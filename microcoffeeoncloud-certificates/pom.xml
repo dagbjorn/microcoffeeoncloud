@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>study.microcoffeeoncloud</groupId>
+    <artifactId>microcoffeeoncloud-certificates</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+
+        <cn>192.168.99.100</cn>
+        <alias>${cn}</alias>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>keytool-maven-plugin</artifactId>
+                <version>${keytool-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>clean-keystore</id>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                    <execution>
+                        <id>generate-key-pair-localhost</id>
+                        <goals>
+                            <goal>generateKeyPair</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <alias>localhost</alias>
+                            <dname>cn=localhost, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                            <!--
+                            <ext>SAN=ip:127.0.0.1,dns:localhost</ext>
+                            -->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-key-pair-ip</id>
+                        <goals>
+                            <goal>generateKeyPair</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <alias>${alias}</alias>
+                            <dname>cn=${cn}, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>list-keystore</id>
+                        <goals>
+                            <goal>list</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keystore>${project.build.outputDirectory}/microcoffee-keystore.jks</keystore>
+                    <storepass>12345678</storepass>
+                    <keypass>12345678</keypass>
+                    <validity>3650</validity>
+                    <keyalg>RSA</keyalg>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

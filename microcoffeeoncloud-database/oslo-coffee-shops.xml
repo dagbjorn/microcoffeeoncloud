@@ -1,0 +1,1161 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="osmfilter 1.2S">
+	<bounds minlat="59.8703" minlon="10.5805" maxlat="59.9706" maxlon="10.9448"/>
+	<node id="292135703" lat="59.9234799" lon="10.7587531" version="9" timestamp="2016-04-15T13:54:08Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="55"/>
+		<tag k="addr:postcode" v="0555"/>
+		<tag k="addr:street" v="Thorvald Meyers gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262675"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_thorvald_meyersgate_55/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="302026064" lat="59.9367912" lon="10.7663829" version="5" timestamp="2016-04-16T21:19:19Z" changeset="38630770" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="68"/>
+		<tag k="addr:postcode" v="0477"/>
+		<tag k="addr:street" v="Vogts gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="vogtsgate@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22221874"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/vogtsgate/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="302026073" lat="59.9347825" lon="10.7643877" version="8" timestamp="2012-08-26T13:03:14Z" changeset="12866120" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="50"/>
+		<tag k="addr:postcode" v="0477"/>
+		<tag k="addr:street" v="Vogts gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262670"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_vogtsgate_50/"/>
+		<tag k="wifi" v="no"/>
+	</node>
+	<node id="428063059" lat="59.920229" lon="10.6834023" version="4" timestamp="2017-04-19T07:45:04Z" changeset="47928150" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="22"/>
+		<tag k="addr:postcode" v="0278"/>
+		<tag k="addr:street" v="Karenslyst Allé"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22561324"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_karenslyst_alle_22/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="441565073" lat="59.9119793" lon="10.7403454" version="4" timestamp="2016-04-15T13:54:06Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="16"/>
+		<tag k="addr:postcode" v="0158"/>
+		<tag k="addr:street" v="Akersgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22416600"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_akersgaten_16/"/>
+	</node>
+	<node id="499994680" lat="59.9136189" lon="10.7410928" version="5" timestamp="2014-09-22T14:14:09Z" changeset="25604157" uid="2279835" user="bFjeldstad">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="yes"/>
+		<tag k="name" v="Stockfleth&#39;s"/>
+	</node>
+	<node id="499995086" lat="59.9153836" lon="10.7416618" version="4" timestamp="2012-01-24T09:15:05Z" changeset="10481833" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Stockfleth&#39;s"/>
+		<tag k="wheelchair" v="limited"/>
+	</node>
+	<node id="499995891" lat="59.9233271" lon="10.7556127" version="4" timestamp="2012-12-01T23:13:01Z" changeset="14118663" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="1"/>
+		<tag k="addr:postcode" v="0552"/>
+		<tag k="addr:street" v="Grüners gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="brenneriet@timwendelboe.no"/>
+		<tag k="name" v="Tim Wendelboe"/>
+		<tag k="opening_hours" v="Mo-Fr 08:30-18:00; Sa-Su 11:00-17:00"/>
+		<tag k="phone" v="+47 40004062"/>
+		<tag k="website" v="http://timwendelboe.no"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="500193198" lat="59.9104891" lon="10.7465548" version="3" timestamp="2011-11-06T00:25:29Z" changeset="9744488" uid="290680" user="wheelmap_visitor">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Stockfleths"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="521434665" lat="59.9198156" lon="10.6844701" version="6" timestamp="2017-04-09T22:31:49Z" changeset="47605473" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="16"/>
+		<tag k="addr:postcode" v="0278"/>
+		<tag k="addr:street" v="Karenslyst Allé"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="sjolyst@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/9812/8835/3389/IMG_2386.jpg"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-20:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22551493"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="toilets:wheelchair" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/sjolyst/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="571676204" lat="59.9163298" lon="10.7160046" version="5" timestamp="2016-04-15T13:54:07Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="8"/>
+		<tag k="addr:postcode" v="0257"/>
+		<tag k="addr:street" v="Skovveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="phone" v="+47 95262662"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_skovveien_8/"/>
+	</node>
+	<node id="615209023" lat="59.9280093" lon="10.7592257" version="5" timestamp="2013-06-27T10:58:43Z" changeset="16725131" uid="596206" user="Simen Heggestøyl">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="18"/>
+		<tag k="addr:postcode" v="0555"/>
+		<tag k="addr:street" v="Thorvald Meyers gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="post@srw.no"/>
+		<tag k="name" v="Supreme Roastworks"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-16:00; Sa 10:00-16:00"/>
+		<tag k="phone" v="+47 227114202"/>
+		<tag k="website" v="http://www.supremeroastworks.no/"/>
+	</node>
+	<node id="864946063" lat="59.9140678" lon="10.7419761" version="8" timestamp="2016-04-15T13:54:07Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="45"/>
+		<tag k="addr:postcode" v="0158"/>
+		<tag k="addr:street" v="Akersgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 24201728"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_akersgaten_45/"/>
+	</node>
+	<node id="973873267" lat="59.9206046" lon="10.7281008" version="7" timestamp="2016-04-15T13:54:08Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="25"/>
+		<tag k="addr:postcode" v="0350"/>
+		<tag k="addr:street" v="Parkveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa-Su 09:00-17:00"/>
+		<tag k="phone" v="+47 22461160"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_parkveien_25"/>
+		<tag k="wheelchair" v="limited"/>
+	</node>
+	<node id="1221546285" lat="59.9123587" lon="10.7603124" version="4" timestamp="2015-08-24T09:33:27Z" changeset="33541358" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Evita 1"/>
+		<tag k="source" v="knowledge"/>
+		<tag k="wheelchair" v="limited"/>
+	</node>
+	<node id="1419271599" lat="59.9327109" lon="10.7337176" version="6" timestamp="2016-04-15T13:54:03Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="95"/>
+		<tag k="addr:postcode" v="0359"/>
+		<tag k="addr:street" v="Ullevålsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="adamstuen@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa 09:00-17:00; Su 10:00-15:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22468173"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="website" v="http://www.bakerhansen.no/adamstuen/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="1437766247" lat="59.9111602" lon="10.7297012" version="5" timestamp="2016-04-15T13:54:06Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="2"/>
+		<tag k="addr:postcode" v="0250"/>
+		<tag k="addr:street" v="Brynjulf Bulls plass"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 24200823"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_vestbanen/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1769606912" lat="59.9178789" lon="10.7405582" version="4" timestamp="2014-04-05T15:14:47Z" changeset="21515647" uid="50624" user="David Crochet">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="3"/>
+		<tag k="addr:postcode" v="0165"/>
+		<tag k="addr:street" v="St Olavs plass"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="blog" v="http://blingsoslo.wordpress.com/"/>
+		<tag k="contact:email" v="anders@blings.no"/>
+		<tag k="contact:facebook" v="http://www.facebook.com/blingssiden"/>
+		<tag k="contact:phone" v="+47 22205270"/>
+		<tag k="contact:twitter" v="@BlingsOslo"/>
+		<tag k="contact:website" v="http://www.apentbakeri.no/blings/"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Blings"/>
+		<tag k="note" v="Menu available at http://www.apentbakeri.no/blings/meny/"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-17:00; Sa 09:00-16:00"/>
+		<tag k="operator" v="Åpent Bakeri"/>
+	</node>
+	<node id="1769606915" lat="59.916794" lon="10.7404134" version="1" timestamp="2012-05-29T16:34:58Z" changeset="11739869" uid="36306" user="Ximo">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Fuglen"/>
+	</node>
+	<node id="1832533880" lat="59.9307203" lon="10.7934818" version="5" timestamp="2017-08-21T17:56:32Z" changeset="51314009" uid="538387" user="forteller">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Norð Løren"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00, Sa,Su 09:00-18:00"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
+		<tag k="wifi" v="yes"/>
+	</node>
+	<node id="1883613666" lat="59.9273886" lon="10.731555" version="3" timestamp="2016-04-15T13:54:09Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="35b"/>
+		<tag k="addr:postcode" v="0354"/>
+		<tag k="addr:street" v="Thereses gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="phone" v="+47 24200107"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_theresesgate_35/"/>
+	</node>
+	<node id="1883637893" lat="59.9233316" lon="10.7398908" version="3" timestamp="2016-04-15T13:54:08Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="39"/>
+		<tag k="addr:postcode" v="0171"/>
+		<tag k="addr:street" v="Ullevålsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="phone" v="+47 22463505"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_ullevalsveien_39/"/>
+	</node>
+	<node id="1883652177" lat="59.9193785" lon="10.7091252" version="2" timestamp="2016-04-15T13:54:07Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="2"/>
+		<tag k="addr:postcode" v="0263"/>
+		<tag k="addr:street" v="Løvenskiolds gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22559869"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_loevenskioldsgate_2/"/>
+	</node>
+	<node id="1883660592" lat="59.9128682" lon="10.7482769" version="2" timestamp="2016-04-15T13:54:06Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="2"/>
+		<tag k="addr:postcode" v="0155"/>
+		<tag k="addr:street" v="Storgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22420131"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_storgaten_2/"/>
+	</node>
+	<node id="1883670728" lat="59.9283064" lon="10.7184133" version="3" timestamp="2016-04-15T13:54:09Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="3"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Valkyriegata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22565584"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_valkyriegata_3/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="1883688028" lat="59.9097104" lon="10.7255271" version="3" timestamp="2016-04-15T13:54:06Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="7"/>
+		<tag k="addr:postcode" v="0250"/>
+		<tag k="addr:street" v="Fjordalléen"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 22836040"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_fjordalleen_7/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1883730293" lat="59.9140686" lon="10.7324477" version="4" timestamp="2017-02-10T12:49:25Z" changeset="45972803" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="28"/>
+		<tag k="addr:postcode" v="0161"/>
+		<tag k="addr:street" v="Stortingsgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-21:30; Sa 09:30-21:30; Su 10:30-21:30"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 23697797"/>
+		<tag k="toilets:wheelchair" v="no"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_saga_kino/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1883738235" lat="59.9156914" lon="10.7377208" version="2" timestamp="2015-09-03T21:03:29Z" changeset="33782336" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="18"/>
+		<tag k="addr:postcode" v="0164"/>
+		<tag k="addr:street" v="Universitetsgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00; Su 11:00-17:00"/>
+		<tag k="phone" v="+47 95262677"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_universitetsgata_18/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1883743934" lat="59.9373634" lon="10.7523713" version="2" timestamp="2014-04-04T07:56:05Z" changeset="21489927" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="18"/>
+		<tag k="addr:postcode" v="0463"/>
+		<tag k="addr:street" v="Dannevigsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262678"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_dannevigsveien_18/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="1883751170" lat="59.9116466" lon="10.7478383" version="1" timestamp="2012-08-26T14:07:52Z" changeset="12866857" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="7"/>
+		<tag k="addr:postcode" v="0154"/>
+		<tag k="addr:street" v="Karl Johans gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-18:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262679"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/Kafffebrenneriet_karl_johansgate_7/"/>
+	</node>
+	<node id="1883804866" lat="59.9270717" lon="10.7588599" version="2" timestamp="2012-10-11T18:40:37Z" changeset="13453265" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="25A"/>
+		<tag k="addr:postcode" v="0555"/>
+		<tag k="addr:street" v="Thorvald Meyers gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262683"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/thorvald_meyersgate_25a_-_birkelunden/"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="1883827735" lat="59.9115645" lon="10.7669601" version="1" timestamp="2012-08-26T14:50:35Z" changeset="12867388" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="32"/>
+		<tag k="addr:postcode" v="0190"/>
+		<tag k="addr:street" v="Grønlandsleiret"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262684"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/grnlandsleiret_32/"/>
+	</node>
+	<node id="1883840492" lat="59.9187511" lon="10.7575326" version="1" timestamp="2012-08-26T15:01:16Z" changeset="12867508" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="60"/>
+		<tag k="addr:postcode" v="0550"/>
+		<tag k="addr:street" v="Markveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="construction" v="yes"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/markveien/"/>
+	</node>
+	<node id="1883877606" lat="59.9100164" lon="10.7461445" version="1" timestamp="2012-08-26T15:29:43Z" changeset="12867811" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="11"/>
+		<tag k="addr:postcode" v="0152"/>
+		<tag k="addr:street" v="Tollbugata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="post@pascal.no"/>
+		<tag k="name" v="Pascal kaffebar"/>
+		<tag k="opening_hours" v="Mo-Fr 07:30-17:00; Sa 10:00-17:00"/>
+		<tag k="operator" v="Pascal"/>
+		<tag k="website" v="http://pascal.no/serveringssteder/tollbugata-11-kaffebar/"/>
+	</node>
+	<node id="1884241680" lat="59.9137666" lon="10.7329595" version="3" timestamp="2015-04-06T17:54:27Z" changeset="30022134" uid="2178612" user="HelgeO">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="26"/>
+		<tag k="addr:postcode" v="0161"/>
+		<tag k="addr:street" v="Stortingsgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-23:00; Sa 08:00-23:00; Su 09:00-23:00"/>
+		<tag k="operator" v="Espresso House"/>
+		<tag k="phone" v="+47 21064805"/>
+		<tag k="website" v="http://www.espressohouse.com"/>
+	</node>
+	<node id="1886537682" lat="59.9115736" lon="10.7356626" version="2" timestamp="2016-04-15T13:54:00Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="12"/>
+		<tag k="addr:postcode" v="0160"/>
+		<tag k="addr:street" v="Tordenskiolds gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="radhuset@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-17:00; Sa 12:00-16:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22416365"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="website" v="http://www.bakerhansen.no/radhuset/"/>
+	</node>
+	<node id="1886544205" lat="59.9137599" lon="10.7348848" version="3" timestamp="2016-04-15T13:54:00Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="20"/>
+		<tag k="addr:postcode" v="0161"/>
+		<tag k="addr:street" v="Stortingsgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="stortingsgaten@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 06:00-18:00; Sa 08:00-17:00; Su 10:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22426166"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="website" v="http://www.bakerhansen.no/stortingsgaten/"/>
+	</node>
+	<node id="1886546756" lat="59.9142479" lon="10.7290554" version="5" timestamp="2016-04-15T13:54:01Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="3"/>
+		<tag k="addr:postcode" v="0251"/>
+		<tag k="addr:street" v="Ruseløkkveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="vika@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 06:00-18:00; Sa 09:00-16:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22832166"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="website" v="http://www.bakerhansen.no/vika/"/>
+	</node>
+	<node id="1886559141" lat="59.9278782" lon="10.7181878" version="2" timestamp="2016-04-15T13:54:03Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="54"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Bogstadveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="bvn@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa 09:00-18:00; Su 11:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 23201620"/>
+		<tag k="shop" v="bakery"/>
+	</node>
+	<node id="1886562573" lat="59.9177513" lon="10.6355551" version="3" timestamp="2016-04-15T13:54:01Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="16"/>
+		<tag k="addr:postcode" v="0283"/>
+		<tag k="addr:street" v="Lilleakerveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="ccvest@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 10:00-20:00; Sa 09:00-18:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22731856"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="website" v="http://www.bakerhansen.no/ccvest/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1915658835" lat="59.923603" lon="10.7926563" version="3" timestamp="2016-04-15T13:54:02Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="50"/>
+		<tag k="addr:postcode" v="0579"/>
+		<tag k="addr:street" v="Grenseveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="hasletorg@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/7212/8816/8374/IMG_1594.jpg"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-20:00; Sa 09:00-18:00; Su 10:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 23377691"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/hasletorg/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1915676796" lat="59.9295378" lon="10.7164449" version="2" timestamp="2016-04-15T13:54:03Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="15"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Valkyriegata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="majorstukrysset@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00; Su 12:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22699969"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/majorstukrysset/"/>
+	</node>
+	<node id="1915743891" lat="59.9493945" lon="10.7659032" version="2" timestamp="2016-04-15T13:54:05Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="33"/>
+		<tag k="addr:postcode" v="0484"/>
+		<tag k="addr:street" v="Nydalsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="nydalen@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa 10:00-17:00; Su 11:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22234824"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/nydalen/"/>
+	</node>
+	<node id="1915783774" lat="59.922892" lon="10.7265316" version="2" timestamp="2016-04-15T13:54:02Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:housenumber" v="35"/>
+		<tag k="addr:postcode" v="0352"/>
+		<tag k="addr:street" v="Hegdehaugsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="oscarsgate@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/2512/8774/4140/IMG_1444.jpg"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-17:00; Sa 10:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22694271"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/oscarsgate/"/>
+	</node>
+	<node id="1915801333" lat="59.948265" lon="10.6438491" version="2" timestamp="2016-04-15T13:54:04Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="207"/>
+		<tag k="addr:postcode" v="0751"/>
+		<tag k="addr:street" v="Vækerøveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="roa@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/3312/8835/1838/IMG_1013.jpg"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-20:00; Sa 09:00-18:00; Su 10:00-16:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22731897"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/roa/"/>
+	</node>
+	<node id="1915825778" lat="59.9127146" lon="10.7094156" version="2" timestamp="2016-04-15T13:54:00Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="62"/>
+		<tag k="addr:postcode" v="0271"/>
+		<tag k="addr:street" v="Drammensveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="skillebekk@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/8912/8835/3682/IMG_1896.jpg"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:30-18:00; Sa 09:00-15:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22440854"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/skillebekk/"/>
+	</node>
+	<node id="1915830429" lat="59.924174" lon="10.7395685" version="4" timestamp="2017-07-08T18:29:03Z" changeset="50137091" uid="5198133" user="Wulfmorn">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="45"/>
+		<tag k="addr:postcode" v="0171"/>
+		<tag k="addr:street" v="Ullevålsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="st.hanshaugen@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/3112/8626/4903/IMG_1162.JPG"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 08:00-18:00; Su 09:00-18:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22690900"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/sthanshaugen/"/>
+	</node>
+	<node id="1915856269" lat="59.9469796" lon="10.7745355" version="2" timestamp="2016-04-15T13:54:04Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="7"/>
+		<tag k="addr:postcode" v="0485"/>
+		<tag k="addr:street" v="Vitaminveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="storo@bakerhansen.no"/>
+		<tag k="image" v="http://www.bakerhansen.no/files/1113/4192/2280/Sittegruppe.jpg"/>
+		<tag k="internet_access" v="wlan"/>
+		<tag k="internet_access:fee" v="yes"/>
+		<tag k="level" v="0"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 10:00-21:00; Sa 09:00-18:00; Su 11:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22222560"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/storo/"/>
+	</node>
+	<node id="1915868322" lat="59.9496933" lon="10.7336972" version="2" timestamp="2016-04-15T13:54:05Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="75C"/>
+		<tag k="addr:postcode" v="0855"/>
+		<tag k="addr:street" v="Sognsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="stadion@bakerhansen.no"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-19:00; Sa 09:00-17:00"/>
+		<tag k="operator" v="Baker Hansen"/>
+		<tag k="phone" v="+47 22230855"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="smoking" v="no"/>
+		<tag k="website" v="http://www.bakerhansen.no/ullevalstadion/"/>
+	</node>
+	<node id="1934896151" lat="59.9294334" lon="10.7114306" version="1" timestamp="2012-09-27T08:55:53Z" changeset="13269044" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="9"/>
+		<tag k="addr:postcode" v="0368"/>
+		<tag k="addr:street" v="Essendrops gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-21:00; Sa-Su 09:00-21:00"/>
+		<tag k="phone" v="+47 21668147"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-colosseum.aspx"/>
+	</node>
+	<node id="1934908544" lat="59.9231507" lon="10.7315633" version="1" timestamp="2012-09-27T09:09:41Z" changeset="13269135" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="57"/>
+		<tag k="addr:postcode" v="0350"/>
+		<tag k="addr:street" v="Pilestredet"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-20:00; Sa-Su 09:00-18:00"/>
+		<tag k="operator" v="Wayne&#39;s Coffee"/>
+		<tag k="phone" v="+47 21447630"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-pilestredet.aspx"/>
+	</node>
+	<node id="1935110001" lat="59.9146927" lon="10.7195168" version="3" timestamp="2017-06-21T09:15:27Z" changeset="49714901" uid="597290" user="monoschalter">
+		<tag k="addr:housenumber" v="90"/>
+		<tag k="addr:postcode" v="0255"/>
+		<tag k="addr:street" v="Henrik Ibsens gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-21:00; Sa-Su 09:00-18:00"/>
+		<tag k="operator" v="Wayne&#39;s Coffee"/>
+		<tag k="phone" v="+47 21666763"/>
+		<tag k="toilets:wheelchair" v="no"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-solli-plass.aspx"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1944590110" lat="59.9290339" lon="10.7173576" version="2" timestamp="2017-02-04T15:43:12Z" changeset="45808448" uid="3497659" user="NKA">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="9"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Valkyriegata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+	</node>
+	<node id="1948285104" lat="59.9142278" lon="10.7297983" version="2" timestamp="2012-10-06T00:26:15Z" changeset="13379304" uid="7538" user="oyvind">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="10"/>
+		<tag k="addr:postcode" v="0161"/>
+		<tag k="addr:street" v="Haakon VII&#39;s gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-21:00; Sa-Su 09:00-18:00"/>
+		<tag k="operator" v="Wayne&#39;s Coffee"/>
+		<tag k="phone" v="+47 21668146"/>
+		<tag k="website" v="http://vikaterrassen.no/butikkoversikt/wayne%C2%B4s-coffee"/>
+	</node>
+	<node id="1960942706" lat="59.9082645" lon="10.7231808" version="4" timestamp="2017-03-27T07:04:56Z" changeset="47192476" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="4"/>
+		<tag k="addr:postcode" v="0252"/>
+		<tag k="addr:street" v="Lille stranden"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 07:30-20:00; Sa-Su 09:00-18:00"/>
+		<tag k="phone" v="+47 21668266"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-tjuvholmen.aspx"/>
+		<tag k="wheelchair" v="limited"/>
+	</node>
+	<node id="1975696959" lat="59.914274" lon="10.7362783" version="4" timestamp="2017-02-24T21:42:03Z" changeset="46380779" uid="605010" user="Noen">
+		<tag k="addr:housenumber" v="24"/>
+		<tag k="addr:postcode" v="0162"/>
+		<tag k="addr:street" v="Karl Johans gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffebrenneriet"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa 09:00-17:00; Su 11:00-17:00"/>
+		<tag k="operator" v="Kaffebrenneriet"/>
+		<tag k="phone" v="+47 95262680"/>
+		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_karl_johans_gate_24_-_spikersuppa/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1976677755" lat="59.9328994" lon="10.7342747" version="2" timestamp="2013-01-26T18:22:25Z" changeset="14796087" uid="492311" user="zacmccormick">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffekoppkafe"/>
+		<tag k="outdoor_seating" v="yes"/>
+		<tag k="smoking" v="outside"/>
+		<tag k="takeaway" v="yes"/>
+	</node>
+	<node id="1999461639" lat="59.9143425" lon="10.7413749" version="2" timestamp="2016-04-15T13:59:05Z" changeset="38588485" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="20"/>
+		<tag k="addr:postcode" v="0180"/>
+		<tag k="addr:street" v="Grensen"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="operator" v="Wayne&#39;s Coffee"/>
+		<tag k="website" v="http://www.waynescoffee.no/"/>
+	</node>
+	<node id="1999466123" lat="59.9133233" lon="10.74145" version="3" timestamp="2017-03-27T07:03:38Z" changeset="47192476" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="35"/>
+		<tag k="addr:postcode" v="0158"/>
+		<tag k="addr:street" v="Akersgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-20:00; Sa-Su 09:00-18:00"/>
+		<tag k="operator" v="Wayne&#39;s Coffee"/>
+		<tag k="phone" v="+47 21445190"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-egertorget.aspx"/>
+		<tag k="wheelchair" v="limited"/>
+	</node>
+	<node id="2004612610" lat="59.9507635" lon="10.6942671" version="5" timestamp="2014-08-28T21:57:58Z" changeset="25084381" uid="145231" user="woodpeck_repair">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="41"/>
+		<tag k="addr:postcode" v="0776"/>
+		<tag k="addr:street" v="Risalléen"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="email" v="kaffeco@kaffeco.no"/>
+		<tag k="facebook" v="https://www.facebook.com/KaffeOgCo"/>
+		<tag k="name" v="Kaffe &#38; co"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa 09:00-16:00; Su 10:00-16:00"/>
+		<tag k="outdoor_seating" v="yes"/>
+		<tag k="phone" v="+47 22491105"/>
+		<tag k="smoking" v="outside"/>
+		<tag k="takeaway" v="yes"/>
+	</node>
+	<node id="2069813324" lat="59.9193495" lon="10.7185953" version="1" timestamp="2012-12-16T14:38:24Z" changeset="14294031" uid="88788" user="AndersHerman">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Mocca kaffebar &#38; brenneri AS"/>
+		<tag k="phone" v="22 55 55 18"/>
+	</node>
+	<node id="2276017071" lat="59.9072696" lon="10.7210089" version="6" timestamp="2017-05-20T07:36:26Z" changeset="48837435" uid="290680" user="wheelmap_visitor">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="15"/>
+		<tag k="addr:postcode" v="0252"/>
+		<tag k="addr:street" v="Tjuvholmen Allé"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="facebook" v="http://www.facebook.com/pages/Bergshaven-bakeri-og-konditori-as/111905355506397"/>
+		<tag k="name" v="Bergshaven"/>
+		<tag k="opening_hours" v="Mo-We 07:00-18:00; Th 07:00-19:00; Fr 07:00-21:00; Sa-Su 10:00-18:00"/>
+		<tag k="phone" v="+47 37040446"/>
+		<tag k="shop" v="bakery"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="website" v="http://www.bergshaven.com/"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="2278256452" lat="59.9374779" lon="10.7517188" version="3" timestamp="2015-04-19T19:23:19Z" changeset="30339518" uid="596206" user="Simen Heggestøyl">
+		<tag k="addr:street" v="Stockflethsgate 60"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffe Gram"/>
+		<tag k="source" v="http://www.kaffegram.no/"/>
+		<tag k="wifi" v="free"/>
+	</node>
+	<node id="2296403819" lat="59.9025528" lon="10.7526916" version="1" timestamp="2013-05-08T20:27:33Z" changeset="16037657" uid="222448" user="Hvassing">
+		<tag k="addr:housenumber" v="103"/>
+		<tag k="addr:postcode" v="0150"/>
+		<tag k="addr:street" v="Sørengkaia"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Evita Espressobar Sørenga"/>
+		<tag k="wifi" v="free"/>
+	</node>
+	<node id="2616073833" lat="59.9181441" lon="10.7436842" version="4" timestamp="2017-07-01T10:22:44Z" changeset="49961850" uid="173918" user="njaard">
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="1"/>
+		<tag k="addr:street" v="Ullevålsveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Dagny&#39;s"/>
+	</node>
+	<node id="2617758178" lat="59.9236703" lon="10.7407014" version="2" timestamp="2014-01-10T19:20:28Z" changeset="19923188" uid="169710" user="ehamberg">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="wlan"/>
+		<tag k="name" v="Espresso House, St. Hanshaugen"/>
+	</node>
+	<node id="2637042963" lat="59.92002" lon="10.735028" version="3" timestamp="2016-04-15T13:54:05Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:housenumber" v="39D"/>
+		<tag k="addr:postcode" v="0166"/>
+		<tag k="addr:street" v="Pilestredet"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+		<tag k="smoking" v="no"/>
+		<tag k="takeaway" v="yes"/>
+	</node>
+	<node id="2689891213" lat="59.9424069" lon="10.7038408" version="2" timestamp="2016-04-15T13:54:04Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Baker Hansen"/>
+		<tag k="shop" v="bakery"/>
+	</node>
+	<node id="2725126143" lat="59.9142433" lon="10.7519512" version="3" timestamp="2017-03-19T16:00:58Z" changeset="46986320" uid="5198133" user="Wulfmorn">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="2"/>
+		<tag k="addr:postcode" v="0181"/>
+		<tag k="addr:street" v="Hammersborggata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s coffee"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-20:00; Sa-Su 10:00-18:00"/>
+		<tag k="phone" v="+47 21 44 51 99"/>
+		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-storgata.aspx"/>
+	</node>
+	<node id="2919371562" lat="59.9211559" lon="10.757535" version="4" timestamp="2016-08-24T09:34:38Z" changeset="41653308" uid="290680" user="wheelmap_visitor">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="2919371563" lat="59.9221345" lon="10.7570683" version="3" timestamp="2017-07-31T08:28:05Z" changeset="50712184" uid="473" user="Håkon">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Retrolykke"/>
+	</node>
+	<node id="3040987689" lat="59.930802" lon="10.7575615" version="2" timestamp="2015-12-02T10:16:10Z" changeset="35702733" uid="825406" user="IngunnW">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="no"/>
+		<tag k="name" v="Hønselouisas Hus"/>
+		<tag k="smoking" v="outside"/>
+		<tag k="wheelchair" v="no"/>
+	</node>
+	<node id="3041284437" lat="59.9309806" lon="10.7570202" version="2" timestamp="2014-08-26T07:10:47Z" changeset="25020185" uid="128123" user="lars"/>
+	<node id="3041284438" lat="59.9309694" lon="10.757093" version="2" timestamp="2014-08-26T07:10:47Z" changeset="25020185" uid="128123" user="lars"/>
+	<node id="3041284439" lat="59.9310245" lon="10.7571467" version="2" timestamp="2014-08-26T07:10:47Z" changeset="25020185" uid="128123" user="lars"/>
+	<node id="3041284440" lat="59.9311788" lon="10.7573046" version="1" timestamp="2014-08-25T13:18:44Z" changeset="25003411" uid="128123" user="lars"/>
+	<node id="3041284441" lat="59.9311845" lon="10.7572232" version="1" timestamp="2014-08-25T13:18:44Z" changeset="25003411" uid="128123" user="lars"/>
+	<node id="3090736998" lat="59.9136313" lon="10.7412136" version="2" timestamp="2015-09-13T17:52:52Z" changeset="34004821" uid="53964" user="_Mathieu_">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Baker Hansen"/>
+	</node>
+	<node id="3125995604" lat="59.9380956" lon="10.7352945" version="2" timestamp="2016-04-15T13:54:05Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="wlan"/>
+		<tag k="name" v="Espresso House"/>
+	</node>
+	<node id="3132098801" lat="59.9112807" lon="10.7529968" version="4" timestamp="2017-08-16T15:24:21Z" changeset="51178767" uid="5732597" user="Entur AS | Johan Wiklund">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="level" v="3"/>
+		<tag k="name" v="Starbucks Coffee"/>
+	</node>
+	<node id="3266303481" lat="59.9533437" lon="10.7244834" version="2" timestamp="2015-01-03T04:28:25Z" changeset="27878568" uid="1818564" user="ErikBol"/>
+	<node id="3266303482" lat="59.9532896" lon="10.7243801" version="2" timestamp="2015-01-03T04:28:25Z" changeset="27878568" uid="1818564" user="ErikBol"/>
+	<node id="3266303483" lat="59.9533407" lon="10.7242733" version="2" timestamp="2015-01-03T04:28:25Z" changeset="27878568" uid="1818564" user="ErikBol"/>
+	<node id="3266348486" lat="59.9533948" lon="10.7243767" version="1" timestamp="2015-01-03T04:28:16Z" changeset="27878568" uid="1818564" user="ErikBol"/>
+	<node id="3366591666" lat="59.9239649" lon="10.7589715" version="3" timestamp="2016-09-22T08:40:44Z" changeset="42341787" uid="809733" user="Vesihiisi">
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="49"/>
+		<tag k="addr:street" v="Thorvald Meyers gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Godt Brød"/>
+		<tag k="opening_hours" v="06:00-18:00"/>
+	</node>
+	<node id="3441434847" lat="59.9105983" lon="10.7286756" version="3" timestamp="2017-04-19T07:48:53Z" changeset="47928150" uid="524500" user="wheelmap_android">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="3441434871" lat="59.9133781" lon="10.7321373" version="1" timestamp="2015-04-06T17:54:26Z" changeset="30022134" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Wayne&#39;s Coffee"/>
+	</node>
+	<node id="3471869888" lat="59.9378614" lon="10.7546053" version="1" timestamp="2015-04-22T19:09:40Z" changeset="30412879" uid="596206" user="Simen Heggestøyl">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:housenumber" v="14"/>
+		<tag k="addr:postcode" v="0463"/>
+		<tag k="addr:street" v="Arendalsgata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Coffeeshop Company"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-21:00;Sa-Su 09:00-20:00"/>
+		<tag k="website" v="http://coffeeshopcompany.no/"/>
+	</node>
+	<node id="3514876864" lat="59.9282618" lon="10.7169236" version="3" timestamp="2017-04-19T08:05:06Z" changeset="47928150" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="60"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Bogstadveien"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Starbucks"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="3544034628" lat="59.9085201" lon="10.7682179" version="2" timestamp="2016-09-22T08:41:28Z" changeset="42341787" uid="809733" user="Vesihiisi">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="2"/>
+		<tag k="addr:postcode" v="0656"/>
+		<tag k="addr:street" v="Munkegata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Stockfleths Gamlebyen"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00; Sa-Su 10:00-18:00"/>
+	</node>
+	<node id="3655173293" lat="59.9081977" lon="10.7577602" version="1" timestamp="2015-07-17T06:59:14Z" changeset="32689699" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Joe &#38; The Juice"/>
+	</node>
+	<node id="3655282219" lat="59.9112738" lon="10.7632009" version="1" timestamp="2015-07-17T09:36:16Z" changeset="32693627" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Evita Espressobar"/>
+	</node>
+	<node id="3664306362" lat="59.912392" lon="10.7662469" version="1" timestamp="2015-07-24T10:15:14Z" changeset="32845854" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="la manga"/>
+	</node>
+	<node id="3665953767" lat="59.9486101" lon="10.7666813" version="1" timestamp="2015-07-25T14:04:45Z" changeset="32871607" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="LekkerDisken"/>
+	</node>
+	<node id="3729794625" lat="59.9087145" lon="10.7580777" version="2" timestamp="2016-04-15T13:54:05Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
+	</node>
+	<node id="3748075035" lat="59.9475327" lon="10.7280362" version="2" timestamp="2015-09-17T16:28:47Z" changeset="34087147" uid="3244878" user="Norsk person">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Lille Cafe"/>
+		<tag k="wifi" v="yes"/>
+	</node>
+	<node id="3932053255" lat="59.9488234" lon="10.7676892" version="1" timestamp="2016-01-07T13:20:21Z" changeset="36423887" uid="128123" user="lars">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Starbucks"/>
+	</node>
+	<node id="3977735965" lat="59.9264444" lon="10.7758711" version="1" timestamp="2016-01-30T10:35:36Z" changeset="36895818" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Kaffekompaniet"/>
+	</node>
+	<node id="4014560357" lat="59.9259845" lon="10.7612863" version="3" timestamp="2016-09-22T09:01:05Z" changeset="42342271" uid="809733" user="Vesihiisi">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="48A"/>
+		<tag k="addr:postcode" v="0556"/>
+		<tag k="addr:street" v="Toftes gate"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Cocoa"/>
+		<tag k="opening_hours" v="10:00-19:00"/>
+		<tag k="website" v="http://cocoa.no"/>
+	</node>
+	<node id="4109872729" lat="59.927151" lon="10.865523" version="1" timestamp="2016-04-09T17:06:54Z" changeset="38432905" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Memento Vivere"/>
+		<tag k="opening_hours" v="Mo-Fr 06:30-17:00; Sa-Su 11:00-16:00"/>
+		<tag k="smoking" v="no"/>
+	</node>
+	<node id="4147050283" lat="59.9024541" lon="10.6282513" version="3" timestamp="2017-03-20T13:55:27Z" changeset="47005290" uid="290680" user="wheelmap_visitor">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Rast Coffee &#38; Tea"/>
+		<tag k="opening_hours" v="Mo-Fr 08:00-17:00; Sa-Su 11:00-17:00"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="4313863188" lat="59.9207605" lon="10.6827824" version="2" timestamp="2017-04-09T22:32:12Z" changeset="47605473" uid="524500" user="wheelmap_android">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:housenumber" v="11"/>
+		<tag k="addr:postcode" v="0278"/>
+		<tag k="addr:street" v="Karenslyst allé"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Starbucks"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-19:00"/>
+		<tag k="outdoor_seating" v="yes"/>
+		<tag k="website" v="https://www.starbucks.no"/>
+		<tag k="wheelchair" v="yes"/>
+		<tag k="wifi" v="yes"/>
+	</node>
+	<node id="5071686908" lat="59.9125548" lon="10.7628251" version="1" timestamp="2017-08-31T14:41:54Z" changeset="51617899" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Starbucks"/>
+	</node>
+	<way id="300027546" version="3" timestamp="2015-12-02T10:16:21Z" changeset="35702733" uid="825406" user="IngunnW">
+		<nd ref="3041284438"/>
+		<nd ref="3041284439"/>
+		<nd ref="3041284440"/>
+		<nd ref="3041284441"/>
+		<nd ref="3041284437"/>
+		<nd ref="3041284438"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="wlan"/>
+		<tag k="name" v="Månefisken"/>
+		<tag k="shelter" v="yes"/>
+		<tag k="smoking" v="outside"/>
+		<tag k="wheelchair" v="no"/>
+	</way>
+	<way id="320141662" version="2" timestamp="2015-01-09T17:44:43Z" changeset="28024303" uid="1818564" user="ErikBol">
+		<nd ref="3266303483"/>
+		<nd ref="3266348486"/>
+		<nd ref="3266303481"/>
+		<nd ref="3266303482"/>
+		<nd ref="3266303483"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="internet_access" v="no"/>
+		<tag k="name" v="Solpynten"/>
+	</way>
+</osm>

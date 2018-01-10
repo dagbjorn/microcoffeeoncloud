@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="coffeeApp">
+<head>
+<meta charset="UTF-8" />
+<title>The &micro;Coffee Shop</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <div class="container">
+        <h2>The &micro;Coffee Shop</h2>
+    </div>
+
+    <div ng-controller="CoffeeShopController" class="container">
+        <div class="form-group">
+            <input type="button" class="btn btn-default" value="Find my coffee shop" ng-click="findCoffeeShopNearestToMe()"/>
+        </div>
+        <div class="panel panel-default" ng-show="nearestCoffeeShop">
+            <div class="panel-body">
+                <strong>{{nearestCoffeeShop.name}}</strong>
+                <strong>latitude: {{nearestCoffeeShop.location.coordinates[1]}}</strong>
+                <strong>longitude: {{nearestCoffeeShop.location.coordinates[0]}}</strong>
+                <a target="_blank" ng-href="https://maps.google.com?q={{nearestCoffeeShop.name}}&ll={{nearestCoffeeShop.location.coordinates[1]}},{{nearestCoffeeShop.location.coordinates[0]}}">Map</a>
+            </div>
+        </div>
+    </div>
+
+    <div ng-controller="DrinksController" class="container">
+        <form ng-submit="giveMeCoffee()">
+            <div class="form-group">
+                <label>Drink</label>
+                <select ng-model="drink.type" ng-options="type.name for type in types | orderBy: 'name'" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Size</label>
+                <select ng-model="drink.size" ng-options="size.name as size.name for size in sizes" class="form-control" ></select>
+            </div>
+
+            <div class="form-group">
+                <label>Your name</label>
+                <input type="text" ng-model="drink.drinker" ng-required="true" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="newOption">Options</label>
+                <input type="text" ng-model="newOption" class="form-control" placeholder="Type milk or syrups or extras here"
+                    uib-typeahead="option.name for option in availableOptions | filter:$viewValue | orderBy:'name'"
+                    typeahead-on-select="addOption()" typeahead-select-on-blur="true"/>
+            </div>
+
+            <div class="form-group">
+                <span ng-repeat="option in drink.selectedOptions">{{option}}; </span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Give Me Coffee" class="btn btn-default btn-lg"/>
+            </div>
+        </form>
+
+        <alert ng-repeat="message in messages" type="message.type" close="closeAlert($index)">
+            {{message.msg}}
+            <div ng-show="message.orderId">
+                <a target="_blank" ng-href="{{message.orderUrl}}">Order details</a>
+            </div>
+        </alert>
+
+        <pre>{{drink|json}}</pre>
+    </div>
+
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/angular-resource.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script type="text/javascript" src="js/env.js"></script>
+    <script type="text/javascript" src="js/coffee.js"></script>
+</body>
+</html>

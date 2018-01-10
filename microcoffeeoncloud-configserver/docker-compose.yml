@@ -1,0 +1,10 @@
+version: '3'
+services:
+    configserver:
+        image: microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
+        ports:
+            - "8091:8091"
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/dagbjorn/microcoffeeoncloud-appconfig.git
+            

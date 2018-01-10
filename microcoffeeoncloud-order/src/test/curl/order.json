@@ -1,0 +1,13 @@
+{
+    "coffeeShopId": 1,
+    "drinker": "Me again",
+    "size": "Small",
+    "type": {
+        "name": "Americano",
+        "family": "Coffee"
+    },
+    "selectedOptions": [
+        "soy",
+        "decaf"
+    ]
+}

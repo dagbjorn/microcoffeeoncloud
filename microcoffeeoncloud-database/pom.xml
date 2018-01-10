@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>study.microcoffeeoncloud</groupId>
+    <artifactId>microcoffeeoncloud-database</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <groovy.version>2.4.13</groovy.version>
+        <mongo-java-driver.version>3.6.1</mongo-java-driver.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <properties>
+                        <property>
+                            <name>dbhost</name>
+                            <value>${dbhost}</value>
+                        </property>
+                        <property>
+                            <name>dbport</name>
+                            <value>${dbport}</value>
+                        </property>
+                        <property>
+                            <name>dbname</name>
+                            <value>${dbname}</value>
+                        </property>
+                        <property>
+                            <name>shopfile</name>
+                            <value>${shopfile}</value>
+                        </property>
+                    </properties>
+                    <scripts>
+                        <!--
+                        <script>file:///${project.basedir}/src/main/resources/test.groovy</script>
+                        -->
+                        <script>file:///${project.basedir}/src/main/resources/PopulateCoffeeShops.groovy</script>
+                        <script>file:///${project.basedir}/src/main/resources/PopulateDrinkMenu.groovy</script>
+                    </scripts>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <!-- any version of Groovy \>= 1.5.0 should work here -->
+                        <version>${groovy.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.mongodb</groupId>
+                        <artifactId>mongo-java-driver</artifactId>
+                        <version>${mongo-java-driver.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

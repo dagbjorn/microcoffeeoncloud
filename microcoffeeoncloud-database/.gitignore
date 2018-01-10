@@ -1,0 +1,8 @@
+/.kube
+/dump
+/target
+.classpath
+.project
+deploy-k8s.bat
+undeploy-k8s.bat
+microcoffee-pod.yml

@@ -1,0 +1,51 @@
+version: '3'
+services:
+    gui:
+        image: microcoffeeoncloud-gui:1.0.0-SNAPSHOT
+        ports:
+            - "8080:8080"
+            - "8443:8443"
+        links:
+            - location
+            - order
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+    location:
+        image: microcoffeeoncloud-location:1.0.0-SNAPSHOT
+        ports:
+            - "8081:8081"
+            - "8444:8444"
+        links:
+            - mongodb
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+    order:
+        image: microcoffeeoncloud-order:1.0.0-SNAPSHOT
+        ports:
+            - "8082:8082"
+            - "8445:8445"
+        links:
+            - mongodb
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+    creditrating:
+        image: microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+        ports:
+            - "8083:8083"
+            - "8446:8446"
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+    mongodb:
+        image: mongo:3.6.1
+        ports:
+            - "27017:27017"
+            - "28017:28017"
+        volumes:
+            - mongodbdata:/data/db
+volumes:
+    mongodbdata:
+        external: true
