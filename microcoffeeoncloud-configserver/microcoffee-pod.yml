@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: microcoffee-configserver
+  labels:
+    app: microcoffee-configserver
+spec:
+  containers:
+    - name: configserver
+      image: microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
+      ports:
+        - containerPort: 8091
+          hostPort: 8091
+      env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "devdocker"
+        - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+          value: "https://github.com/dagbjorn/microcoffeeoncloud-appconfig.git"
+          

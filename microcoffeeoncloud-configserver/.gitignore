@@ -1,3 +1,4 @@
+/.kube
 /target
 .classpath
 .project
