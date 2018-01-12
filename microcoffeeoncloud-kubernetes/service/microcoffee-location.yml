@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microcoffee-location
+  labels:
+    app: microcoffee
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 8081
+      targetPort: 8081
+      name: location-http
+    - port: 8444
+      targetPort: 8444
+      name: location-https
+  selector:
+    app: microcoffee
+    tier: frontend
+  externalIPs:
+    - 192.168.99.100
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: microcoffee-location
+  labels:
+    app: microcoffee
+    tier: frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: microcoffee
+        tier: frontend
+    spec:
+      containers:
+        - name: location
+          image: microcoffeeoncloud-location:1.0.0-SNAPSHOT
+          ports:
+            - containerPort: 8081
+              name: location-http
+            - containerPort: 8444
+              name: location-https
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "devdocker"
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: "http://192.168.99.100:8091"
+              
