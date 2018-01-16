@@ -18,6 +18,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
+
         <spring-cloud.version>Edgware.RELEASE</spring-cloud.version>
 
         <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
@@ -38,6 +40,13 @@
     </dependencyManagement>
 
     <dependencies>
+         <!-- Internal projects -->
+        <dependency>
+            <groupId>study.microcoffeeoncloud</groupId>
+            <artifactId>microcoffeeoncloud-certificates</artifactId>
+            <version>${microcoffeeoncloud-certificates.version}</version>
+        </dependency>
+
         <!-- Spring Cloud -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
