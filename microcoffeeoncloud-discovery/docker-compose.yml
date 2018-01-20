@@ -1,0 +1,11 @@
+version: '3'
+services:
+    discovery:
+        image: microcoffeeoncloud-discovery:1.0.0-SNAPSHOT
+        ports:
+            - "8092:8092"
+            - "8455:8455"
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+            
