@@ -15,10 +15,10 @@ public class ServiceBehaviorFactory {
 
     private static Logger logger = LoggerFactory.getLogger(ServiceBehaviorFactory.class);
 
-    @Value("${creditrating.service.behavior}")
+    @Value("${app.creditrating.service.behavior}")
     private int serviceBehavior;
 
-    @Value("${creditrating.service.behavior.delay}")
+    @Value("${app.creditrating.service.behavior.delay}")
     private int delay;
 
     public ServiceBehavior createServiceBehavior() {

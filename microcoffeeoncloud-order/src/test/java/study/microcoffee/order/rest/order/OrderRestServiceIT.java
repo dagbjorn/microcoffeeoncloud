@@ -1,38 +1,28 @@
 package study.microcoffee.order.rest.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 
 import study.microcoffee.order.domain.DrinkType;
@@ -42,7 +32,7 @@ import study.microcoffee.order.domain.Order;
  * Integration tests of {@link OrderRestService}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class OrderRestServiceIT {
 
@@ -52,9 +42,7 @@ public class OrderRestServiceIT {
     private static final int COFFEE_SHOP_ID = 10;
 
     @Autowired
-    private MockMvc mockMvc;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private TestRestTemplate restTemplate;
 
     @Test
     public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
@@ -65,45 +53,35 @@ public class OrderRestServiceIT {
             .selectedOption("skimmed milk") //
             .build();
 
-        MvcResult result = mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .content(toJson(newOrder)) //
-            .contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(status().isCreated()) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(jsonPath("$.type.name").value("Latte")) //
-            .andExpect(jsonPath("$.drinker").value("Dagbjørn")) //
-            .andReturn();
+        ResponseEntity<Order> response = restTemplate.postForEntity(POST_SERVICE_PATH, newOrder, Order.class, COFFEE_SHOP_ID);
 
-        MockHttpServletResponse response = result.getResponse();
-        Order savedOrder = toObject(response.getContentAsString(), Order.class);
+        Order savedOrder = response.getBody();
 
-        assertThat(response.getHeader(HttpHeaders.LOCATION)).endsWith(savedOrder.getId());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(response.getHeaders().getLocation().toString()).endsWith(savedOrder.getId());
+        assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
+        assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
 
-        mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, savedOrder.getId()) //
-            .accept(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(status().isOk()) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(content().json(toJson(savedOrder)));
+        response = restTemplate.getForEntity(GET_SERVICE_PATH, Order.class, COFFEE_SHOP_ID, savedOrder.getId());
+
+        Order readBackOrder = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(readBackOrder.toString()).isEqualTo(savedOrder.toString());
     }
 
     @Test
     public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
-            .accept(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(status().isNoContent());
+        ResponseEntity<Order> response = restTemplate.getForEntity(GET_SERVICE_PATH, Order.class, COFFEE_SHOP_ID, orderId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
-    private String toJson(Object value) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(value);
-    }
-
-    private <T> T toObject(String json, Class<T> classType) throws IOException {
-        return objectMapper.readValue(json, classType);
-    }
-
-    @Configuration
+    @SpringBootApplication
     @Import({ OrderRestService.class })
     @ComponentScan(basePackages = { "study.microcoffee.order.security", "study.microcoffee.order.consumer.creditrating" })
     @EnableMongoRepositories(basePackages = "study.microcoffee.order.repository")

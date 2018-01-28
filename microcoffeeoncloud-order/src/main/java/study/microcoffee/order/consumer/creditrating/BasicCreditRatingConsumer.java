@@ -26,7 +26,7 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
     @Value("#{creditRatingRestTemplateFactory.createRestTemplate()}")
     private RestTemplate restTemplate;
 
-    @Value("${creditrating.endpointurl}")
+    @Value("${app.creditrating.url}")
     private String creditRatingEndpointUrl;
 
     @Override

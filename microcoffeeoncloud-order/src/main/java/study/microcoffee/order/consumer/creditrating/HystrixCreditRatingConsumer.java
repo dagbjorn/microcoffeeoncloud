@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,23 +26,28 @@ public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(HystrixCreditRatingConsumer.class);
 
-    @Value("#{creditRatingRestTemplateFactory.createRestTemplate()}")
     private RestTemplate restTemplate;
 
-    @Value("${creditrating.endpointurl}")
-    private String creditRatingEndpointUrl;
+    private String creditRatingRootUrl;
+
+    public HystrixCreditRatingConsumer(RestTemplateBuilder builder, @Value("${app.creditrating.url}") String rootUrl) {
+        restTemplate = builder.rootUri(rootUrl).build();
+        creditRatingRootUrl = rootUrl;
+
+        logger.debug("restTemplate.requestFactory={}", restTemplate.getRequestFactory());
+        logger.debug("app.creditrating.url={}", rootUrl);
+    }
 
     @HystrixCommand(fallbackMethod = "getMinimumCreditRating", commandKey = "getCreditRating", commandProperties = {})
     @Override
     public int getCreditRating(String customerId) {
-        String url = creditRatingEndpointUrl + GET_CREDIT_RATING_RESOURCE;
-
-        logger.debug("GET request to {}, customerId={}", url, customerId);
+        logger.debug("GET request to {}, customerId={}", creditRatingRootUrl + GET_CREDIT_RATING_RESOURCE, customerId);
 
         try {
-            ResponseEntity<CreditRating> response = restTemplate.getForEntity(url, CreditRating.class, customerId);
+            ResponseEntity<CreditRating> response = restTemplate.getForEntity(GET_CREDIT_RATING_RESOURCE, CreditRating.class,
+                customerId);
 
-            logger.debug("GET response from {}, response={}", url, response.getBody());
+            logger.debug("GET response from {}, response={}", creditRatingRootUrl + GET_CREDIT_RATING_RESOURCE, response.getBody());
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return response.getBody().getCreditRating();

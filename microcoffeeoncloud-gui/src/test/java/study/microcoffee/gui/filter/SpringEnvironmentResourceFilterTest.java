@@ -34,12 +34,12 @@ public class SpringEnvironmentResourceFilterTest {
     @Test
     public void filterTextWhenEnvironmentPropsShouldReturnTextWithReplacedEnvVars() throws IOException {
         MockEnvironment mockEnv = new MockEnvironment();
-        mockEnv.setProperty("location.endpointurl.https", "https://192.168.99.100:8444");
-        mockEnv.setProperty("menu.endpointurl.https", "https://192.168.99.100:8445");
+        mockEnv.setProperty("app.location.url.https", "https://192.168.99.100:8444");
+        mockEnv.setProperty("app.menu.url.https", "https://192.168.99.100:8445");
 
         String text = "    // REST services (https)\n" //
-            + "    window.__env.locationServiceUrl = '${location.endpointurl.https}';\n" //
-            + "    window.__env.menuServiceUrl = '${menu.endpointurl.https}';\n" //
+            + "    window.__env.locationServiceUrl = '${app.location.url.https}';\n" //
+            + "    window.__env.menuServiceUrl = '${app.menu.url.https}';\n" //
             + "\n";
 
         InputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));

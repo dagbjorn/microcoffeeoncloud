@@ -23,7 +23,7 @@ public class CreditRatingRestTemplateFactory {
 
     private final Logger logger = LoggerFactory.getLogger(CreditRatingRestTemplateFactory.class);
 
-    @Value("${creditrating.timeout}")
+    @Value("${app.creditrating.timeout}")
     private int timeout;
 
     /**
@@ -34,7 +34,7 @@ public class CreditRatingRestTemplateFactory {
     public RestTemplate createRestTemplate() {
         logger.info("javax.net.ssl.trustStore={}", System.getProperty("javax.net.ssl.trustStore"));
         logger.info("javax.net.ssl.trustStorePassword={}", System.getProperty("javax.net.ssl.trustStorePassword"));
-        logger.info("creditrating.timeout={}", timeout);
+        logger.info("app.creditrating.timeout={}", timeout);
 
         HttpClient httpClient = HttpClientFactory.createTrustAnyHostnameClient(timeout);
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
