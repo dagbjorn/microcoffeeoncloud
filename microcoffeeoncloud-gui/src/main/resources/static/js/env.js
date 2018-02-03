@@ -17,14 +17,18 @@
 //    window.__env.orderServiceUrl = 'https://192.168.99.100:8445';
 
     // REST services (http)
-    window.__env.locationServiceUrl = '${app.location.url.http}';
-    window.__env.menuServiceUrl = '${app.menu.url.http}';
-    window.__env.orderServiceUrl = '${app.order.url.http}';
+//    window.__env.locationServiceUrl = '${app.location.url.http}';
+//    window.__env.menuServiceUrl = '${app.menu.url.http}';
+//    window.__env.orderServiceUrl = '${app.order.url.http}';
 
     // REST services (https)
-    window.__env.locationServiceUrl = '${app.location.url.https}';
-    window.__env.menuServiceUrl = '${app.menu.url.https}';
-    window.__env.orderServiceUrl = '${app.order.url.https}';
+//    window.__env.locationServiceUrl = '${app.location.url.https}';
+//    window.__env.menuServiceUrl = '${app.menu.url.https}';
+//    window.__env.orderServiceUrl = '${app.order.url.https}';
+
+    // REST API gateway
+    //window.__env.apiGatewayUrl = '${app.gateway.url.http}';
+    window.__env.apiGatewayUrl = '${app.gateway.url}';
 
     // Logging
     window.__env.enableDebug = true;

@@ -1,4 +1,4 @@
-package study.microcoffee.gui.config;
+package study.microcoffee.gateway;
 
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;

@@ -10,9 +10,9 @@ spec:
     - name: gui
       image: microcoffeeoncloud-gui:1.0.0-SNAPSHOT
       ports:
-        - containerPort: 8080
+        - containerPort: 8090
           hostPort: 9080
-        - containerPort: 8443
+        - containerPort: 8453
           hostPort: 9443
       env:
         - name: SPRING_PROFILES_ACTIVE

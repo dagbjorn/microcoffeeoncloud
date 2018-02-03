@@ -1,4 +1,3 @@
-
 package study.microcoffee.gui.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,18 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Test;
-import org.springframework.mock.env.MockEnvironment;
 
 /**
- * Unit tests of {@link SpringEnvironmentResourceFilter}.
+ * Unit tests of {@link ConcurrentMapResourceFilter}.
  */
-public class SpringEnvironmentResourceFilterTest {
+public class ConcurrentMapResourceFilterTest {
 
     @Test
-    public void filterTextWhenNoEnvironmentPropsShouldReturnUnmodifiedText() throws IOException {
-        MockEnvironment mockEnv = new MockEnvironment(); // empty
+    public void filterTextWhenNoPropertiesShouldReturnUnmodifiedText() throws IOException {
+        ConcurrentMap<String, String> propertyMap = new ConcurrentHashMap<>();
 
         String text = "    // REST services (https)\n" //
             + "    window.__env.locationServiceUrl = 'https://192.168.99.100:8444';\n" //
@@ -29,27 +29,29 @@ public class SpringEnvironmentResourceFilterTest {
         InputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
         StringWriter writer = new StringWriter();
 
-        ResourceFilter filter = new SpringEnvironmentResourceFilter(mockEnv);
+        ResourceFilter filter = new ConcurrentMapResourceFilter(propertyMap);
         filter.filterText(input, writer);
 
         assertThat(text).isEqualTo(writer.toString());
     }
 
     @Test
-    public void filterTextWhenEnvironmentPropsShouldReturnTextWithReplacedEnvVars() throws IOException {
-        MockEnvironment mockEnv = new MockEnvironment();
-        mockEnv.setProperty("app.location.url.https", "https://192.168.99.100:8444");
-        mockEnv.setProperty("app.menu.url.https", "https://192.168.99.100:8445");
+    public void filterTextWhenPropertiesExistsShouldReturnTextWithReplacedEnvVars() throws IOException {
+        ConcurrentMap<String, String> propertyMap = new ConcurrentHashMap<>();
+        propertyMap.put("MICROCOFFEE_LOCATION_SERVICE_HOST", "192.168.99.100");
+        propertyMap.put("MICROCOFFEE_LOCATION_SERVICE_PORT", "8444");
+        propertyMap.put("MICROCOFFEE_MENU_SERVICE_HOST", "192.168.99.100");
+        propertyMap.put("MICROCOFFEE_MENU_SERVICE_PORT", "8445");
 
         String text = "    // REST services (https)\n" //
-            + "    window.__env.locationServiceUrl = '${app.location.url.https}';\n" //
-            + "    window.__env.menuServiceUrl = '${app.menu.url.https}';\n" //
+            + "    window.__env.locationServiceUrl = 'https://${MICROCOFFEE_LOCATION_SERVICE_HOST}:${MICROCOFFEE_LOCATION_SERVICE_PORT}';\n" //
+            + "    window.__env.menuServiceUrl = 'https://${MICROCOFFEE_MENU_SERVICE_HOST}:${MICROCOFFEE_MENU_SERVICE_PORT}';\n" //
             + "\n";
 
         InputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
         StringWriter writer = new StringWriter();
 
-        ResourceFilter filter = new SpringEnvironmentResourceFilter(mockEnv);
+        ResourceFilter filter = new ConcurrentMapResourceFilter(propertyMap);
         filter.filterText(input, writer);
 
         String result = writer.toString();

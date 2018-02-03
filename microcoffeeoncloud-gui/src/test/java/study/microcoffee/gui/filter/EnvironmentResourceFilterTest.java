@@ -12,8 +12,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import study.microcoffee.gui.filter.EnvironmentResourceFilter;
-
+/**
+ * Unit tests of {@link EnvironmentResourceFilter}.
+ */
 public class EnvironmentResourceFilterTest {
 
     @Test
