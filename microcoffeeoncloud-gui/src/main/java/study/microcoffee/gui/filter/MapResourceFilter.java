@@ -6,24 +6,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Implementation of a ResourceFilter where the configuration source is based on properties in a concurrent map.
+ * Implementation of a ResourceFilter where the configuration source is based on properties in a map.
  */
-public class ConcurrentMapResourceFilter implements ResourceFilter {
+public class MapResourceFilter implements ResourceFilter {
 
-    private ConcurrentMap<String, String> propertyMap;
+    private Map<String, String> propertyMap;
 
     /**
-     * Creates a ConcurrentMapResourceFilter object initialized with the provided concurrent map of properties.
+     * Creates a MapResourceFilter object initialized with the provided concurrent map of properties.
      *
      * @param propertyMap
      *            the map of properties.
      */
-    public ConcurrentMapResourceFilter(ConcurrentMap<String, String> propertyMap) {
+    public MapResourceFilter(Map<String, String> propertyMap) {
         this.propertyMap = propertyMap;
     }
 

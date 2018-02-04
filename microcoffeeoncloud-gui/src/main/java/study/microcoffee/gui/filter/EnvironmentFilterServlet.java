@@ -3,8 +3,8 @@ package study.microcoffee.gui.filter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -38,8 +38,6 @@ public class EnvironmentFilterServlet extends HttpServlet {
     @Value("${app.gateway.serviceId}")
     private String gatewayServiceId;
 
-    private ConcurrentMap<String, String> envProps = new ConcurrentHashMap<>();
-
     @Autowired
     private DiscoveredServiceResolver serviceResolver;
 
@@ -53,21 +51,14 @@ public class EnvironmentFilterServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        resolveApiGateway();
+        String resourceUri = getResourceUri(request);
 
-        String requestUri = request.getRequestURI();
+        logger.debug("Processing environment filter request for resourceURI: {}", resourceUri);
 
-        logger.debug("Processing environment filter request for requestURI: {}", requestUri);
+        InputStream resource = getResourceAsStream(resourceUri);
 
-        // Prepend with 'static' used by Spring Boot as root folder for static resources.
-        String resourcePath = "static" + requestUri;
-
-        InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
-        if (resource == null) {
-            throw new ServletException("Resource " + requestUri + " not found on server.");
-        }
-
-        ResourceFilter resourceFilter = new ConcurrentMapResourceFilter(envProps);
+        Map<String, String> envProps = resolveEnvironmentProperties();
+        ResourceFilter resourceFilter = new MapResourceFilter(envProps);
 
         StringWriter tempWriter = new StringWriter();
         resourceFilter.filterText(resource, tempWriter);
@@ -80,9 +71,41 @@ public class EnvironmentFilterServlet extends HttpServlet {
         response.getWriter().print(responseAsString);
     }
 
-    private void resolveApiGateway() {
+    /**
+     * Returns the URI of the resource to filter. This is the request URI with the context root removed.
+     */
+    private String getResourceUri(HttpServletRequest request) {
+        return request.getRequestURI().substring(request.getContextPath().length());
+    }
+
+    /**
+     * Returns the resource as an input stream. The resource is assumed to be located in Spring Boot's 'static' folder. This is the
+     * root folder used by Spring Boot for static resources.
+     */
+    private InputStream getResourceAsStream(String resourceUri) throws ServletException {
+        String resourcePath = "static" + resourceUri;
+
+        InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
+        if (resource == null) {
+            throw new ServletException("Resource " + resourcePath + " not found on server.");
+        }
+        return resource;
+    }
+
+    /**
+     * Resolves environment-specific properties based on discovered services and returns the result in a map.
+     */
+    private Map<String, String> resolveEnvironmentProperties() {
+        Map<String, String> envProps = new HashMap<>();
+
         String gatewayUrl = serviceResolver.resolveServiceUrl(gatewayServiceId);
-        envProps.put(GATEWAY_URL_PROP_NAME, gatewayUrl);
+        if (gatewayUrl != null) {
+            envProps.put(GATEWAY_URL_PROP_NAME, gatewayUrl);
+        } else {
+            logger.error("No service discovered with service ID: {}", gatewayServiceId);
+        }
+
+        return envProps;
     }
 }
 

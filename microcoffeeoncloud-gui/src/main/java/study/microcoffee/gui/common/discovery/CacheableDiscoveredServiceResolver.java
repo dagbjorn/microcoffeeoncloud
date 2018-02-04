@@ -29,6 +29,10 @@ public class CacheableDiscoveredServiceResolver implements DiscoveredServiceReso
     @Cacheable("serviceUrls")
     public String resolveServiceUrl(String serviceId) {
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
+        if (serviceInstances.isEmpty()) {
+            return null;
+        }
+
         int instanceNumber = ThreadLocalRandom.current().nextInt(serviceInstances.size());
         String serviceUrl = serviceInstances.get(instanceNumber).getUri().toString();
 

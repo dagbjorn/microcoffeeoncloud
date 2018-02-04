@@ -7,19 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
 /**
- * Unit tests of {@link ConcurrentMapResourceFilter}.
+ * Unit tests of {@link MapResourceFilter}.
  */
-public class ConcurrentMapResourceFilterTest {
+public class MapResourceFilterTest {
 
     @Test
     public void filterTextWhenNoPropertiesShouldReturnUnmodifiedText() throws IOException {
-        ConcurrentMap<String, String> propertyMap = new ConcurrentHashMap<>();
+        Map<String, String> propertyMap = new HashMap<>();
 
         String text = "    // REST services (https)\n" //
             + "    window.__env.locationServiceUrl = 'https://192.168.99.100:8444';\n" //
@@ -29,7 +29,7 @@ public class ConcurrentMapResourceFilterTest {
         InputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
         StringWriter writer = new StringWriter();
 
-        ResourceFilter filter = new ConcurrentMapResourceFilter(propertyMap);
+        ResourceFilter filter = new MapResourceFilter(propertyMap);
         filter.filterText(input, writer);
 
         assertThat(text).isEqualTo(writer.toString());
@@ -37,7 +37,7 @@ public class ConcurrentMapResourceFilterTest {
 
     @Test
     public void filterTextWhenPropertiesExistsShouldReturnTextWithReplacedEnvVars() throws IOException {
-        ConcurrentMap<String, String> propertyMap = new ConcurrentHashMap<>();
+        Map<String, String> propertyMap = new HashMap<>();
         propertyMap.put("MICROCOFFEE_LOCATION_SERVICE_HOST", "192.168.99.100");
         propertyMap.put("MICROCOFFEE_LOCATION_SERVICE_PORT", "8444");
         propertyMap.put("MICROCOFFEE_MENU_SERVICE_HOST", "192.168.99.100");
@@ -51,7 +51,7 @@ public class ConcurrentMapResourceFilterTest {
         InputStream input = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
         StringWriter writer = new StringWriter();
 
-        ResourceFilter filter = new ConcurrentMapResourceFilter(propertyMap);
+        ResourceFilter filter = new MapResourceFilter(propertyMap);
         filter.filterText(input, writer);
 
         String result = writer.toString();
