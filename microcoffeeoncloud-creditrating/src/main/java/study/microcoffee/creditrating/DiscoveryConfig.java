@@ -1,10 +1,10 @@
-package study.microcoffee.gui;
+package study.microcoffee.creditrating;
 
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration class of discovery client.
+ * Configuration class of Discovery client.
  */
 @Configuration
 @EnableDiscoveryClient

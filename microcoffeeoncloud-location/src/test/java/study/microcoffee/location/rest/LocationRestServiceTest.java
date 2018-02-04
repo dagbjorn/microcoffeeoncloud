@@ -14,8 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -23,13 +21,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import study.microcoffee.location.repository.LocationRepository;
-import study.microcoffee.location.rest.LocationRestService;
 
 /**
  * Unit tests of {@link LocationRestService}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(LocationRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 public class LocationRestServiceTest {
 
@@ -47,9 +44,8 @@ public class LocationRestServiceTest {
 
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong())).willReturn(expectedContent);
 
-        mockMvc
-            .perform(get(SERVICE_PATH, 1, 2, 3) //
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(SERVICE_PATH, 1, 2, 3) //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isOk()) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(expectedContent));
@@ -57,9 +53,8 @@ public class LocationRestServiceTest {
 
     @Test
     public void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() throws Exception {
-        mockMvc
-            .perform(get(SERVICE_PATH, 4, 5, 6) //
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(SERVICE_PATH, 4, 5, 6) //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isNoContent());
     }
 
@@ -70,18 +65,12 @@ public class LocationRestServiceTest {
 
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong())).willReturn(expectedContent);
 
-        mockMvc
-            .perform(get(SERVICE_PATH, 1, 2, 3) //
-                .accept(MediaType.APPLICATION_JSON_UTF8) //
-                .header(HttpHeaders.ORIGIN, expectedOriginHeader)) //
+        mockMvc.perform(get(SERVICE_PATH, 1, 2, 3) //
+            .accept(MediaType.APPLICATION_JSON_UTF8) //
+            .header(HttpHeaders.ORIGIN, expectedOriginHeader)) //
             .andExpect(status().isOk()) //
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, Matchers.equalTo(expectedOriginHeader))) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(expectedContent));
-    }
-
-    @Configuration
-    @Import(LocationRestService.class)
-    static class Config {
     }
 }

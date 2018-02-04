@@ -1,4 +1,4 @@
-package study.microcoffee.creditrating.config;
+package study.microcoffee.configserver;
 
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;

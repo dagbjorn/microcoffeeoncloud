@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -32,13 +30,12 @@ import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.repository.OrderRepository;
-import study.microcoffee.order.rest.order.OrderRestService;
 
 /**
  * Unit tests of {@link OrderRestService}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(OrderRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 public class OrderRestServiceTest {
 
@@ -141,10 +138,5 @@ public class OrderRestServiceTest {
 
     private String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
-    }
-
-    @Configuration
-    @Import({ OrderRestService.class })
-    static class Config {
     }
 }

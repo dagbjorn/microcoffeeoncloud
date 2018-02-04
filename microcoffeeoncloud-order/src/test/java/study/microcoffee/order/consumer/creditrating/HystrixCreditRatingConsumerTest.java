@@ -14,8 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -31,7 +29,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  * Unit tests of {@link HystrixCreditRatingConsumer}.
  */
 @RunWith(SpringRunner.class)
-@RestClientTest
+@RestClientTest(HystrixCreditRatingConsumer.class)
 @TestPropertySource(properties = { "app.creditrating.url=http://dummy" })
 public class HystrixCreditRatingConsumerTest {
 
@@ -70,10 +68,5 @@ public class HystrixCreditRatingConsumerTest {
 
     private String buildServicePath(String customerId) throws UnsupportedEncodingException {
         return "/coffeeshop/creditrating/" + UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name());
-    }
-
-    @Configuration
-    @Import({ HystrixCreditRatingConsumer.class })
-    static class Config {
     }
 }

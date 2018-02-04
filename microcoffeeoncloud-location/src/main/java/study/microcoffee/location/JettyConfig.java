@@ -1,4 +1,4 @@
-package study.microcoffee.discovery.config;
+package study.microcoffee.location;
 
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;

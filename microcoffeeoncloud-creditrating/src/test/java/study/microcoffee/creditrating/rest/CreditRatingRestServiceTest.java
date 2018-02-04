@@ -4,16 +4,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,22 +26,18 @@ import study.microcoffee.creditrating.domain.CreditRating;
  * Unit tests of {@link CreditRatingRestService}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(CreditRatingRestService.class)
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
-@TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@TestPropertySource("/application-test.properties")
 public class CreditRatingRestServiceTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
-
-    @MockBean
-    private ServiceBehaviorFactory serviceBehaviorFactory;
 
     @Autowired
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    @Ignore("Throws SpelEvaluationException: EL1021E: A problem occurred whilst attempting to access the property 'serviceBehaviorFactory': 'EvaluationContext is required'")
     @Test
     public void getCreditRatingShouldReturnRating() throws Exception {
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(70));
@@ -54,8 +48,12 @@ public class CreditRatingRestServiceTest {
             .andExpect(content().json(expectedContent));
     }
 
-    @Configuration
-    @Import({ CreditRatingRestService.class })
+    @TestConfiguration
     static class Config {
+
+        @Bean
+        public ServiceBehaviorFactory serviceBehaviorFactory() {
+            return new ServiceBehaviorFactory();
+        }
     }
 }

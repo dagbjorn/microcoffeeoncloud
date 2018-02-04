@@ -7,9 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.test.context.TestPropertySource;
@@ -39,8 +38,7 @@ public class MongoMenuRepositoryIT {
         assertThat(coffeeMenu.toString()).contains("soy");
     }
 
-    @Configuration
-    @Import({ MongoMenuRepository.class })
+    @TestConfiguration
     static class Config {
 
         @Value("${mongo.database.host}")

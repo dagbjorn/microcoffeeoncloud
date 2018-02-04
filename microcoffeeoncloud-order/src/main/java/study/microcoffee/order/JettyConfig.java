@@ -1,4 +1,4 @@
-package study.microcoffee.location.config;
+package study.microcoffee.order;
 
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;

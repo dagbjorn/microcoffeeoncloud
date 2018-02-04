@@ -10,21 +10,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import study.microcoffee.order.repository.MenuRepository;
-import study.microcoffee.order.rest.menu.MenuRestService;
 
 /**
  * Unit tests of {@link MenuRestService}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(MenuRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 public class MenuRestServiceTest {
 
@@ -46,10 +43,5 @@ public class MenuRestServiceTest {
             .andExpect(status().isOk()) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(expectedMenu));
-    }
-
-    @Configuration
-    @Import(MenuRestService.class)
-    static class Config {
     }
 }

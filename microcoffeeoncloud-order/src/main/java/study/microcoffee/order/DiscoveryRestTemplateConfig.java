@@ -1,4 +1,4 @@
-package study.microcoffee.order.config;
+package study.microcoffee.order;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,6 @@ import com.netflix.client.http.HttpRequest;
 
 /**
  * Discovery-supported RestTemplate configuration.
- *
- *
  */
 @Configuration
 @ConditionalOnClass(HttpRequest.class)

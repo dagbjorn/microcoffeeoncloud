@@ -6,11 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.http.HttpEntity;
@@ -23,8 +22,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mongodb.MongoClient;
-
-import study.microcoffee.location.repository.MongoLocationRepository;
 
 /**
  * Integration tests of {@link LocationRestService}.
@@ -78,11 +75,10 @@ public class LocationRestServiceIT {
         assertThat(response.getBody()).contains("coordinates");
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
         // No Access-Control-Allow-Origin returned
-        //assertThat(response.getHeaders().getAccessControlAllowOrigin()).isEqualTo(originHeaderValue);
+        // assertThat(response.getHeaders().getAccessControlAllowOrigin()).isEqualTo(originHeaderValue);
     }
 
-    @SpringBootApplication
-    @Import({ LocationRestService.class, MongoLocationRepository.class })
+    @TestConfiguration
     static class Config {
 
         @Value("${mongo.database.host}")
