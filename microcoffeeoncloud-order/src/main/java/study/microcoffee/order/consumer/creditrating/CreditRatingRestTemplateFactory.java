@@ -18,7 +18,7 @@ import study.microcoffee.order.consumer.common.http.HttpClientFactory;
  * Note! RestTemplate instances are supposed to be thread-safe.
  */
 @Component
-@DependsOn("trustStoreConfig")
+//@DependsOn("trustStoreConfig")
 public class CreditRatingRestTemplateFactory {
 
     private final Logger logger = LoggerFactory.getLogger(CreditRatingRestTemplateFactory.class);

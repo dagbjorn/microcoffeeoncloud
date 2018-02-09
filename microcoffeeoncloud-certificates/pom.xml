@@ -61,6 +61,18 @@
                                 </configuration>
                             </execution>
                             <execution>
+                                <id>generate-key-pair-domainname</id>
+                                <goals>
+                                    <goal>generateKeyPair</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <alias>microcoffee.study</alias>
+                                    <dname>cn=*.microcoffee.study, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                                    <ext>SAN=ip:192.168.99.100</ext>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>list-keystore</id>
                                 <goals>
                                     <goal>list</goal>

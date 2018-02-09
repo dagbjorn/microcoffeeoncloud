@@ -10,7 +10,8 @@ services:
             - order
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+        domainname: microcoffee.study
     location:
         image: microcoffeeoncloud-location:1.0.0-SNAPSHOT
         ports:
@@ -20,7 +21,8 @@ services:
             - mongodb
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+        domainname: microcoffee.study
     order:
         image: microcoffeeoncloud-order:1.0.0-SNAPSHOT
         ports:
@@ -30,7 +32,8 @@ services:
             - mongodb
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+        domainname: microcoffee.study
     creditrating:
         image: microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
         ports:
@@ -38,7 +41,8 @@ services:
             - "8446:8446"
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=http://192.168.99.100:8091
+            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+        domainname: microcoffee.study
     mongodb:
         image: mongo:3.6.1
         ports:

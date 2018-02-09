@@ -102,7 +102,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <jvmArguments>
-                        -Djavax.net.debug=none
+                        -Djavax.net.debug=none -Djavax.net.ssl.trustStore=target/keystore/microcoffee-keystore.jks -Djavax.net.ssl.trustStorePassword=12345678
                     </jvmArguments>
                 </configuration>
             </plugin>
@@ -113,6 +113,26 @@
                     <downloadSources>true</downloadSources>
                     <testSourcesLast>true</testSourcesLast>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-keystore</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>microcoffeeoncloud-certificates</includeArtifactIds>
+                            <includes>**/microcoffee-keystore.jks</includes>
+                            <outputDirectory>${project.build.directory}/keystore</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -127,6 +147,11 @@
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
                             <include>${project.build.finalName}.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}/keystore</directory>
+                            <include>microcoffee-keystore.jks</include>
                         </resource>
                     </resources>
                     <imageTags>

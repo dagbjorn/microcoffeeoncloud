@@ -21,7 +21,7 @@ import study.microcoffee.gateway.utils.TempFileUtils;
  * <li>javax.net.ssl.trustStorePassword</li>
  * </ul>
  */
-@Component
+//@Component
 public class TrustStoreConfig {
 
     public static final String SYSTEM_PROPERTY_TRUSTSTORE = "javax.net.ssl.trustStore";

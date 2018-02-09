@@ -33,7 +33,7 @@ public class HttpClientFactory {
             .build();
 
         CloseableHttpClient httpClient = HttpClients.custom() //
-            .setSSLHostnameVerifier(new NoopHostnameVerifier()) //
+            //.setSSLHostnameVerifier(new NoopHostnameVerifier()) //
             .setDefaultRequestConfig(requestConfig) //
             .build();
 
