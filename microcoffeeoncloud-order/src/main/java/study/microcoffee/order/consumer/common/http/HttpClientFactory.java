@@ -1,7 +1,6 @@
 package study.microcoffee.order.consumer.common.http;
 
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -33,7 +32,7 @@ public class HttpClientFactory {
             .build();
 
         CloseableHttpClient httpClient = HttpClients.custom() //
-            //.setSSLHostnameVerifier(new NoopHostnameVerifier()) //
+            // .setSSLHostnameVerifier(new NoopHostnameVerifier()) // Not needed with current wildcard certificate.
             .setDefaultRequestConfig(requestConfig) //
             .build();
 

@@ -3,6 +3,7 @@ package study.microcoffee.creditrating;
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * Additional Jetty configuration not supported by Spring Boot.
  */
 @Configuration
+@ConditionalOnProperty(value = "server.http.port", matchIfMissing = false)
 public class JettyConfig {
 
     /**

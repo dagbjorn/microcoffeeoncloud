@@ -117,6 +117,8 @@
                 <configuration>
                     <downloadSources>true</downloadSources>
                     <testSourcesLast>true</testSourcesLast>
+                    <!-- Needed for Spring to resolve classpath:microcoffee-keystore.jks in integration test -->
+                    <useProjectReferences>false</useProjectReferences>
                 </configuration>
             </plugin>
 

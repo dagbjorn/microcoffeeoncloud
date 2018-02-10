@@ -1,0 +1,12 @@
+version: '3'
+services:
+    gateway:
+        image: microcoffeeoncloud-gateway:1.0.0-SNAPSHOT
+        ports:
+            - "8080:8080"
+            - "8443:8443"
+        environment:
+            - SPRING_PROFILES_ACTIVE=devdocker
+            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+        domainname: microcoffee.study
+            

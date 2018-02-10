@@ -2,6 +2,10 @@ package study.microcoffee.order.rest.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import com.mongodb.MongoClient;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
+import study.microcoffee.order.utils.KeystoreUtils;
 
 /**
  * Integration tests of {@link OrderRestService}.
@@ -39,6 +44,18 @@ public class OrderRestServiceIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @BeforeClass
+    public static void initOnce() throws IOException {
+        System.setProperty("javax.net.debug", "ssl");
+
+        KeystoreUtils.configureTruststore();
+    }
+
+    @AfterClass
+    public static void destroyOnce() {
+        KeystoreUtils.clearTruststore();
+    }
 
     @Test
     public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {

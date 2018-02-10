@@ -98,8 +98,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- Use JDK cacerts, otherwise root certificate of github.com is not available. -->
                     <jvmArguments>
-                        -Djavax.net.debug=none -Djavax.net.ssl.trustStore=target/keystore/microcoffee-keystore.jks -Djavax.net.ssl.trustStorePassword=12345678
+                        -Djavax.net.debug=none
                     </jvmArguments>
                 </configuration>
             </plugin>

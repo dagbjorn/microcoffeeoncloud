@@ -10,10 +10,7 @@ import java.nio.file.StandardCopyOption;
 /**
  * Utility class providing temporary file support.
  */
-public final class TempFileUtils {
-
-    private TempFileUtils() {
-    }
+public abstract class TempFileUtils {
 
     /**
      * Reads data from a URL and writes it to a temporary file of name <code>&lt;namePrefix&gt;&lt;currentTimeMillis&gt;.tmp</code>.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration>
+
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+    <!-- Kills the extremely noisy debug logging when Spring initializes -->
+    <logger name="org.springframework" level="INFO"/>
+</configuration>
