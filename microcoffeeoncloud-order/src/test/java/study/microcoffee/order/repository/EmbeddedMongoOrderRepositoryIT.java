@@ -2,42 +2,27 @@ package study.microcoffee.order.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.repository.Repository;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
-import study.microcoffee.order.test.config.MongoTestConfig;
-import study.microcoffee.order.test.utils.KeystoreUtils;
 
 /**
- * Integration tests of {@link OrderRepository} that uses an external MongoDB database.
+ * Integration tests of {@link OrderRepository} that uses an auto-configured Embedded MongoDB database.
+ * <p>
+ * The @DataMongoTest annotation will scan for @Document classes and Spring {@link Repository} classes.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@TestPropertySource("/application-test.properties")
-@Import(MongoTestConfig.class)
-public class OrderRepositoryIT {
+@DataMongoTest
+public class EmbeddedMongoOrderRepositoryIT {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @BeforeClass
-    public static void initOnce() throws Exception {
-        KeystoreUtils.configureTruststore();
-    }
-
-    @AfterClass
-    public static void destroyOnce() throws Exception {
-        KeystoreUtils.clearTruststore();
-    }
 
     @Test
     public void saveOrderWhenReadBackShouldReturnSavedOrder() {
