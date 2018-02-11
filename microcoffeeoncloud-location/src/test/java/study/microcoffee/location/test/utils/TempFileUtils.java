@@ -1,4 +1,4 @@
-package study.microcoffee.order.utils;
+package study.microcoffee.location.test.utils;
 
 import java.io.File;
 import java.io.IOException;

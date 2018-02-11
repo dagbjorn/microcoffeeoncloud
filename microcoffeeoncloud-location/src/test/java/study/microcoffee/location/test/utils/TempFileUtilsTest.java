@@ -1,4 +1,4 @@
-package study.microcoffee.order.utils;
+package study.microcoffee.location.test.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

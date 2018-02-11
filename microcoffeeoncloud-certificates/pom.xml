@@ -37,6 +37,8 @@
                                 </goals>
                                 <phase>initialize</phase>
                             </execution>
+
+                            <!-- Generate keystores -->
                             <execution>
                                 <id>generate-key-pair-localhost</id>
                                 <goals>
@@ -69,9 +71,55 @@
                                 <configuration>
                                     <alias>microcoffee.study</alias>
                                     <dname>cn=*.microcoffee.study, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
-                                    <ext>SAN=ip:192.168.99.100</ext>
+                                    <ext>SAN=ip:${cn}</ext>
                                 </configuration>
                             </execution>
+
+                            <!-- Convert keystore to PKCS12 format (selected alias) -->
+                            <execution>
+                                <id>convert-pkcs12-localhost</id>
+                                <goals>
+                                    <goal>importKeystore</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <srcalias>localhost</srcalias>
+                                    <destkeystore>${project.build.outputDirectory}/localhost.p12</destkeystore>
+                                    <deststorepass>12345678</deststorepass>
+                                    <deststoretype>PKCS12</deststoretype>
+                                    <noprompt>false</noprompt>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>convert-pkcs12-ip</id>
+                                <goals>
+                                    <goal>importKeystore</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <srcalias>${alias}</srcalias>
+                                    <destkeystore>${project.build.outputDirectory}/${alias}.p12</destkeystore>
+                                    <deststorepass>12345678</deststorepass>
+                                    <deststoretype>PKCS12</deststoretype>
+                                    <noprompt>false</noprompt>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>convert-pkcs12-domainname</id>
+                                <goals>
+                                    <goal>importKeystore</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <srcalias>microcoffee.study</srcalias>
+                                    <destkeystore>${project.build.outputDirectory}/microcoffee.study.p12</destkeystore>
+                                    <deststorepass>12345678</deststorepass>
+                                    <deststoretype>PKCS12</deststoretype>
+                                    <noprompt>false</noprompt>
+                                </configuration>
+                            </execution>
+
+                            <!-- List contents of keystore -->
                             <execution>
                                 <id>list-keystore</id>
                                 <goals>
@@ -82,7 +130,9 @@
                         </executions>
                         <configuration>
                             <keystore>${project.build.outputDirectory}/microcoffee-keystore.jks</keystore>
+                            <srckeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</srckeystore>
                             <storepass>12345678</storepass>
+                            <srcstorepass>12345678</srcstorepass>
                             <keypass>12345678</keypass>
                             <validity>3650</validity>
                             <keyalg>RSA</keyalg>

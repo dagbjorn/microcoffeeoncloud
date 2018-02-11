@@ -9,25 +9,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.mongodb.MongoClient;
-
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
-import study.microcoffee.order.utils.KeystoreUtils;
+import study.microcoffee.order.test.config.MongoTestConfig;
+import study.microcoffee.order.test.utils.KeystoreUtils;
 
 /**
  * Integration tests of {@link OrderRestService}.
@@ -35,6 +29,7 @@ import study.microcoffee.order.utils.KeystoreUtils;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
+@Import(MongoTestConfig.class)
 public class OrderRestServiceIT {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
@@ -47,7 +42,7 @@ public class OrderRestServiceIT {
 
     @BeforeClass
     public static void initOnce() throws IOException {
-        System.setProperty("javax.net.debug", "ssl");
+        System.setProperty("javax.net.debug", "none");
 
         KeystoreUtils.configureTruststore();
     }
@@ -92,28 +87,5 @@ public class OrderRestServiceIT {
         ResponseEntity<Order> response = restTemplate.getForEntity(GET_SERVICE_PATH, Order.class, COFFEE_SHOP_ID, orderId);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    }
-
-    @TestConfiguration
-    static class Config {
-
-        @Value("${mongo.database.host}")
-        private String mongoDatabaseHost;
-
-        @Value("${mongo.database.port}")
-        private int mongoDatabasePort;
-
-        @Value("${mongo.database.name}")
-        private String mongoDatabaseName;
-
-        @Bean
-        public MongoDbFactory mongoDbFactory() {
-            return new SimpleMongoDbFactory(new MongoClient(mongoDatabaseHost, mongoDatabasePort), mongoDatabaseName);
-        }
-
-        @Bean
-        public MongoTemplate mongoTemplate() throws Exception {
-            return new MongoTemplate(mongoDbFactory());
-        }
     }
 }

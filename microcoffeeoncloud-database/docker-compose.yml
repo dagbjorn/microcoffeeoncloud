@@ -1,7 +1,8 @@
 version: '3'
 services:
     mongodb:
-        image: mongo:3.6.1
+        image: microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        command: mongod --sslMode preferSSL --sslPEMKeyFile /microcoffee.study-key.pem --bind_ip_all
         ports:
             - "27017:27017"
             - "28017:28017"

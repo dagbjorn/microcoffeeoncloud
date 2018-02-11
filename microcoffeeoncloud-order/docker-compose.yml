@@ -21,7 +21,8 @@ services:
             - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
         domainname: microcoffee.study
     mongodb:
-        image: mongo:3.6.1
+        image: microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        command: mongod --sslMode preferSSL --sslPEMKeyFile /microcoffee.study-key.pem --bind_ip_all
         ports:
             - "27017:27017"
             - "28017:28017"

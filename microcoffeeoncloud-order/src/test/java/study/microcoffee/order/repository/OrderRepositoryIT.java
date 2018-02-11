@@ -2,23 +2,20 @@ package study.microcoffee.order.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.mongodb.MongoClient;
-
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
+import study.microcoffee.order.test.config.MongoTestConfig;
+import study.microcoffee.order.test.utils.KeystoreUtils;
 
 /**
  * Integration tests of {@link OrderRepository}.
@@ -26,10 +23,21 @@ import study.microcoffee.order.domain.Order;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
+@Import(MongoTestConfig.class)
 public class OrderRepositoryIT {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @BeforeClass
+    public static void initOnce() throws Exception {
+        KeystoreUtils.configureTruststore();
+    }
+
+    @AfterClass
+    public static void destroyOnce() throws Exception {
+        KeystoreUtils.clearTruststore();
+    }
 
     @Test
     public void saveOrderWhenReadBackShouldReturnSavedOrder() {
@@ -58,28 +66,5 @@ public class OrderRepositoryIT {
         Order order = orderRepository.findById("123");
 
         assertThat(order).isNull();
-    }
-
-    @TestConfiguration
-    static class Config {
-
-        @Value("${mongo.database.host}")
-        private String mongoDatabaseHost;
-
-        @Value("${mongo.database.port}")
-        private int mongoDatabasePort;
-
-        @Value("${mongo.database.name}")
-        private String mongoDatabaseName;
-
-        @Bean
-        public MongoDbFactory mongoDbFactory() {
-            return new SimpleMongoDbFactory(new MongoClient(mongoDatabaseHost, mongoDatabasePort), mongoDatabaseName);
-        }
-
-        @Bean
-        public MongoTemplate mongoTemplate() throws Exception {
-            return new MongoTemplate(mongoDbFactory());
-        }
     }
 }

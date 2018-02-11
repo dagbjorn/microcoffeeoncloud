@@ -1,4 +1,5 @@
 call mvn clean package docker:build eclipse:eclipse -f microcoffeeoncloud-configserver\pom.xml
+call mvn clean package docker:build eclipse:eclipse -f microcoffeeoncloud-database\pom.xml
 call mvn clean package docker:build eclipse:eclipse -f microcoffeeoncloud-discovery\pom.xml
 call mvn clean package docker:build eclipse:eclipse -f microcoffeeoncloud-gateway\pom.xml
 call mvn clean package docker:build eclipse:eclipse -f microcoffeeoncloud-creditrating\pom.xml
