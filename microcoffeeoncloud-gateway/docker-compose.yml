@@ -58,6 +58,7 @@ services:
         ports:
             - "27017:27017"
             - "28017:28017"
+        domainname: microcoffee.study
         volumes:
             - mongodbdata:/data/db
 volumes:
