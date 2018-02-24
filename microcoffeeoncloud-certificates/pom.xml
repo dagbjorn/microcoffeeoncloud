@@ -13,6 +13,7 @@
 
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 
         <!-- Only in use by gen-certs-keytool profile -->
         <cn>192.168.99.100</cn>
@@ -24,7 +25,7 @@
             Profile that generates certificates with openssl. We must use openssl instead of keytool since openssl
             allow SAN with wildcard hostnames which is something we need.
 
-            Note: openssl must be installed on the developer machine.
+            Note: openssl must be installed on the developer machine. (Version: OpenSSL 1.1.0g  2 Nov 2017)
         -->
         <profile>
             <id>gen-certs</id>
@@ -32,7 +33,30 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/openssl</directory>
+                        <targetPath>${project.build.directory}/openssl</targetPath>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${maven-resources-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>filter-resources</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>resources</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
@@ -74,7 +98,7 @@
                                         <argument>-out</argument>
                                         <argument>${project.build.directory}/openssl/microcoffee.study-cert.pem</argument>
                                         <argument>-config</argument>
-                                        <argument>${basedir}/src/main/openssl/microcoffee.study.cfg</argument>
+                                        <argument>${project.build.directory}/openssl/microcoffee.study.cfg</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -99,7 +123,7 @@
                                         <argument>-out</argument>
                                         <argument>${project.build.directory}/openssl/localhost-cert.pem</argument>
                                         <argument>-config</argument>
-                                        <argument>${basedir}/src/main/openssl/localhost.cfg</argument>
+                                        <argument>${project.build.directory}/openssl/localhost.cfg</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
