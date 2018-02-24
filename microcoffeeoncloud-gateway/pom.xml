@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.9.RELEASE</version>
+        <version>1.5.10.RELEASE</version>
     </parent>
 
     <properties>
@@ -20,7 +20,7 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>Edgware.SR1</spring-cloud.version>
+        <spring-cloud.version>Edgware.SR2</spring-cloud.version>
 
         <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
         <docker.image.prefix>dagbjorn</docker.image.prefix>

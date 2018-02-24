@@ -7,6 +7,17 @@ services:
             - "8455:8455"
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+            - SPRING_CLOUD_CONFIG_URI=https://configserver.microcoffee.study:8454
         domainname: microcoffee.study
+        networks:
+            discovery:
+                aliases:
+                    - discovery.microcoffee.study
+            configserver:
+
+networks:
+    discovery:
+    configserver:
+        external:
+            name: microcoffeeoncloudconfigserver_configserver
             

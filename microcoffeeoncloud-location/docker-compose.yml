@@ -5,12 +5,16 @@ services:
         ports:
             - "8081:8081"
             - "8444:8444"
-        links:
+        depends_on:
             - mongodb
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=https://192.168.99.100:8454
+            - SPRING_CLOUD_CONFIG_URI=https://configserver.microcoffee.study:8454
         domainname: microcoffee.study
+        networks:
+            - microcoffee
+            - configserver
+            - discovery
     mongodb:
         image: microcoffeeoncloud-database:1.0.0-SNAPSHOT
         command: mongod --sslMode preferSSL --sslPEMKeyFile /microcoffee.study-key.pem --bind_ip_all
@@ -20,6 +24,21 @@ services:
         domainname: microcoffee.study
         volumes:
             - mongodbdata:/data/db
+        networks:
+            microcoffee:
+                aliases:
+                    - database.microcoffee.study
+
 volumes:
     mongodbdata:
         external: true
+
+networks:
+    microcoffee:
+    configserver:
+        external:
+            name: microcoffeeoncloudconfigserver_configserver
+    discovery:
+        external:
+            name: microcoffeeonclouddiscovery_discovery
+ 
