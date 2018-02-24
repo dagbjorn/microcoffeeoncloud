@@ -7,7 +7,7 @@
     window.__env = window.__env || {};
 
     // REST API gateway
-    window.__env.apiGatewayUrl = '${app.gateway.url}';
+    window.__env.apiGatewayUrl = window.location.href.split('/').slice(0, 3).join('/');
 
     // Logging
     window.__env.enableDebug = true;

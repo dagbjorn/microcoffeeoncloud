@@ -69,11 +69,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
         <!-- Auditing, health and metrics -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
