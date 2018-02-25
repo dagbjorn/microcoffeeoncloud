@@ -21,8 +21,6 @@
 
         <spring-cloud.version>Edgware.SR2</spring-cloud.version>
 
-        <httpclient.version>4.5.5</httpclient.version>
-
         <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
         <docker.image.prefix>dagbjorn</docker.image.prefix>
         <docker.image.tag>${project.version}</docker.image.tag>
@@ -109,7 +107,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
 
         <!-- Test -->
@@ -135,16 +132,6 @@
                     <jvmArguments>
                         -Djavax.net.debug=none -Djavax.net.ssl.trustStore=target/keystore/microcoffee-keystore.jks -Djavax.net.ssl.trustStorePassword=12345678
                     </jvmArguments>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <testSourcesLast>true</testSourcesLast>
-                    <!-- Needed for Spring to resolve classpath:microcoffee-keystore.jks in integration test -->
-                    <useProjectReferences>false</useProjectReferences>
                 </configuration>
             </plugin>
 

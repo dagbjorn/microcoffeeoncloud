@@ -113,16 +113,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <testSourcesLast>true</testSourcesLast>
-                    <!-- Needed for Spring to resolve classpath:microcoffee-keystore.jks in integration test -->
-                    <useProjectReferences>false</useProjectReferences>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
