@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +12,7 @@ import study.microcoffee.order.repository.MenuRepository;
 
 /**
  * Class implementing the Menu REST service for returning the coffee shop menu.
- * <p>
- * The implementation supports CORS (Cross-Origin Resource Sharing).
  */
-@CrossOrigin
 @RestController
 @RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MenuRestService {

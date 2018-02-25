@@ -58,9 +58,6 @@ public class OrderRestServiceTest {
 
     @Test
     public void saveOrderShouldReturnCreated() throws Exception {
-        final String accessControlAllowOrigin = "http://localhost:8080";
-        final String accessControlExposeHeaders = "Location";
-
         Order newOrder = new Order.Builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
@@ -77,13 +74,10 @@ public class OrderRestServiceTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(70);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .header(HttpHeaders.ORIGIN, accessControlAllowOrigin) //
             .content(toJson(newOrder)) //
             .contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isCreated()) //
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.endsWith(savedOrder.getId())))
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, Matchers.equalTo(accessControlAllowOrigin))) //
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, Matchers.equalTo(accessControlExposeHeaders))) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(toJson(savedOrder)));
     }

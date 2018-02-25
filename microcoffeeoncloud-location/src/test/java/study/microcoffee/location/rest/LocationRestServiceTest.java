@@ -5,16 +5,13 @@ import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -56,21 +53,5 @@ public class LocationRestServiceTest {
         mockMvc.perform(get(SERVICE_PATH, 4, 5, 6) //
             .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isNoContent());
-    }
-
-    @Test
-    public void getNearestCoffeeShopWhenOriginHeaderSetShouldReturnCORSHeaders() throws Exception {
-        final String expectedContent = "{ location: 'here' }";
-        final String expectedOriginHeader = "http://localhost:8080";
-
-        given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong())).willReturn(expectedContent);
-
-        mockMvc.perform(get(SERVICE_PATH, 1, 2, 3) //
-            .accept(MediaType.APPLICATION_JSON_UTF8) //
-            .header(HttpHeaders.ORIGIN, expectedOriginHeader)) //
-            .andExpect(status().isOk()) //
-            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, Matchers.equalTo(expectedOriginHeader))) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(content().json(expectedContent));
     }
 }

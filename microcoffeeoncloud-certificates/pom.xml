@@ -33,15 +33,8 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/openssl</directory>
-                        <targetPath>${project.build.directory}/openssl</targetPath>
-                        <filtering>true</filtering>
-                    </resource>
-                </resources>
-
                 <plugins>
+                    <!-- Filter openssl configuration files used to generate the certificates -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -53,6 +46,15 @@
                                 <goals>
                                     <goal>resources</goal>
                                 </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/openssl</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/openssl</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

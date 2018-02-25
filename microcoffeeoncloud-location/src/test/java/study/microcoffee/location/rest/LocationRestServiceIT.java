@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,27 +61,5 @@ public class LocationRestServiceIT {
         System.out.println(response);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    }
-
-    @Test
-    public void getNearestCoffeeShopWhenOriginHeaderSetShouldReturnCORSHeaders() {
-        final String originHeaderValue = "http://example.com:8080";
-
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add(HttpHeaders.ORIGIN, originHeaderValue);
-
-        ResponseEntity<String> response = restTemplate.exchange(SERVICE_PATH, HttpMethod.GET, new HttpEntity<>(requestHeaders),
-            String.class, 59.969048, 10.774445, 2500);
-
-        // ResponseEntity<String> response = restTemplate.getForEntity(SERVICE_PATH, String.class, 59.969048, 10.774445, 2500);
-
-        System.out.println(response.getBody());
-        System.out.println(response.getHeaders());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("coordinates");
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
-        // No Access-Control-Allow-Origin returned
-        // assertThat(response.getHeaders().getAccessControlAllowOrigin()).isEqualTo(originHeaderValue);
     }
 }
