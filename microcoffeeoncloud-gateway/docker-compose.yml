@@ -6,23 +6,6 @@ services:
             - "8080:8080"
             - "8443:8443"
         depends_on:
-            - web
-            - location
-            - order
-        environment:
-            - SPRING_PROFILES_ACTIVE=devdocker
-            - SPRING_CLOUD_CONFIG_URI=https://configserver.microcoffee.study:8454
-        domainname: microcoffee.study
-        networks:
-            - microcoffee
-            - configserver
-            - discovery
-    web:
-        image: microcoffeeoncloud-web:1.0.0-SNAPSHOT
-        ports:
-            - "8090:8090"
-            - "8453:8453"
-        depends_on:
             - location
             - order
         environment:
