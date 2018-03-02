@@ -15,7 +15,7 @@
         <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 
-        <!-- Only in use by gen-certs-keytool profile -->
+        <!-- Host VM IP -->
         <cn>192.168.99.100</cn>
         <alias>${cn}</alias>
     </properties>
