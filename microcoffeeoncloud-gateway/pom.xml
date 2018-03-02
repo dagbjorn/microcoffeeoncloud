@@ -22,7 +22,13 @@
 
         <spring-cloud.version>Edgware.SR2</spring-cloud.version>
 
+        <angularjs.version>1.6.9</angularjs.version>
+        <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
+        <bootstrap.version>3.3.7</bootstrap.version>
+
         <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
+        <wro4j-maven-plugin.version>1.8.0</wro4j-maven-plugin.version>
+        
         <docker.image.prefix>dagbjorn</docker.image.prefix>
         <docker.image.tag>${project.version}</docker.image.tag>
     </properties>
@@ -103,6 +109,15 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -132,6 +147,71 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Filters version numbers in wro.xml -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>filter-resources</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/wro</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/wro</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Creates single js and css files of Angular and Bootstrap pulled down by org.webjars dependencies. -->
+            <plugin>
+                <groupId>ro.isdc.wro4j</groupId>
+                <artifactId>wro4j-maven-plugin</artifactId>
+                <version>${wro4j-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetGroups>angular-bootstrap,angular-bootstrap-min</targetGroups>
+                    <minimize>true</minimize>
+                    <wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
+                    <cssDestinationFolder>${project.build.directory}/generated-resources/static/css</cssDestinationFolder>
+                    <jsDestinationFolder>${project.build.directory}/generated-resources/static/js</jsDestinationFolder>
+                    <wroFile>${project.build.directory}/wro/wro.xml</wroFile>
+                    <extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
+                    <ignoreMissingResources>false</ignoreMissingResources>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap</artifactId>
+                        <version>${bootstrap.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>angularjs</artifactId>
+                        <version>${angularjs.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.webjars.npm</groupId>
+                        <artifactId>angular-ui-bootstrap</artifactId>
+                        <version>${angular-ui-bootstrap.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
