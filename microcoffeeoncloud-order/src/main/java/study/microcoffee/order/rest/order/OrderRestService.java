@@ -1,6 +1,7 @@
 package study.microcoffee.order.rest.order;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,11 +92,11 @@ public class OrderRestService {
     public Order getOrder(@PathVariable("coffeeShopId") long coffeeShopId, @PathVariable("orderId") String orderId) {
         logger.debug("GET /{}/order/{}", coffeeShopId, orderId);
 
-        Order order = orderRepository.findById(orderId);
-        if (order == null) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (!order.isPresent()) {
             throw new OrderNotFoundException(orderId);
         }
 
-        return order;
+        return order.get();
     }
 }

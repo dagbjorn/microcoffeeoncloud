@@ -2,13 +2,13 @@ package study.microcoffee.location.repository;
 
 import java.util.Arrays;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
 
 /**
  * MongoDB implementation of Location repository interface.
@@ -41,17 +41,18 @@ public class MongoLocationRepository implements LocationRepository {
      */
     @Override
     public Object findNearestCoffeeShop(double latitude, double longitude, long maxDistance) {
-        DBCollection collection = mongo.getDb().getCollection("coffeeshop");
+        MongoCollection<Document> collection = mongo.getDb().getCollection("coffeeshop");
 
-        DBObject coffeeShop = collection.findOne(new BasicDBObject( //
+        Document coffeeShop = collection.find(new BasicDBObject( //
             "location", //
             new BasicDBObject( //
                 "$near", //
                 new BasicDBObject( //
                     "$geometry", //
                     new BasicDBObject("type", "Point").append("coordinates", Arrays.asList(longitude, latitude))) //
-                        .append("$maxDistance", maxDistance))));
+                        .append("$maxDistance", maxDistance))))
+            .first();
 
-        return coffeeShop;
+        return (coffeeShop != null) ? coffeeShop.toJson() : null;
     }
 }

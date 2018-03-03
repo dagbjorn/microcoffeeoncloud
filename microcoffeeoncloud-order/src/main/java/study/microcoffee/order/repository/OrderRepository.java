@@ -1,5 +1,7 @@
 package study.microcoffee.order.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import study.microcoffee.order.domain.Order;
@@ -18,7 +20,8 @@ public interface OrderRepository extends MongoRepository<Order, String> {
      *
      * @param orderId
      *            the ID of the coffee order.
-     * @return The Order object containing the requested coffee order if found; otherwise null is returned.
+     * @return The Order object containing the requested coffee order if found; otherwise {@link Optional#empty()} if none was
+     *         found.
      */
-    Order findById(String orderId);
+    Optional<Order> findById(String orderId);
 }

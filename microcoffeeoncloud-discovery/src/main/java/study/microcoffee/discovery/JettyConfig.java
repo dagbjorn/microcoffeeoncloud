@@ -4,8 +4,8 @@ import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
+import org.springframework.boot.web.embedded.jetty.JettyServerCustomizer;
+import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,13 +22,11 @@ public class JettyConfig {
      *
      * @param httpPort
      *            the http port configured by the <code>server.http.port</code> property in <code>application.properties</code>.
-     * @return The JettyEmbeddedServletContainerFactory object.
+     * @return The JettyServletWebServerFactory object.
      */
     @Bean
-    public JettyEmbeddedServletContainerFactory jettyEmbeddedServletContainerFactory(
-        @Value("${server.http.port}") final String httpPort) {
-
-        JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
+    public JettyServletWebServerFactory jettyServletWebServerFactory(@Value("${server.http.port}") final String httpPort) {
+        JettyServletWebServerFactory factory = new JettyServletWebServerFactory();
 
         factory.addServerCustomizers(new JettyServerCustomizer() {
 

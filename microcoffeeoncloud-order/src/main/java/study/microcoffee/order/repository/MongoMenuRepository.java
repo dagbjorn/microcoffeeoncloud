@@ -1,15 +1,15 @@
 package study.microcoffee.order.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
 
 /**
  * MongoDB implementation of the Menu repository interface.
@@ -61,15 +61,15 @@ public class MongoMenuRepository implements MenuRepository {
         // + "{\"name\": \"extra hot\", \"appliesTo\": \"preparation\"}]" //
         // + "}";
 
-        Object menu = new BasicDBObject("types", getCollectionAsList("drinktypes"))
-            .append("sizes", getCollectionAsList("drinksizes")).append("availableOptions", getCollectionAsList("drinkoptions"));
+        Object menu = new BasicDBObject("types", getCollectionAsList("drinktypes")) //
+            .append("sizes", getCollectionAsList("drinksizes")) //
+            .append("availableOptions", getCollectionAsList("drinkoptions"));
 
         return menu;
     }
 
-    private List<DBObject> getCollectionAsList(String collectionName) {
-        DB db = mongo.getDb();
-        DBCollection collection = db.getCollection(collectionName);
-        return collection.find().toArray();
+    private List<Object> getCollectionAsList(String collectionName) {
+        MongoCollection<Document> collection = mongo.getDb().getCollection(collectionName);
+        return collection.find().into(new ArrayList<>());
     }
 }

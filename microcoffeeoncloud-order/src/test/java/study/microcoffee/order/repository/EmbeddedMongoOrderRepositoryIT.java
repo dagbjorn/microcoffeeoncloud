@@ -2,6 +2,8 @@ package study.microcoffee.order.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +41,20 @@ public class EmbeddedMongoOrderRepositoryIT {
 
         assertThat(savedOrder.getId()).isNotNull();
 
-        Order readbackOrder = orderRepository.findById(savedOrder.getId());
+        Optional<Order> readbackOrder = orderRepository.findById(savedOrder.getId());
 
-        System.out.println(readbackOrder);
+        System.out.println(readbackOrder.get());
 
-        assertThat(readbackOrder.getId()).isEqualTo(savedOrder.getId());
+        assertThat(readbackOrder.isPresent()).isTrue();
+        assertThat(readbackOrder.get().toString()).isEqualTo(savedOrder.toString());
     }
 
     @Test
     public void findByIdWhenNoOrderShouldReturnNull() {
-        Order order = orderRepository.findById("123");
+        Optional<Order> order = orderRepository.findById("123");
 
-        assertThat(order).isNull();
+        System.err.println(order);
+
+        assertThat(order.isPresent()).isFalse();
     }
 }

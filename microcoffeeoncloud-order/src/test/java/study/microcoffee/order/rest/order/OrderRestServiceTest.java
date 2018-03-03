@@ -1,14 +1,16 @@
 package study.microcoffee.order.rest.order;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -110,7 +112,7 @@ public class OrderRestServiceTest {
             .selectedOption("soy milk") //
             .build();
 
-        given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(expectedOrder);
+        given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(Optional.of(expectedOrder));
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, expectedOrder.getId()) //
             .accept(MediaType.APPLICATION_JSON_UTF8)) //
@@ -123,7 +125,7 @@ public class OrderRestServiceTest {
     public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        given(orderRepositoryMock.findById(eq(orderId))).willReturn(null);
+        given(orderRepositoryMock.findById(eq(orderId))).willReturn(Optional.empty());
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
             .accept(MediaType.APPLICATION_JSON_UTF8)) //
