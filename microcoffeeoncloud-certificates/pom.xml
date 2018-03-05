@@ -15,9 +15,8 @@
         <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
 
-        <!-- Host VM IP -->
-        <cn>192.168.99.100</cn>
-        <alias>${cn}</alias>
+        <!-- VM host IP -->
+        <vmHostIp>192.168.99.100</vmHostIp>
     </properties>
 
     <profiles>
@@ -264,6 +263,18 @@
 
                             <!-- Generate keystores -->
                             <execution>
+                                <id>generate-key-pair-domainname</id>
+                                <goals>
+                                    <goal>generateKeyPair</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <alias>microcoffee.study</alias>
+                                    <dname>cn=*.microcoffee.study, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                                    <!-- <ext>SAN=ip:${vmHostIp},dns:*.microcoffee.study</ext> -->
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>generate-key-pair-localhost</id>
                                 <goals>
                                     <goal>generateKeyPair</goal>
@@ -272,7 +283,6 @@
                                 <configuration>
                                     <alias>localhost</alias>
                                     <dname>cn=localhost, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
-                                    <!-- <ext>SAN=ip:127.0.0.1,dns:localhost</ext> -->
                                 </configuration>
                             </execution>
                             <execution>
@@ -282,20 +292,8 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <alias>${alias}</alias>
-                                    <dname>cn=${cn}, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>generate-key-pair-domainname</id>
-                                <goals>
-                                    <goal>generateKeyPair</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <alias>microcoffee.study</alias>
-                                    <dname>cn=*.microcoffee.study, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
-                                    <!-- <ext>SAN=ip:${cn},dns:*.microcoffee.study</ext> -->
+                                    <alias>${vmHostIp}</alias>
+                                    <dname>cn=${vmHostIp}, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
                                 </configuration>
                             </execution>
 
@@ -321,8 +319,8 @@
                                 </goals>
                                 <phase>process-resources</phase>
                                 <configuration>
-                                    <srcalias>${alias}</srcalias>
-                                    <destkeystore>${project.build.outputDirectory}/${alias}.p12</destkeystore>
+                                    <srcalias>${vmHostIp}</srcalias>
+                                    <destkeystore>${project.build.outputDirectory}/${vmHostIp}.p12</destkeystore>
                                     <deststorepass>12345678</deststorepass>
                                     <deststoretype>PKCS12</deststoretype>
                                     <noprompt>false</noprompt>
