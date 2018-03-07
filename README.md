@@ -13,11 +13,11 @@ Date | Change
 * [The application](#application)
 * [Prerequisite](#prerequisite)
 * [Start Docker VM](#start-docker-vm)
-* [Building microcoffee](#building-microcoffee)
+* [Building Microcoffee](#building-microcoffee)
 * [Application configuration](#configuration)
-* [Run microcoffee](#run-microcoffee)
+* [Run Microcoffee](#run-microcoffee)
 * [Setting up the database](#setting-up-database)
-* [Give microcoffee a spin](#give-a-spin)
+* [Give Microcoffee a spin](#give-a-spin)
 * [REST services](#rest-services)
 * [Spring Cloud Netflix](#spring-cloud-netflix)
 * [Extras](#extras)
@@ -127,7 +127,7 @@ To check the status of your Docker VM, run:
 
     docker-machine status docker-vm
 
-## <a name="building-microcoffee"></a>Building microcoffee
+## <a name="building-microcoffee"></a>Building Microcoffee
 
 ### Get the code from GitHub
 Clone the microcoffee project on GitHub, including the appconfig project, or download the projects as zip files.
@@ -269,7 +269,7 @@ Finally, stop the database container:
 
     docker-compose down
 
-## <a name="run-microcoffee"></a>Run microcoffee
+## <a name="run-microcoffee"></a>Run Microcoffee
 When running microcoffee, the config server must be started first followed by the discovery server. Finally, the other microservices are started all together. Make sure the previous microservice has started completely, before starting the next.
 
 A microservice is started by running `docker-compose up -d` or by using the convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
@@ -290,7 +290,7 @@ For testing individual projects outside Docker, run:
 
 This is a batch file that starts a Spring Boot application by running `mvn spring-boot:run -Dspring-boot.run.profiles=devlocal`.
 
-## <a name="give-a-spin"></a>Give microcoffee a spin
+## <a name="give-a-spin"></a>Give Microcoffee a spin
 After microcoffee has started, navigate to the coffee shop to place your first coffee order:
 
     https://192.168.99.100:8443/coffee.html
