@@ -32,7 +32,7 @@ public class CreditRatingRestTemplateFactory {
     public RestTemplate createRestTemplate() {
         logger.info("app.creditrating.timeout={}", timeout);
 
-        HttpClient httpClient = HttpClientFactory.createTrustAnyHostnameClient(timeout);
+        HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
