@@ -632,7 +632,7 @@ Then, click Monitor Stream. (A snippet of the dashboard is shown below.)
 
 ![Snapshot of Order Hystrix Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/hystrix-dashboard-ok.png "Snapshot of Order Hystrix Dashboard")
 
-:no_entry: For the time being, the Hystrix Dashboard appears to be broken. When trying to open the stream, the message <span style="color:red">Unable to connect to Command Metric Stream.</span> is displayed.
+:no_entry: For the time being, the Hystrix Dashboard appears to be broken. When trying to open the stream, the message "<span style="color:red">**Unable to connect to Command Metric Stream.**</span>" is displayed.
 
 ## <a name="extras"></a>Extras
 
