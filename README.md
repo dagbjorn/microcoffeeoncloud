@@ -1,10 +1,10 @@
-# microcoffeeonkube - The &micro;Coffee Shop on Kubernetes
+# microcoffeeoncloud - The &micro;Coffee Shop on Spring Cloud Netflix and ![Docker](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/docker-vertical-small.png "Docker")
 
 ## Revision log
 
 Date | Change
 ---- | -------
-07.02.2018 | Markdown file is under work.
+07.02.2018 | Markdown file under work.
 
 
 ## Contents
@@ -12,7 +12,7 @@ Date | Change
 * [Acknowledgements](#acknowledgements)
 * [The application](#application)
 * [Prerequisite](#prerequisite)
-* [Start Minikube](#start-minikube)
+* [Start Docker VM](#start-docker-vm)
 * [Building microcoffee](#building-microcoffee)
 * [Application configuration](#configuration)
 * [Run microcoffee](#run-microcoffee)
@@ -23,10 +23,10 @@ Date | Change
 * [Extras](#extras)
 
 ## <a name="acknowledgements"></a>Acknowledgements
-The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
+The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
 
 ## <a name="application"></a>The application
-The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loaded the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
+The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### The microservices
 The application is made up by the following microservices, each running in its own Docker container:
@@ -34,29 +34,29 @@ The application is made up by the following microservices, each running in its o
 * The config server for externalized configuration in a GIT backend.
 * The discovery server for service discovery with Eureka.
 * The gateway server for proxying of calls to the backend REST services.
-* The backend REST services separated on three different microservices.
+* The backend REST services provided as three different microservices.
 * The MongoDB database.
 
 Each microservice, apart from the database, is implemented by a Spring Boot application.
 
-The application supports both http and https on all communication channels. However, https is a requirement in most browsers to get the HTML Geolocation API going, so https is needed to unlock all available functionality in Microcoffee.
+The application supports both http and https on all communication channels. However, https is a requirement in most browsers to get the HTML Geolocation API going, so https is needed to unlock all available functions in Microcoffee.
 
 #### microcoffeeoncloud-configserver
-Contains the configuration server for serving externalized configuration to the application. The configuration is located in property/YAML files in a GIT repo. For simplicity, a GIT repo on GitHub is used.
+Contains the configuration server for serving externalized configuration to the application. The configuration server is based on the Spring Cloud Config Server.
 
-The implementation is based on the Spring Cloud Config Server. The other microservices act as configuration clients using the Spring Cloud Config Client.
+The configuration is located in property/YAML files in a GIT repo. For simplicity, a GIT repo on GitHub is used. Upon startup, each microservice reads its own configuration using the Spring Cloud Config Client.
 
-:warning: Using a public repo on GitHub is not recommended since the configuration usually contains sensitive data like passwords and details of the internal network infrastructure.
+:warning: Using a public repo on GitHub is not recommended because the configuration usually contains sensitive data like passwords and details of the internal network. However, Microcoffee is just a study application and contains no secrets.
 
 #### microcoffeeoncloud-discovery
 Contains the discovery server for service discovery. The discovery server is based on Spring Cloud Netflix Eureka.
 
-Upon startup, the other microservices register with the discovery server using an Eureka client.
+Upon startup, each microservice registers with the discovery server using an Eureka client.
 
 #### microcoffeeoncloud-gateway
 Contains the gateway server for proxying of REST calls to the backend services. The gateway server is based on Spring Cloud Netflix Zuul.
 
-Zuul acts as a reverse proxy for REST calls from the user interface of Microcoffee, hence the user interface can use a single point to access REST services as well as the static web resources of the application. This simplifies things, avoiding the need to manage REST service endpoints as well as CORS concerns independently for all the backends.
+Zuul acts as a reverse proxy for REST calls from the user interface of Microcoffee, hence the user interface can use a single point to access all REST services as well as the static web resources of the application. This simplifies things, avoiding the need to manage REST service endpoints and CORS concerns independently for all the backends.
 
 #### microcoffeeoncloud-location
 Contains the Location REST service for locating the nearest coffee shop. Coffee shop geodata is downloaded from [OpenStreetMap](https://www.openstreetmap.org) and imported into the database.
@@ -71,7 +71,7 @@ Order uses the CreditRating REST service as a backend service for checking if a 
 #### microcoffeeoncloud-creditrating
 Contains an extremely simple credit rating service. Provides an API for reading the credit rating of a customer. Used by the Order service.
 
-Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and unstable behaviors. See the [Hystrix section](#hystrix) below for details.
+Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by configuration properties. Current options include stable, failing, slow and unstable behaviors. See the [Hystrix section](#hystrix) below for details.
 
 #### microcoffeeoncloud-database
 Contains the MongoDB database. The database image is based on the official [mongo](https://hub.docker.com/r/_/mongo/) image on DockerHub.
@@ -86,7 +86,7 @@ The application also contains common artifacts (for the time being only one) whi
 A word of warning: Common artifacts should be used wisely in a microservice architecture.
 
 #### microcoffeeoncloud-certificates
-Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. In fact, two certificates are created:
+Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. As a matter of fact, two certificates are created:
 
 * A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application on Docker.
 * A certificate with common name (CN) `localhost` for use when testing outside Docker.
@@ -94,7 +94,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-The microcoffee application is developed on Windows 10 and tested on Docker 18.02.0-ce/Docker Compose 1.19.0 running on Oracle VM VirtualBox 5.2.8.
+Microcoffee is developed on Windows 10 and tested on Docker 18.02.0-ce/Docker Compose 1.19.0 running on Oracle VM VirtualBox 5.2.8.
 
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
@@ -111,13 +111,13 @@ Finally, OpenSSL is needed to create a self-signed wildcard certificate.
 :warning: Java keytool won't work because it doesn't support wildcard host names as SAN (Subject Alternative Name) values.
 
 ## <a name="start-docker-vm"></a>Start Docker VM
-Before moving on and start building microcoffee, we need a running VM. The reason is that the Docker images being built are stored in the local Docker repository inside the VM.
+Before moving on and start building Microcoffee, we need a running VM. The reason is that the Docker images being built are stored in the local Docker repository inside the VM.
 
 To start your Docker VM (called `docker-vm`), run:
 
     docker-machine start docker-vm
 
-Next, configure the Docker environment variables in your shell following the instructions displayed by:
+Next, configure the Docker environment variables in your shell by following the instructions displayed by:
 
     docker-machine env docker-vm
 
@@ -157,9 +157,9 @@ To inspect the created keystore, run:
 
 To specify a different VM host IP, run:
 
-    mvn clean install -Dcn=10.0.0.100
+    mvn clean install -DvmHostIp=10.0.0.100
 
-:bulb: The keystore properties are specified in `${application}-${profile}.properties` of each microservice using the `microcoffeeoncloud-certificates` artifact.
+:bulb: The keystore properties are specified in `${application}-${profile}.properties` of each microservice that is using the `microcoffeeoncloud-certificates` artifact.
 
 ### Build the microservices
 Use Maven to build each microservice in turn by running:
@@ -168,7 +168,7 @@ Use Maven to build each microservice in turn by running:
 
 :exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
 
-:bulb: On Windows, all projects may be built by running the `build-all-images.bat` from the top-level folder.
+:bulb: On Windows, all projects may be built by running the `build-all-images.bat` file from the top-level folder.
 
 ## <a name="configuration"></a>Application configuration
 Application and environment-specific properties are defined in standard Spring manner by `${application}-${profile}.properties` files in the `microcoffeeoncloud-appconfig` project. Supported profiles are:
@@ -178,7 +178,7 @@ Application and environment-specific properties are defined in standard Spring m
 
 In addition, the gateway routing configuration is defined in `gateway.yml`.
 
-This configuration is served by the configuration server. The URL of the configuration server itself is defined in each microservice project as follows, depending on the current profile:
+Configuration is served by the configuration server. The URL of the configuration server itself is defined in each microservice project as follows, depending on the current profile:
 
 * devdocker: In `docker-compose.yml`.
 * devlocal: In `bootstrap-devlocal.properties`.
@@ -189,12 +189,12 @@ The port numbers are:
 
 Microservice | http port | https port
 ------------ | --------- | ----------
-configserver | 8091 | 8454
-discovery | 8092 | 8455
 gateway | 8080 | 8443
 location | 8081 | 8444
 order | 8082 | 8445
 creditrating | 8083 | 8446
+configserver | 8091 | 8454
+discovery | 8092 | 8455
 database | 27017 | 27017
 
 ## <a name="setting-up-database"></a>Setting up the database
@@ -211,7 +211,7 @@ Verify by:
 ### Load data into the database collections
 The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. (We run it twice to also load the test database, *microcoffee-test*.) Make sure to specify the correct IP address of your VM.
 
-But first, we need to start MongoDB (from `microcoffeeoncloud-database` project):
+But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
     docker-compose up -d
 
@@ -270,7 +270,7 @@ Finally, stop the database container:
     docker-compose down
 
 ## <a name="run-microcoffee"></a>Run microcoffee
-When running microcoffee, the config server must be started first, and then the discovery server. Finally, the other microservices may started all together. Make sure the previous microservice has started completely, before starting the next.
+When running microcoffee, the config server must be started first followed by the discovery server. Finally, the other microservices are started all together. Make sure the previous microservice has started completely, before starting the next.
 
 A microservice is started by running `docker-compose up -d` or by using the convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
 
@@ -282,7 +282,7 @@ From the `configserver`folder, run:
 
 Then, when the config server is up and running (takes about 40 secs), move on to the `discovery` folder and start the discovery server.
 
-Finally, when the discovery server is up and running (takes about 60 secs), move on to the `gateway` folder and start the remaining microservices (takes about 5 minutes).
+Finally, when the discovery server is up and running (takes another 60 secs), move on to the `gateway` folder and start the remaining microservices (may take as long as 5 minutes or even more).
 
 For testing individual projects outside Docker, run:
 
@@ -602,7 +602,7 @@ To open the dashboard, navigate to https://192.168.99.100:8455.
 
 The Order service is using Hystrix to supervise calls to CreditRating, a service that can be configured to behave in an unreliable manner.
 
-The desired behavior of CreditRating is configurable by means of configuration properties in creditrating-${profile}.properties.
+The desired behavior of CreditRating is configurable by means of configuration properties in `creditrating-${profile}.properties`.
 
 Property | Description
 -------- | -----------
@@ -611,12 +611,12 @@ app.creditrating.service.behavior.delay | Delay in seconds when behavior 2 or 3 
 
 The service behaviors may be described as follows:
 
-Behavior | Description
--------- | -----------
-Stable | All service calls returns after a brief delay.
-Failing | All service calls throws an exception after a brief delay.
-Slow | All service calls is delayed by ${app.creditrating.service.behavior.delay} secs.
-Unstable | A random mix of stable, failing and slow behaviors.
+Behavior | Value | Description
+-------- | ----- | -----------
+Stable | 0 | All service calls returns after a brief delay.
+Failing | 1 | All service calls throws an exception after a brief delay.
+Slow | 2 | All service calls is delayed by ${app.creditrating.service.behavior.delay} secs.
+Unstable | 3 | A random mix of stable, failing and slow behaviors.
 
 #### <a name="hystrix-dashboard"></a>Hystrix Dashboard
 
@@ -631,6 +631,8 @@ To start monitoring the Order service, navigate to https://192.168.99.100:8445/h
 Then, click Monitor Stream. (A snippet of the dashboard is shown below.)
 
 ![Snapshot of Order Hystrix Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/hystrix-dashboard-ok.png "Snapshot of Order Hystrix Dashboard")
+
+:no_entry: For the time being, the Hystrix Dashboard appears to be broken. When trying to open the stream, the message <span style="color:red">Unable to connect to Command Metric Stream.</span> is displayed.
 
 ## <a name="extras"></a>Extras
 
