@@ -1,4 +1,4 @@
-# microcoffeeoncloud - The &micro;Coffee Shop on Spring Cloud Netflix and ![Docker](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/docker-horizontal-small.png "Docker")
+# microcoffeeoncloud - The &micro;Coffee Shop powered by Spring Cloud Netflix and ![Docker](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/docker-horizontal-small.png "Docker")
 
 ## Revision log
 
