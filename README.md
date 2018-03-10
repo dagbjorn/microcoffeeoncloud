@@ -29,7 +29,7 @@ The &micro;Coffee Shop application is based on the coffee shop application coded
 The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### The microservices
-The figure shows the microservice architecture of the application.
+The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the central technologies in the backend. AngularJS and Bootstrap in the frontend.
 
 ![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture.png "Microcoffee architecture")
 
@@ -37,7 +37,7 @@ The application is made up by the following microservices, each running in its o
 
 * The Config Server for externalized configuration in a GIT backend.
 * The Discovery server for service discovery with Eureka.
-* The API Gateway for proxying of calls to the backend REST services. Static web resources are also served by the gateway server.
+* The API Gateway for proxying of calls to the backend REST services. Static web resources are also served by the API gateway.
 * The backend REST API provided as three different microservices.
 * The MongoDB database.
 
