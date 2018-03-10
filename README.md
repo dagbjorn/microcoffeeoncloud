@@ -29,12 +29,16 @@ The &micro;Coffee Shop application is based on the coffee shop application coded
 The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### The microservices
+The figure shows the microservice architecture of the application.
+
+![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture.png "Microcoffee architecture")
+
 The application is made up by the following microservices, each running in its own Docker container:
 
-* The config server for externalized configuration in a GIT backend.
-* The discovery server for service discovery with Eureka.
-* The gateway server for proxying of calls to the backend REST services.
-* The backend REST services provided as three different microservices.
+* The Config Server for externalized configuration in a GIT backend.
+* The Discovery server for service discovery with Eureka.
+* The API Gateway for proxying of calls to the backend REST services. Static web resources are also served by the gateway server.
+* The backend REST API provided as three different microservices.
 * The MongoDB database.
 
 Each microservice, apart from the database, is implemented by a Spring Boot application.
@@ -475,7 +479,7 @@ HTTP status | Description
 
 **Example**
 
-    http://192.168.99.100:8082/coffeeshop/1/order
+    POST http://192.168.99.100:8082/coffeeshop/1/order
 
     {
         "coffeeShopId": 1,
@@ -517,7 +521,7 @@ Response:
 
 **Syntax**
 
-    GET /coffeeshop//{coffeeShopId}/order/{orderId}
+    GET /coffeeshop/{coffeeShopId}/order/{orderId}
 
 Reads the details of the order of the given ID *orderId* from coffee shop with the given ID coffeeShopId.
 
@@ -530,7 +534,7 @@ HTTP status | Description
 
 **Example**
 
-    http://192.168.99.100:8082/coffeeshop/1/order/585fe5230d248f00011173ce
+    GET http://192.168.99.100:8082/coffeeshop/1/order/585fe5230d248f00011173ce
 
 Response:
 
@@ -571,7 +575,7 @@ HTTP status | Description
 
 **Example**
 
-    http://192.168.99.100:8083/coffeeshop/creditrating/john
+    GET http://192.168.99.100:8083/coffeeshop/creditrating/john
 
 Response:
 
