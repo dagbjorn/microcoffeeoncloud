@@ -4,7 +4,7 @@
 
 Date | Change
 ---- | -------
-07.02.2018 | Markdown file under work.
+10.03.2018 | Finialised markdown file.
 
 
 ## Contents
