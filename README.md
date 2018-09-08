@@ -5,6 +5,7 @@
 Date | Change
 ---- | -------
 10.03.2018 | Finialised markdown file.
+08.09.2018 | Upgraded to Docker 18.06.1-ce.
 
 
 ## Contents
@@ -98,7 +99,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 18.02.0-ce/Docker Compose 1.19.0 running on Oracle VM VirtualBox 5.2.8.
+Microcoffee is developed on Windows 10 and tested on Docker 18.06.1-ce/Docker Compose 1.22.0 running on Oracle VM VirtualBox 5.2.18.
 
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
