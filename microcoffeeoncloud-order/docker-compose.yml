@@ -51,7 +51,7 @@ networks:
     microcoffee:
     configserver:
         external:
-            name: microcoffeeoncloudconfigserver_configserver
+            name: microcoffeeoncloud-configserver_configserver
     discovery:
         external:
-            name: microcoffeeonclouddiscovery_discovery
+            name: microcoffeeoncloud-discovery_discovery
