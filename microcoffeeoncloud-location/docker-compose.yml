@@ -1,7 +1,7 @@
 version: '3'
 services:
     location:
-        image: microcoffeeoncloud-location:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-location:1.0.0-SNAPSHOT
         ports:
             - "8081:8081"
             - "8444:8444"
@@ -16,7 +16,7 @@ services:
             - configserver
             - discovery
     mongodb:
-        image: microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
         command: mongod --sslMode preferSSL --sslPEMKeyFile /microcoffee.study-key.pem --bind_ip_all
         ports:
             - "27017:27017"

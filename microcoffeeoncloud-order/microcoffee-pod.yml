@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: order
-      image: microcoffeeoncloud-order:1.0.0-SNAPSHOT
+      image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
       ports:
         - containerPort: 8082
           hostPort: 8082
@@ -20,7 +20,7 @@ spec:
         - name: SPRING_CLOUD_CONFIG_URI
           value: "http://192.168.99.100:8091"
     - name: creditrating
-      image: microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+      image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
       ports:
         - containerPort: 8083
           hostPort: 8083

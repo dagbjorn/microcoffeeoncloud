@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: location
-      image: microcoffeeoncloud-location:1.0.0-SNAPSHOT
+      image: dagbjorn/microcoffeeoncloud-location:1.0.0-SNAPSHOT
       ports:
         - containerPort: 8081
           hostPort: 8081

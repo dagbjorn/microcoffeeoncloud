@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: creditrating
-      image: microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+      image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
       ports:
         - containerPort: 8083
           hostPort: 8083

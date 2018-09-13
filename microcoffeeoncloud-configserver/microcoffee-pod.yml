@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: configserver
-      image: microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
+      image: dagbjorn/microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
       ports:
         - containerPort: 8091
           hostPort: 8091

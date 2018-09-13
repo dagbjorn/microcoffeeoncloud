@@ -1,7 +1,7 @@
 version: '3'
 services:
     order:
-        image: microcoffeeoncloud-order:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
         ports:
             - "8082:8082"
             - "8445:8445"
@@ -17,7 +17,7 @@ services:
             - configserver
             - discovery
     creditrating:
-        image: microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
         ports:
             - "8083:8083"
             - "8446:8446"
@@ -30,7 +30,7 @@ services:
             - configserver
             - discovery
     mongodb:
-        image: microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
         command: mongod --sslMode preferSSL --sslPEMKeyFile /microcoffee.study-key.pem --bind_ip_all
         ports:
             - "27017:27017"

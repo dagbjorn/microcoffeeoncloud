@@ -23,8 +23,9 @@
         <spring-cloud.version>Finchley.SR1</spring-cloud.version>
 
         <docker-maven-plugin.version>1.1.1</docker-maven-plugin.version>
+
         <docker.image.prefix>dagbjorn</docker.image.prefix>
-        <docker.image.tag>${project.version}</docker.image.tag>
+        <server.id>docker-hub</server.id>
     </properties>
 
     <repositories>
@@ -159,12 +160,69 @@
                             <include>microcoffee-keystore.jks</include>
                         </resource>
                     </resources>
-                    <imageTags>
-                        <imageTag>latest</imageTag>
-                        <imageTag>${docker.image.tag}</imageTag>
-                    </imageTags>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>tag-image-latest</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>${project.artifactId}</image>
+                            <newName>${docker.image.prefix}/${project.artifactId}:latest</newName>
+                            <pushImage>false</pushImage>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-image-version</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>${project.artifactId}</image>
+                            <newName>${docker.image.prefix}/${project.artifactId}:${project.version}</newName>
+                            <pushImage>false</pushImage>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>push-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>${docker-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>push-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                                    <serverId>${server.id}</serverId>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
