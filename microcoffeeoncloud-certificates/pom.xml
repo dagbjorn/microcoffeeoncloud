@@ -79,7 +79,7 @@
 
                             <!-- Generate private keys and certificates -->
                             <execution>
-                                <id>generate-key-and-cert-domainname</id>
+                                <id>generate-key-and-cert-microcoffee-study</id>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
@@ -128,10 +128,35 @@
                                     </arguments>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>generate-key-and-cert-wildcard-default</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>
+                                        <argument>req</argument>
+                                        <argument>-x509</argument>
+                                        <argument>-sha256</argument>
+                                        <argument>-nodes</argument>
+                                        <argument>-days</argument>
+                                        <argument>3650</argument>
+                                        <argument>-newkey</argument>
+                                        <argument>rsa:2048</argument>
+                                        <argument>-keyout</argument>
+                                        <argument>${project.build.directory}/openssl/wildcard.default-key.pem</argument>
+                                        <argument>-out</argument>
+                                        <argument>${project.build.directory}/openssl/wildcard.default-cert.pem</argument>
+                                        <argument>-config</argument>
+                                        <argument>${project.build.directory}/openssl/wildcard.default.cfg</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
 
                             <!-- Create PKCS12 keystores containing the created key and cert -->
                             <execution>
-                                <id>create-pcks12-keystore-domainname</id>
+                                <id>create-pcks12-keystore-microcoffee-study</id>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
@@ -176,6 +201,29 @@
                                     </arguments>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>create-pcks12-keystore-wildcard-default</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>
+                                        <argument>pkcs12</argument>
+                                        <argument>-export</argument>
+                                        <argument>-inkey</argument>
+                                        <argument>${project.build.directory}/openssl/wildcard.default-key.pem</argument>
+                                        <argument>-in</argument>
+                                        <argument>${project.build.directory}/openssl/wildcard.default-cert.pem</argument>
+                                        <argument>-out</argument>
+                                        <argument>${project.build.outputDirectory}/wildcard.default.p12</argument>
+                                        <argument>-password</argument>
+                                        <argument>pass:12345678</argument>
+                                        <argument>-name</argument>
+                                        <argument>wildcard.default</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
                          </executions>
                         <configuration>
                             <executable>openssl</executable>
@@ -190,7 +238,7 @@
                         <executions>
                             <!-- Import PKCS12 keystore to JKS keystore -->
                             <execution>
-                                <id>import-to-jks-domainname</id>
+                                <id>import-to-jks-microcoffee-study</id>
                                 <goals>
                                     <goal>importKeystore</goal>
                                 </goals>
@@ -211,6 +259,20 @@
                                 <phase>process-resources</phase>
                                 <configuration>
                                     <srckeystore>${project.build.outputDirectory}/localhost.p12</srckeystore>
+                                    <srcstorepass>12345678</srcstorepass>
+                                    <srcstoretype>PKCS12</srcstoretype>
+                                    <destkeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</destkeystore>
+                                    <deststorepass>12345678</deststorepass>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>import-to-jks-wildcard-default</id>
+                                <goals>
+                                    <goal>importKeystore</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <srckeystore>${project.build.outputDirectory}/wildcard.default.p12</srckeystore>
                                     <srcstorepass>12345678</srcstorepass>
                                     <srcstoretype>PKCS12</srcstoretype>
                                     <destkeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</destkeystore>
@@ -263,7 +325,7 @@
 
                             <!-- Generate keystores -->
                             <execution>
-                                <id>generate-key-pair-domainname</id>
+                                <id>generate-key-pair-microcoffee-study</id>
                                 <goals>
                                     <goal>generateKeyPair</goal>
                                 </goals>
@@ -327,7 +389,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>convert-pkcs12-domainname</id>
+                                <id>convert-pkcs12-microcoffee-study</id>
                                 <goals>
                                     <goal>importKeystore</goal>
                                 </goals>

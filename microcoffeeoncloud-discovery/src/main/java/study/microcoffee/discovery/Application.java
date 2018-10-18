@@ -17,6 +17,8 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
+        System.setProperty("javax.net.debug", "none");
+
         logHostInfo();
 
         SpringApplication.run(Application.class, args);

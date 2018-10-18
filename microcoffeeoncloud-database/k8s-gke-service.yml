@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        args: ["--sslMode", "preferSSL", "--sslPEMKeyFile", "/wildcard.default-key.pem", "--bind_ip_all"]
+        ports:
+        - containerPort: 27017
+          hostPort: 27017
+        - containerPort: 28017
+          hostPort: 28017
+        volumeMounts:
+        - name: mongodbdata
+          mountPath: /data/db
+      volumes:
+      - name: mongodbdata
+        gcePersistentDisk:
+          pdName: mongodb-disk
+          fsType: ext4
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  labels:
+    app: mongodb
+spec:
+  type: ClusterIP
+  ports:
+    - port: 27017
+      targetPort: 27017
+      name: mongodb
+    - port: 28017
+      targetPort: 28017
+      name: mongodb-extra
+  selector:
+    app: mongodb

@@ -101,7 +101,7 @@
                         </goals>
                         <configuration>
                             <includeArtifactIds>microcoffeeoncloud-certificates</includeArtifactIds>
-                            <includes>**/microcoffee.study.p12</includes>
+                            <includes>**/microcoffee.study.p12,**/wildcard.default.p12</includes>
                             <outputDirectory>${project.build.directory}/keystore</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
@@ -122,6 +122,11 @@
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}/keystore</directory>
                             <include>microcoffee.study.p12</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}/keystore</directory>
+                            <include>wildcard.default.p12</include>
                         </resource>
                     </resources>
                 </configuration>

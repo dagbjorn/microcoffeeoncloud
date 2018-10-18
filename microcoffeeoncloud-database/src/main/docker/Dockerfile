@@ -1,5 +1,7 @@
 FROM mongo:4.0.1
 WORKDIR /
-COPY microcoffee.study.p12 .
+COPY microcoffee.study.p12 wildcard.default.p12 ./
 RUN openssl pkcs12 -in microcoffee.study.p12 -password pass:12345678 -nodes -out microcoffee.study-key.pem \
-    && rm microcoffee.study.p12
+    && openssl pkcs12 -in wildcard.default.p12 -password pass:12345678 -nodes -out wildcard.default-key.pem \
+    && rm microcoffee.study.p12 \
+    && rm wildcard.default.p12
