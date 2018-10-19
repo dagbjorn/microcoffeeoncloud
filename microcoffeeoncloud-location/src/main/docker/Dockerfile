@@ -1,5 +1,4 @@
-#FROM frolvlad/alpine-oraclejdk8:slim
-FROM java:8
+FROM openjdk:8-slim
 VOLUME /tmp
 WORKDIR /
 COPY microcoffeeoncloud-location-1.0.0-SNAPSHOT.jar app.jar

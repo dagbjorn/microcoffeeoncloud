@@ -1,4 +1,4 @@
-FROM java:8
+FROM openjdk:8-slim
 VOLUME /tmp
 WORKDIR /
 COPY microcoffeeoncloud-order-1.0.0-SNAPSHOT.jar app.jar
