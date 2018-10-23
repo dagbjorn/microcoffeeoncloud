@@ -1,0 +1,5 @@
+{"_id":{"$oid":"5bc382c46773a056d8303bee"},"name":"Small"}
+{"_id":{"$oid":"5bc382c46773a056d8303bef"},"name":"Medium"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf0"},"name":"Large"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf1"},"name":"X-Large"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf2"},"name":"Supersized"}

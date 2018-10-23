@@ -1,0 +1,18 @@
+{"_id":{"$oid":"5bc382c46773a056d8303bf3"},"name":"soy","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf4"},"name":"skimmed","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf5"},"name":"caramel","appliesTo":"syrup"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf6"},"name":"decaf","appliesTo":"caffeine"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf7"},"name":"whipped cream","appliesTo":"extras"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf8"},"name":"vanilla","appliesTo":"syrup"}
+{"_id":{"$oid":"5bc382c46773a056d8303bf9"},"name":"hazelnut","appliesTo":"syrup"}
+{"_id":{"$oid":"5bc382c46773a056d8303bfa"},"name":"sugar free","appliesTo":"syrup"}
+{"_id":{"$oid":"5bc382c46773a056d8303bfb"},"name":"non fat","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c46773a056d8303bfc"},"name":"half fat","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c46773a056d8303bfd"},"name":"half and half","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c46773a056d8303bfe"},"name":"half caf","appliesTo":"caffeine"}
+{"_id":{"$oid":"5bc382c56773a056d8303bff"},"name":"chocolate powder","appliesTo":"extras"}
+{"_id":{"$oid":"5bc382c56773a056d8303c00"},"name":"double shot","appliesTo":"preparation"}
+{"_id":{"$oid":"5bc382c56773a056d8303c01"},"name":"wet","appliesTo":"preparation"}
+{"_id":{"$oid":"5bc382c56773a056d8303c02"},"name":"dry","appliesTo":"preparation"}
+{"_id":{"$oid":"5bc382c56773a056d8303c03"},"name":"organic","appliesTo":"milk"}
+{"_id":{"$oid":"5bc382c56773a056d8303c04"},"name":"extra hot","appliesTo":"preparation"}

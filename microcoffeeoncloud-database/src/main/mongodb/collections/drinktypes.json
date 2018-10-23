@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5bc382c46773a056d8303bea"},"name":"Americano","family":"Coffee"}
+{"_id":{"$oid":"5bc382c46773a056d8303beb"},"name":"Latte","family":"Coffee"}
+{"_id":{"$oid":"5bc382c46773a056d8303bec"},"name":"Tea","family":"That other drink"}
+{"_id":{"$oid":"5bc382c46773a056d8303bed"},"name":"Cappuccino","family":"Coffee"}

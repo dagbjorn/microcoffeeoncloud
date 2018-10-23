@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.menu;
+package study.microcoffee.order.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,11 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -21,20 +17,20 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 /**
- * Integration tests of {@link MenuRestService}.
+ * Integration tests of {@link MongoMenuRepository}.
+ * <p>
+ * Spring Boot autoconfigures a MongoTemplate instance when de.flapdoodle.embed.mongo is found on the classpath.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @TestPropertySource("/application-test.properties")
-public class MenuRestServiceIT {
-
-    private static final String SERVICE_PATH = "/coffeeshop/menu";
+public class EmbeddedMongoMenuRepositoryIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private MenuRepository menuRepository;
 
     @Before
     public void init() {
@@ -62,12 +58,12 @@ public class MenuRestServiceIT {
 
     @Test
     public void getCoffeeMenuShouldReturnCoffeeMenu() {
-        ResponseEntity<String> response = restTemplate.getForEntity(SERVICE_PATH, String.class);
+        Object coffeeMenu = menuRepository.getCoffeeMenu();
 
-        System.out.println(response);
+        System.out.println(coffeeMenu);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("Americano");
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(coffeeMenu.toString()).contains("Americano");
+        assertThat(coffeeMenu.toString()).contains("Large");
+        assertThat(coffeeMenu.toString()).contains("extra hot");
     }
 }
