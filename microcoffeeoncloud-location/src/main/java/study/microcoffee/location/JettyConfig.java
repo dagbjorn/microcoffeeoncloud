@@ -5,17 +5,17 @@ import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.embedded.jetty.JettyServerCustomizer;
 import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Additional Jetty configuration not supported by Spring Boot.
  */
 @Configuration
-@ConditionalOnProperty(value = "server.http.port", matchIfMissing = false)
+@Profile("!itest")
 public class JettyConfig {
 
     private final Logger logger = LoggerFactory.getLogger(JettyConfig.class);
@@ -30,10 +30,9 @@ public class JettyConfig {
      */
     @Bean
     public JettyServletWebServerFactory jettyServletWebServerFactory(@Value("${server.http.port}") final String httpPort) {
-        logger.debug("Adding network connector of port {}", httpPort);
+        logger.info("Adding network connector of port {}", httpPort);
 
         JettyServletWebServerFactory factory = new JettyServletWebServerFactory();
-
         factory.addServerCustomizers(new JettyServerCustomizer() {
 
             @Override

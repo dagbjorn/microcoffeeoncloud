@@ -9,13 +9,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -32,6 +33,8 @@ import study.microcoffee.order.domain.Order;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @AutoConfigureWireMock(port = 8083) // HTTP port of CreditRating API
+@ActiveProfiles("itest")
+@Profile("itest")
 public class OrderRestServiceIT {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
@@ -43,9 +46,6 @@ public class OrderRestServiceIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-    @Value("${server.http.port}")
-    private int httpPort;
 
     @Test
     public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
