@@ -235,5 +235,18 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- To run integration tests: mvn verify -Prun-itest -->
+        <profile>
+            <id>run-itest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
