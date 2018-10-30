@@ -23,8 +23,8 @@ Date | Change
 * [REST services](#rest-services)
 * [Spring Cloud Netflix](#spring-cloud-netflix)
 * [Extras](#extras)
-- [Download geodata from OpenStreetMap](#download-geodata)
-- [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
+  - [Download geodata from OpenStreetMap](#download-geodata)
+  - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
