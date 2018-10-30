@@ -6,6 +6,7 @@ Date | Change
 ---- | -------
 10.03.2018 | Finialised markdown file.
 08.09.2018 | Upgraded to Docker 18.06.1-ce.
+30.10.2018 | Added extras on Google Kubernetes Engine (GKE).
 
 
 ## Contents
@@ -22,6 +23,8 @@ Date | Change
 * [REST services](#rest-services)
 * [Spring Cloud Netflix](#spring-cloud-netflix)
 * [Extras](#extras)
+* [Download geodata from OpenStreetMap](#download-geodata)
+* [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -93,7 +96,8 @@ A word of warning: Common artifacts should be used wisely in a microservice arch
 #### microcoffeeoncloud-certificates
 Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. As a matter of fact, two certificates are created:
 
-* A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application on Docker.
+* A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application with Docker Compose.
+* A wildcard certificare with common name (CN) `*.default` for use when running the application on Kubernetes. (See Extras)
 * A certificate with common name (CN) `localhost` for use when testing outside Docker.
 
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
@@ -147,7 +151,8 @@ In order for https to work, a self-signed certificate needs to be created. The `
 
 Key alias | Common Name (CN) | Subject Alternative Name (SAN) | Comment
 --------- | ---------------- | ------------------------------ | --------
-microcoffee.study | \*.microcoffee.study | \*.microcoffee.study, ${vmHostIp} | Wildcard certificate used when running in Docker.
+microcoffee.study | \*.microcoffee.study | \*.microcoffee.study, ${vmHostIp} | Wildcard certificate used when running with Docker.
+wildcard.default | \*.default | \*.default | Wildcard certificate used when running on Kubernetes.
 localhost | localhost | | Certificate used when testing outside Docker.
 
 `${vmHostIp}` is a Maven property defining the IP address of VM host. Default value is `192.168.99.100`.
@@ -169,7 +174,9 @@ To specify a different VM host IP, run:
 ### Build the microservices
 Use Maven to build each microservice in turn by running:
 
-    mvn clean package docker:build
+    mvn clean package [-Ppush-image]
+
+Specify the `push-image` profile to push the Docker image to Docker Hub.
 
 :exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
 
@@ -671,3 +678,8 @@ List of a Key's Values, sorted by Occurrence:
 Get all coffee shops:
 
     osmfilter oslo.osm --keep="all cuisine=coffee_shop" > oslo-coffee-shops.xml
+
+### <a name="microcoffee-on-gke"></a>Microcoffee on Google Kubernetes Engine (GKE)
+
+:construction: More to come...
+
