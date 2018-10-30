@@ -681,5 +681,26 @@ Get all coffee shops:
 
 ### <a name="microcoffee-on-gke"></a>Microcoffee on Google Kubernetes Engine (GKE)
 
-:construction: More to come...
+:construction: Under work...
+
+#### Getting started
+
+See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/docs/quickstart) to getting started with GKE. In particular, the following needs to be carried out:
+
+1. Sign in to Google Cloud Platform using your Gmail account.
+1. Activate a free trial of one year/USD 300. (Or use an existing paid account if you have...)
+1. Create a project called microcoffeeoncloud.
+1. Enable billing for the microcoffeeoncloud project.
+1. Choose a shell. The following options are available:
+   * Local shell: Install Google Cloud SDK locally (recommended). Also, make sure that kubectl is installed.
+   * Cloud shell: Activate Google Cloud Shell.
+1. Configure default settings for the gcloud CLI tool.
+
+    gcloud config set project microcoffeeoncloud
+    gcloud config set compute/zone europe-north1-a
+
+
+
+
+
 
