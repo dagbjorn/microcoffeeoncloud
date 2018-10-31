@@ -692,13 +692,16 @@ See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/do
 1. Create a project called microcoffeeoncloud.
 1. Enable billing for the microcoffeeoncloud project.
 1. Choose a shell. The following options are available:
-   * Local shell: Install Google Cloud SDK locally (recommended). Also, make sure that kubectl is installed.
+   * Local shell: Install Google Cloud SDK locally (recommended). Make sure that `gcloud init` is run. Also, make sure that kubectl is installed.
    * Cloud shell: Activate Google Cloud Shell.
-1. Configure default settings for the gcloud CLI tool.
+1. Verify default settings for the gcloud CLI tool (region, zone, account and project).
+   `gcloud config list`
+1. Enable Compute Engine API (gcloud compute) from [Google Cloud Console](https://console.cloud.google.com), Navigation Menu > APIs & Services.
 
-    gcloud config set project microcoffeeoncloud
-    gcloud config set compute/zone europe-north1-a
+#### Create cluster
 
+    gcloud container clusters create microcoffeeoncloud-cluster
+    gcloud compute instances list
 
 
 
