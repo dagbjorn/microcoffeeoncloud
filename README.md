@@ -692,18 +692,86 @@ See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/do
 1. Create a project called microcoffeeoncloud.
 1. Enable billing for the microcoffeeoncloud project.
 1. Choose a shell. The following options are available:
-   * Local shell: Install Google Cloud SDK locally (recommended). Make sure that `gcloud init` is run. Also, make sure that kubectl is installed.
+   * Local shell (recommended): Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/quickstarts) locally. Make sure that `gcloud init` is run as part of the installation. Also, make sure to install kubectl. (The simplest way is to run `gcloud components install kubectl`.)
    * Cloud shell: Activate Google Cloud Shell.
 1. Verify default settings for the gcloud CLI tool (region, zone, account and project).
-   `gcloud config list`
+   * `gcloud config list`
 1. Enable Compute Engine API (gcloud compute) from [Google Cloud Console](https://console.cloud.google.com), Navigation Menu > APIs & Services.
 
 #### Create cluster
 
+Create a default cluster consisting of three nodes.
+
     gcloud container clusters create microcoffeeoncloud-cluster
+
+List all created VM instances.
+
     gcloud compute instances list
 
+Remember to delete the cluster when your finished. (This will save you a few bucks a day...)
 
+    gcloud container clusters delete microcoffeeoncloud-cluster --quiet
 
+#### Create MongoDB disk
 
+Create a 10GB disk for use by MongoDB.
 
+    gcloud compute disks create mongodb-disk --size 10GB
+
+List all created disks.
+
+    gcloud compute disks list
+
+Delete the disk. (The daily charge of the disk is minimal.)
+
+    gcloud compute disks delete mongodb-disk --quiet
+
+#### Create firewall openings
+
+When the service is exposed by a NodePort, we need to manually add firewall openings for the selected port numbers.
+
+    gcloud compute firewall-rules create microcoffee --allow tcp:30080-30099,tcp:30443-30462
+
+Also, for simple data loading in MongoDB, create another firewall rule for port 27017. (May be deleted again as soon as the database
+loading is completed.)
+
+    gcloud compute firewall-rules create microcoffee-database --allow tcp:27017
+
+List firewall rules.
+
+    gcloud compute firewall-rules list
+
+Delete the firewall rules.
+
+    gcloud compute firewall-rules delete microcoffee --quiet
+    gcloud compute firewall-rules delete microcoffee-database --quiet
+
+#### Run Microcoffee
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+
+    deploy-k8s-gke-1-servers.bat
+    deploy-k8s-gke-2-discovery.bat
+    deploy-k8s-gke-3-apps.bat
+
+Make sure that the pods are up and running before starting the next. (Check the log from each pod.)
+
+#### Loading the database
+
+From the `microcoffeeoncloud-database` project, run:
+
+    mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+
+EXTERNAL_IP is found by listing the created VM instances by running `gcloud compute disks list`.
+
+To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
+
+    kubectl exec -it PODNAME -- mongo microcoffee
+
+#### Give Microcoffee a spin - in the Google cloud
+
+Navigate to:
+
+    https://EXTERNAL_IP:8443/coffee.html
+
+As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
