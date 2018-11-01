@@ -772,6 +772,6 @@ To verify the database loading, start the MongoDB client in the database pod. (U
 
 Navigate to:
 
-    https://EXTERNAL_IP:8443/coffee.html
+    https://EXTERNAL_IP:30443/coffee.html
 
 As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
