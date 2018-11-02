@@ -762,7 +762,7 @@ From the `microcoffeeoncloud-database` project, run:
 
     mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-EXTERNAL_IP is found by listing the created VM instances by running `gcloud compute disks list`.
+EXTERNAL_IP is found by listing the created VM instances by using `gcloud compute disks list`.
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
@@ -775,3 +775,15 @@ Navigate to:
     https://EXTERNAL_IP:30443/coffee.html
 
 As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
+
+#### Summary of port numbers
+
+Microservice | http port | https port
+------------ | --------- | ----------
+gateway | 30080 | 30443
+location | 30081 | 30444
+order | 30082 | 30445
+creditrating | 30083 | 30446
+configserver | 30091 | 30454
+discovery | 30092 | 30455
+database | 27017 | 27017
