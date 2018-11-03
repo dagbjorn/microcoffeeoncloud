@@ -16,6 +16,7 @@ spec:
       containers:
       - name: configserver
         image: dagbjorn/microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
         ports:
         - containerPort: 8091
         - containerPort: 8454

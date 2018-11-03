@@ -16,6 +16,7 @@ spec:
       containers:
       - name: order
         image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
         ports:
         - containerPort: 8082
         - containerPort: 8445

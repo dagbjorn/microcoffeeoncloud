@@ -16,6 +16,7 @@ spec:
       containers:
       - name: creditrating
         image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
         ports:
         - containerPort: 8083
         - containerPort: 8446

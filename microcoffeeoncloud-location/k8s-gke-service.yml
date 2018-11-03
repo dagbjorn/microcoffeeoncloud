@@ -16,6 +16,7 @@ spec:
       containers:
       - name: location
         image: dagbjorn/microcoffeeoncloud-location:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
         ports:
         - containerPort: 8081
         - containerPort: 8444

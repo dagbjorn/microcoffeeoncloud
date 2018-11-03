@@ -16,6 +16,7 @@ spec:
       containers:
       - name: discovery
         image: dagbjorn/microcoffeeoncloud-discovery:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
         ports:
         - containerPort: 8092
         - containerPort: 8455
