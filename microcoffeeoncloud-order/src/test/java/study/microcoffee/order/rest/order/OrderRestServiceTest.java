@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.common.logging.JsonResponseLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
@@ -39,6 +41,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@Import(JsonResponseLoggingFilterTestConfig.class)
 public class OrderRestServiceTest {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
@@ -77,8 +80,10 @@ public class OrderRestServiceTest {
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .content(toJson(newOrder)) //
-            .contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .contentType(MediaType.APPLICATION_JSON_UTF8) //
+            .header("Host", "somehost.no")) //
             .andExpect(status().isCreated()) //
+            .andExpect(header().string(HttpHeaders.LOCATION, Matchers.containsString("somehost.no")))
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.endsWith(savedOrder.getId())))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(toJson(savedOrder)));
