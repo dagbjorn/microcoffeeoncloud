@@ -12,11 +12,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import study.microcoffee.location.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.location.repository.LocationRepository;
 
 /**
@@ -25,6 +27,7 @@ import study.microcoffee.location.repository.LocationRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(LocationRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@Import(HttpLoggingFilterTestConfig.class)
 public class LocationRestServiceTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
+import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
 
 /**
  * Unit tests of {@link CreditRatingRestService}.
@@ -29,6 +31,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
 @WebMvcTest(CreditRatingRestService.class)
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
+@Import(HttpLoggingFilterTestConfig.class)
 public class CreditRatingRestServiceTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
