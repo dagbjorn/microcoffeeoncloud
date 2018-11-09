@@ -1,4 +1,4 @@
-package study.microcoffee.order;
+package study.microcoffee.location;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-public class ApplicationIT {
+public class ApplicationTest {
 
     @Test
     public void applicationContextShouldLoad() {
