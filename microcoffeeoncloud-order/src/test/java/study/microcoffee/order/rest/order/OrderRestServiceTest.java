@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import study.microcoffee.order.common.logging.JsonResponseLoggingFilterTestConfig;
+import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
@@ -41,7 +41,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderRestService.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
-@Import(JsonResponseLoggingFilterTestConfig.class)
+@Import(HttpLoggingFilterTestConfig.class)
 public class OrderRestServiceTest {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
@@ -54,6 +54,7 @@ public class OrderRestServiceTest {
 
     @MockBean
     @Qualifier("Hystrix")
+    // @Qualifier("Basic")
     private CreditRatingConsumer creditRatingCustomerMock;
 
     @Autowired

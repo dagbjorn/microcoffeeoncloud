@@ -93,7 +93,7 @@ public class OrderRestServiceIT {
         assertThat(readBackOrder.toString()).isEqualTo(savedOrder.toString());
     }
 
-    //@Test
+    @Test
     public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 

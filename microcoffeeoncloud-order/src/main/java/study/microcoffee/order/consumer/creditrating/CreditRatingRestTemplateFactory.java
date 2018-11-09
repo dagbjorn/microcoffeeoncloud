@@ -9,6 +9,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import study.microcoffee.order.common.logging.HttpLoggingInterceptor;
 import study.microcoffee.order.consumer.common.http.HttpClientFactory;
 
 /**
@@ -36,6 +37,7 @@ public class CreditRatingRestTemplateFactory {
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
+        restTemplate.getInterceptors().add(new HttpLoggingInterceptor(false));
         return restTemplate;
     }
 }
