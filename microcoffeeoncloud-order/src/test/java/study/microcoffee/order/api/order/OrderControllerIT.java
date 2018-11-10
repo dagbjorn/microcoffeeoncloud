@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.order;
+package study.microcoffee.order.api.order;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -25,12 +25,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.api.order.OrderController;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
 
 /**
- * Integration tests of {@link OrderRestService}.
+ * Integration tests of {@link OrderController}.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,7 +39,7 @@ import study.microcoffee.order.domain.Order;
 @AutoConfigureWireMock(port = 8083) // HTTP port of CreditRating API
 @ActiveProfiles("itest")
 @Profile("itest")
-public class OrderRestServiceIT {
+public class OrderControllerIT {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order/{orderId}";

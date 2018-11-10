@@ -1,4 +1,4 @@
-package study.microcoffee.location.rest;
+package study.microcoffee.location.api;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -18,17 +18,18 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import study.microcoffee.location.api.LocationController;
 import study.microcoffee.location.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.location.repository.LocationRepository;
 
 /**
- * Unit tests of {@link LocationRestService}.
+ * Unit tests of {@link LocationController}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(LocationRestService.class)
+@WebMvcTest(LocationController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 @Import(HttpLoggingFilterTestConfig.class)
-public class LocationRestServiceTest {
+public class LocationControllerTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 

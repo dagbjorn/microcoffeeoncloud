@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
  * <pre>
  * ..
  * &#64;Import(HttpLoggingFilterTestConfig.class)
- * public class LocationRestServiceTest {
+ * public class LocationControllerTest {
  * </pre>
  */
 @TestConfiguration

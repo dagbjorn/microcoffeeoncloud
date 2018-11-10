@@ -1,4 +1,4 @@
-package study.microcoffee.creditrating.rest;
+package study.microcoffee.creditrating.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,15 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import study.microcoffee.creditrating.api.CreditRatingController;
 import study.microcoffee.creditrating.domain.CreditRating;
 
 /**
- * Integration tests of {@link CreditRatingRestService}.
+ * Integration tests of {@link CreditRatingController}.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CreditRatingRestServiceIT {
+public class CreditRatingControllerIT {
 
     private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
 

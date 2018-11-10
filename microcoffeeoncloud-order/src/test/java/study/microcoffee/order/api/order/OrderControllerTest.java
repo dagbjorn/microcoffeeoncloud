@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.order;
+package study.microcoffee.order.api.order;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.api.order.OrderController;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
@@ -36,13 +37,13 @@ import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.repository.OrderRepository;
 
 /**
- * Unit tests of {@link OrderRestService}.
+ * Unit tests of {@link OrderController}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(OrderRestService.class)
+@WebMvcTest(OrderController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 @Import(HttpLoggingFilterTestConfig.class)
-public class OrderRestServiceTest {
+public class OrderControllerTest {
 
     private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order/{orderId}";

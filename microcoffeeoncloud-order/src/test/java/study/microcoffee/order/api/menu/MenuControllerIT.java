@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.menu;
+package study.microcoffee.order.api.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,15 +22,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import study.microcoffee.order.api.menu.MenuController;
+
 /**
- * Integration tests of {@link MenuRestService}.
+ * Integration tests of {@link MenuController}.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class MenuRestServiceIT {
+public class MenuControllerIT {
 
     private static final String SERVICE_PATH = "/coffeeshop/menu";
 

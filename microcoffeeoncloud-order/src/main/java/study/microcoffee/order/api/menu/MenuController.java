@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.menu;
+package study.microcoffee.order.api.menu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import study.microcoffee.order.repository.MenuRepository;
 
 /**
- * Class implementing the Menu REST service for returning the coffee shop menu.
+ * Controller class of the Menu REST API for returning the coffee shop menu.
  */
 @RestController
 @RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class MenuRestService {
+public class MenuController {
 
-    private Logger logger = LoggerFactory.getLogger(MenuRestService.class);
+    private Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
     private MenuRepository menuRepository;

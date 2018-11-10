@@ -1,4 +1,4 @@
-package study.microcoffee.creditrating.rest;
+package study.microcoffee.creditrating.api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import study.microcoffee.creditrating.behavior.ServiceBehavior;
 import study.microcoffee.creditrating.domain.CreditRating;
 
 /**
- * Class implementing the Credit Rating REST service for checking if customers are creditworthy.
+ * Controller class of the Credit Rating REST API for checking if customers are creditworthy.
  * <p>
  * Also, some kind of configurable service behavior is executed to give the illusion of an unreliable backend service.
  * <p>
@@ -23,9 +23,9 @@ import study.microcoffee.creditrating.domain.CreditRating;
 @RefreshScope
 @RestController
 @RequestMapping(path = "/coffeeshop", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
-public class CreditRatingRestService {
+public class CreditRatingController {
 
-    private Logger logger = LoggerFactory.getLogger(CreditRatingRestService.class);
+    private Logger logger = LoggerFactory.getLogger(CreditRatingController.class);
 
     @Value("#{serviceBehaviorFactory.createServiceBehavior()}")
     public ServiceBehavior serviceBehavior;

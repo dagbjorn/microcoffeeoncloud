@@ -1,4 +1,4 @@
-package study.microcoffee.location.rest;
+package study.microcoffee.location.api;
 
 import java.io.IOException;
 
@@ -19,24 +19,24 @@ import study.microcoffee.location.exception.CoffeeShopNotFoundException;
 import study.microcoffee.location.repository.LocationRepository;
 
 /**
- * Class implementing the Location REST service for finding the geographical location of objects.
+ * Controller class of the Location REST API for finding the geographical location of objects.
  */
 @RestController
 @RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class LocationRestService {
+public class LocationController {
 
-    private Logger logger = LoggerFactory.getLogger(LocationRestService.class);
+    private Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     private LocationRepository locationRepository;
 
     // Doesn't really need @Autowired when only having a single constructor. Spring sorts it out by itself.
     @Autowired
-    public LocationRestService(LocationRepository locationRepository) {
+    public LocationController(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
     }
 
     /**
-     * Finds the nearest coffee shop within maxdistance meters from the position given by the WGS84 latitude/longitude coordinates.
+     * Finds the nearest coffee shop within maxDistance meters from the position given by the WGS84 latitude/longitude coordinates.
      *
      * @param latitude
      *            the WGS84 latitude of the given position.

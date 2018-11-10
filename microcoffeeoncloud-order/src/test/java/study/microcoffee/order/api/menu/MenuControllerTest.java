@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.menu;
+package study.microcoffee.order.api.menu;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,15 +15,16 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import study.microcoffee.order.api.menu.MenuController;
 import study.microcoffee.order.repository.MenuRepository;
 
 /**
- * Unit tests of {@link MenuRestService}.
+ * Unit tests of {@link MenuController}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(MenuRestService.class)
+@WebMvcTest(MenuController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
-public class MenuRestServiceTest {
+public class MenuControllerTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/menu";
 

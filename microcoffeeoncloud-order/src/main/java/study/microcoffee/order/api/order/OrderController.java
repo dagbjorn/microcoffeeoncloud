@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest.order;
+package study.microcoffee.order.api.order;
 
 import java.net.URI;
 import java.util.Optional;
@@ -24,15 +24,15 @@ import study.microcoffee.order.exception.OrderNotFoundException;
 import study.microcoffee.order.repository.OrderRepository;
 
 /**
- * Class implementing the Order REST service for handling coffee orders.
+ * Controller class of the Order REST API for handling coffee orders.
  */
 @RestController
 @RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class OrderRestService {
+public class OrderController {
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
-    private Logger logger = LoggerFactory.getLogger(OrderRestService.class);
+    private Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderRepository orderRepository;

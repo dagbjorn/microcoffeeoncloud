@@ -1,4 +1,4 @@
-package study.microcoffee.creditrating.rest;
+package study.microcoffee.creditrating.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,19 +20,20 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.creditrating.api.CreditRatingController;
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
 import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
 
 /**
- * Unit tests of {@link CreditRatingRestService}.
+ * Unit tests of {@link CreditRatingController}.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(CreditRatingRestService.class)
+@WebMvcTest(CreditRatingController.class)
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
 @Import(HttpLoggingFilterTestConfig.class)
-public class CreditRatingRestServiceTest {
+public class CreditRatingControllerTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
 

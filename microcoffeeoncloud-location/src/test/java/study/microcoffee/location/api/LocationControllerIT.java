@@ -1,4 +1,4 @@
-package study.microcoffee.location.rest;
+package study.microcoffee.location.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,17 +18,18 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import study.microcoffee.location.api.LocationController;
 import study.microcoffee.location.test.utils.MongoDBUtils;
 
 /**
- * Integration tests of {@link LocationRestService}.
+ * Integration tests of {@link LocationController}.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class LocationRestServiceIT {
+public class LocationControllerIT {
 
     private static final String SERVICE_PATH = "/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
