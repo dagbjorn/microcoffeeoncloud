@@ -58,11 +58,11 @@
      */
 
     coffeeApp.factory('CoffeeMenu', function ($resource, __env) {
-        return $resource('/coffeeshop/menu');
+        return $resource('/api/coffeeshop/menu');
     });
 
     coffeeApp.factory('CoffeeOrder', function ($resource, __env) {
-        return $resource('/coffeeshop/:id/order', {id: '@CoffeeShopId'}, {});
+        return $resource('/api/coffeeshop/:id/order', {id: '@CoffeeShopId'}, {});
     });
 
     coffeeApp.controller('DrinksController', function ($scope, CoffeeMenu, CoffeeOrder, $log) {
@@ -123,7 +123,7 @@
     });
 
     coffeeApp.factory('CoffeeShopLocator', function ($resource, __env) {
-        return $resource('/coffeeshop/nearest/:latitude/:longitude/:maxdistance',
+        return $resource('/api/coffeeshop/nearest/:latitude/:longitude/:maxdistance',
                 {latitude: '@latitude', longitude: '@longitude', maxdistance: '@maxdistance'}, {});
     });
 
