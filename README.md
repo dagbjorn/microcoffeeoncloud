@@ -7,6 +7,7 @@ Date | Change
 10.03.2018 | Finialised markdown file.
 08.09.2018 | Upgraded to Docker 18.06.1-ce.
 30.10.2018 | Added extras on Google Kubernetes Engine (GKE).
+12.11.2018 | Updated API URLs with leading /api.
 
 
 ## Contents
@@ -331,7 +332,7 @@ assuming the VM host IP 192.168.99.100.
 
 **Syntax**
 
-    GET /coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}
+    GET /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}
 
 Finds the nearest coffee shop within *maxdistance* meters from the position given by the WGS84 *latitude*/*longitude* coordinates.
 
@@ -346,7 +347,7 @@ HTTP status | Description
 
 Find the coffee shop closest to the Capgemini Skøyen office:
 
-    GET http://192.168.99.100:8081/coffeeshop/nearest/59.920161/10.683517/200
+    GET http://192.168.99.100:8081/api/coffeeshop/nearest/59.920161/10.683517/200
 
 Response:
 
@@ -384,8 +385,8 @@ Response:
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8081/coffeeshop/nearest/59.920161/10.683517/200
-    curl -i --insecure https://192.168.99.100:8444/coffeeshop/nearest/59.920161/10.683517/200
+    curl -i http://192.168.99.100:8081/api/coffeeshop/nearest/59.920161/10.683517/200
+    curl -i --insecure https://192.168.99.100:8444/api/coffeeshop/nearest/59.920161/10.683517/200
 
 :bulb: For testing with https, use a recent curl version that supports SSL. (7.46.0 is good.)
 
@@ -395,7 +396,7 @@ Response:
 
 **Syntax**
 
-    GET /coffeeshop/menu
+    GET /api/coffeeshop/menu
 
 Gets the coffee shop menu.
 
@@ -407,7 +408,7 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8082/coffeeshop/menu
+    GET http://192.168.99.100:8082/api/coffeeshop/menu
 
 Response (abbreviated):
 
@@ -463,8 +464,8 @@ Response (abbreviated):
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8082/coffeeshop/menu
-    curl -i --insecure https://192.168.99.100:8445/coffeeshop/menu
+    curl -i http://192.168.99.100:8082/api/coffeeshop/menu
+    curl -i --insecure https://192.168.99.100:8445/api/coffeeshop/menu
 
 ### <a name="order-api"></a>Order API
 
@@ -472,7 +473,7 @@ Response (abbreviated):
 
 **Syntax**
 
-    POST /coffeeshop/{coffeeShopId}/order
+    POST /api/coffeeshop/{coffeeShopId}/order
 
 Places an order to the coffee shop with ID *coffeeShopId*. The order details are given in the JSON-formatted HTTP request body.
 
@@ -487,7 +488,7 @@ HTTP status | Description
 
 **Example**
 
-    POST http://192.168.99.100:8082/coffeeshop/1/order
+    POST http://192.168.99.100:8082/api/coffeeshop/1/order
 
     {
         "coffeeShopId": 1,
@@ -522,14 +523,14 @@ Response:
 
 :white_check_mark: Must be run from `microcoffee-order` to find the JSON file `src\test\curl\order.json`.
 
-    curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://192.168.99.100:8082/coffeeshop/1/order
-    curl -i --insecure -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://192.168.99.100:8445/coffeeshop/1/order
+    curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://192.168.99.100:8082/api/coffeeshop/1/order
+    curl -i --insecure -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://192.168.99.100:8445/api/coffeeshop/1/order
 
 #### Get order details
 
 **Syntax**
 
-    GET /coffeeshop/{coffeeShopId}/order/{orderId}
+    GET /api/coffeeshop/{coffeeShopId}/order/{orderId}
 
 Reads the details of the order of the given ID *orderId* from coffee shop with the given ID coffeeShopId.
 
@@ -542,7 +543,7 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8082/coffeeshop/1/order/585fe5230d248f00011173ce
+    GET http://192.168.99.100:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
 
 Response:
 
@@ -562,8 +563,8 @@ Response:
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8082/coffeeshop/1/order/585fe5230d248f00011173ce
-    curl -i --insecure https://192.168.99.100:8445/coffeeshop/1/order/585fe5230d248f00011173ce
+    curl -i http://192.168.99.100:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
+    curl -i --insecure https://192.168.99.100:8445/api/coffeeshop/1/order/585fe5230d248f00011173ce
 
 ### <a name="creditrating-api"></a>CreditRating API
 
@@ -571,7 +572,7 @@ Response:
 
 **Syntax**
 
-    GET /coffeeshop/creditrating/{customerId}
+    GET /api/coffeeshop/creditrating/{customerId}
 
 Gets the credit rating of the customer with ID *customerId*. For the time being, a credit rating of 70 is always returned!
 
@@ -583,7 +584,7 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8083/coffeeshop/creditrating/john
+    GET http://192.168.99.100:8083/api/coffeeshop/creditrating/john
 
 Response:
 
@@ -593,8 +594,8 @@ Response:
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8083/coffeeshop/creditrating/john
-    curl -i --insecure https://192.168.99.100:8446/coffeeshop/creditrating/john
+    curl -i http://192.168.99.100:8083/api/coffeeshop/creditrating/john
+    curl -i --insecure https://192.168.99.100:8446/api/coffeeshop/creditrating/john
 
 ## <a name="spring-cloud-netflix"></a>Spring Cloud Netflix
 
