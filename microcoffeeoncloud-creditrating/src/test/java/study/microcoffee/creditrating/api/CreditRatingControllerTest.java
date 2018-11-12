@@ -35,7 +35,7 @@ import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
 @Import(HttpLoggingFilterTestConfig.class)
 public class CreditRatingControllerTest {
 
-    private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
+    private static final String SERVICE_PATH = "/api/coffeeshop/creditrating/{customerId}";
 
     @Autowired
     private MockMvc mockMvc;

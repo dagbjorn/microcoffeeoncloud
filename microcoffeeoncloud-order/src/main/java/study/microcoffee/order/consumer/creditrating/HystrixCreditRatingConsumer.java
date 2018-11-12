@@ -22,7 +22,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 @Qualifier("Hystrix")
 public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
 
-    private static final String GET_CREDIT_RATING_RESOURCE = "/coffeeshop/creditrating/{customerId}";
+    private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
     private final Logger logger = LoggerFactory.getLogger(HystrixCreditRatingConsumer.class);
 

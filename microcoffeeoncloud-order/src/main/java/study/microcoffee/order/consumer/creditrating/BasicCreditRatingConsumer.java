@@ -19,7 +19,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 @Qualifier("Basic")
 public class BasicCreditRatingConsumer implements CreditRatingConsumer {
 
-    private static final String GET_CREDIT_RATING_RESOURCE = "/coffeeshop/creditrating/{customerId}";
+    private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
     private final Logger logger = LoggerFactory.getLogger(BasicCreditRatingConsumer.class);
 

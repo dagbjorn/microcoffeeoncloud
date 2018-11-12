@@ -14,7 +14,7 @@ import study.microcoffee.order.repository.MenuRepository;
  * Controller class of the Menu REST API for returning the coffee shop menu.
  */
 @RestController
-@RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MenuController {
 
     private Logger logger = LoggerFactory.getLogger(MenuController.class);

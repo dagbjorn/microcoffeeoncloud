@@ -27,6 +27,7 @@ public class HttpLoggingFilterConfig {
     public FilterRegistrationBean<HttpLoggingFilter> requestLoggingFilterRegistrationBean() {
         FilterRegistrationBean<HttpLoggingFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(createRequestLogFilter());
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registrationBean;
     }

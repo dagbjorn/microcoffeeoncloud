@@ -41,8 +41,8 @@ import study.microcoffee.order.domain.Order;
 @Profile("itest")
 public class OrderControllerIT {
 
-    private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
-    private static final String GET_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order/{orderId}";
+    private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
+    private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
 
     private static final int COFFEE_SHOP_ID = 10;
 
@@ -56,7 +56,7 @@ public class OrderControllerIT {
         // WireMock stubbing of CreditRating API
         final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
 
-        stubFor(get(urlPathMatching("/coffeeshop/creditrating/(.+)")) //
+        stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(aResponse() //
                 .withStatus(HttpStatus.OK.value()) //
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //

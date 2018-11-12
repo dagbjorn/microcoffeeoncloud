@@ -23,7 +23,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
 @TestPropertySource("/application-test.properties")
 public class CreditRatingControllerIT {
 
-    private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
+    private static final String SERVICE_PATH = "/api/coffeeshop/creditrating/{customerId}";
 
     private static final String CUSTOMER_ID = "Dagbjørn";
 

@@ -75,7 +75,7 @@ public class BasicCreditRatingConsumerTest {
 
     private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
         UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
-            .path("/coffeeshop/creditrating") //
+            .path("/api/coffeeshop/creditrating") //
             .pathSegment(UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name())) //
             .build();
         return serviceUrl.toUriString();

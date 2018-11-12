@@ -31,7 +31,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 @Profile("itest")
 public class LocationControllerIT {
 
-    private static final String SERVICE_PATH = "/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
+    private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
     @Autowired
     private MongoTemplate mongoTemplate;

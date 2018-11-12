@@ -34,7 +34,7 @@ import study.microcoffee.order.api.menu.MenuController;
 @Profile("itest")
 public class MenuControllerIT {
 
-    private static final String SERVICE_PATH = "/coffeeshop/menu";
+    private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
     @Autowired
     private MongoTemplate mongoTemplate;

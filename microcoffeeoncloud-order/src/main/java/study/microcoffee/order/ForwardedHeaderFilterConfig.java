@@ -19,7 +19,7 @@ public class ForwardedHeaderFilterConfig {
     public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilterRegistrationBean() {
         FilterRegistrationBean<ForwardedHeaderFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(createForwardedHeaderFilter());
-        registrationBean.addUrlPatterns("/coffeeshop/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1); // Second-highest
         return registrationBean;
     }

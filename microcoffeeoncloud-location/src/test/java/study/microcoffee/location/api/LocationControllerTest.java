@@ -31,7 +31,7 @@ import study.microcoffee.location.repository.LocationRepository;
 @Import(HttpLoggingFilterTestConfig.class)
 public class LocationControllerTest {
 
-    private static final String SERVICE_PATH = "/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
+    private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
     @MockBean
     private LocationRepository locationRepositoryMock;

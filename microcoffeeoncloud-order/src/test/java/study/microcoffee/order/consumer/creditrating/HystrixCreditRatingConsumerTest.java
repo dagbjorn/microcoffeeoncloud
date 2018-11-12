@@ -67,6 +67,6 @@ public class HystrixCreditRatingConsumerTest {
     }
 
     private String buildServicePath(String customerId) throws UnsupportedEncodingException {
-        return "/coffeeshop/creditrating/" + UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name());
+        return "/api/coffeeshop/creditrating/" + UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name());
     }
 }

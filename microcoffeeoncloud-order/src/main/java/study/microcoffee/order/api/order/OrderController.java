@@ -27,7 +27,7 @@ import study.microcoffee.order.repository.OrderRepository;
  * Controller class of the Order REST API for handling coffee orders.
  */
 @RestController
-@RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderController {
 
     private static final int MINIMUM_CREDIT_RATING = 50;

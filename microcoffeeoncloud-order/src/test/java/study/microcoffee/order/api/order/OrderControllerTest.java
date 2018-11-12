@@ -45,8 +45,8 @@ import study.microcoffee.order.repository.OrderRepository;
 @Import(HttpLoggingFilterTestConfig.class)
 public class OrderControllerTest {
 
-    private static final String POST_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order";
-    private static final String GET_SERVICE_PATH = "/coffeeshop/{coffeeShopId}/order/{orderId}";
+    private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
+    private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
 
     private static final int COFFEE_SHOP_ID = 10;
 

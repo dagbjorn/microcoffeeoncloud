@@ -22,7 +22,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
  */
 @RefreshScope
 @RestController
-@RequestMapping(path = "/coffeeshop", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/api/coffeeshop", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 public class CreditRatingController {
 
     private Logger logger = LoggerFactory.getLogger(CreditRatingController.class);

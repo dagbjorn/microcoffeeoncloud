@@ -10,12 +10,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import study.microcoffee.order.api.menu.MenuController;
+import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.repository.MenuRepository;
 
 /**
@@ -24,9 +26,10 @@ import study.microcoffee.order.repository.MenuRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(MenuController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@Import(HttpLoggingFilterTestConfig.class)
 public class MenuControllerTest {
 
-    private static final String SERVICE_PATH = "/coffeeshop/menu";
+    private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
     @MockBean
     private MenuRepository menuRepositoryMock;
