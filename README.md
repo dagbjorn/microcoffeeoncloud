@@ -175,13 +175,13 @@ To specify a different VM host IP, run:
 ### Build the microservices
 Use Maven to build each microservice in turn by running:
 
-    mvn clean package [-Ppush-image]
+    mvn clean package [-Pbuild,push]
 
-Specify the `push-image` profile to push the Docker image to Docker Hub.
+Specify the `build` and `push` profiles to build and push, respectively, the Docker image to Docker Hub.
 
 :exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
 
-:bulb: On Windows, all projects may be built by running the `build-all-images.bat` file from the top-level folder.
+:bulb: On Windows, all projects may be built by running the `build-all-images.bat -Pbuild,push` file from the top-level folder.
 
 ## <a name="configuration"></a>Application configuration
 Application and environment-specific properties are defined in standard Spring manner by `${application}-${profile}.properties` files in the `microcoffeeoncloud-appconfig` project. Supported profiles are:
