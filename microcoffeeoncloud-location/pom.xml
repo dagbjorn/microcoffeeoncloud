@@ -15,7 +15,9 @@
 
     <properties>
         <java.version>1.8</java.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
@@ -23,10 +25,9 @@
 
         <swagger.version>2.9.2</swagger.version>
 
-        <docker-maven-plugin.version>1.2.0</docker-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
-        <server.id>docker-hub</server.id>
     </properties>
 
     <repositories>
@@ -180,31 +181,19 @@
     </build>
 
     <profiles>
-        <!-- To build image: mvn clean package -Pbuild-image -->
-        <!-- To build image + push image to Docker Hub: mvn clean package -Pbuild-image,push-image -->
+        <!-- To build image: mvn clean package -Pbuild -->
+        <!-- To build image + push image to Docker Hub: mvn clean package -Pbuild,push -->
         <profile>
-            <id>build-image</id>
+            <id>build</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.spotify</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>${docker-maven-plugin.version}</version>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${dockerfile-maven-plugin.version}</version>
                         <configuration>
-                            <imageName>${project.artifactId}</imageName>
-                            <dockerDirectory>${basedir}/src/main/docker</dockerDirectory>
-                            <resources>
-                                <resource>
-                                    <targetPath>/</targetPath>
-                                    <directory>${project.build.directory}</directory>
-                                    <include>${project.build.finalName}.jar</include>
-                                </resource>
-                                <resource>
-                                    <targetPath>/</targetPath>
-                                    <directory>${project.build.directory}/keystore</directory>
-                                    <include>microcoffee-keystore.jks</include>
-                                </resource>
-                            </resources>
+                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                            <tag>${project.version}</tag>
                         </configuration>
                         <executions>
                             <execution>
@@ -221,21 +210,7 @@
                                     <goal>tag</goal>
                                 </goals>
                                 <configuration>
-                                    <image>${project.artifactId}</image>
-                                    <newName>${docker.image.prefix}/${project.artifactId}:latest</newName>
-                                    <pushImage>false</pushImage>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>tag-image-version</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>tag</goal>
-                                </goals>
-                                <configuration>
-                                    <image>${project.artifactId}</image>
-                                    <newName>${docker.image.prefix}/${project.artifactId}:${project.version}</newName>
-                                    <pushImage>false</pushImage>
+                                    <tag>latest</tag>
                                 </configuration>
                             </execution>
                         </executions>
@@ -245,24 +220,24 @@
         </profile>
 
         <profile>
-            <id>push-image</id>
+            <id>push</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.spotify</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>${docker-maven-plugin.version}</version>
-                        <executions>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${dockerfile-maven-plugin.version}</version>
+                        <configuration>
+                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                         <executions>
                             <execution>
                                 <id>push-image</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>push</goal>
                                 </goals>
-                                <configuration>
-                                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
-                                    <serverId>${server.id}</serverId>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -270,9 +245,9 @@
             </build>
         </profile>
 
-        <!-- To run integration tests: mvn clean verify -Prun-itest -->
+        <!-- To run integration tests: mvn clean verify -Pitest -->
         <profile>
-            <id>run-itest</id>
+            <id>itest</id>
             <build>
                 <plugins>
                     <plugin>

@@ -1,5 +1,5 @@
 ::
-:: build-all-images [-Pbuild-image] [-Pbuild-image,push-image] [-Prun-itest]
+:: build-all-images [-Pbuild] [-Pbuild,push] [-Pitest]
 ::
 call mvn clean install -f microcoffeeoncloud-configserver\pom.xml %* || goto :error
 call mvn clean install -f microcoffeeoncloud-database\pom.xml %* || goto :error
