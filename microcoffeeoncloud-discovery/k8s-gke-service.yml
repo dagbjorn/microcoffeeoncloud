@@ -17,6 +17,20 @@ spec:
       - name: discovery
         image: dagbjorn/microcoffeeoncloud-discovery:1.0.0-SNAPSHOT
         imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8092
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8092
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
         ports:
         - containerPort: 8092
         - containerPort: 8455

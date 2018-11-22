@@ -18,7 +18,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import study.microcoffee.location.api.LocationController;
 import study.microcoffee.location.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.location.repository.LocationRepository;
 
@@ -27,7 +26,7 @@ import study.microcoffee.location.repository.LocationRepository;
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(LocationController.class)
-@TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@TestPropertySource("/application-test.properties")
 @Import(HttpLoggingFilterTestConfig.class)
 public class LocationControllerTest {
 

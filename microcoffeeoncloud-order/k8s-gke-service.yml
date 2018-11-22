@@ -17,6 +17,20 @@ spec:
       - name: order
         image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
         imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8082
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8082
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 5
         ports:
         - containerPort: 8082
         - containerPort: 8445

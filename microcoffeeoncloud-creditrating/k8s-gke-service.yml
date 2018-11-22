@@ -17,6 +17,20 @@ spec:
       - name: creditrating
         image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
         imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8083
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8083
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
         ports:
         - containerPort: 8083
         - containerPort: 8446

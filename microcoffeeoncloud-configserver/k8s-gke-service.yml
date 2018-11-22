@@ -17,6 +17,20 @@ spec:
       - name: configserver
         image: dagbjorn/microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
         imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8091
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8091
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
         ports:
         - containerPort: 8091
         - containerPort: 8454
