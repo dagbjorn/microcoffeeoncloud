@@ -13,7 +13,7 @@
 
         <!-- Note: Version 2.5.0-2.5.2 (latest) and greater has no jar file in Maven central -->
         <groovy.version>2.4.9</groovy.version>
-        <mongo-java-driver.version>3.8.2</mongo-java-driver.version>
+        <mongo-java-driver.version>3.9.1</mongo-java-driver.version>
 
         <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
         <gmavenplus-plugin.version>1.6.2</gmavenplus-plugin.version>
