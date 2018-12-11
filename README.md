@@ -751,9 +751,9 @@ Delete the firewall rules.
 
 From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
 
-    deploy-k8s-gke-1-servers.bat
-    deploy-k8s-gke-2-discovery.bat
-    deploy-k8s-gke-3-apps.bat
+    deploy-k8s-1-servers.bat gke
+    deploy-k8s-2-servers.bat gke
+    deploy-k8s-3-apps.bat gke
 
 Make sure that the pods are up and running before starting the next. (Check the log from each pod.)
 
