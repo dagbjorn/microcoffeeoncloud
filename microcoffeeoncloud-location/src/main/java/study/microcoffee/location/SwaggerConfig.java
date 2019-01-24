@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import springfox.documentation.builders.PathSelectors;
@@ -17,6 +18,9 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.InMemorySwaggerResourcesProvider;
+import springfox.documentation.swagger.web.SwaggerResource;
+import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -55,5 +59,28 @@ public class SwaggerConfig {
                 .code(204) //
                 .message("No coffee shop found") //
                 .build());
+    }
+
+    /**
+     * Configures Swagger resources to use. Adds a custom spec in addition to the built-in default spec.
+     */
+    @Primary
+    @Bean
+    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
+        return new SwaggerResourcesProvider() {
+
+            @Override
+            public List<SwaggerResource> get() {
+                SwaggerResource customResource = new SwaggerResource();
+                customResource.setName("Location API [custom spec]");
+                customResource.setSwaggerVersion("2.0");
+                customResource.setLocation("/location-apispec.yaml");
+
+                List<SwaggerResource> resources = new ArrayList<>();
+                resources.add(customResource);
+                resources.addAll(defaultResourcesProvider.get());
+                return resources;
+            }
+        };
     }
 }

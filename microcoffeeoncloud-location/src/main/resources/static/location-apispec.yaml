@@ -1,0 +1,125 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "[FROM CUSTOM SPEC] Finds the coffee shop closest to the current position.",
+    "version": "1.0",
+    "title": "Location API",
+    "contact": {
+      "name": "Dagbjørn Nogva",
+      "url": "https://github.com/dagbjorn"
+    },
+    "license": {}
+  },
+  "host": "localhost:8444",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "health-check-controller",
+      "description": "Health Check Controller"
+    },
+    {
+      "name": "location-controller",
+      "description": "Location Controller"
+    }
+  ],
+  "paths": {
+    "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}": {
+      "get": {
+        "tags": [
+          "location-controller"
+        ],
+        "summary": "getNearestCoffeeShop",
+        "operationId": "getNearestCoffeeShopUsingGET",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "path",
+            "description": "latitude",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "longitude",
+            "in": "path",
+            "description": "longitude",
+            "required": true,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "maxdistance",
+            "in": "path",
+            "description": "maxdistance",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "204": {
+            "description": "No coffee shop found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/internal/isalive": {
+      "get": {
+        "tags": [
+          "health-check-controller"
+        ],
+        "summary": "isAlive",
+        "operationId": "isAliveUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "No coffee shop found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/internal/isready": {
+      "get": {
+        "tags": [
+          "health-check-controller"
+        ],
+        "summary": "isReady",
+        "operationId": "isReadyUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "No coffee shop found"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  }
+}
