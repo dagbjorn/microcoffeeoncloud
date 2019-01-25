@@ -74,7 +74,7 @@ public class SwaggerConfig {
                 SwaggerResource customResource = new SwaggerResource();
                 customResource.setName("Location API [custom spec]");
                 customResource.setSwaggerVersion("2.0");
-                customResource.setLocation("/location-apispec.yaml");
+                customResource.setLocation("/swagger/location-apispec.yaml");
 
                 List<SwaggerResource> resources = new ArrayList<>();
                 resources.add(customResource);
