@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
@@ -34,8 +34,7 @@ public class SwaggerConfig {
     public Docket locationApi() {
         return new Docket(DocumentationType.SWAGGER_2) //
             .select() //
-            .apis(RequestHandlerSelectors.basePackage("study.microcoffee")) //
-            .paths(PathSelectors.any()) //
+            .paths(PathSelectors.ant("/api/**")) //
             .build() //
             .apiInfo(locationApiInfo()) //
             .useDefaultResponseMessages(false) //
@@ -43,9 +42,12 @@ public class SwaggerConfig {
     }
 
     private ApiInfo locationApiInfo() {
-        return new ApiInfo("Location API", "Finds the coffee shop closest to the current position.", "1.0", "",
-            new Contact("Dagbjørn Nogva", "https://github.com/dagbjorn", ""), "", "", new ArrayList<>()) {
-        };
+        return new ApiInfoBuilder() //
+            .title("Location API") //
+            .description("Finds the coffee shop closest to the current position.") //
+            .version("1.0") //
+            .contact(new Contact("Dagbjørn Nogva", "https://github.com/dagbjorn", "")) //
+            .build();
     }
 
     private List<ResponseMessage> locationResponseMessages() {
@@ -71,15 +73,19 @@ public class SwaggerConfig {
 
             @Override
             public List<SwaggerResource> get() {
-                SwaggerResource customResource = new SwaggerResource();
-                customResource.setName("Location API [custom spec]");
-                customResource.setSwaggerVersion("2.0");
-                customResource.setLocation("/swagger/location-apispec.yaml");
 
                 List<SwaggerResource> resources = new ArrayList<>();
-                resources.add(customResource);
+                resources.add(swaggerResource("Location API [custom spec]", "/swagger/location-apispec.yml", "2.0"));
                 resources.addAll(defaultResourcesProvider.get());
                 return resources;
+            }
+
+            private SwaggerResource swaggerResource(String name, String location, String version) {
+                SwaggerResource resource = new SwaggerResource();
+                resource.setName(name);
+                resource.setLocation(location);
+                resource.setSwaggerVersion(version);
+                return resource;
             }
         };
     }
