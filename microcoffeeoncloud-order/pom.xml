@@ -24,6 +24,8 @@
         <spring-cloud.version>Greenwich.RC2</spring-cloud.version>
         <spring-cloud-contract.version>2.0.2.RELEASE</spring-cloud-contract.version>
 
+        <swagger.version>2.9.2</swagger.version>
+
         <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
@@ -134,6 +136,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <!-- Commons HTTP Client -->
