@@ -57,4 +57,23 @@ public class LocationControllerTest {
             .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void getNearestCoffeeShopWhenParameterTypeMismatchShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get(SERVICE_PATH, 4, 5, "6x") //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(status().isBadRequest()) //
+            .andExpect(content().contentType(MediaType.TEXT_PLAIN));
+    }
+
+    @Test
+    public void getNearestCoffeeShopWhenRepositoryErrorShouldReturnInternalServerError() throws Exception {
+        given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong()))
+            .willThrow(new RuntimeException(("Mocked exception")));
+
+        mockMvc.perform(get(SERVICE_PATH, 4, 5, 6) //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(status().isInternalServerError()) //
+            .andExpect(content().contentType(MediaType.TEXT_PLAIN));
+    }
 }

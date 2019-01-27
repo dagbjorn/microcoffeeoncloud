@@ -63,9 +63,6 @@
                         </property>
                     </properties>
                     <scripts>
-                        <!--
-                        <script>file:///${project.basedir}/src/main/resources/test.groovy</script>
-                        -->
                         <script>file:///${project.basedir}/src/main/resources/PopulateCoffeeShops.groovy</script>
                         <script>file:///${project.basedir}/src/main/resources/PopulateDrinkMenu.groovy</script>
                     </scripts>
