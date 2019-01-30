@@ -8,7 +8,7 @@ Date | Change
 08.09.2018 | Upgraded to Docker 18.06.1-ce.
 30.10.2018 | Added extras on Google Kubernetes Engine (GKE).
 12.11.2018 | Updated API URLs with leading /api.
-
+30.01.2019 | Added Swagger URL to API doc.
 
 ## Contents
 
@@ -325,6 +325,14 @@ assuming the VM host IP 192.168.99.100.
 * [Menu API](#menu-api)
 * [Order API](#order-api)
 * [CreditRating API](#creditrating-api)
+
+### <a name="swagger-doc"></a>Swagger API documentation
+
+Centralized browsing of API documentation is available at the following URL:
+
+    https://192.168.99.100:8443/swagger-ui.html
+
+Select the spec of interest in the upper right corner.
 
 ### <a name="location-api"></a>Location API
 

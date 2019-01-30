@@ -9,7 +9,6 @@ info:
         url: https://github.com/dagbjorn
     license: {
         }
-host: localhost:8444
 basePath: /
 tags:
 -   name: Location
