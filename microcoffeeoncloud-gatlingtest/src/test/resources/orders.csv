@@ -1,11 +1,11 @@
 coffeeShopId,	drinker,	size,		drinkName,	drinkFamily,		selectedOptions
 1,				Einar,		Small,		Americano,	Coffee,				soy
-1,				Per,		Medium,		Americano,	Coffee,				decaf soy
-1,				Arne,		Large,		Americano,	Coffee,				decaf soy
-1,				Mette,		X-Large,	Latte,		Coffee,				decaf soy
-1,				Siri,		Supersized,	Latte,		Coffee,				decaf soy vanilla
-2,				Pia,		Small,		Latte,		Coffee,				decaf soy hazelnut
-2,				Hans,		Medium,		Cappuccino,	Coffee,				organic dry
-2,				Jonas,		Large,		Cappuccino,	Coffee,				organic dry
-2,				Eli,		X-Large,	Cappuccino,	Coffee,				organic dry
+1,				Per,		Medium,		Americano,	Coffee,				decaf+soy
+1,				Arne,		Large,		Americano,	Coffee,				decaf+soy+extra hot
+1,				Mette,		X-Large,	Latte,		Coffee,				decaf+soy
+1,				Siri,		Supersized,	Latte,		Coffee,				decaf+soy+vanilla
+2,				Pia,		Small,		Latte,		Coffee,				decaf+soy+hazelnut
+2,				Hans,		Medium,		Cappuccino,	Coffee,				organic+dry
+2,				Jonas,		Large,		Cappuccino,	Coffee,				organic+milk+half and half+extra hot
+2,				Eli,		X-Large,	Cappuccino,	Coffee,				organic+dry+extra hot
 2,				Kåre,		Supersized,	Tea,		That other drink,	

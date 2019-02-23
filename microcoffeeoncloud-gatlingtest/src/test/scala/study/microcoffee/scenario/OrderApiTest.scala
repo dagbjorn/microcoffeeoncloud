@@ -28,7 +28,7 @@ class OrderApiTest extends Simulation {
       case ("size", value)            => value.trim()
       case ("drinkName", value)       => value.trim()
       case ("drinkFamily", value)     => value.trim()
-      case ("selectedOptions", value) => write(value.trim().split("\\s+"))
+      case ("selectedOptions", value) => write(value.trim().split("\\+"))
     })
 
   val httpProtocol: HttpProtocolBuilder = http
