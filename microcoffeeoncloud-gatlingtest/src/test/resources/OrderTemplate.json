@@ -1,0 +1,10 @@
+{
+    "coffeeShopId": ${coffeeShopId},
+    "drinker": "${drinker}",
+    "size": "${size}",
+    "type": {
+        "name": "${drinkName}",
+        "family": "${drinkFamily}"
+    },
+    "selectedOptions": ${selectedOptions}
+}
