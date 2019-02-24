@@ -799,12 +799,10 @@ database | 27017 | 27017
 
 ### <a name="api-load-testing-gatling"></a>API load testing with Gatling
 
-:construction: Under work...
-
 #### About Gatling
 
 Gatling is a load testing tool for testing HTTP servers. Test scenarios are written in Scala, however no deep Scala skills are
-needed since Gatling provides an easy-to-use DSL. See [Gatling load testing](https://gatling.io/download/) for more information.
+needed since Gatling provides an easy-to-use DSL. See [Gatling load testing](https://gatling.io/docs/current) for more information.
 
 Gatling may be used in two ways:
 
@@ -814,20 +812,21 @@ Gatling may be used in two ways:
 For load testing of the Microcoffee API we use Gatling with Maven. This requires no separate tool installation, however it is very
 useful to install an IDE that supports Scala. The Eclipse-based [Scala IDE](http://scala-ide.org) is an ok alternative.
 
-:warning: The current version of Scala IDE is based on Eclipse Oxygen (4.7). Hence, installing the plugin in a newer Eclipse release
-is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature produces very annoying error messages.)
+:warning: The current version of Scala IDE is based on Eclipse Oxygen (4.7). Hence, installing the plugin option in a newer Eclipse
+release is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature produces very
+annoying error messages.)
 
 #### The test scenarios
 
-The test scenarios are developed in the `gatlingtest` project and consist of the following simulation classes:
+The test scenarios are developed in the `microcoffeeoncloud-gatlingtest` project and consist of the following simulation classes:
 
 Simulation class  | Test data feed | Template JSON
 ----------------- | -------------- | -------------
-LocationApiTest   | locations.csv  |
-MenuApiTest       |                |
+LocationApiTest   | locations.csv  | -
+MenuApiTest       | -              | -
 OrderApiTest      | orders.csv     | OrderTemplate.json
 
-The simulation classes uses the following system properties for test configuration:
+The simulation classes use the following system properties for test configuration:
 
 System property     | Mandatory | Default value | Description
 ------------------- | --------- | ------------- | -----------
@@ -838,15 +837,29 @@ app.durationMinutes | No        | 1             | Duration of a test run in numb
 #### Running load tests from Maven
 
 Load tests are run using the `gatling-maven-plugin`. Use the `gatling.simulationClass` property to specify the
-fully qualified simulation class to run.
+fully qualified name (FQN) of the simulation class to run.
 
-From the `gatlingtest` project, run:
+From the `microcoffeeoncloud-gatlingtest` project, run:
 
     mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=10 -Dapp.durationMinutes=30
 
+#### Running load tests in Scala IDE
+
+During development of simulation classes, it is very handy to test the scenario in the IDE. To accomplish this, create
+a Run Configuration as follows:
+
+Run Configurations... > Scala Application > New
+- Main
+-- Name: LocationApiTest
+-- Project: microcoffeeoncloud-gatlingtest
+-- Main class: io.gatling.app.Gatling
+- Arguments
+-- Program arguments: -s study.microcoffee.scenario.LocationApiTest -sf src/test/scala -rf target/gatling
+-- VM arguments: -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
+
 #### Test report
 
-The test report file on HTML format is displayed upon termination of the load test. (A snippet of the test report open in a web
-browser is shown below.)
+The file name of the HTML test report is displayed upon termination of the load test. A snapshot of the test report opened in a web
+browser is shown below.
 
 ![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report.png "Snapshot of Gatling Test Report")
