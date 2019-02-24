@@ -846,11 +846,11 @@ From the `microcoffeeoncloud-gatlingtest` project, run:
 #### Running load tests in Scala IDE
 
 During development of simulation classes, it is very handy to test scenarios in the IDE. To accomplish this, create
-a Run Configuration as follows:
+a Run Configuration like the following example shows:
 
 Run Configurations... > Scala Application > New
+* Name: LocationApiTest
 * Main
-  - Name: LocationApiTest
   - Project: microcoffeeoncloud-gatlingtest
   - Main class: io.gatling.app.Gatling
 * Arguments
