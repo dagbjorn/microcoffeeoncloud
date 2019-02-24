@@ -801,8 +801,9 @@ database | 27017 | 27017
 
 #### About Gatling
 
-Gatling is a load testing tool for testing HTTP servers. Test scenarios are written in Scala, however no deep Scala skills are
-needed since Gatling provides an easy-to-use DSL. See [Gatling documentation](https://gatling.io/docs/current) for more information.
+[Gatling](https://gatling.io) is a load test tool for testing HTTP servers. Test scenarios are written in Scala, however
+no deep Scala skills are needed since Gatling provides an easy-to-use DSL. See [Gatling documentation](https://gatling.io/docs/current)
+for more information.
 
 Gatling may be used in two ways:
 
