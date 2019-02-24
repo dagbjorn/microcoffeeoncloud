@@ -802,7 +802,7 @@ database | 27017 | 27017
 #### About Gatling
 
 Gatling is a load testing tool for testing HTTP servers. Test scenarios are written in Scala, however no deep Scala skills are
-needed since Gatling provides an easy-to-use DSL. See [Gatling load testing](https://gatling.io/docs/current) for more information.
+needed since Gatling provides an easy-to-use DSL. See [Gatling documentation](https://gatling.io/docs/current) for more information.
 
 Gatling may be used in two ways:
 
@@ -813,8 +813,8 @@ For load testing of the Microcoffee API we use Gatling with Maven. This requires
 useful to install an IDE that supports Scala. The Eclipse-based [Scala IDE](http://scala-ide.org) is an ok alternative.
 
 :warning: The current version of Scala IDE is based on Eclipse Oxygen (4.7). Hence, installing the plugin option in a newer Eclipse
-release is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature produces very
-annoying error messages.)
+release is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature is broken and
+produces very annoying error messages.)
 
 #### The test scenarios
 
@@ -845,21 +845,21 @@ From the `microcoffeeoncloud-gatlingtest` project, run:
 
 #### Running load tests in Scala IDE
 
-During development of simulation classes, it is very handy to test the scenario in the IDE. To accomplish this, create
+During development of simulation classes, it is very handy to test scenarios in the IDE. To accomplish this, create
 a Run Configuration as follows:
 
 Run Configurations... > Scala Application > New
-- Main
--- Name: LocationApiTest
--- Project: microcoffeeoncloud-gatlingtest
--- Main class: io.gatling.app.Gatling
-- Arguments
--- Program arguments: -s study.microcoffee.scenario.LocationApiTest -sf src/test/scala -rf target/gatling
--- VM arguments: -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
+* Main
+  - Name: LocationApiTest
+  - Project: microcoffeeoncloud-gatlingtest
+  - Main class: io.gatling.app.Gatling
+* Arguments
+  - Program arguments: -s study.microcoffee.scenario.LocationApiTest -sf src/test/scala -rf target/gatling
+  - VM arguments: -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
 
 #### Test report
 
-The file name of the HTML test report is displayed upon termination of the load test. A snapshot of the test report opened in a web
+The file name of the HTML test report is displayed upon termination of a load test. A snapshot of the test report opened in a web
 browser is shown below.
 
 ![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report.png "Snapshot of Gatling Test Report")
