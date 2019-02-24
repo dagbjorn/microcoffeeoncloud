@@ -9,6 +9,7 @@ Date | Change
 30.10.2018 | Added extras on Google Kubernetes Engine (GKE).
 12.11.2018 | Updated API URLs with leading /api.
 30.01.2019 | Added Swagger URL to API doc.
+24.02.2019 | Added load testing with Gatling.
 
 ## Contents
 
@@ -21,11 +22,12 @@ Date | Change
 * [Run Microcoffee](#run-microcoffee)
 * [Setting up the database](#setting-up-database)
 * [Give Microcoffee a spin](#give-a-spin)
-* [REST services](#rest-services)
+* [REST API](#rest-api)
 * [Spring Cloud Netflix](#spring-cloud-netflix)
 * [Extras](#extras)
   - [Download geodata from OpenStreetMap](#download-geodata)
   - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
+  - [API load testing with Gatling](#api-load-testing-gatling)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -317,7 +319,7 @@ assuming the VM host IP 192.168.99.100.
 
 :no_entry: The application doesn't work on IE11. Error logged in console: "Object doesn't support property or method 'assign'." Object.assign is used in coffee.js. Needs some fixing... And Microsoft Edge? Cannot even find the site...
 
-## <a name="rest-services"></a>REST services
+## <a name="rest-api"></a>REST API
 
 ### APIs
 
@@ -690,8 +692,6 @@ Get all coffee shops:
 
 ### <a name="microcoffee-on-gke"></a>Microcoffee on Google Kubernetes Engine (GKE)
 
-:construction: Under work...
-
 #### Getting started
 
 See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/docs/quickstart) to getting started with GKE. In particular, the following needs to be carried out:
@@ -796,3 +796,57 @@ creditrating | 30083 | 30446
 configserver | 30091 | 30454
 discovery | 30092 | 30455
 database | 27017 | 27017
+
+### <a name="api-load-testing-gatling"></a>API load testing with Gatling
+
+:construction: Under work...
+
+#### About Gatling
+
+Gatling is a load testing tool for testing HTTP servers. Test scenarios are written in Scala, however no deep Scala skills are
+needed since Gatling provides an easy-to-use DSL. See [Gatling load testing](https://gatling.io/download/) for more information.
+
+Gatling may be used in two ways:
+
+1. Use Gatling as a standalone tool.
+2. Use Gatling with a build tool (Maven or sbt).
+
+For load testing of the Microcoffee API we use Gatling with Maven. This requires no separate tool installation, however it is very
+useful to install an IDE that supports Scala. The Eclipse-based [Scala IDE](http://scala-ide.org) is an ok alternative.
+
+:warning: The current version of Scala IDE is based on Eclipse Oxygen (4.7). Hence, installing the plugin in a newer Eclipse release
+is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature produces very annoying error messages.)
+
+#### The test scenarios
+
+The test scenarios are developed in the `gatlingtest` project and consist of the following simulation classes:
+
+Simulation class  | Test data feed | Template JSON
+----------------- | -------------- | -------------
+LocationApiTest   | locations.csv  |
+MenuApiTest       |                |
+OrderApiTest      | orders.csv     | OrderTemplate.json
+
+The simulation classes uses the following system properties for test configuration:
+
+System property     | Mandatory | Default value | Description
+------------------- | --------- | ------------- | -----------
+app.baseUrl         | Yes       |               | Base URL of API. Example value: https://192.168.99.100:8443
+app.numberOfUsers   | No        | 1             | Number of concurrent REST calls.
+app.durationMinutes | No        | 1             | Duration of a test run in number of minutes.
+
+#### Running load tests from Maven
+
+Load tests are run using the `gatling-maven-plugin`. Use the `gatling.simulationClass` property to specify the
+fully qualified simulation class to run.
+
+From the `gatlingtest` project, run:
+
+    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=10 -Dapp.durationMinutes=30
+
+#### Test report
+
+The test report file on HTML format is displayed upon termination of the load test. (A snippet of the test report open in a web
+browser is shown below.)
+
+![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report.png "Snapshot of Gatling Test Report")
