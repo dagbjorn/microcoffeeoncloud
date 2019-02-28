@@ -6,10 +6,11 @@ Date | Change
 ---- | -------
 10.03.2018 | Finialised markdown file.
 08.09.2018 | Upgraded to Docker 18.06.1-ce.
-30.10.2018 | Added extras on Google Kubernetes Engine (GKE).
+30.10.2018 | Added extra on how to run Microcoffee on Google Kubernetes Engine (GKE).
 12.11.2018 | Updated API URLs with leading /api.
 30.01.2019 | Added Swagger URL to API doc.
-24.02.2019 | Added load testing with Gatling.
+24.02.2019 | Added extra on load testing with Gatling.
+28.02.2019 | Added extra on how to run Microcoffee on Minikube.
 
 ## Contents
 
@@ -27,6 +28,7 @@ Date | Change
 * [Extras](#extras)
   - [Download geodata from OpenStreetMap](#download-geodata)
   - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
+  - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
 
 ## <a name="acknowledgements"></a>Acknowledgements
@@ -106,7 +108,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 18.06.1-ce/Docker Compose 1.22.0 running on Oracle VM VirtualBox 5.2.18.
+Microcoffee is developed on Windows 10 and tested on Docker 18.09.2/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
 
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
@@ -784,6 +786,96 @@ Navigate to:
     https://EXTERNAL_IP:30443/coffee.html
 
 As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
+
+#### Summary of port numbers
+
+Microservice | http port | https port
+------------ | --------- | ----------
+gateway | 30080 | 30443
+location | 30081 | 30444
+order | 30082 | 30445
+creditrating | 30083 | 30446
+configserver | 30091 | 30454
+discovery | 30092 | 30455
+database | 27017 | 27017
+
+### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
+
+#### Getting started
+
+Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. See [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/setup/minikube) to getting started with Minikube. In particular, the following has to be carried out:
+
+1. A VM must be installed on your development machine, e.g. Oracle VirtualBox.
+1. Install Minikube. Download the executable from the [Minikube repo on GitHub](https://github.com/kubernetes/minikube/releases) and
+place it in a folder on the OS path.
+1. Install kubectl - the Kubernetes CLI. See [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl)
+for guidelines.
+1. Optionally, define the following environment variables if you don't like the default locations in your user home directory.
+   * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): D:\var\minikube
+   * KUBECONFIG: The Kubernetes config file. Example value (on Windows): D:\var\kubectl\config
+
+#### Start Minikube
+
+To start Minikube, run:
+
+    minikube start
+
+Next, configure the Docker environment variables in your shell following the instructions displayed by:
+
+    minikube docker-env
+
+:bulb: On Windows, it is handy to create a batch file to do this. The file should be placed in a folder on your Windows path. A sample batch file, `minikube-setenv.bat`, is located in the `utils` folder of `microcoffeeoncloud-utils`.
+
+To check the status of your local Kubernetes cluster, run:
+
+    minikube status
+
+#### Run Microcoffee
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+
+    deploy-k8s-1-servers.bat mkube
+    deploy-k8s-2-servers.bat mkube
+    deploy-k8s-3-apps.bat mkube
+
+Make sure that the pods are up and running before starting the next. (Check the log from each pod. Use `kubectl get pods` to
+find the PODNAME.)
+
+:warning: You need a powerful development machine to get all pods going. On my machine, only 5 out of 7 pods are successfully started.
+Also, the apps pods may need to be started individually by running `kubectl create -f k8s-service-mkube.yml` in each project.
+
+#### <a name="setting-up-database"></a>Setting up the database
+
+##### The Kubernetes volume used by the MongoDB database
+
+The manifest file `k8s-service-mkube.yml` in `microcoffeeoncloud-database` creates a Kubernetes volume of type hostPath for
+use by the MongoDB database. The properties of the volume are as follows:
+
+* Name: `mongodbdata`
+* mountPath (inside the container): `/data/db`
+* hostPath (on the VM): `/mnt/sda1/data/mongodbdata`
+
+The data stored in the volume survive restarts. This is because Minikube by default is configured to persist files stored in `/data` (a softlink to `/mnt/sda1/data`).
+
+##### Loading the database
+
+From the `microcoffeeoncloud-database` project, run:
+
+    mvn gplus:execute -Ddbhost=VM_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+
+VM_IP is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
+
+To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
+
+    kubectl exec -it PODNAME -- mongo microcoffee
+
+#### Give Microcoffee a spin
+
+Navigate to:
+
+    https://VM_IP:30443/coffee.html
+
+As usual, run `minikube ip` to get the VM_IP of the Minikube VM.
 
 #### Summary of port numbers
 
