@@ -18,9 +18,9 @@ echo kubectl get pods
 echo kubectl logs PODNAME -f
 
 echo on
-kubectl create -f microcoffeeoncloud-gateway/k8s-service-%1.yml
-kubectl create -f microcoffeeoncloud-location/k8s-service-%1.yml
-kubectl create -f microcoffeeoncloud-order/k8s-service-%1.yml
-kubectl create -f microcoffeeoncloud-creditrating/k8s-service-%1.yml
+kubectl apply -f microcoffeeoncloud-gateway/k8s-service-%1.yml
+kubectl apply -f microcoffeeoncloud-location/k8s-service-%1.yml
+kubectl apply -f microcoffeeoncloud-order/k8s-service-%1.yml
+kubectl apply -f microcoffeeoncloud-creditrating/k8s-service-%1.yml
 kubectl get services
 kubectl get pods -w

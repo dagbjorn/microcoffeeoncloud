@@ -842,7 +842,7 @@ Make sure that the pods are up and running before starting the next. (Check the 
 find the PODNAME.)
 
 :warning: You need a powerful development machine to get all pods going. On my machine, only 5 out of 7 pods are successfully started.
-Also, the apps pods may need to be started individually by running `kubectl create -f k8s-service-mkube.yml` in each project.
+Also, the apps pods may need to be started individually by running `kubectl apply -f k8s-service-mkube.yml` in each project.
 
 #### <a name="setting-up-database"></a>Setting up the database
 
