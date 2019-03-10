@@ -112,6 +112,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Java 11 migration -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
