@@ -7,8 +7,6 @@ info:
     contact:
         name: Dagbjørn Nogva
         url: https://github.com/dagbjorn
-    license: {
-        }
 basePath: /
 tags:
 -   name: Location
@@ -46,4 +44,3 @@ paths:
                         type: object
                 '204':
                     description: No coffee shop found
-            deprecated: false

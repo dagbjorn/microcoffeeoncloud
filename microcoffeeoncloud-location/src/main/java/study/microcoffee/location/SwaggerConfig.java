@@ -75,7 +75,7 @@ public class SwaggerConfig {
             public List<SwaggerResource> get() {
 
                 List<SwaggerResource> resources = new ArrayList<>();
-                resources.add(swaggerResource("Location API [custom spec]", "/swagger/location-apispec.yml", "2.0"));
+                resources.add(swaggerResource("Location API [custom spec]", "/swagger/location-apispec-3.0.yml", "3.0.0"));
                 resources.addAll(defaultResourcesProvider.get());
                 return resources;
             }

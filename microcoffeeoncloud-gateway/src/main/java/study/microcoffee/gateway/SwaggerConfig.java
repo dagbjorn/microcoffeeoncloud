@@ -31,8 +31,8 @@ public class SwaggerConfig {
 
                 List<SwaggerResource> resources = new ArrayList<>();
                 resources.add(swaggerResource("Credit Rating API", "/apidocs/creditrating/v2/api-docs", "2.0"));
-                resources
-                    .add(swaggerResource("Location API [custom spec]", "/apidocs/location/swagger/location-apispec.yml", "2.0"));
+                resources.add(
+                    swaggerResource("Location API [custom spec]", "/apidocs/location/swagger/location-apispec-3.0.yml", "3.0.0"));
                 resources.add(swaggerResource("Menu/Order API", "/apidocs/order/v2/api-docs", "2.0"));
                 return resources;
             }
