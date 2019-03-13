@@ -46,7 +46,7 @@ public class LocationSpecificationTest {
 
     @Test
     public void implementationShouldMatchApiSpecification() throws Exception {
-        URL apiSpec = LocationSpecificationTest.class.getClassLoader().getResource(API_SPEC_FILE);
+        URL apiSpec = getClass().getClassLoader().getResource(API_SPEC_FILE);
         OpenApiConverter openApiConverter = OpenApiConverter.usingPath(Paths.get(apiSpec.toURI()));
         SpringConverter springConverter = new SpringConverter(applicationContext);
 
