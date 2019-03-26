@@ -23,6 +23,7 @@
 
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
 
+        <hikaku-version>1.1.1</hikaku-version>
         <swagger.version>2.9.2</swagger.version>
 
         <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
@@ -144,6 +145,21 @@
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Hikaku - tests if the implementation of a REST-API meets its specification -->
+        <dependency>
+            <groupId>de.codecentric.hikaku</groupId>
+            <artifactId>hikaku-openapi</artifactId>
+            <version>${hikaku-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.codecentric.hikaku</groupId>
+            <artifactId>hikaku-spring</artifactId>
+            <version>${hikaku-version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -176,6 +192,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
             </plugin>
         </plugins>
     </build>
