@@ -21,9 +21,9 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
-        <angularjs.version>1.7.6</angularjs.version>
+        <angularjs.version>1.7.7</angularjs.version>
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
         <bootstrap.version>4.3.1</bootstrap.version>
         <swagger.version>2.9.2</swagger.version>

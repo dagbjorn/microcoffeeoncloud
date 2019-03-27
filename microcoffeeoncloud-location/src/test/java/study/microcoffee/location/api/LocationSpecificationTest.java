@@ -18,8 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import de.codecentric.hikaku.Hikaku;
 import de.codecentric.hikaku.HikakuConfig;
-import de.codecentric.hikaku.converter.openapi.OpenApiConverter;
-import de.codecentric.hikaku.converter.spring.SpringConverter;
+import de.codecentric.hikaku.converters.openapi.OpenApiConverter;
+import de.codecentric.hikaku.converters.spring.SpringConverter;
 
 /**
  * Tests if the implementation of the Location API meets its specification.
@@ -47,7 +47,7 @@ public class LocationSpecificationTest {
     @Test
     public void implementationShouldMatchApiSpecification() throws Exception {
         URL apiSpec = getClass().getClassLoader().getResource(API_SPEC_FILE);
-        OpenApiConverter openApiConverter = OpenApiConverter.usingPath(Paths.get(apiSpec.toURI()));
+        OpenApiConverter openApiConverter = new OpenApiConverter(Paths.get(apiSpec.toURI()));
         SpringConverter springConverter = new SpringConverter(applicationContext);
 
         List<String> ignorePaths = new ArrayList<String>();
