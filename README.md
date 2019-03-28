@@ -11,6 +11,7 @@ Date | Change
 30.01.2019 | Added Swagger URL to API doc.
 24.02.2019 | Added extra on load testing with Gatling.
 28.02.2019 | Added extra on how to run Microcoffee on Minikube.
+28.03.2019 | Migrated to Java 11.
 
 ## Contents
 
@@ -110,6 +111,10 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee is developed on Windows 10 and tested on Docker 18.09.2/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
 
+The code was originally written in Java 8, but later migrated to Java 11. Only two issues were found during the migration:
+* ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
+* Incompatibility with wro4j-maven-plugin. Fixed by adding plugin dependency to org.mockito:mockito-core:2.18.0 or above.
+
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
 :bulb: On Windows, install [Docker Toolbox](https://github.com/docker/toolbox/releases) to get all necessary tools (Docker client, Compose, Machine, Kitematic and VirtualBox).
@@ -118,7 +123,7 @@ A Docker VM is needed. To create a Docker VM called `docker-vm` for use with Vir
 
     docker-machine create --driver virtualbox docker-vm
 
-In addition, you'll need the basic Java development tools (IDE w/ Java 1.8 and Maven) installed on your development machine.
+In addition, you'll need the basic Java development tools (IDE w/ Java 11 and Maven) installed on your development machine.
 
 Finally, OpenSSL is needed to create a self-signed wildcard certificate.
 
