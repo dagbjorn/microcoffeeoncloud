@@ -30,11 +30,11 @@ public class EmbeddedMongoOrderRepositoryIT {
 
     @Test
     public void saveOrderWhenReadBackShouldReturnSavedOrder() {
-        Order order = new Order.Builder() //
+        Order order = Order.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Dagbjørn") //
-            .selectedOption("skimmed milk") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
         Order savedOrder = orderRepository.save(order);

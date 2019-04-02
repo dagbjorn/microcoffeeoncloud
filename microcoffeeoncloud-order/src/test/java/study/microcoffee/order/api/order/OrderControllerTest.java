@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import study.microcoffee.order.api.order.OrderController;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
@@ -65,15 +64,14 @@ public class OrderControllerTest {
 
     @Test
     public void saveOrderShouldReturnCreated() throws Exception {
-        Order newOrder = new Order.Builder() //
+        Order newOrder = Order.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Dagbjørn") //
-            .selectedOption("skimmed milk") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
-        Order savedOrder = new Order.Builder() //
-            .order(newOrder) //
+        Order savedOrder = newOrder.toBuilder() //
             .id("1234567890abcdf") //
             .build();
 
@@ -93,11 +91,11 @@ public class OrderControllerTest {
 
     @Test
     public void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
-        Order newOrder = new Order.Builder() //
+        Order newOrder = Order.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Poor Sod") //
-            .selectedOption("skimmed milk") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(20);
@@ -111,12 +109,12 @@ public class OrderControllerTest {
 
     @Test
     public void getOrderShouldReturnOrder() throws Exception {
-        Order expectedOrder = new Order.Builder() //
+        Order expectedOrder = Order.builder() //
             .id("1234567890abcdef") //
             .type(new DrinkType("Americano", "Coffee")) //
             .size("Large") //
             .drinker("Dagbjørn") //
-            .selectedOption("soy milk") //
+            .selectedOptions(new String[] { "soy milk" }) //
             .build();
 
         given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(Optional.of(expectedOrder));

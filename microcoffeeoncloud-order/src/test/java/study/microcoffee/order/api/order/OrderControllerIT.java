@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import study.microcoffee.order.api.order.OrderController;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
@@ -64,11 +63,11 @@ public class OrderControllerIT {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //
                 .withBody(creditRatingResponse)));
 
-        Order newOrder = new Order.Builder() //
+        Order newOrder = Order.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Dagbjørn") //
-            .selectedOption("skimmed milk") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
         HttpHeaders headers = new HttpHeaders();
