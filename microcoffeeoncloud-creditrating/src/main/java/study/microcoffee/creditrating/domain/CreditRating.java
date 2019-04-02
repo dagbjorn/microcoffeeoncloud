@@ -5,22 +5,22 @@ package study.microcoffee.creditrating.domain;
  */
 public class CreditRating {
 
-    private int creditRating;
+    private int rating;
 
     // Needed by Jackson ObjectMapper.
     public CreditRating() {
     }
 
-    public CreditRating(int creditRating) {
-        this.creditRating = creditRating;
+    public CreditRating(int rating) {
+        this.rating = rating;
     }
 
-    public int getCreditRating() {
-        return creditRating;
+    public int getRating() {
+        return rating;
     }
 
     @Override
     public String toString() {
-        return String.format("CreditRating [creditRating=%d]", creditRating);
+        return String.format("CreditRating [rating=%d]", rating);
     }
 }

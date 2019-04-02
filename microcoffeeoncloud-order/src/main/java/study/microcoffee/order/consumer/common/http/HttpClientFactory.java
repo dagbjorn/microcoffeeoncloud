@@ -10,6 +10,9 @@ import org.apache.http.impl.client.HttpClients;
  */
 public class HttpClientFactory {
 
+    private HttpClientFactory() {
+    }
+
     /**
      * Creates a HTTP client with a configurable timeout.
      * <p>

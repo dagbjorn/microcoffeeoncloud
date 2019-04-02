@@ -13,15 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "orders")
 public class Order {
 
-    // {
-    // "type": {
-    // "name": "Americano",
-    // "family": "Coffee"
-    // },
-    // "size": "Small",
-    // "drinker": "Dagbj�rn"
-    // }
-
     @Id
     private String id;
 

@@ -1,11 +1,9 @@
 package study.microcoffee.order;
 
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
-import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.embedded.jetty.JettyServerCustomizer;
 import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,14 +31,10 @@ public class JettyConfig {
         logger.info("Adding network connector of port {}", httpPort);
 
         JettyServletWebServerFactory factory = new JettyServletWebServerFactory();
-        factory.addServerCustomizers(new JettyServerCustomizer() {
-
-            @Override
-            public void customize(Server server) {
-                NetworkTrafficServerConnector connector = new NetworkTrafficServerConnector(server);
-                connector.setPort(Integer.valueOf(httpPort));
-                server.addConnector(connector);
-            }
+        factory.addServerCustomizers(server -> {
+            NetworkTrafficServerConnector connector = new NetworkTrafficServerConnector(server);
+            connector.setPort(Integer.valueOf(httpPort));
+            server.addConnector(connector);
         });
 
         return factory;

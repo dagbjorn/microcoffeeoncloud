@@ -41,7 +41,7 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
             logger.debug("GET response from {}, response={}", url, response.getBody());
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                return response.getBody().getCreditRating();
+                return response.getBody().getRating();
             } else {
                 throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
             }

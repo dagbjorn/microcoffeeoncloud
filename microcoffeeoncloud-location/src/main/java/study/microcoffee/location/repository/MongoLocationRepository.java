@@ -53,6 +53,6 @@ public class MongoLocationRepository implements LocationRepository {
                         .append("$maxDistance", maxDistance))))
             .first();
 
-        return (coffeeShop != null) ? coffeeShop.toJson() : null;
+        return (coffeeShop != null) ? coffeeShop.toJson() : null; // NOSONAR null must be allowed
     }
 }

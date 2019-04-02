@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -51,7 +52,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public class HttpLoggingFilter extends OncePerRequestFilter {
 
-    private final Logger logger = LoggerFactory.getLogger(HttpLoggingFilter.class);
+    private final Logger log = LoggerFactory.getLogger(HttpLoggingFilter.class);
 
     private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -77,7 +78,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
         if (shouldLog()) {
             String formattedRequest = formatRequest(requestToUse);
-            logger.debug("[{}] [{}]{}{}", logSequence, "BEFORE", lineTerminator, formattedRequest);
+            log.debug("[{}] [{}]{}{}", logSequence, "BEFORE", lineTerminator, formattedRequest);
         }
 
         try {
@@ -85,10 +86,10 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         } finally {
             if (shouldLog()) {
                 String formattedRequest = formatRequest(requestToUse);
-                logger.debug("[{}] [{}]{}{}", logSequence, "AFTER", lineTerminator, formattedRequest);
+                log.debug("[{}] [{}]{}{}", logSequence, "AFTER", lineTerminator, formattedRequest);
 
                 String formattedResponse = formatResponse(responseToUse);
-                logger.debug("[{}]{}{}", logSequence, lineTerminator, formattedResponse);
+                log.debug("[{}]{}{}", logSequence, lineTerminator, formattedResponse);
             }
         }
     }
@@ -216,7 +217,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             return;
         }
 
-        for (String headerName : headers.keySet()) {
+        for (Entry<String, List<String>> header : headers.entrySet()) {
+            String headerName = header.getKey();
+
             builder.append(headerName).append(": ");
 
             List<String> values = headers.get(headerName);
@@ -232,7 +235,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     }
 
     private boolean shouldLog() {
-        return logger.isDebugEnabled();
+        return log.isDebugEnabled();
     }
 
     public boolean isFormattedLogging() {

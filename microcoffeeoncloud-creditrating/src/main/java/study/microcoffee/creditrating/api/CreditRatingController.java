@@ -38,8 +38,6 @@ public class CreditRatingController {
         serviceBehavior.execute();
 
         // TODO Create some kind of database table where customers credit rating is found.
-        CreditRating creditRating = new CreditRating(70);
-
-        return creditRating;
+        return new CreditRating(70);
     }
 }

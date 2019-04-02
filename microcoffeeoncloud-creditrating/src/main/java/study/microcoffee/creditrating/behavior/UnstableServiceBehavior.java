@@ -49,6 +49,9 @@ public class UnstableServiceBehavior extends AbstractServiceBehavior {
                 logger.debug("Unstable behavior => slow...");
                 sleep(delaySecs * 1000);
                 break;
+
+            default:
+                break;
         }
     }
 }

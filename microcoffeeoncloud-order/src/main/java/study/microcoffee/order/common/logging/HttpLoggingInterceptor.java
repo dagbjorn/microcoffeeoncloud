@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
         }
 
         ClientHttpResponse response = execution.execute(request, body);
-        if (response != null && shouldLog()) {
+        if (shouldLog()) {
             String formattedResponse = formatResponse(response);
             logger.debug("[{}]{}{}", logSequence, lineTerminator, formattedResponse);
         }
@@ -92,10 +93,8 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
         HttpHeaders headers = response.getHeaders();
         formatHeaders(builder, headers);
 
-        if (response.getBody() != null) {
-            String bodyAsString = readInputStreamAsString(response.getBody());
-            formatBody(builder, bodyAsString);
-        }
+        String bodyAsString = readInputStreamAsString(response.getBody());
+        formatBody(builder, bodyAsString);
 
         return builder.toString();
     }
@@ -107,7 +106,9 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
             return;
         }
 
-        for (String headerName : headers.keySet()) {
+        for (Entry<String, List<String>> header : headers.entrySet()) {
+            String headerName = header.getKey();
+
             builder.append(headerName + ": ");
 
             List<String> values = headers.get(headerName);

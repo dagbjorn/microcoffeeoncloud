@@ -5,11 +5,6 @@ package study.microcoffee.order.domain;
  */
 public class DrinkType {
 
-    // "type": {
-    // "name": "Americano",
-    // "family": "Coffee"
-    // }
-
     private String name;
 
     private String family;

@@ -37,6 +37,6 @@ public class CreditRatingControllerIT {
         System.out.println(response);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getCreditRating()).isEqualTo(70);
+        assertThat(response.getBody().getRating()).isEqualTo(70);
     }
 }

@@ -128,7 +128,7 @@
     });
 
     coffeeApp.controller('CoffeeShopController', function ($scope, $window, CoffeeShopLocator, $log) {
-        maxDistance = 2500; // Max distance to coffee shop in meters
+        const maxDistance = 2500; // Max distance to coffee shop in meters
 
         $scope.findCoffeeShopNearestToMe = function () {
             window.navigator.geolocation.getCurrentPosition(function (position) {

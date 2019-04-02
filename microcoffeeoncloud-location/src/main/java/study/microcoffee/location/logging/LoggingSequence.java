@@ -9,6 +9,9 @@ public class LoggingSequence {
 
     private static AtomicInteger currentSequence = new AtomicInteger();
 
+    private LoggingSequence() {
+    }
+
     /**
      * @return Next sequence number.
      */

@@ -25,7 +25,6 @@ public class ForwardedHeaderFilterConfig {
     }
 
     private ForwardedHeaderFilter createForwardedHeaderFilter() {
-        ForwardedHeaderFilter filter = new ForwardedHeaderFilter();
-        return filter;
+        return new ForwardedHeaderFilter();
     }
 }

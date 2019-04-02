@@ -1,7 +1,5 @@
 package study.microcoffee.creditrating.behavior;
 
-import study.microcoffee.creditrating.exception.ServiceBehaviorException;
-
 /**
  * Abstract class containing basic service behavior.
  */
@@ -20,7 +18,7 @@ public abstract class AbstractServiceBehavior implements ServiceBehavior {
         try {
             Thread.sleep(delayMillisecs);
         } catch (InterruptedException e) {
-            throw new ServiceBehaviorException(e);
+            Thread.currentThread().interrupt();
         }
     }
 }

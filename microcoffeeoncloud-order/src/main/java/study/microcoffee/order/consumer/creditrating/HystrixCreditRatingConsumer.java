@@ -41,16 +41,16 @@ public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
     @HystrixCommand(fallbackMethod = "getMinimumCreditRating", commandKey = "getCreditRating", commandProperties = {})
     @Override
     public int getCreditRating(String customerId) {
-        logger.debug("GET request to {}, customerId={}", creditRatingRootUrl + GET_CREDIT_RATING_RESOURCE, customerId);
+        logger.debug("GET request to {}{}, customerId={}", creditRatingRootUrl, GET_CREDIT_RATING_RESOURCE, customerId);
 
         try {
             ResponseEntity<CreditRating> response = restTemplate.getForEntity(GET_CREDIT_RATING_RESOURCE, CreditRating.class,
                 customerId);
 
-            logger.debug("GET response from {}, response={}", creditRatingRootUrl + GET_CREDIT_RATING_RESOURCE, response.getBody());
+            logger.debug("GET response from {}{}, response={}", creditRatingRootUrl, GET_CREDIT_RATING_RESOURCE, response.getBody());
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                return response.getBody().getCreditRating();
+                return response.getBody().getRating();
             } else {
                 throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
             }

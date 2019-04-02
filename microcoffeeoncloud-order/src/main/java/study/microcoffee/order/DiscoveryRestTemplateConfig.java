@@ -8,7 +8,6 @@ import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.cloud.netflix.ribbon.RibbonClientHttpRequestFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 import com.netflix.client.http.HttpRequest;
 
@@ -34,13 +33,10 @@ public class DiscoveryRestTemplateConfig {
     @Bean
     public RestTemplateCustomizer ribbonClientRestTemplateCustomizer(
         final RibbonClientHttpRequestFactory ribbonClientHttpRequestFactory) {
-        return new RestTemplateCustomizer() {
-            @Override
-            public void customize(RestTemplate restTemplate) {
-                logger.debug("RestTemplateCustomizer => requestFactory={}", ribbonClientHttpRequestFactory);
+        return restTemplate -> {
+            logger.debug("RestTemplateCustomizer => requestFactory={}", ribbonClientHttpRequestFactory);
 
-                restTemplate.setRequestFactory(ribbonClientHttpRequestFactory);
-            }
+            restTemplate.setRequestFactory(ribbonClientHttpRequestFactory);
         };
     }
 }
