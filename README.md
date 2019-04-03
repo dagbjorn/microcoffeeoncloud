@@ -12,6 +12,7 @@ Date | Change
 24.02.2019 | Added extra on load testing with Gatling.
 28.02.2019 | Added extra on how to run Microcoffee on Minikube.
 28.03.2019 | Migrated to Java 11.
+03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
 
 ## Contents
 
@@ -109,7 +110,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 18.09.2/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
+Microcoffee is developed on Windows 10 and tested on Docker 18.09.3/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
 
 The code was originally written in Java 8, but later migrated to Java 11. Only two issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
@@ -819,6 +820,10 @@ for guidelines.
    * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): D:\var\minikube
    * KUBECONFIG: The Kubernetes config file. Example value (on Windows): D:\var\kubectl\config
 
+:bulb: Recommended versions:
+* minikube v1.0.0
+* kubectl v1.14.0
+
 #### Start Minikube
 
 To start Minikube, run:
@@ -845,9 +850,6 @@ From the `microcoffeeoncloud` top-level folder, run the following batch files (W
 
 Make sure that the pods are up and running before starting the next. (Check the log from each pod. Use `kubectl get pods` to
 find the PODNAME.)
-
-:warning: You need a powerful development machine to get all pods going. On my machine, only 5 out of 7 pods are successfully started.
-Also, the apps pods may need to be started individually by running `kubectl apply -f k8s-service-mkube.yml` in each project.
 
 #### <a name="setting-up-database"></a>Setting up the database
 
