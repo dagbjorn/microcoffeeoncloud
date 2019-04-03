@@ -817,8 +817,8 @@ place it in a folder on the OS path.
 1. Install kubectl - the Kubernetes CLI. See [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl)
 for guidelines.
 1. Optionally, define the following environment variables if you don't like the default locations in your user home directory.
-   * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): D:\var\minikube
-   * KUBECONFIG: The Kubernetes config file. Example value (on Windows): D:\var\kubectl\config
+   * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): `D:\var\minikube`
+   * KUBECONFIG: The Kubernetes config file. Example value (on Windows): `D:\var\kubectl\config`
 
 :bulb: Recommended versions:
 * minikube v1.0.0
