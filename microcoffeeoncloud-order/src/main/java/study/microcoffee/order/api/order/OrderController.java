@@ -3,6 +3,7 @@ package study.microcoffee.order.api.order;
 import java.net.URI;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.exception.OrderNotFoundException;
@@ -42,6 +44,8 @@ public class OrderController {
     @Qualifier("Hystrix")
     private CreditRatingConsumer creditRatingConsumer;
 
+    private ModelMapper modelMapper = new ModelMapper();
+
     /**
      * Saves the order in the database.
      * <p>
@@ -49,14 +53,16 @@ public class OrderController {
      *
      * @param coffeeShopId
      *            the ID of the coffee shop.
-     * @param order
+     * @param orderModel
      *            the JSON-formatted coffee order received in the HTTP request body.
      * @return A ResponseEntity object containing 1) the saved coffee order including its ID, and 2) a HTTP location header
      *         containing the URL for reading the saved order.
      */
     @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Order> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody Order order) {
-        logger.debug("POST /{}/order body={}", coffeeShopId, order);
+    public ResponseEntity<Order> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody OrderModel orderModel) {
+        logger.debug("POST /{}/order body={}", coffeeShopId, orderModel);
+
+        Order order = convertToEntity(orderModel);
 
         int creditRating = creditRatingConsumer.getCreditRating(order.getDrinker());
         if (creditRating < MINIMUM_CREDIT_RATING) {
@@ -89,7 +95,7 @@ public class OrderController {
      *             if no such order ID exists. The exception class is mapped to HTTP status 204 (No content).
      */
     @GetMapping(path = "/{coffeeShopId}/order/{orderId}")
-    public Order getOrder(@PathVariable("coffeeShopId") long coffeeShopId, @PathVariable("orderId") String orderId) {
+    public OrderModel getOrder(@PathVariable("coffeeShopId") long coffeeShopId, @PathVariable("orderId") String orderId) {
         logger.debug("GET /{}/order/{}", coffeeShopId, orderId);
 
         Optional<Order> order = orderRepository.findById(orderId);
@@ -97,6 +103,14 @@ public class OrderController {
             throw new OrderNotFoundException(orderId);
         }
 
-        return order.get();
+        return convertToModel(order.get());
+    }
+
+    private Order convertToEntity(OrderModel orderModel) {
+        return modelMapper.map(orderModel, Order.class);
+    }
+
+    private OrderModel convertToModel(Order order) {
+        return modelMapper.map(order, OrderModel.class);
     }
 }

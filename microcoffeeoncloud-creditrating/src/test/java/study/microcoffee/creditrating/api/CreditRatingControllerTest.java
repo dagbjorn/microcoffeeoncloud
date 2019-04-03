@@ -40,7 +40,8 @@ public class CreditRatingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void getCreditRatingShouldReturnRating() throws Exception {

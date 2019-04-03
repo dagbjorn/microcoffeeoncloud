@@ -24,6 +24,7 @@
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <spring-cloud-contract.version>2.1.1.RELEASE</spring-cloud-contract.version>
 
+        <modelmapper.version>2.3.0</modelmapper.version>
         <swagger.version>2.9.2</swagger.version>
 
         <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
@@ -155,6 +156,13 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <!-- ModelMapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
         </dependency>
 
         <!-- Lombok -->

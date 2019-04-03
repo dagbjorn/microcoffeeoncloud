@@ -1,7 +1,4 @@
-package study.microcoffee.order.domain;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package study.microcoffee.order.api.order.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,20 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import study.microcoffee.order.domain.DrinkType;
 
 /**
- * Domain object for storing a coffee order.
+ * Model object for transferring a coffee order.
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@Builder
 @ToString
-@Document(collection = "orders")
-public class Order {
+public class OrderModel {
 
-    @Id
     private String id;
 
     private long coffeeShopId;

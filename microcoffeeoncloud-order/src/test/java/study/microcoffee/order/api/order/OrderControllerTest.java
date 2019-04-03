@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
@@ -60,18 +62,21 @@ public class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Test
     public void saveOrderShouldReturnCreated() throws Exception {
-        Order newOrder = Order.builder() //
+        OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Dagbjørn") //
             .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
-        Order savedOrder = newOrder.toBuilder() //
+        Order savedOrder = toOrder(orderModel).toBuilder() //
             .id("1234567890abcdf") //
             .build();
 
@@ -79,19 +84,19 @@ public class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(70);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .content(toJson(newOrder)) //
+            .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON_UTF8) //
             .header("Host", "somehost.no")) //
             .andExpect(status().isCreated()) //
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.containsString("somehost.no")))
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.endsWith(savedOrder.getId())))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(content().json(toJson(savedOrder)));
+            .andExpect(content().json(toJson(toOrderModel(savedOrder))));
     }
 
     @Test
     public void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
-        Order newOrder = Order.builder() //
+        OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Poor Sod") //
@@ -101,7 +106,7 @@ public class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(20);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .content(toJson(newOrder)) //
+            .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isPaymentRequired()) //
             .andExpect(content().contentType(MediaType.TEXT_PLAIN));
@@ -123,7 +128,7 @@ public class OrderControllerTest {
             .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isOk()) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(content().json(toJson(expectedOrder)));
+            .andExpect(content().json(toJson(toOrderModel(expectedOrder))));
     }
 
     @Test
@@ -139,5 +144,13 @@ public class OrderControllerTest {
 
     private String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
+    }
+
+    private Order toOrder(OrderModel orderModel) {
+        return modelMapper.map(orderModel, Order.class);
+    }
+
+    private OrderModel toOrderModel(Order order) {
+        return modelMapper.map(order, OrderModel.class);
     }
 }

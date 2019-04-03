@@ -26,9 +26,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
-import study.microcoffee.order.domain.Order;
 
 /**
  * Integration tests of {@link OrderController}.
@@ -47,10 +47,11 @@ public class OrderControllerIT {
 
     private static final int COFFEE_SHOP_ID = 10;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
@@ -63,7 +64,7 @@ public class OrderControllerIT {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //
                 .withBody(creditRatingResponse)));
 
-        Order newOrder = Order.builder() //
+        OrderModel newOrder = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
             .drinker("Dagbjørn") //
@@ -72,12 +73,12 @@ public class OrderControllerIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Forwarded-Host", "forwardedhost.no");
-        HttpEntity<Order> requestEntity = new HttpEntity<Order>(newOrder, headers);
+        HttpEntity<OrderModel> requestEntity = new HttpEntity<>(newOrder, headers);
 
-        ResponseEntity<Order> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST, requestEntity, Order.class,
-            COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST, requestEntity,
+            OrderModel.class, COFFEE_SHOP_ID);
 
-        Order savedOrder = response.getBody();
+        OrderModel savedOrder = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
@@ -86,9 +87,9 @@ public class OrderControllerIT {
         assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
         assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
 
-        response = restTemplate.getForEntity(GET_SERVICE_PATH, Order.class, COFFEE_SHOP_ID, savedOrder.getId());
+        response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, savedOrder.getId());
 
-        Order readBackOrder = response.getBody();
+        OrderModel readBackOrder = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
@@ -99,7 +100,8 @@ public class OrderControllerIT {
     public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        ResponseEntity<Order> response = restTemplate.getForEntity(GET_SERVICE_PATH, Order.class, COFFEE_SHOP_ID, orderId);
+        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
+            orderId);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }

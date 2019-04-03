@@ -33,7 +33,8 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 @TestPropertySource(properties = { "app.creditrating.url=http://dummy" })
 public class HystrixCreditRatingConsumerTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockRestServiceServer server;
