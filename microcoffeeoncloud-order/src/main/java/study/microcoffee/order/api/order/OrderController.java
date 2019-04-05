@@ -59,7 +59,7 @@ public class OrderController {
      *         containing the URL for reading the saved order.
      */
     @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Order> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody OrderModel orderModel) {
+    public ResponseEntity<OrderModel> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody OrderModel orderModel) {
         logger.debug("POST /{}/order body={}", coffeeShopId, orderModel);
 
         Order order = convertToEntity(orderModel);
@@ -78,7 +78,7 @@ public class OrderController {
         // Create URL of Location header
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{orderId}").buildAndExpand(order.getId()).toUri();
 
-        return ResponseEntity.created(location).body(order);
+        return ResponseEntity.created(location).body(convertToModel(order));
     }
 
     /**
