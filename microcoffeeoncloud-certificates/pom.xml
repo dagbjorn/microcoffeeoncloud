@@ -252,6 +252,7 @@
                                     <srcstoretype>PKCS12</srcstoretype>
                                     <destkeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</destkeystore>
                                     <deststorepass>12345678</deststorepass>
+                                    <deststoretype>JKS</deststoretype>
                                 </configuration>
                             </execution>
                             <execution>
@@ -266,6 +267,7 @@
                                     <srcstoretype>PKCS12</srcstoretype>
                                     <destkeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</destkeystore>
                                     <deststorepass>12345678</deststorepass>
+                                    <deststoretype>JKS</deststoretype>
                                 </configuration>
                             </execution>
                             <execution>
@@ -280,6 +282,7 @@
                                     <srcstoretype>PKCS12</srcstoretype>
                                     <destkeystore>${project.build.outputDirectory}/microcoffee-keystore.jks</destkeystore>
                                     <deststorepass>12345678</deststorepass>
+                                    <deststoretype>JKS</deststoretype>
                                 </configuration>
                             </execution>
 
@@ -337,6 +340,7 @@
                                     <alias>microcoffee.study</alias>
                                     <dname>cn=*.microcoffee.study, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
                                     <!-- <ext>SAN=ip:${vmHostIp},dns:*.microcoffee.study</ext> -->
+                                    <storetype>JKS</storetype>
                                 </configuration>
                             </execution>
                             <execution>
@@ -348,6 +352,7 @@
                                 <configuration>
                                     <alias>localhost</alias>
                                     <dname>cn=localhost, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                                    <storetype>JKS</storetype>
                                 </configuration>
                             </execution>
                             <execution>
@@ -359,6 +364,7 @@
                                 <configuration>
                                     <alias>${vmHostIp}</alias>
                                     <dname>cn=${vmHostIp}, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                                    <storetype>JKS</storetype>
                                 </configuration>
                             </execution>
 

@@ -112,9 +112,11 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee is developed on Windows 10 and tested on Docker 18.09.3/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
 
-The code was originally written in Java 8, but later migrated to Java 11. Only two issues were found during the migration:
+The code was originally written in Java 8, but later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
 * Incompatibility with wro4j-maven-plugin. Fixed by adding plugin dependency to org.mockito:mockito-core:2.18.0 or above.
+* Starting with Java 9, keytool creates PKCS12 keystores by default. This broke SSL for some still not understood reason. Fixed for now
+by changing the certificate generation to create JKS keystores.
 
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
