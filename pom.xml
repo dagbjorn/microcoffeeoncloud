@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>study.microcoffeeoncloud</groupId>
+    <artifactId>microcoffeeoncloud-aggregator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>microcoffeeoncloud-configserver</module>
+        <module>microcoffeeoncloud-database</module>
+        <module>microcoffeeoncloud-discovery</module>
+        <module>microcoffeeoncloud-gateway</module>
+        <module>microcoffeeoncloud-creditrating</module>
+        <module>microcoffeeoncloud-location</module>
+        <module>microcoffeeoncloud-order</module>
+    </modules>
+</project>
