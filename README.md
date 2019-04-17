@@ -191,9 +191,9 @@ Use Maven to build each microservice in turn by running:
 
 Specify the `build` and `push` profiles to build and push, respectively, the Docker image to Docker Hub.
 
-:exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
+Or take advantage of the aggregator pom in the top-level folder and build all microservices in one go.
 
-:bulb: On Windows, all projects may be built by running the `build-all-images.bat -Pbuild,push` file from the top-level folder.
+:exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
 
 ## <a name="configuration"></a>Application configuration
 Application and environment-specific properties are defined in standard Spring manner by `${application}-${profile}.properties` files in the `microcoffeeoncloud-appconfig` project. Supported profiles are:
