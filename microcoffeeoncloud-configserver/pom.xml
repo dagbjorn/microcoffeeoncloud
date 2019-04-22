@@ -20,14 +20,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <surefire.argLine>-Dfile.encoding=UTF-8</surefire.argLine>
+        <failsafe.argLine>-Dfile.encoding=UTF-8</failsafe.argLine>
+        <surefire.coverage.argLine/>
+        <failsafe.coverage.argLine/>
+
+        <docker.image.prefix>dagbjorn</docker.image.prefix>
+
+        <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
+        <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
-
-        <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
 
     <repositories>
@@ -118,18 +125,40 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!-- Use JDK cacerts, otherwise root certificate of github.com is not available. -->
-                    <jvmArguments>
-                        -Djavax.net.debug=none
-                    </jvmArguments>
-                </configuration>
-            </plugin>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <!-- Use JDK cacerts, otherwise root certificate of github.com is not available. -->
+                        <jvmArguments>
+                            -Djavax.net.debug=none
+                        </jvmArguments>
+                    </configuration>
+                </plugin>
 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <argLine>${surefire.argLine} ${surefire.coverage.argLine}</argLine>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <configuration>
+                        <argLine>${failsafe.argLine} ${failsafe.coverage.argLine}</argLine>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -234,22 +263,30 @@
             </build>
         </profile>
 
-        <!-- Generate code coverage: mvn clean verify -Pcoverage -Dmaven.test.failure.ignore=true -->
+
+        <!-- Generate code coverage: mvn clean verify -Pcoverage -->
+        <!--
+                This profile supports the JaCoCo XML format for code coverage instead of the old JaCoCo .exec file format which is
+                deprecated in SonarQube 7.x. Also, starting from SonarQube 7.7, the "Coverage per Test" feature is removed.
+                Drop of JaCoCo .exec file format support is planned for September 2019.
+         -->
         <profile>
             <id>coverage</id>
+            <properties>
+                <surefire.coverage.argLine>${jacoco.agent.ut.argLine}</surefire.coverage.argLine>
+                <failsafe.coverage.argLine>${jacoco.agent.it.argLine}</failsafe.coverage.argLine>
+                <maven.test.failure.ignore>true</maven.test.failure.ignore>
+                <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml,${project.build.directory}/site/jacoco-it/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>${jacoco-maven-plugin.version}</version>
-                        <configuration>
-                            <append>true</append>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>prepare-agent-ut</id>
-                                <phase>process-test-classes</phase>
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
@@ -257,15 +294,28 @@
                                     <propertyName>jacoco.agent.ut.argLine</propertyName>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>prepare-agent-it</id>
+                                <goals>
+                                    <goal>prepare-agent-integration</goal>
+                                </goals>
+                                <configuration>
+                                    <propertyName>jacoco.agent.it.argLine</propertyName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>jacoco-report-ut</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-report-it</id>
+                                <goals>
+                                    <goal>report-integration</goal>
+                                </goals>
+                            </execution>
                         </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>${jacoco.agent.ut.argLine}</argLine>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
