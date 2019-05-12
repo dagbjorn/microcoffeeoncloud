@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -38,14 +37,13 @@ public class BasicCreditRatingConsumerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private CreditRatingConsumer creditRatingConsumer = new BasicCreditRatingConsumer();
+    private CreditRatingConsumer creditRatingConsumer;
 
     @Before
     public void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
-        ReflectionTestUtils.setField(creditRatingConsumer, "restTemplate", restTemplate);
-        ReflectionTestUtils.setField(creditRatingConsumer, "creditRatingEndpointUrl", CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new BasicCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
     }
 
     @Test

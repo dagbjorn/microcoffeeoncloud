@@ -54,9 +54,8 @@ public class OrderControllerTest {
     @MockBean
     private OrderRepository orderRepositoryMock;
 
-    @MockBean
-    @Qualifier("Hystrix")
-    // @Qualifier("Basic")
+    @MockBean()
+    @Qualifier(OrderController.CREDIT_RATING_CONSUMER)
     private CreditRatingConsumer creditRatingCustomerMock;
 
     @Autowired

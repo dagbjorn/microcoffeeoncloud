@@ -23,11 +23,18 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(BasicCreditRatingConsumer.class);
 
-    @Value("#{creditRatingRestTemplateFactory.createRestTemplate()}")
     private RestTemplate restTemplate;
 
-    @Value("${app.creditrating.url}")
     private String creditRatingEndpointUrl;
+
+    public BasicCreditRatingConsumer(@Qualifier("creditRatingRestTemplate") RestTemplate restTemplate,
+        @Value("${app.creditrating.url}") String endpointUrl) {
+        this.restTemplate = restTemplate;
+        this.creditRatingEndpointUrl = endpointUrl;
+
+        logger.debug("restTemplate.requestFactory={}", restTemplate.getRequestFactory());
+        logger.debug("app.creditrating.url={}", endpointUrl);
+    }
 
     @Override
     public int getCreditRating(String customerId) {

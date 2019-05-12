@@ -32,6 +32,10 @@ import study.microcoffee.order.repository.OrderRepository;
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderController {
 
+    static final String BASIC_CONSUMER = "Basic";
+    static final String HYSTRIX_CONSUMER = "Hystrix";
+    static final String CREDIT_RATING_CONSUMER = HYSTRIX_CONSUMER;
+
     private static final int MINIMUM_CREDIT_RATING = 50;
 
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -40,8 +44,7 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @Autowired
-    // @Qualifier("Basic")
-    @Qualifier("Hystrix")
+    @Qualifier(CREDIT_RATING_CONSUMER)
     private CreditRatingConsumer creditRatingConsumer;
 
     private ModelMapper modelMapper = new ModelMapper();

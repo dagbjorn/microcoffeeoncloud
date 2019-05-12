@@ -4,6 +4,7 @@ import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -22,15 +23,11 @@ public class CreditRatingRestTemplateFactory {
 
     private final Logger logger = LoggerFactory.getLogger(CreditRatingRestTemplateFactory.class);
 
-    @Value("${app.creditrating.timeout}")
-    private int timeout;
-
     /**
      * Creates a RestTemplate instance that uses a {@link BufferingClientHttpRequestFactory}.
-     *
-     * @return The RestTemplate instance.
      */
-    public RestTemplate createRestTemplate() {
+    @Bean
+    public RestTemplate creditRatingRestTemplate(@Value("${app.creditrating.timeout}") int timeout) {
         logger.info("app.creditrating.timeout={}", timeout);
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
