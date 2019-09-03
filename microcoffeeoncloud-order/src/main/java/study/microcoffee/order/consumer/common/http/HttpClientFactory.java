@@ -1,6 +1,7 @@
 package study.microcoffee.order.consumer.common.http;
 
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -31,6 +32,7 @@ public class HttpClientFactory {
     public static CloseableHttpClient createDefaultClient(int timeout) {
         return HttpClients.custom() //
             .setDefaultRequestConfig(createRequestConfig(timeout)) //
+            .setSSLHostnameVerifier(new DefaultHostnameVerifier()) //
             .build();
     }
 

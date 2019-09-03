@@ -15,7 +15,7 @@
         <mongo-java-driver.version>3.10.2</mongo-java-driver.version>
 
         <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
-        <gmavenplus-plugin.version>1.7.0</gmavenplus-plugin.version>
+        <gmavenplus-plugin.version>1.7.1</gmavenplus-plugin.version>
         <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
@@ -31,6 +31,16 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
@@ -86,7 +96,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven-dependency-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>unpack-keystore</id>
