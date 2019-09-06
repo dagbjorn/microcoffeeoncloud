@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.junit.Before;
@@ -20,6 +19,11 @@ import de.codecentric.hikaku.Hikaku;
 import de.codecentric.hikaku.HikakuConfig;
 import de.codecentric.hikaku.converters.openapi.OpenApiConverter;
 import de.codecentric.hikaku.converters.spring.SpringConverter;
+import de.codecentric.hikaku.endpoints.Endpoint;
+import de.codecentric.hikaku.endpoints.HttpMethod;
+import de.codecentric.hikaku.reporters.CommandLineReporter;
+import de.codecentric.hikaku.reporters.Reporter;
+import kotlin.jvm.functions.Function1;
 
 /**
  * Tests if the implementation of the Location API meets its specification.
@@ -50,15 +54,36 @@ public class LocationSpecificationTest {
         OpenApiConverter openApiConverter = new OpenApiConverter(Paths.get(apiSpec.toURI()));
         SpringConverter springConverter = new SpringConverter(applicationContext);
 
-        List<String> ignorePaths = new ArrayList<String>();
-        ignorePaths.add(SpringConverter.IGNORE_ERROR_ENDPOINT);
-        ignorePaths.add("/internal/isalive");
-        ignorePaths.add("/internal/isready");
-        ignorePaths.add("/swagger-resources");
-        ignorePaths.add("/swagger-resources/configuration/security");
-        ignorePaths.add("/swagger-resources/configuration/ui");
+        List<Reporter> reporters = new ArrayList<>();
+        reporters.add(new CommandLineReporter());
 
-        HikakuConfig hikakuConfig = new HikakuConfig(new HashSet<>(ignorePaths), true, true);
+        List<Function1<Endpoint, Boolean>> ignorePaths = new ArrayList<>();
+        ignorePaths.add(SpringConverter.IGNORE_ERROR_ENDPOINT);
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}")
+                && endpoint.getHttpMethod().equals(HttpMethod.HEAD);
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}")
+                && endpoint.getHttpMethod().equals(HttpMethod.OPTIONS);
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/internal/isalive");
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/internal/isready");
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/swagger-resources");
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/swagger-resources/configuration/security");
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/swagger-resources/configuration/ui");
+        });
+
+        HikakuConfig hikakuConfig = new HikakuConfig(reporters, ignorePaths);
 
         new Hikaku(openApiConverter, springConverter, hikakuConfig).match();
     }

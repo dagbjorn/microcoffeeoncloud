@@ -17,7 +17,7 @@ spec:
       - name: mongodb
         image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
         imagePullPolicy: Always
-        args: ["--sslMode", "preferSSL", "--sslPEMKeyFile", "/wildcard.default-key.pem", "--bind_ip_all"]
+        args: ["--tlsMode", "preferTLS", "--tlsCertificateKeyFile", "/wildcard.default-key.pem", "--bind_ip_all"]
         ports:
         - containerPort: 27017
           hostPort: 27017
