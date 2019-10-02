@@ -15,7 +15,7 @@
         <mongo-java-driver.version>3.11.0</mongo-java-driver.version>
 
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
-        <gmavenplus-plugin.version>1.7.1</gmavenplus-plugin.version>
+        <gmavenplus-plugin.version>1.8.0</gmavenplus-plugin.version>
         <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
