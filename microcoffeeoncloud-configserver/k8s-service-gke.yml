@@ -59,4 +59,3 @@ spec:
       name: config-https
   selector:
     app: configserver
-    

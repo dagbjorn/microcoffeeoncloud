@@ -52,11 +52,11 @@ spec:
     - port: 8082
       targetPort: 8082
       nodePort: 30082
-      name: config-http
+      name: order-http
     - port: 8445
       targetPort: 8445
       nodePort: 30445
-      name: config-https
+      name: order-https
   selector:
     app: order
  

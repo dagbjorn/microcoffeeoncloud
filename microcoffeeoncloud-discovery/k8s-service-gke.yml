@@ -52,11 +52,11 @@ spec:
     - port: 8092
       targetPort: 8092
       nodePort: 30092
-      name: config-http
+      name: discovery-http
     - port: 8455
       targetPort: 8455
       nodePort: 30455
-      name: config-https
+      name: discovery-https
   selector:
     app: discovery
     

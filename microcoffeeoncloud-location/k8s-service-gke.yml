@@ -53,11 +53,11 @@ spec:
     - port: 8081
       targetPort: 8081
       nodePort: 30081
-      name: config-http
+      name: location-http
     - port: 8444
       targetPort: 8444
       nodePort: 30444
-      name: config-https
+      name: location-https
   selector:
     app: location
     
