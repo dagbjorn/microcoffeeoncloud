@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditrating
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: creditrating
+  template:
+    metadata:
+      labels:
+        app: creditrating
+    spec:
+      containers:
+      - name: creditrating
+        image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8083
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8083
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8083
+        - containerPort: 8446
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "devgke"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "https://configserver.default:8454"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditrating
+  labels:
+    app: creditrating
+spec:
+  type: NodePort
+  ports:
+    - port: 8083
+      targetPort: 8083
+      nodePort: 30083
+      name: creditrating-http
+    - port: 8446
+      targetPort: 8446
+      nodePort: 30446
+      name: creditrating-https
+  selector:
+    app: creditrating
+    

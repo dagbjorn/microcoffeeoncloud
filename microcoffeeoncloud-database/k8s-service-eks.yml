@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        args: ["--tlsMode", "preferTLS", "--tlsCertificateKeyFile", "/wildcard.default-key.pem", "--bind_ip_all"]
+        ports:
+        - containerPort: 27017
+          hostPort: 27017
+        - containerPort: 28017
+          hostPort: 28017
+        volumeMounts:
+        - name: mongodbdata
+          mountPath: /data/db
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: failure-domain.beta.kubernetes.io/zone
+                operator: In
+                values:
+                - eu-west-1a
+      # Volume must be created with availability-zone eu-west-1a.
+      volumes:
+      - name: mongodbdata
+        awsElasticBlockStore:
+          fsType: ext4
+          volumeID: vol-0ecb01ef3034ab45c
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  labels:
+    app: mongodb
+spec:
+  type: NodePort
+  ports:
+    - port: 27017
+      targetPort: 27017
+      nodePort: 30017
+      name: mongodb
+    - port: 28017
+      targetPort: 28017
+      name: mongodb-extra
+  selector:
+    app: mongodb
