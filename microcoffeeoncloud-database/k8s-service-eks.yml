@@ -35,12 +35,14 @@ spec:
                 operator: In
                 values:
                 - eu-west-1a
-      # Volume must be created with availability-zone eu-west-1a.
+      # Volume must be created with availability-zone eu-west-1a as follows:
+      #   aws ec2 create-volume --availability-zone=eu-west-1a --size=5 --volume-type=gp2 --tag-specifications="ResourceType=volume,Tags=[{Key=app,Value=mongodb}]"
+      # Use VolumeId of created volume below. 
       volumes:
       - name: mongodbdata
         awsElasticBlockStore:
           fsType: ext4
-          volumeID: vol-0ecb01ef3034ab45c
+          volumeID: vol-0f9c024468b4c5bde
 ---
 apiVersion: v1
 kind: Service
