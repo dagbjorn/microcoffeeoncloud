@@ -18,7 +18,7 @@ paths:
             summary: Get nearest coffee shop closest to the current position.
             operationId: getNearestCoffeeShop
             produces:
-            - application/json;charset=UTF-8
+            - application/json
             parameters:
             -   name: latitude
                 in: path

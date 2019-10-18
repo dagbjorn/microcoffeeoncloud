@@ -59,7 +59,7 @@ public class LocationControllerIT {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("coordinates");
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(response.getHeaders().getContentType().toString()).startsWith(MediaType.APPLICATION_JSON_VALUE);
     }
 
     @Test

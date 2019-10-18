@@ -43,9 +43,9 @@ public class MenuControllerTest {
 
         given(menuRepositoryMock.getCoffeeMenu()).willReturn(expectedMenu);
 
-        mockMvc.perform(get(SERVICE_PATH).accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(SERVICE_PATH).accept(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isOk()) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
             .andExpect(content().json(expectedMenu));
     }
 }

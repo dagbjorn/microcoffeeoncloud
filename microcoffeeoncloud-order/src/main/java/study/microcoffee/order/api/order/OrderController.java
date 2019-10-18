@@ -29,7 +29,7 @@ import study.microcoffee.order.repository.OrderRepository;
  * Controller class of the Order REST API for handling coffee orders.
  */
 @RestController
-@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
 
     static final String BASIC_CONSUMER = "Basic";
@@ -61,7 +61,7 @@ public class OrderController {
      * @return A ResponseEntity object containing 1) the saved coffee order including its ID, and 2) a HTTP location header
      *         containing the URL for reading the saved order.
      */
-    @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderModel> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody OrderModel orderModel) {
         logger.debug("POST /{}/order body={}", coffeeShopId, orderModel);
 

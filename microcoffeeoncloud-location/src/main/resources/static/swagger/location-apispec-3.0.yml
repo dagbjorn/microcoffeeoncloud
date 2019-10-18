@@ -41,7 +41,7 @@ paths:
                 '200':
                     description: OK
                     content:
-                        application/json;charset=UTF-8:
+                        application/json:
                             schema:
                                 type: object
                 '204':

@@ -55,7 +55,7 @@ public class ApiExceptionHandler {
         List<MediaType> acceptMediaTypes = MediaType.parseMediaTypes(acceptHeaders);
 
         if (acceptMediaTypes.stream().anyMatch(m -> m.isCompatibleWith(MediaType.APPLICATION_JSON))) {
-            return MediaType.APPLICATION_JSON_UTF8;
+            return MediaType.APPLICATION_JSON;
         } else if (acceptMediaTypes.stream().anyMatch(m -> m.isCompatibleWith(MediaType.TEXT_PLAIN))) {
             return MediaType.TEXT_PLAIN;
         } else {
@@ -64,7 +64,7 @@ public class ApiExceptionHandler {
     }
 
     private String buildBody(MediaType contentType, String message) {
-        if (MediaType.APPLICATION_JSON_UTF8.equals(contentType)) {
+        if (MediaType.APPLICATION_JSON.equals(contentType)) {
             return "{ \"error\": \"" + message + "\" }";
         } else if (MediaType.TEXT_PLAIN.equals(contentType)) {
             return message;

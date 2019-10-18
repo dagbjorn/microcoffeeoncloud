@@ -84,12 +84,12 @@ public class OrderControllerTest {
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .content(toJson(orderModel)) //
-            .contentType(MediaType.APPLICATION_JSON_UTF8) //
+            .contentType(MediaType.APPLICATION_JSON) //
             .header("Host", "somehost.no")) //
             .andExpect(status().isCreated()) //
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.containsString("somehost.no")))
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.endsWith(savedOrder.getId())))
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
             .andExpect(content().json(toJson(toOrderModel(savedOrder))));
     }
 
@@ -106,9 +106,9 @@ public class OrderControllerTest {
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .content(toJson(orderModel)) //
-            .contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .contentType(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isPaymentRequired()) //
-            .andExpect(content().contentType(MediaType.TEXT_PLAIN));
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN));
     }
 
     @Test
@@ -124,9 +124,9 @@ public class OrderControllerTest {
         given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(Optional.of(expectedOrder));
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, expectedOrder.getId()) //
-            .accept(MediaType.APPLICATION_JSON_UTF8)) //
+            .accept(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isOk()) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
             .andExpect(content().json(toJson(toOrderModel(expectedOrder))));
     }
 
@@ -137,7 +137,7 @@ public class OrderControllerTest {
         given(orderRepositoryMock.findById(eq(orderId))).willReturn(Optional.empty());
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
-            .accept(MediaType.APPLICATION_JSON_UTF8)) //
+            .accept(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isNoContent());
     }
 

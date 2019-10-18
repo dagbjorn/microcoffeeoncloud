@@ -22,7 +22,7 @@ import study.microcoffee.location.repository.LocationRepository;
  * Controller class of the Location REST API for finding the geographical location of objects.
  */
 @RestController
-@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LocationController {
 
     private Logger logger = LoggerFactory.getLogger(LocationController.class);

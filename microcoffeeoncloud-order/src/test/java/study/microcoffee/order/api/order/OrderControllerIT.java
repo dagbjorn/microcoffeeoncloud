@@ -81,7 +81,7 @@ public class OrderControllerIT {
         OrderModel savedOrder = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
         assertThat(response.getHeaders().getLocation().toString()).contains("forwardedhost.no");
         assertThat(response.getHeaders().getLocation().toString()).endsWith(savedOrder.getId());
         assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
@@ -92,7 +92,7 @@ public class OrderControllerIT {
         OrderModel readBackOrder = response.getBody();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
         assertThat(readBackOrder.toString()).isEqualTo(savedOrder.toString());
     }
 

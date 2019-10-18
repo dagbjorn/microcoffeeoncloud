@@ -47,9 +47,9 @@ public class CreditRatingControllerTest {
     public void getCreditRatingShouldReturnRating() throws Exception {
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(70));
 
-        mockMvc.perform(get(SERVICE_PATH, 123).accept(MediaType.APPLICATION_JSON_UTF8_VALUE)) //
+        mockMvc.perform(get(SERVICE_PATH, 123).accept(MediaType.APPLICATION_JSON_VALUE)) //
             .andExpect(status().isOk()) //
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
             .andExpect(content().json(expectedContent));
     }
 
