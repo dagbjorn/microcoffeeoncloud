@@ -13,6 +13,7 @@ Date | Change
 28.02.2019 | Added extra on how to run Microcoffee on Minikube.
 28.03.2019 | Migrated to Java 11.
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
+21.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 
 ## Contents
 
@@ -30,6 +31,7 @@ Date | Change
 * [Extras](#extras)
   - [Download geodata from OpenStreetMap](#download-geodata)
   - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
+  - [Microcoffee on Amazon Elastic Kubernetes Service (EKS)](#microcoffee-on-eks)
   - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
 
@@ -110,7 +112,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 18.09.3/Docker Compose 1.23.2 running on Oracle VM VirtualBox 6.0.4.
+Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.0.10.
 
 The code was originally written in Java 8, but later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
@@ -704,7 +706,7 @@ Get all coffee shops:
 
 #### Getting started
 
-See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/docs/quickstart) to getting started with GKE. In particular, the following needs to be carried out:
+See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/docs/quickstart) for getting started with GKE. In particular, the following needs to be carried out:
 
 1. Sign in to Google Cloud Platform using your Gmail account.
 1. Activate a free trial of one year/USD 300. (Or use an existing paid account if you have...)
@@ -806,6 +808,84 @@ creditrating | 30083 | 30446
 configserver | 30091 | 30454
 discovery | 30092 | 30455
 database | 27017 | 27017
+
+### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
+
+#### Getting started
+
+See [Getting started with Amazon EKS](https://aws.amazon.com/eks/getting-started/) for information on how to get along with
+Amazon EKS. In particular, the following needs to be carried out:
+
+1. Create a new AWS account at https://portal.aws.amazon.com/billing/signup or sign in to an existing
+account. Unfortunately, Amazon doesn't include EKS in their free tier so be ready to spend a few bucks. How much? It depends, but
+less than $10 should be sufficient to get things up and running.
+
+1. Install the AWS CLI. See [Installing the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
+
+1. Create access keys for an IAM user. See details in subsection below.
+
+1. Configure the AWS CLI. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+Make sure you have the access key ID and secret access key of the created IAM user at hand.
+
+1. Install eksctl. See [eksctl - The official CLI for Amazon EKS](https://eksctl.io/).
+
+##### Create access keys for an IAM user
+
+As a best practice, do not use the AWS account root user access keys for any task where it's not required. Instead, create a new
+administrator IAM user with access keys for yourself.
+
+1. Log in to the [Identity and Access Management (IAM) dashboard](https://console.aws.amazon.com/iam) with your root user credentials.
+
+1. Create a new group and attach the policy `AdministratorAccess`. This is the easy solution, however, if you like to assign
+only the minimum number of required policies, see [Detailed policy configuration (permissions)](#eks-detailed-policy-config) below.
+
+1. Add a new user with access type `Programmatic access`. Add the user to the group you created in the previous step. Then just
+follow the wizard to the end and create the user. :warning: Before closing the dialogue, make sure to make a note of the following information:
+   * AWS Management Console URL.
+   * Access key ID.
+   * Secret access key.
+Or simply download the offered .csv file.
+
+MORE TO COME...
+
+#### <a name="eks-detailed-policy-config"></a>Detailed policy configuration (permissions)
+
+Instead of assigning the IAM user full administrator access, the following is the minimum number of managed policies required for
+running Microcoffee on Amazon EKS.
+
+- AmazonEC2FullAccess
+- AmazonEKSClusterPolicy
+- AmazonEKSServicePolicy
+- AmazonEKSWorkerNodePolicy
+- AutoScalingFullAccess
+- AWSCloudFormationFullAccess
+- IAMFullAccess
+
+In addition, the managed policies above must be accompanied by the following inline policy:
+
+Policy name: Inline_Policy_EKS_Cluster
+Policy document:
+
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "eks:UpdateClusterVersion",
+                    "eks:ListUpdates",
+                    "eks:DescribeUpdate",
+                    "eks:DescribeCluster",
+                    "eks:ListClusters",
+                    "eks:CreateCluster",
+                    "eks:DeleteCluster"
+                ],
+                "Resource": "*"
+            }
+        ]
+    }
+
+:tip: Remember to validate the policy to check that it's all right.
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
