@@ -4,7 +4,7 @@
 
 Date | Change
 ---- | -------
-10.03.2018 | Finialised markdown file.
+10.03.2018 | Finalised markdown file.
 08.09.2018 | Upgraded to Docker 18.06.1-ce.
 30.10.2018 | Added extra on how to run Microcoffee on Google Kubernetes Engine (GKE).
 12.11.2018 | Updated API URLs with leading /api.
@@ -811,21 +811,25 @@ database | 27017 | 27017
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
 
+:construction_worker: UNDER WORK
+
 #### Getting started
 
 See [Getting started with Amazon EKS](https://aws.amazon.com/eks/getting-started/) for information on how to get along with
 Amazon EKS. In particular, the following needs to be carried out:
 
 1. Create a new AWS account at https://portal.aws.amazon.com/billing/signup or sign in to an existing
-account. Unfortunately, Amazon doesn't include EKS in their free tier so be ready to spend a few bucks. How much? It depends, but
-less than $10 should be sufficient to get things up and running.
+one. Unfortunately, Amazon doesn't include EKS in AWS Free Tier so be ready to spend a few bucks. How much? It depends, but
+less than $10 should be sufficient to get Microcoffee up and running.
 
 1. Install the AWS CLI. See [Installing the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
-1. Create access keys for an IAM user. See details in subsection below.
+1. Create access keys for an IAM user. See details in the subsection below.
 
-1. Configure the AWS CLI. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+1. Configure the AWS CLI using `aws configure`. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 Make sure you have the access key ID and secret access key of the created IAM user at hand.
+:bulb: For region names, go to [AWS Service Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html) and search for "EKS".
+Also, note that eu-north-1 (Stockholm) doesn't support t2.micro nodes, included in AWS Free Tier (12 months).
 
 1. Install eksctl. See [eksctl - The official CLI for Amazon EKS](https://eksctl.io/).
 
@@ -836,17 +840,134 @@ administrator IAM user with access keys for yourself.
 
 1. Log in to the [Identity and Access Management (IAM) dashboard](https://console.aws.amazon.com/iam) with your root user credentials.
 
-1. Create a new group and attach the policy `AdministratorAccess`. This is the easy solution, however, if you like to assign
+1. Create a new group and attach the managed policy `AdministratorAccess`. This is the easy solution, however, if you like to assign
 only the minimum number of required policies, see [Detailed policy configuration (permissions)](#eks-detailed-policy-config) below.
 
 1. Add a new user with access type `Programmatic access`. Add the user to the group you created in the previous step. Then just
-follow the wizard to the end and create the user. :warning: Before closing the dialogue, make sure to make a note of the following information:
+follow the wizard to the end and create the user. :warning: Before closing the dialogue, make sure to make a note of the following information (or simply download the offered .csv file):
    * AWS Management Console URL.
    * Access key ID.
    * Secret access key.
-Or simply download the offered .csv file.
 
-MORE TO COME...
+#### Create cluster
+
+Create a cluster that contains seven `t2.micro` nodes. (One for each microservice.)
+
+    eksctl create cluster --name=microcoffeeoncloud --node-type=t2.micro --nodes=7
+
+:bulb: See [Amazon EC2 T2 Instances](https://aws.amazon.com/ec2/instance-types/t2) for information on T2 instances.
+
+After completed cluster creation, list the created nodes.
+
+    kubectl get nodes -o wide
+
+Remember to delete the cluster when your finished. See "Clean-up" below.
+
+#### Create MongoDB volume
+
+Create a 5GB volume for use by MongoDB.
+
+    aws ec2 create-volume --availability-zone=eu-west-1a --size=5 --volume-type=gp2 --tag-specifications="ResourceType=volume,Tags=[{Key=app,Value=mongodb}]"
+
+:point_right: Choose a zone within the region configured by `aws configure`.
+
+After successful creation, volume information is listed in the response:
+
+    {
+        "AvailabilityZone": "eu-west-1a",
+        "CreateTime": "2019-10-16T17:17:12.000Z",
+        "Encrypted": false,
+        "Size": 5,
+        "SnapshotId": "",
+        "State": "creating",
+        "VolumeId": "vol-085f29972a3e552a2",
+        "Iops": 100,
+        "Tags": [
+            {
+                "Key": "app",
+                "Value": "mongodb"
+            }
+        ],
+        "VolumeType": "gp2"
+    }
+
+:point_right: The VolumeId must be specified in `microcoffee-database/k8s-service.eks.yml` before deploying the application.
+
+:bulb: The volume may also be listed by running:
+
+    aws ec2 describe-volumes --filters="Name=tag:app,Values=mongodb"
+
+#### Run Microcoffee
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+
+    deploy-k8s-1-servers.bat gke
+    deploy-k8s-2-servers.bat gke
+    deploy-k8s-3-apps.bat gke
+
+Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for state of READY
+0/1 -> 1/1.)
+
+#### Create firewall openings
+
+In Microcoffee, creating firewall openings is only necessary when accessing service via NodePorts. This is necessary when:
+
+   * Initial loading of the database.
+   * Accessing Microcoffee services using the static node ports.
+
+Firewall openings are created by `aws ec2 authorize-security-group-ingress`. This command requires the group ID of the
+security group associated with the nodegroup. There are (at least) two ways of obtaining the group ID, either from the Amazon EKS
+Dashboard (Amazon EKS > Clusters > microcoffeeoncloud > Networking > Security Groups) or run the following command:
+
+    aws ec2 describe-instances --query "Reservations[].Instances[].SecurityGroups[]"
+
+Then specify the GroupId value of the eksctl-microcoffeeoncloud-nodegroup-ng-xxxxxxx security groups when creating the firewall
+openings.
+
+For access to the node port of the database:
+
+    aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30017 --cidr=0.0.0.0/0
+
+For access to the node ports of the Microcoffee services.
+
+    aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30080-30099 --cidr=0.0.0.0/0
+    aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30443-30462 --cidr=0.0.0.0/0
+
+#### Loading the database
+
+TODO
+
+#### Clean-up
+
+##### Undeploy application
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+
+    undeploy-k8s-1-apps.bat
+    undeploy-k8s-2-servers.bat
+    undeploy-k8s-3-servers.bat
+
+:point_right: It is important to explicitly delete any services that have an associated EXTERNAL-IP value. These services are
+fronted by an Elastic Load Balancing load balancer, and you must delete them in Kubernetes to allow the load balancer and associated resources to be properly released. In Microcoffee, the `gateway` microservice offers a service of type LoadBalancer.
+
+##### Delete cluster
+
+:bulb: Deleting the cluster after finishing each day's work, will save you a little money.
+
+    eksctl delete cluster --name=microcoffeeoncloud
+
+##### Delete volume
+
+:bulb: During the 12 months period of AWS Free Tier, there is no charge in keeping the volume alive. This will save you the hazzle
+of creating the volume and loading the database each time the cluster is created.
+
+Find VolumeId:
+
+    aws ec2 describe-volumes --filters="Name=tag:app,Values=mongodb" --query="Volumes[].VolumeId"
+
+And delete it:
+
+    aws ec2 delete-volume --volume-id=VolumeId
 
 #### <a name="eks-detailed-policy-config"></a>Detailed policy configuration (permissions)
 
@@ -861,10 +982,10 @@ running Microcoffee on Amazon EKS.
 - AWSCloudFormationFullAccess
 - IAMFullAccess
 
-In addition, the managed policies above must be accompanied by the following inline policy:
+In addition to the managed policies above, also create the following inline policy:
 
-Policy name: Inline_Policy_EKS_Cluster
-Policy document:
+ - Policy name: Inline\_Policy\_EKS_Cluster
+ - Policy document:
 
     {
         "Version": "2012-10-17",
@@ -885,7 +1006,7 @@ Policy document:
         ]
     }
 
-:tip: Remember to validate the policy to check that it's all right.
+:bulb: Remember to validate the policy to check that it's all right.
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
