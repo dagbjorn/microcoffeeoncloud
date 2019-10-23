@@ -112,7 +112,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.0.10.
+Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.0.14.
 
 The code was originally written in Java 8, but later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
@@ -1041,6 +1041,18 @@ creditrating | 30083 | 30446 |
 configserver | 30091 | 30454 |
 discovery | 30092 | 30455 |
 database | 30017 | 30017 |
+
+#### Overview of AWS dashboards
+
+Dashboard URL | Description
+------------- | -----------
+https://console.aws.amazon.com/billing/home | Keep an eye on this...
+https://console.aws.amazon.com/eks/home | The clusters appear here.
+https://console.aws.amazon.com/cloudformation/home | The stacks appear here.
+https://console.aws.amazon.com/ec2/home | Among others, instances (nodes) and volumes appear here.
+https://console.aws.amazon.com/iam/home | Identity and access management. Users, groups, policies and other security related stuff.
+
+:point_right: Remember to select the configured region on dashboards where this is applicable. (Listed by `aws configure list`.)
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
