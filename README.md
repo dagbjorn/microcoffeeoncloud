@@ -13,7 +13,7 @@ Date | Change
 28.02.2019 | Added extra on how to run Microcoffee on Minikube.
 28.03.2019 | Migrated to Java 11.
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
-21.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
+23.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 
 ## Contents
 
@@ -783,7 +783,7 @@ From the `microcoffeeoncloud-database` project, run:
 
     mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-EXTERNAL_IP is found by listing the created VM instances by using `gcloud compute disks list`.
+EXTERNAL_IP is found by listing the created VM instances by running `gcloud compute disks list`.
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
@@ -824,12 +824,12 @@ less than $10 should be sufficient to get Microcoffee up and running.
 
 1. Install the AWS CLI. See [Installing the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
-1. Create access keys for an IAM user. See details in the subsection below.
+1. Create access keys for an IAM user. See details in the following subsection.
 
-1. Configure the AWS CLI using `aws configure`. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+1. Configure the AWS CLI using `aws configure`. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for details.
 Make sure you have the access key ID and secret access key of the created IAM user at hand.
 :bulb: For region names, go to [AWS Service Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html) and search for "EKS".
-Also, note that eu-north-1 (Stockholm) doesn't support t2.micro nodes, included in AWS Free Tier (12 months).
+Also, note that eu-north-1 (Stockholm) doesn't support t2.micro nodes, the freebies in AWS Free Tier (12 months).
 
 1. Install eksctl. See [eksctl - The official CLI for Amazon EKS](https://eksctl.io/).
 
@@ -861,7 +861,7 @@ After completed cluster creation, list the created nodes.
 
     kubectl get nodes -o wide
 
-Remember to delete the cluster when your finished. See "Clean-up" below.
+Remember to delete the cluster when your finished. See [Clean-up of resources](#eks-cleanup) below.
 
 #### Create MongoDB volume
 
@@ -871,7 +871,7 @@ Create a 5GB volume for use by MongoDB.
 
 :point_right: Choose a zone within the region configured by `aws configure`.
 
-After successful creation, volume information is listed in the response:
+After successful creation, volume details is listed in the response:
 
     {
         "AvailabilityZone": "eu-west-1a",
@@ -891,9 +891,9 @@ After successful creation, volume information is listed in the response:
         "VolumeType": "gp2"
     }
 
-:point_right: The VolumeId must be specified in `microcoffee-database/k8s-service.eks.yml` before deploying the application.
+:point_right: The VolumeId must be specified in `microcoffeeoncloud-database/k8s-service.eks.yml` before deploying the application.
 
-:bulb: The volume may also be listed by running:
+The volume details may also be listed by running:
 
     aws ec2 describe-volumes --filters="Name=tag:app,Values=mongodb"
 
@@ -901,19 +901,20 @@ After successful creation, volume information is listed in the response:
 
 From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
 
-    deploy-k8s-1-servers.bat gke
-    deploy-k8s-2-servers.bat gke
-    deploy-k8s-3-apps.bat gke
+    deploy-k8s-1-servers.bat eks
+    deploy-k8s-2-servers.bat eks
+    deploy-k8s-3-apps.bat eks
 
-Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for state of READY
-0/1 -> 1/1.)
+Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
+STATUS = Running and READY = 1/1.)
 
 #### Create firewall openings
 
-In Microcoffee, creating firewall openings is only necessary when accessing service via NodePorts. This is necessary when:
+In Microcoffee, creating firewall openings is only necessary when accessing services via NodePorts. This is necessary when:
 
    * Initial loading of the database.
-   * Accessing Microcoffee services using the static node ports.
+   * Accessing Microcoffee services using the static node ports. (By default, port 80 and 443 are open when exposing a service via
+   a load balancer.)
 
 Firewall openings are created by `aws ec2 authorize-security-group-ingress`. This command requires the group ID of the
 security group associated with the nodegroup. There are (at least) two ways of obtaining the group ID, either from the Amazon EKS
@@ -921,23 +922,46 @@ Dashboard (Amazon EKS > Clusters > microcoffeeoncloud > Networking > Security Gr
 
     aws ec2 describe-instances --query "Reservations[].Instances[].SecurityGroups[]"
 
-Then specify the GroupId value of the eksctl-microcoffeeoncloud-nodegroup-ng-xxxxxxx security groups when creating the firewall
-openings.
+Then specify the GroupId value of the `eksctl-microcoffeeoncloud-nodegroup-ng-xxxxxxx` security group when creating
+the firewall openings.
 
-For access to the node port of the database:
+For accessing the node port of the database, run:
 
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30017 --cidr=0.0.0.0/0
 
-For access to the node ports of the Microcoffee services.
+For accessing the node ports of the Microcoffee services, run.
 
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30080-30099 --cidr=0.0.0.0/0
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30443-30462 --cidr=0.0.0.0/0
 
 #### Loading the database
 
-TODO
+From the `microcoffeeoncloud-database` project, run:
 
-#### Clean-up
+    mvn gplus:execute -Ddbhost=EXTERNAL-IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+
+EXTERNAL-IP is found by listing the created nodes by running `kubectl get nodes -o wide`. You can pick any node.
+
+To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
+
+    kubectl exec -it PODNAME -- mongo microcoffee
+
+#### Give Microcoffee a spin - in the AWS cloud
+
+Navigate to:
+
+    https://EXTERNAL-IP/coffee.html
+
+Run `kubectl get services gateway-lb` to get the EXTERNAL-IP (hostname) of the gateway load balancer service.
+Example value for region eu-west-1: `aa6937282f5b811e9ae9e02466ed2eca-133344008.eu-west-1.elb.amazonaws.com`
+
+Alternatively, use the static node port:
+
+    https://EXTERNAL-IP:30443/coffee.html
+
+This time, run `kubectl get nodes -o wide` to find an EXTERNAL-IP (IP address). You can pick any node.
+
+#### <a name="eks-cleanup"></a>Clean-up of resources
 
 ##### Undeploy application
 
@@ -952,14 +976,11 @@ fronted by an Elastic Load Balancing load balancer, and you must delete them in 
 
 ##### Delete cluster
 
-:bulb: Deleting the cluster after finishing each day's work, will save you a little money.
-
     eksctl delete cluster --name=microcoffeeoncloud
 
-##### Delete volume
+:bulb: Deleting the cluster after finishing each day's work, will save you a little money.
 
-:bulb: During the 12 months period of AWS Free Tier, there is no charge in keeping the volume alive. This will save you the hazzle
-of creating the volume and loading the database each time the cluster is created.
+##### Delete volume
 
 Find VolumeId:
 
@@ -968,6 +989,9 @@ Find VolumeId:
 And delete it:
 
     aws ec2 delete-volume --volume-id=VolumeId
+
+:bulb: During the 12 months period of AWS Free Tier, there is no charge in keeping the volume alive. This will save you the hazzle
+of creating the volume and loading the database each time the cluster is created.
 
 #### <a name="eks-detailed-policy-config"></a>Detailed policy configuration (permissions)
 
