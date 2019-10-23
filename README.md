@@ -1030,6 +1030,18 @@ In addition to the managed policies above, create the following inline policy to
 
 :bulb: Remember to validate the policy to check that it is all right.
 
+#### Summary of port numbers
+
+Microservice | http port | https port | Comment
+------------ | --------- | ---------- | -------
+gateway | 80/30080 | 443/30443 | Load balancer: 80/443, Node port: 30800/30443
+location | 30081 | 30444 |
+order | 30082 | 30445 |
+creditrating | 30083 | 30446 |
+configserver | 30091 | 30454 |
+discovery | 30092 | 30455 |
+database | 30017 | 30017 |
+
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
 #### Getting started
