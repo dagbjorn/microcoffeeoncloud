@@ -811,8 +811,6 @@ database | 27017 | 27017
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
 
-:construction_worker: UNDER WORK
-
 #### Getting started
 
 See [Getting started with Amazon EKS](https://aws.amazon.com/eks/getting-started/) for information on how to get along with
@@ -829,7 +827,7 @@ less than $10 should be sufficient to get Microcoffee up and running.
 1. Configure the AWS CLI using `aws configure`. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for details.
 Make sure you have the access key ID and secret access key of the created IAM user at hand.
 :bulb: For region names, go to [AWS Service Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html) and search for "EKS".
-Also, note that eu-north-1 (Stockholm) doesn't support t2.micro nodes, the freebies in AWS Free Tier (12 months).
+Also, note that eu-north-1 (Stockholm) does not support t2.micro nodes, the freebies in AWS Free Tier (12 months).
 
 1. Install eksctl. See [eksctl - The official CLI for Amazon EKS](https://eksctl.io/).
 
@@ -841,10 +839,10 @@ administrator IAM user with access keys for yourself.
 1. Log in to the [Identity and Access Management (IAM) dashboard](https://console.aws.amazon.com/iam) with your root user credentials.
 
 1. Create a new group and attach the managed policy `AdministratorAccess`. This is the easy solution, however, if you like to assign
-only the minimum number of required policies, see [Detailed policy configuration (permissions)](#eks-detailed-policy-config) below.
+only the minimum number of required policies, see [Minimum policy configuration (permissions)](#eks-minimum-policy-config) below.
 
 1. Add a new user with access type `Programmatic access`. Add the user to the group you created in the previous step. Then just
-follow the wizard to the end and create the user. :warning: Before closing the dialogue, make sure to make a note of the following information (or simply download the offered .csv file):
+follow the wizard to the end and, finally, create the user. :warning: Before closing the dialogue, make sure to make a note of the following information (or simply download the offered .csv file):
    * AWS Management Console URL.
    * Access key ID.
    * Secret access key.
@@ -871,7 +869,7 @@ Create a 5GB volume for use by MongoDB.
 
 :point_right: Choose a zone within the region configured by `aws configure`.
 
-After successful creation, volume details is listed in the response:
+After successful creation, volume details are listed in the response:
 
     {
         "AvailabilityZone": "eu-west-1a",
@@ -910,14 +908,14 @@ STATUS = Running and READY = 1/1.)
 
 #### Create firewall openings
 
-In Microcoffee, creating firewall openings is only necessary when accessing services via NodePorts. This is necessary when:
+In Microcoffee, creating firewall openings is only necessary when accessing services via node ports (NodePort). This is necessary for:
 
    * Initial loading of the database.
    * Accessing Microcoffee services using the static node ports. (By default, port 80 and 443 are open when exposing a service via
    a load balancer.)
 
 Firewall openings are created by `aws ec2 authorize-security-group-ingress`. This command requires the group ID of the
-security group associated with the nodegroup. There are (at least) two ways of obtaining the group ID, either from the Amazon EKS
+security group associated with the node group. There are (at least) two ways of obtaining the group ID, either from the Amazon EKS
 Dashboard (Amazon EKS > Clusters > microcoffeeoncloud > Networking > Security Groups) or run the following command:
 
     aws ec2 describe-instances --query "Reservations[].Instances[].SecurityGroups[]"
@@ -925,11 +923,11 @@ Dashboard (Amazon EKS > Clusters > microcoffeeoncloud > Networking > Security Gr
 Then specify the GroupId value of the `eksctl-microcoffeeoncloud-nodegroup-ng-xxxxxxx` security group when creating
 the firewall openings.
 
-For accessing the node port of the database, run:
+For accessing the node port of the database, run (replacing `GroupId` by the actual value):
 
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30017 --cidr=0.0.0.0/0
 
-For accessing the node ports of the Microcoffee services, run.
+And similar, for accessing the node ports of the Microcoffee services, run.
 
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30080-30099 --cidr=0.0.0.0/0
     aws ec2 authorize-security-group-ingress --group-id=GroupId --protocol=tcp --port=30443-30462 --cidr=0.0.0.0/0
@@ -942,7 +940,7 @@ From the `microcoffeeoncloud-database` project, run:
 
 EXTERNAL-IP is found by listing the created nodes by running `kubectl get nodes -o wide`. You can pick any node.
 
-To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
+To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
     kubectl exec -it PODNAME -- mongo microcoffee
 
@@ -959,7 +957,7 @@ Alternatively, use the static node port:
 
     https://EXTERNAL-IP:30443/coffee.html
 
-This time, run `kubectl get nodes -o wide` to find an EXTERNAL-IP (IP address). You can pick any node.
+However, this time run `kubectl get nodes -o wide` to find an EXTERNAL-IP (IP address). You can pick any node.
 
 #### <a name="eks-cleanup"></a>Clean-up of resources
 
@@ -990,10 +988,10 @@ And delete it:
 
     aws ec2 delete-volume --volume-id=VolumeId
 
-:bulb: During the 12 months period of AWS Free Tier, there is no charge in keeping the volume alive. This will save you the hazzle
-of creating the volume and loading the database each time the cluster is created.
+:bulb: During the 12 months period of AWS Free Tier, there is no charge in keeping the volume alive. Just keeping the volume during
+the 12 months Free Tier period, will save you the hazzle of recreating it and loading the database over and over again.
 
-#### <a name="eks-detailed-policy-config"></a>Detailed policy configuration (permissions)
+#### <a name="eks-minimum-policy-config"></a>Minimum policy configuration (permissions)
 
 Instead of assigning the IAM user full administrator access, the following is the minimum number of managed policies required for
 running Microcoffee on Amazon EKS.
@@ -1006,7 +1004,7 @@ running Microcoffee on Amazon EKS.
 - AWSCloudFormationFullAccess
 - IAMFullAccess
 
-In addition to the managed policies above, also create the following inline policy:
+In addition to the managed policies above, create the following inline policy to get a few missing permissions:
 
  - Policy name: Inline\_Policy\_EKS_Cluster
  - Policy document:
@@ -1030,7 +1028,7 @@ In addition to the managed policies above, also create the following inline poli
         ]
     }
 
-:bulb: Remember to validate the policy to check that it's all right.
+:bulb: Remember to validate the policy to check that it is all right.
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
