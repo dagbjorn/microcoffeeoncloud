@@ -13,7 +13,7 @@ Date | Change
 28.02.2019 | Added extra on how to run Microcoffee on Minikube.
 28.03.2019 | Migrated to Java 11.
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
-23.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
+24.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 
 ## Contents
 
@@ -1034,7 +1034,7 @@ In addition to the managed policies above, create the following inline policy to
 
 Microservice | http port | https port | Comment
 ------------ | --------- | ---------- | -------
-gateway | 80/30080 | 443/30443 | Load balancer: 80/443, Node port: 30800/30443
+gateway | 80/30080 | 443/30443 | Load balancer: 80/443, Node port: 30080/30443
 location | 30081 | 30444 |
 order | 30082 | 30445 |
 creditrating | 30083 | 30446 |
@@ -1046,13 +1046,14 @@ database | 30017 | 30017 |
 
 Dashboard URL | Description
 ------------- | -----------
-https://console.aws.amazon.com/billing/home | Keep an eye on this...
+https://console.aws.amazon.com/billing/home | Billing! Keep an eye on this...
 https://console.aws.amazon.com/eks/home | The clusters appear here.
 https://console.aws.amazon.com/cloudformation/home | The stacks appear here.
 https://console.aws.amazon.com/ec2/home | Among others, instances (nodes) and volumes appear here.
-https://console.aws.amazon.com/iam/home | Identity and access management. Users, groups, policies and other security related stuff.
+https://console.aws.amazon.com/iam/home | Identity and access management.: Users, groups, policies and other security related stuff.
 
-:point_right: Remember to select the configured region on dashboards where this is applicable. (Listed by `aws configure list`.)
+:point_right: Remember to select the configured region (the one listed by `aws configure list`) on dashboards where this is
+applicable.
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 
