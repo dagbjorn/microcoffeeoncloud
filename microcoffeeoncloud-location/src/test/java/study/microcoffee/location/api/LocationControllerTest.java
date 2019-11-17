@@ -40,7 +40,7 @@ public class LocationControllerTest {
 
     @Test
     public void getNearestCoffeeShopWhenFoundShouldReturnLocation() throws Exception {
-        final String expectedContent = "{ location: 'here' }";
+        final String expectedContent = "{ location: 'Ålesund' }";
 
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong())).willReturn(expectedContent);
 

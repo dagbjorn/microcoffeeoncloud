@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 public class HttpLoggingFilterTestConfig {
 
     @Bean
-    public MockMvcBuilderCustomizer filterMockMvcCustomizer() {
+    public MockMvcBuilderCustomizer httpLoggingFilterMockMvcCustomizer() {
         return new MockMvcBuilderCustomizer() {
 
             @Override

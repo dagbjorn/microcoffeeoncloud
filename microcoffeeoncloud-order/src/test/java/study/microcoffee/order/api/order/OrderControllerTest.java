@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.CharacterEncodingFilterTestConfig;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
@@ -43,7 +44,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
-@Import(HttpLoggingFilterTestConfig.class)
+@Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class })
 public class OrderControllerTest {
 
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
@@ -98,7 +99,7 @@ public class OrderControllerTest {
         OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
-            .drinker("Poor Sod") //
+            .drinker("Dagbjørn") //
             .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
 
