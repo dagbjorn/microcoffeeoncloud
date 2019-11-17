@@ -23,8 +23,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import study.microcoffee.order.api.menu.MenuController;
-
 /**
  * Integration tests of {@link MenuController}.
  */
@@ -76,6 +74,6 @@ public class MenuControllerIT {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("Americano");
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
     }
 }

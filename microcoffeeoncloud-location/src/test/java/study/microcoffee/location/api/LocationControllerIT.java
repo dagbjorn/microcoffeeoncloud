@@ -19,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import study.microcoffee.location.api.LocationController;
 import study.microcoffee.location.test.utils.MongoDBUtils;
 
 /**
@@ -59,7 +58,7 @@ public class LocationControllerIT {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("coordinates");
-        assertThat(response.getHeaders().getContentType().toString()).startsWith(MediaType.APPLICATION_JSON_VALUE);
+        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
     }
 
     @Test
