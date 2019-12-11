@@ -14,6 +14,7 @@ Date | Change
 28.03.2019 | Migrated to Java 11.
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
 24.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
+11.12.2019 | Updated GKE to use NodePort 30017 instead of ClusterIP for database.
 
 ## Contents
 
@@ -753,10 +754,10 @@ When the service is exposed by a NodePort, we need to manually add firewall open
 
     gcloud compute firewall-rules create microcoffee --allow tcp:30080-30099,tcp:30443-30462
 
-Also, for simple data loading in MongoDB, create another firewall rule for port 27017. (May be deleted again as soon as the database
+Also, for simple data loading in MongoDB, create another firewall rule for port 30017. (May be deleted again as soon as the database
 loading is completed.)
 
-    gcloud compute firewall-rules create microcoffee-database --allow tcp:27017
+    gcloud compute firewall-rules create microcoffee-database --allow tcp:30017
 
 List firewall rules.
 
@@ -781,7 +782,7 @@ Make sure that the pods are up and running before starting the next. (Check the 
 
 From the `microcoffeeoncloud-database` project, run:
 
-    mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
 EXTERNAL_IP is found by listing the created VM instances by running `gcloud compute disks list`.
 
@@ -797,7 +798,7 @@ Navigate to:
 
 As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
 
-#### Summary of port numbers
+#### Summary of external port numbers
 
 Microservice | http port | https port
 ------------ | --------- | ----------
@@ -807,7 +808,7 @@ order | 30082 | 30445
 creditrating | 30083 | 30446
 configserver | 30091 | 30454
 discovery | 30092 | 30455
-database | 27017 | 27017
+database | 30017 | 30017
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
 
@@ -1030,7 +1031,7 @@ In addition to the managed policies above, create the following inline policy to
 
 :bulb: Remember to validate the policy to check that it is all right.
 
-#### Summary of port numbers
+#### Summary of external port numbers
 
 Microservice | http port | https port | Comment
 ------------ | --------- | ---------- | -------
