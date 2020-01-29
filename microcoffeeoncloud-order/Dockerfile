@@ -1,4 +1,4 @@
-FROM openjdk:11.0.5-slim
+FROM openjdk:11.0.6-slim
 VOLUME /tmp
 WORKDIR /
 ARG JAR_FILE
