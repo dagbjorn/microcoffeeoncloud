@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.3.0.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -30,10 +30,10 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>Hoxton.SR2</spring-cloud.version>
-        <spring-cloud-contract.version>2.2.1.RELEASE</spring-cloud-contract.version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <spring-cloud-contract.version>2.2.2.RELEASE</spring-cloud-contract.version>
 
-        <modelmapper.version>2.3.6</modelmapper.version>
+        <modelmapper.version>2.3.7</modelmapper.version>
         <swagger.version>2.9.2</swagger.version>
 
         <!-- Plugin versions -->

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
@@ -16,10 +16,10 @@ import com.mongodb.client.MongoCollection;
 @Repository
 public class MongoLocationRepository implements LocationRepository {
 
-    private final MongoDbFactory mongo;
+    private final MongoDatabaseFactory mongo;
 
     @Autowired
-    public MongoLocationRepository(MongoDbFactory mongo) {
+    public MongoLocationRepository(MongoDatabaseFactory mongo) {
         this.mongo = mongo;
     }
 
@@ -41,7 +41,7 @@ public class MongoLocationRepository implements LocationRepository {
      */
     @Override
     public Object findNearestCoffeeShop(double latitude, double longitude, long maxDistance) {
-        MongoCollection<Document> collection = mongo.getDb().getCollection("coffeeshop");
+        MongoCollection<Document> collection = mongo.getMongoDatabase().getCollection("coffeeshop");
 
         Document coffeeShop = collection.find(new BasicDBObject( //
             "location", //

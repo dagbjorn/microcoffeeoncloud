@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import study.microcoffee.creditrating.api.CreditRatingController;
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
 import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
