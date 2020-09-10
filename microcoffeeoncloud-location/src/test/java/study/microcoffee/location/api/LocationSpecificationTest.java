@@ -82,6 +82,18 @@ public class LocationSpecificationTest {
         ignorePaths.add((endpoint) -> {
             return endpoint.getPath().equals("/swagger-resources/configuration/ui");
         });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/v2/api-docs") //
+                && (endpoint.getHttpMethod().equals(HttpMethod.GET) //
+                    || endpoint.getHttpMethod().equals(HttpMethod.HEAD) //
+                    || endpoint.getHttpMethod().equals(HttpMethod.OPTIONS));
+        });
+        ignorePaths.add((endpoint) -> {
+            return endpoint.getPath().equals("/v3/api-docs") //
+                && (endpoint.getHttpMethod().equals(HttpMethod.GET) //
+                    || endpoint.getHttpMethod().equals(HttpMethod.HEAD) //
+                    || endpoint.getHttpMethod().equals(HttpMethod.OPTIONS));
+        });
 
         HikakuConfig hikakuConfig = new HikakuConfig(reporters, ignorePaths);
 

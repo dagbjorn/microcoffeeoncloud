@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>2.3.3.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -30,11 +30,11 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
-        <spring-cloud-contract.version>2.2.2.RELEASE</spring-cloud-contract.version>
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <spring-cloud-contract.version>2.2.4.RELEASE</spring-cloud-contract.version>
 
-        <modelmapper.version>2.3.7</modelmapper.version>
-        <swagger.version>2.9.2</swagger.version>
+        <modelmapper.version>2.3.8</modelmapper.version>
+        <springfox.version>3.0.0</springfox.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
@@ -151,14 +151,8 @@
         <!-- Swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
 
         <!-- Commons HTTP Client -->

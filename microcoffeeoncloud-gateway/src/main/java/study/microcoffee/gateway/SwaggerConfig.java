@@ -9,13 +9,11 @@ import org.springframework.context.annotation.Primary;
 
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Configuration class of Swagger.
  */
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
     /**
