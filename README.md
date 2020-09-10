@@ -15,7 +15,7 @@ Date | Change
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
 24.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 11.12.2019 | Updated GKE to use NodePort 30017 instead of ClusterIP for database.
-10.09.2020 | Update Swagger URL after 3.0.0 upgrade.
+10.09.2020 | Update Swagger URL after Springfox 3.0.0 upgrade.
 
 ## Contents
 
