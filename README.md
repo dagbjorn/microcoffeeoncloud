@@ -15,6 +15,7 @@ Date | Change
 03.04.2019 | Upgraded to Docker 18.09.3. Stated recommended versions of minikube and kubectl.
 24.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 11.12.2019 | Updated GKE to use NodePort 30017 instead of ClusterIP for database.
+10.09.2020 | Update Swagger URL after 3.0.0 upgrade.
 
 ## Contents
 
@@ -113,7 +114,7 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.0.14.
+Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.14.
 
 The code was originally written in Java 8, but later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
@@ -345,7 +346,7 @@ assuming the VM host IP 192.168.99.100.
 
 Centralized browsing of API documentation is available at the following URL:
 
-    https://192.168.99.100:8443/swagger-ui.html
+    https://192.168.99.100:8443/swagger-ui/index.html
 
 Select the spec of interest in the upper right corner.
 
