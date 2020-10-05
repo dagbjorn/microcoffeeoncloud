@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configserver
+  template:
+    metadata:
+      labels:
+        app: configserver
+    spec:
+      containers:
+      - name: configserver
+        image: dagbjorn/microcoffeeoncloud-configserver:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8091
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8091
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8091
+        - containerPort: 8454
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "devgke"
+        - name: SPRING_CLOUD_CONFIG_SERVER_GIT_URI
+          value: "https://github.com/dagbjorn/microcoffeeoncloud-appconfig.git"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+  labels:
+    app: configserver
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8091
+      targetPort: 8091
+      nodePort: 30091
+      name: config-http
+    - port: 8454
+      targetPort: 8454
+      nodePort: 30454
+      name: config-https
+  selector:
+    app: configserver

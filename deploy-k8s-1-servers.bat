@@ -5,11 +5,12 @@
 
 if "%1" == "gke" goto :deploy
 if "%1" == "eks" goto :deploy
+if "%1" == "aks" goto :deploy
 if "%1" == "mkube" goto :deploy
 echo ERROR: Unsupported Kubernetes platform
 echo.
 echo Usage: deploy-k8s-1-servers platform
-echo        platform    gke, eks or mkube
+echo        platform    gke, eks, aks or mkube
 goto :EOF
 
 :deploy

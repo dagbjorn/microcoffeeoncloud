@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        args: ["--tlsMode", "preferTLS", "--tlsCertificateKeyFile", "/wildcard.default-key.pem", "--bind_ip_all"]
+        ports:
+        - containerPort: 27017
+          hostPort: 27017
+        - containerPort: 28017
+          hostPort: 28017
+        volumeMounts:
+        - name: mongodbdata
+          mountPath: /data/db
+      # The volume must be created as follows:
+      #   $ az aks show --resource-group microcoffeeoncloud --name microcoffeeoncloud --query nodeResourceGroup -o tsv
+      #   MC_microcoffeeoncloud_microcoffeeoncloud_westeurope
+      #
+      # Specify the node resource group (MC_xxx) as the resource-group when creating the disk. The id is specified as the diskURI
+      # value below.
+      #   $ az disk create --resource-group MC_microcoffeeoncloud_microcoffeeoncloud_westeurope --name mongodb-disk --sku StandardSSD_LRS --size-gb 2 --query id --output tsv
+      #   /subscriptions/2626e439-657b-4c82-b1be-2e8e93f24800/resourceGroups/microcoffeeoncloud/providers/Microsoft.Compute/disks/mongodb-disk
+      volumes:
+      - name: mongodbdata
+        azureDisk:
+          kind: Managed
+          diskName: mongodb-disk
+          diskURI: /subscriptions/2626e439-657b-4c82-b1be-2e8e93f24800/resourceGroups/MC_microcoffeeoncloud_microcoffeeoncloud_westeurope/providers/Microsoft.Compute/disks/mongodb-disk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  labels:
+    app: mongodb
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 27017
+      targetPort: 27017
+      nodePort: 30017
+      name: mongodb
+    - port: 28017
+      targetPort: 28017
+      name: mongodb-extra
+  selector:
+    app: mongodb

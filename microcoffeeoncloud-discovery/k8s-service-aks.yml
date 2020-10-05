@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery
+  template:
+    metadata:
+      labels:
+        app: discovery
+    spec:
+      containers:
+      - name: discovery
+        image: dagbjorn/microcoffeeoncloud-discovery:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            path: /internal/isready
+            port: 8092
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /internal/isalive
+            port: 8092
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8092
+        - containerPort: 8455
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "devgke"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "https://configserver.default:8454"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery
+  labels:
+    app: discovery
+spec:
+  type: NodePort
+  ports:
+    - port: 8092
+      targetPort: 8092
+      nodePort: 30092
+      name: discovery-http
+    - port: 8455
+      targetPort: 8455
+      nodePort: 30455
+      name: discovery-https
+  selector:
+    app: discovery
+    
