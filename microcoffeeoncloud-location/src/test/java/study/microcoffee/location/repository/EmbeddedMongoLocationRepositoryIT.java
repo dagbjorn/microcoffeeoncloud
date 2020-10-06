@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,7 +21,6 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@DirtiesContext
 @TestPropertySource("/application-test.properties")
 public class EmbeddedMongoLocationRepositoryIT {
 

@@ -6,12 +6,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +19,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
@@ -35,9 +35,7 @@ import study.microcoffee.order.domain.DrinkType;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext
 @TestPropertySource("/application-test.properties")
-@AutoConfigureWireMock(port = 8083) // HTTP port of CreditRating API
 @ActiveProfiles("itest")
 @Profile("itest")
 public class OrderControllerIT {
@@ -46,6 +44,10 @@ public class OrderControllerIT {
     private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
 
     private static final int COFFEE_SHOP_ID = 10;
+
+    // ClassRule keeps the WireMock server running between tests.
+    @ClassRule
+    public static WireMockClassRule wireMockRule = new WireMockClassRule(8083);
 
     @Autowired
     private TestRestTemplate restTemplate;
