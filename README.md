@@ -16,6 +16,7 @@ Date | Change
 24.10.2019 | Added extra on how to run Microcoffee on Amazon Elastic Kubernetes Service (EKS).
 11.12.2019 | Updated GKE to use NodePort 30017 instead of ClusterIP for database.
 10.09.2020 | Updated Swagger URL after Springfox 3.0.0 upgrade.
+15.10.2020 | Added extra on how to run Microcoffee on Microsoft Azure Kubernetes Service (AKS).
 
 ## Contents
 
@@ -34,6 +35,7 @@ Date | Change
   - [Download geodata from OpenStreetMap](#download-geodata)
   - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
   - [Microcoffee on Amazon Elastic Kubernetes Service (EKS)](#microcoffee-on-eks)
+  - [Microcoffee on Microsoft Azure Kubernetes Service (AKS)](#microcoffee-on-aks)
   - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
 
@@ -1056,6 +1058,168 @@ https://console.aws.amazon.com/iam/home | Identity and access management.: Users
 
 :point_right: Remember to select the configured region (the one listed by `aws configure list`) on dashboards where this is
 applicable.
+
+### <a name="microcoffee-on-aks"></a>Microcoffee on Microsoft Azure Kubernetes Service (AKS)
+
+:bulb: A great resource for getting an AKS cluster up and running is [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough). However, first you need to make sure you have a valid Azure account.
+
+#### Account stuff
+Before getting started with Microsoft AKS, you need an Azure account.
+
+1. Sign up or log in to an existing Microsoft account.
+1. [Create a free 12 Azure months account](https://azure.microsoft.com/en-us/free/kubernetes-service/) in case you don't have a paid one. Even the free account needs a credit card. Also, select a verification method. SMS code is good.
+
+#### Getting started
+
+##### Install the Azure CLI
+
+Install the Azure CLI on your developement machine. See
+[Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) for details. The following assumes Windows.
+
+1. Download and run the MSI installer. The path is automatically added to the Windows path.
+1. Verify the installation by running `az --version`.
+
+:bulb: Instead of installing the Azure CLI on your local machine, you could also use the [Azure Cloud Shell](https://shell.azure.com/).
+
+##### Sign in with Azure CLI
+
+Sign in with Azure CLI by running `az login`.
+
+Your default browser opens and lets you sign in to your Azure account. On successful login, all the subscriptions to which you have access are listed. In case no subscriptions are found, double-check that you are logged in to the correct account (in case you have several).
+
+:bulb: List account details by running `az account list`.
+
+##### Configure default location
+
+Run `az account list-locations` to list available locations. Pick a location near you, however be aware that not all locations support Kubernetes clusters. In my case, living in Norway, `westeurope` appears to be the working choice.
+
+Set default location:
+
+    az configure --defaults location=westeurope
+
+Verify current defaults by running:
+
+    az configure --list-defaults
+
+##### Enable Azure Monitor for containers
+
+Azure Monitor for containers is enabled using the `--enable-addons monitoring` when creating the cluster. This requires *Microsoft.OperationsManagement* and *Microsoft.OperationalInsights* to be registered on your subscription.
+
+    az provider register --namespace Microsoft.OperationsManagement
+    az provider register --namespace Microsoft.OperationalInsights
+
+Registration may take some time. Check status by running:
+
+    az provider show -n Microsoft.OperationsManagement -o table
+    az provider show -n Microsoft.OperationalInsights -o table
+
+#### Create resource group
+
+Create a resource group in which other resources are deployed and managed.
+
+    az group create --name microcoffeeoncloud
+
+On completion, some JSON-formatted information is listed. Amongst other, the `provisioningState` property should contain the
+value `Succeeded`.
+
+#### Create cluster
+
+Create a cluster containing two nodes.
+
+    az aks create --resource-group microcoffeeoncloud --name microcoffeeoncloud --node-count 2 --enable-addons monitoring --generate-ssh-keys
+
+Creating a cluster takes a few minutes, but eventually the command lists a JSON-formatted response containing information about the cluster.
+
+To list managed Kubernetes clusters, run:
+
+    az aks list -o table
+
+#### Configure kubectl
+
+Configure kubectl to connect to the cluster just created. By default, the command updates the default kubectl `config` file located in `%HOMEDRIVE%%HOMEPATH%\.kube` (Windows). Unfortunately, the standard `KUBECONFIG` environment variable is not respected by Microsoft AKS. So in order to use a custom file, specify `--file %KUBECONFIG%` on the command line.
+
+    az aks get-credentials --resource-group microcoffeeoncloud --name microcoffeeoncloud --overwrite-existing --file %KUBECONFIG%
+
+Verify the connection by listing the cluster nodes:
+
+    kubectl get nodes -o wide
+
+#### Create MongoDB disk
+
+Create a 2GB disk for use by MongoDB.
+
+:point_right: The disk must be created in the node resource group of the cluster. This is **not** the same as the resource group created above.
+
+Get the name of the node resource group.
+
+    $ az aks show --resource-group microcoffeeoncloud --name microcoffeeoncloud --query nodeResourceGroup -o tsv
+    MC_microcoffeeoncloud_microcoffeeoncloud_westeurope
+
+Then, create the disk specifying the above node resource group name in the `--resource-group` option.
+
+    az disk create --resource-group MC_microcoffeeoncloud_microcoffeeoncloud_westeurope --name mongodb-disk --sku StandardSSD_LRS --size-gb 2 --query id --output tsv
+
+:point_right: The id must be specified in `microcoffeeoncloud-database/k8s-service.aks.yml` before deploying the application.
+
+#### Run Microcoffee
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows) in turn.
+
+    deploy-k8s-1-servers.bat aks
+    deploy-k8s-2-servers.bat aks
+    deploy-k8s-3-apps.bat aks
+
+Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
+STATUS = Running and READY = 1/1.)
+
+#### Loading the database
+
+From the `microcoffeeoncloud-database` project, run:
+
+    mvn gplus:execute -Ddbhost=EXTERNAL-IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+
+EXTERNAL-IP is found by listing the database service by running `kubectl get service database`.
+
+To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
+
+    kubectl exec -it PODNAME -- mongo microcoffee
+
+#### Give Microcoffee a spin - in the AWS cloud
+
+Navigate to:
+
+    https://EXTERNAL-IP:8443/coffee.html
+
+Run `kubectl get services gateway` to get the EXTERNAL-IP of the gateway service.
+
+#### Clean-up of resources
+
+Simply delete the resource group to delete all resources including the cluster and the disk.
+
+    az group delete --name microcoffeeoncloud --yes
+
+Verify that all resources are gone:
+
+    az aks list -o table
+    az disk list -o table
+
+Verify that both the resource group and the node resource group of Microcoffee are gone:
+
+    az group list -o table
+
+#### Summary of external port numbers
+
+Microservice | http port | https port | Comment
+------------ | --------- | ---------- | -------
+gateway | 8080 | 8443 |
+location | 8081 | 8444 |
+order | 8082 | 8445 |
+creditrating | 8083 | 8446 |
+configserver | 8091 | 8454 |
+discovery | 8092 | 8455 | NodePort => No external IP.
+database | 27017 | 27017 |
+
+Only LoadBalancer services are externally available.
 
 ### <a name="microcoffee-on-minikube"></a>Microcoffee on Minikube
 

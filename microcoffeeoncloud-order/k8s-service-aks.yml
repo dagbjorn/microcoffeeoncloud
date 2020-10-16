@@ -51,11 +51,9 @@ spec:
   ports:
     - port: 8082
       targetPort: 8082
-      nodePort: 30082
       name: order-http
     - port: 8445
       targetPort: 8445
-      nodePort: 30445
       name: order-https
   selector:
     app: order

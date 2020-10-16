@@ -51,11 +51,9 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30080
       name: gateway-http
     - port: 8443
       targetPort: 8443
-      nodePort: 30443
       name: gateway-https
   selector:
     app: gateway

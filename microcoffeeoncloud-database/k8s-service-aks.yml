@@ -52,7 +52,6 @@ spec:
   ports:
     - port: 27017
       targetPort: 27017
-      nodePort: 30017
       name: mongodb
     - port: 28017
       targetPort: 28017

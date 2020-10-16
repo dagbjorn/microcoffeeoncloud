@@ -51,11 +51,9 @@ spec:
   ports:
     - port: 8083
       targetPort: 8083
-      nodePort: 30083
       name: creditrating-http
     - port: 8446
       targetPort: 8446
-      nodePort: 30446
       name: creditrating-https
   selector:
     app: creditrating

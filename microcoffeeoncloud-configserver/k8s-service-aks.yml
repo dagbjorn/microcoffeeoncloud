@@ -51,11 +51,9 @@ spec:
   ports:
     - port: 8091
       targetPort: 8091
-      nodePort: 30091
       name: config-http
     - port: 8454
       targetPort: 8454
-      nodePort: 30454
       name: config-https
   selector:
     app: configserver
