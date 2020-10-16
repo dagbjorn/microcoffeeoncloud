@@ -1188,7 +1188,7 @@ To verify the database loading, start the MongoDB client in the database pod. (R
 
     kubectl exec -it PODNAME -- mongo microcoffee
 
-#### Give Microcoffee a spin - in the AWS cloud
+#### Give Microcoffee a spin - in the Azure cloud
 
 Navigate to:
 
