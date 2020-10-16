@@ -30,8 +30,8 @@ spec:
       #   $ az aks show --resource-group microcoffeeoncloud --name microcoffeeoncloud --query nodeResourceGroup -o tsv
       #   MC_microcoffeeoncloud_microcoffeeoncloud_westeurope
       #
-      # Specify the node resource group (MC_xxx) as the resource-group when creating the disk. The id is specified as the diskURI
-      # value below.
+      # Specify the node resource group (MC_xxx) as by the resource-group option when creating the disk. The id is specified as
+      # the diskURI value below.
       #   $ az disk create --resource-group MC_microcoffeeoncloud_microcoffeeoncloud_westeurope --name mongodb-disk --sku StandardSSD_LRS --size-gb 2 --query id --output tsv
       #   /subscriptions/2626e439-657b-4c82-b1be-2e8e93f24800/resourceGroups/microcoffeeoncloud/providers/Microsoft.Compute/disks/mongodb-disk
       volumes:

@@ -1061,13 +1061,13 @@ applicable.
 
 ### <a name="microcoffee-on-aks"></a>Microcoffee on Microsoft Azure Kubernetes Service (AKS)
 
-:bulb: A great resource for getting an AKS cluster up and running is [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough). However, first you need to make sure you have a valid Azure account.
+A great resource for getting an AKS cluster up and running is [Quickstart: Deploy an Azure Kubernetes Service cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough). However, first you need to make sure you have a valid Azure account.
 
 #### Account stuff
 Before getting started with Microsoft AKS, you need an Azure account.
 
 1. Sign up or log in to an existing Microsoft account.
-1. [Create a free 12 Azure months account](https://azure.microsoft.com/en-us/free/kubernetes-service/) in case you don't have a paid one. Even the free account needs a credit card. Also, select a verification method. SMS code is good.
+1. [Create a free 12 Azure months account](https://azure.microsoft.com/en-us/free/kubernetes-service/) in case you don't have a paid one. Even the free account needs a credit card. Also, select a verification method. SMS code is a good choice.
 
 #### Getting started
 
@@ -1091,7 +1091,7 @@ Your default browser opens and lets you sign in to your Azure account. On succes
 
 ##### Configure default location
 
-Run `az account list-locations` to list available locations. Pick a location near you, however be aware that not all locations support Kubernetes clusters. In my case, living in Norway, `westeurope` appears to be the working choice.
+Run `az account list-locations` to list available locations. Pick a location near you, however, be aware that not all locations support Kubernetes clusters. In my case, living in Norway, `westeurope` appears to be the working choice.
 
 Set default location:
 
@@ -1103,7 +1103,7 @@ Verify current defaults by running:
 
 ##### Enable Azure Monitor for containers
 
-Azure Monitor for containers is enabled using the `--enable-addons monitoring` when creating the cluster. This requires *Microsoft.OperationsManagement* and *Microsoft.OperationalInsights* to be registered on your subscription.
+[Azure Monitor for containers](https://docs.microsoft.com/en-us/azure/azure-monitor/insights/container-insights-overview) is enabled using the `--enable-addons monitoring` when creating the cluster. This requires *Microsoft.OperationsManagement* and *Microsoft.OperationalInsights* to be registered on your subscription.
 
     az provider register --namespace Microsoft.OperationsManagement
     az provider register --namespace Microsoft.OperationalInsights
@@ -1119,8 +1119,12 @@ Create a resource group in which other resources are deployed and managed.
 
     az group create --name microcoffeeoncloud
 
-On completion, some JSON-formatted information is listed. Amongst other, the `provisioningState` property should contain the
+On completion, a JSON-formatted response is listed. Amongst other, the `provisioningState` property should contain the
 value `Succeeded`.
+
+To list all resource groups, run:
+
+    az group list -o table
 
 #### Create cluster
 
@@ -1136,7 +1140,7 @@ To list managed Kubernetes clusters, run:
 
 #### Configure kubectl
 
-Configure kubectl to connect to the cluster just created. By default, the command updates the default kubectl `config` file located in `%HOMEDRIVE%%HOMEPATH%\.kube` (Windows). Unfortunately, the standard `KUBECONFIG` environment variable is not respected by Microsoft AKS. So in order to use a custom file, specify `--file %KUBECONFIG%` on the command line.
+Configure kubectl to connect to the cluster just created. By default, the command updates the default kubectl config file located in `%USERPROFILE%\.kube\config` (Windows). Unfortunately, the standard `KUBECONFIG` environment variable is not respected by Microsoft AKS. So in order to use a custom file, specify `--file %KUBECONFIG%` on the command line.
 
     az aks get-credentials --resource-group microcoffeeoncloud --name microcoffeeoncloud --overwrite-existing --file %KUBECONFIG%
 
@@ -1148,7 +1152,7 @@ Verify the connection by listing the cluster nodes:
 
 Create a 2GB disk for use by MongoDB.
 
-:point_right: The disk must be created in the node resource group of the cluster. This is **not** the same as the resource group created above.
+:point_right: The disk must be created in the **node resource group** of the cluster. This is **not** the same as the resource group created above.
 
 Get the name of the node resource group.
 
@@ -1159,7 +1163,7 @@ Then, create the disk specifying the above node resource group name in the `--re
 
     az disk create --resource-group MC_microcoffeeoncloud_microcoffeeoncloud_westeurope --name mongodb-disk --sku StandardSSD_LRS --size-gb 2 --query id --output tsv
 
-:point_right: The id must be specified in `microcoffeeoncloud-database/k8s-service.aks.yml` before deploying the application.
+:point_right: The *id* must be specified in `microcoffeeoncloud-database/k8s-service.aks.yml` before deploying the application.
 
 #### Run Microcoffee
 
