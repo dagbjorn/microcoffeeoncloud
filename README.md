@@ -1067,7 +1067,9 @@ A great resource for getting an AKS cluster up and running is [Quickstart: Deplo
 Before getting started with Microsoft AKS, you need an Azure account.
 
 1. Sign up or log in to an existing Microsoft account.
-1. [Create a free 12 Azure months account](https://azure.microsoft.com/en-us/free/kubernetes-service/) in case you don't have a paid one. Even the free account needs a credit card. Also, select a verification method. SMS code is a good choice.
+1. [Create a free Azure 12 months account](https://azure.microsoft.com/en-us/free/kubernetes-service/) in case you don't have a paid one. Even the free account needs a credit card. Also, select a verification method. SMS code is a good choice.
+
+:point_right: Be aware of that the really free period is only 30 days long. After this you need to upgrade to a paid account. For study use, a Pay-As-You-Go account with no technical support is sufficient. Then you are only charged for the non-free services you actually use.
 
 #### Getting started
 
