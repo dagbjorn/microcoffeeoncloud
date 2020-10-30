@@ -17,6 +17,7 @@ Date | Change
 11.12.2019 | Updated GKE to use NodePort 30017 instead of ClusterIP for database.
 10.09.2020 | Updated Swagger URL after Springfox 3.0.0 upgrade.
 15.10.2020 | Added extra on how to run Microcoffee on Microsoft Azure Kubernetes Service (AKS).
+30.10.2020 | Added AmazonSSMReadOnlyAccess to Amazon EKS Minimum policy configuration.
 
 ## Contents
 
@@ -830,8 +831,8 @@ less than $10 should be sufficient to get Microcoffee up and running.
 
 1. Configure the AWS CLI using `aws configure`. See [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for details.
 Make sure you have the access key ID and secret access key of the created IAM user at hand.
-:bulb: For region names, go to [AWS Service Endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html) and search for "EKS".
-Also, note that eu-north-1 (Stockholm) does not support t2.micro nodes, the freebies in AWS Free Tier (12 months).
+:bulb: For region names, go to [AWS Service Endpoints > View the service endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#view-service-endpoints), move on to [Service endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html) and search for "Amazon EKS".
+Also, note that as of October 2019 eu-north-1 (Stockholm) does not support t2.micro nodes, the freebies in AWS Free Tier (12 months).
 
 1. Install eksctl. See [eksctl - The official CLI for Amazon EKS](https://eksctl.io/).
 
@@ -1004,6 +1005,7 @@ running Microcoffee on Amazon EKS.
 - AmazonEKSClusterPolicy
 - AmazonEKSServicePolicy
 - AmazonEKSWorkerNodePolicy
+- AmazonSSMReadOnlyAccess
 - AutoScalingFullAccess
 - AWSCloudFormationFullAccess
 - IAMFullAccess
