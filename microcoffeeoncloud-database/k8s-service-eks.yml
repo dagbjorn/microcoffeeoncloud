@@ -42,7 +42,7 @@ spec:
       - name: mongodbdata
         awsElasticBlockStore:
           fsType: ext4
-          volumeID: vol-0fe793825f680a346
+          volumeID: vol-0cc409f06b02efbb3
 ---
 apiVersion: v1
 kind: Service

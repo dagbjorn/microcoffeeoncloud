@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.4.RELEASE</version>
+        <version>2.3.5.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -34,13 +34,13 @@
 
         <angularjs.version>1.8.0</angularjs.version>
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
-        <bootstrap.version>4.5.2</bootstrap.version>
+        <bootstrap.version>4.5.3</bootstrap.version>
         <springfox.version>3.0.0</springfox.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-        <wro4j-maven-plugin.version>1.8.0</wro4j-maven-plugin.version>
+        <wro4j-maven-plugin.version>1.9.0</wro4j-maven-plugin.version>
     </properties>
 
     <repositories>
