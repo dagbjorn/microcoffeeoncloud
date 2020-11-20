@@ -10,14 +10,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.util.UriUtils;
 
@@ -28,7 +27,6 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 /**
  * Unit tests of {@link HystrixCreditRatingConsumer}.
  */
-@RunWith(SpringRunner.class)
 @RestClientTest(HystrixCreditRatingConsumer.class)
 @TestPropertySource(properties = { "app.creditrating.url=http://dummy" })
 public class HystrixCreditRatingConsumerTest {
@@ -56,15 +54,17 @@ public class HystrixCreditRatingConsumerTest {
         assertThat(creditRating).isEqualTo(50);
     }
 
-    @Test(expected = ServiceCallFailedException.class)
+    @Test
     public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
-        final String customerId = "john@company.com";
+        Assertions.assertThrows(ServiceCallFailedException.class, () -> {
+            final String customerId = "john@company.com";
 
-        server.expect(once(), requestTo(buildServicePath(customerId))) //
-            .andExpect(method(HttpMethod.GET)) //
-            .andRespond(withServerError());
+            server.expect(once(), requestTo(buildServicePath(customerId))) //
+                .andExpect(method(HttpMethod.GET)) //
+                .andRespond(withServerError());
 
-        creditRatingConsumer.getCreditRating(customerId);
+            creditRatingConsumer.getCreditRating(customerId);
+        });
     }
 
     private String buildServicePath(String customerId) throws UnsupportedEncodingException {

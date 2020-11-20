@@ -2,15 +2,13 @@ package study.microcoffee.location.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import study.microcoffee.location.test.utils.MongoDBUtils;
 
@@ -19,7 +17,6 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
  * <p>
  * Spring Boot autoconfigures a MongoTemplate instance when de.flapdoodle.embed.mongo is found on the classpath.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 public class EmbeddedMongoLocationRepositoryIT {
@@ -30,12 +27,12 @@ public class EmbeddedMongoLocationRepositoryIT {
     @Autowired
     private LocationRepository locationRepository;
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
         MongoDBUtils.loadCoffeeshopCollection(mongoTemplate, "testdata/coffeeshop.json");
     }
 
-    @After
+    @AfterEach
     public void destroy() {
         MongoDBUtils.dropCoffeeshopLocation(mongoTemplate);
     }

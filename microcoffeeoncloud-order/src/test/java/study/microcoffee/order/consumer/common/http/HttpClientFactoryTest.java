@@ -3,7 +3,7 @@ package study.microcoffee.order.consumer.common.http;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests of {@link HttpClientFactory}.

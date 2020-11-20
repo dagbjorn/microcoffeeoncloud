@@ -3,15 +3,13 @@ package study.microcoffee.order.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.bson.Document;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -21,7 +19,6 @@ import com.mongodb.client.MongoDatabase;
  * <p>
  * Spring Boot autoconfigures a MongoTemplate instance when de.flapdoodle.embed.mongo is found on the classpath.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 public class EmbeddedMongoMenuRepositoryIT {
@@ -32,7 +29,7 @@ public class EmbeddedMongoMenuRepositoryIT {
     @Autowired
     private MenuRepository menuRepository;
 
-    @Before
+    @BeforeEach
     public void init() {
         MongoDatabase db = mongoTemplate.getDb();
 
@@ -49,7 +46,7 @@ public class EmbeddedMongoMenuRepositoryIT {
         collection.insertOne(new Document("name", "extra hot").append("appliesTo", "preparation"));
     }
 
-    @After
+    @AfterEach
     public void destroy() {
         mongoTemplate.getCollection("drinktypes").drop();
         mongoTemplate.getCollection("drinksizes").drop();

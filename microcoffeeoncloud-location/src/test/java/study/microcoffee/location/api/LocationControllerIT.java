@@ -2,10 +2,9 @@ package study.microcoffee.location.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,14 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import study.microcoffee.location.test.utils.MongoDBUtils;
 
 /**
  * Integration tests of {@link LocationController}.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
@@ -38,12 +35,12 @@ public class LocationControllerIT {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
         MongoDBUtils.loadCoffeeshopCollection(mongoTemplate, "testdata/coffeeshop.json");
     }
 
-    @After
+    @AfterEach
     public void destroy() {
         MongoDBUtils.dropCoffeeshopLocation(mongoTemplate);
     }

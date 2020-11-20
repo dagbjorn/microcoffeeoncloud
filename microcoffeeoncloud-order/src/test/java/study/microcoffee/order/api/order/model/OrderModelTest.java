@@ -2,7 +2,7 @@ package study.microcoffee.order.api.order.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import study.microcoffee.order.domain.DrinkType;

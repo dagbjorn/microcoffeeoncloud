@@ -13,8 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +23,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,7 +39,6 @@ import study.microcoffee.order.repository.OrderRepository;
 /**
  * Unit tests of {@link OrderController}.
  */
-@RunWith(SpringRunner.class)
 @WebMvcTest(OrderController.class)
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class })

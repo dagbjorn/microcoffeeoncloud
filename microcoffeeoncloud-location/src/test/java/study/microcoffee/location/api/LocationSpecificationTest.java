@@ -7,13 +7,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import de.codecentric.hikaku.Hikaku;
 import de.codecentric.hikaku.HikakuConfig;
@@ -30,7 +28,6 @@ import kotlin.jvm.functions.Function1;
  *
  * @see <a href="https://github.com/codecentric/hikaku">https://github.com/codecentric/hikaku</a>
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class LocationSpecificationTest {
 
@@ -39,7 +36,7 @@ public class LocationSpecificationTest {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         /*
          * Make sure that the test is run using the same file encoding as used by the API spec file. See maven-surefire-plugin

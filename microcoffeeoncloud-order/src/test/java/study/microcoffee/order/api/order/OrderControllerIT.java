@@ -6,9 +6,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -21,10 +22,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
@@ -33,7 +35,6 @@ import study.microcoffee.order.domain.DrinkType;
 /**
  * Integration tests of {@link OrderController}.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
@@ -43,17 +44,36 @@ public class OrderControllerIT {
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
 
-    private static final int COFFEE_SHOP_ID = 10;
+    // Credit rating port
+    private static final int CREDIT_RATING_PORT = 8083;
 
-    // ClassRule keeps the WireMock server running between tests.
-    @ClassRule
-    public static WireMockClassRule wireMockRule = new WireMockClassRule(8083);
+    private static final int COFFEE_SHOP_ID = 10;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(CREDIT_RATING_PORT));
+
+    @BeforeAll
+    public static void beforeAll() {
+        wireMockServer.start();
+
+        // Client-side configuration (default port is 8080)
+        WireMock.configureFor(CREDIT_RATING_PORT);
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        wireMockServer.stop();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        wireMockServer.resetAll();
+    }
 
     @Test
     public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {

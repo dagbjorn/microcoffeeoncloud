@@ -4,12 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.repository.Repository;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
@@ -19,7 +17,6 @@ import study.microcoffee.order.domain.Order;
  * <p>
  * The @DataMongoTest annotation will scan for @Document classes and Spring {@link Repository} classes.
  */
-@RunWith(SpringRunner.class)
 @DataMongoTest
 public class EmbeddedMongoOrderRepositoryIT {
 

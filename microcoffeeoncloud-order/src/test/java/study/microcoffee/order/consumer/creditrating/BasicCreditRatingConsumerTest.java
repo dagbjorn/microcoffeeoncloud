@@ -10,8 +10,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -39,7 +40,7 @@ public class BasicCreditRatingConsumerTest {
 
     private CreditRatingConsumer creditRatingConsumer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
@@ -60,15 +61,17 @@ public class BasicCreditRatingConsumerTest {
         assertThat(creditRating).isEqualTo(50);
     }
 
-    @Test(expected = ServiceCallFailedException.class)
+    @Test
     public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
-        final String customerId = "john@company.com";
+        Assertions.assertThrows(ServiceCallFailedException.class, () -> {
+            final String customerId = "john@company.com";
 
-        server.expect(once(), requestTo(buildServiceUrl(customerId))) //
-            .andExpect(method(HttpMethod.GET)) //
-            .andRespond(withServerError());
+            server.expect(once(), requestTo(buildServiceUrl(customerId))) //
+                .andExpect(method(HttpMethod.GET)) //
+                .andRespond(withServerError());
 
-        creditRatingConsumer.getCreditRating(customerId);
+            creditRatingConsumer.getCreditRating(customerId);
+        });
     }
 
     private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
