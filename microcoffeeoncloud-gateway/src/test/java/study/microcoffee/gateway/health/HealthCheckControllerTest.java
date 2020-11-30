@@ -1,36 +1,29 @@
 package study.microcoffee.gateway.health;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
  * Unit tests of {@link HealthCheckController}.
  */
-@WebMvcTest(HealthCheckController.class)
-@TestPropertySource("/application-test.properties")
 public class HealthCheckControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient client = WebTestClient.bindToController(new HealthCheckController()).build();
 
     @Test
     public void isReadyShouldSucceed() throws Exception {
-        mockMvc.perform(get("/internal/isready") //
-            .accept(MediaType.ALL_VALUE)) //
-            .andExpect(status().isOk());
+        client.get().uri("/internal/isready") //
+            .accept(MediaType.ALL) //
+            .exchange() //
+            .expectStatus().isOk();
     }
 
     @Test
     public void isAliveShouldSucceed() throws Exception {
-        mockMvc.perform(get("/internal/isalive") //
-            .accept(MediaType.ALL_VALUE)) //
-            .andExpect(status().isOk());
+        client.get().uri("/internal/isalive") //
+            .accept(MediaType.ALL) //
+            .exchange() //
+            .expectStatus().isOk();
     }
 }
