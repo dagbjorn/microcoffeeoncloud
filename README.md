@@ -18,6 +18,8 @@ Date | Change
 10.09.2020 | Updated Swagger URL after Springfox 3.0.0 upgrade.
 15.10.2020 | Added extra on how to run Microcoffee on Microsoft Azure Kubernetes Service (AKS).
 30.10.2020 | Added AmazonSSMReadOnlyAccess to Amazon EKS Minimum policy configuration.
+30.11.2020 | Migrated from Spring Cloud Netflix Zuul to Spring Cloud Gateway. Support of Zuul is discontinued in Spring Cloud 2020.
+11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
 
 ## Contents
 
@@ -32,6 +34,7 @@ Date | Change
 * [Give Microcoffee a spin](#give-a-spin)
 * [REST API](#rest-api)
 * [Spring Cloud Netflix](#spring-cloud-netflix)
+* [Resilience4J](#resilience4j)
 * [Extras](#extras)
   - [Download geodata from OpenStreetMap](#download-geodata)
   - [Microcoffee on Google Kubernetes Engine (GKE)](#microcoffee-on-gke)
@@ -49,7 +52,7 @@ The application has a simple user interface written in AngularJS and uses REST c
 ### The microservices
 The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the central technologies in the backend. AngularJS and Bootstrap in the frontend.
 
-![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture.png "Microcoffee architecture")
+![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202012.png "Microcoffee architecture")
 
 The application is made up by the following microservices, each running in its own Docker container:
 
@@ -76,9 +79,9 @@ Contains the discovery server for service discovery. The discovery server is bas
 Upon startup, each microservice registers with the discovery server using an Eureka client.
 
 #### microcoffeeoncloud-gateway
-Contains the gateway server for proxying of REST calls to the backend services. The gateway server is based on Spring Cloud Netflix Zuul.
+Contains the gateway server for proxying of REST calls to the backend services. The gateway server is based on Spring Cloud Gateway.
 
-Zuul acts as a reverse proxy for REST calls from the user interface of Microcoffee, hence the user interface can use a single point to access all REST services as well as the static web resources of the application. This simplifies things, avoiding the need to manage REST service endpoints and CORS concerns independently for all the backends.
+Spring Cloud Gateway acts as a reverse proxy for REST calls from the user interface of Microcoffee, hence the user interface can use a single point to access all REST services as well as the static web resources of the application. This simplifies things, avoiding the need to manage REST service endpoints and CORS concerns independently for all the backends.
 
 #### microcoffeeoncloud-location
 Contains the Location REST service for locating the nearest coffee shop. Coffee shop geodata is downloaded from [OpenStreetMap](https://www.openstreetmap.org) and imported into the database.
@@ -88,12 +91,12 @@ Contains the Location REST service for locating the nearest coffee shop. Coffee 
 #### microcoffeeoncloud-order
 Contains the Menu and Order REST services. Provides APIs for reading the coffee menu and placing coffee orders.
 
-Order uses the CreditRating REST service as a backend service for checking if a customer is creditworthy when placing an order. CreditRating is an unreliable service, hence giving us an "excuse" to use Hystrix from Spring Cloud Netflix for supervising service calls.
+Order uses the CreditRating REST service as a backend service for checking if a customer is creditworthy when placing an order. CreditRating is an unreliable service, hence giving us an "excuse" to use Resilience4J for retrying service calls that fail.
 
 #### microcoffeeoncloud-creditrating
 Contains an extremely simple credit rating service. Provides an API for reading the credit rating of a customer. Used by the Order service.
 
-Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by configuration properties. Current options include stable, failing, slow and unstable behaviors. See the [Hystrix section](#hystrix) below for details.
+Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by configuration properties. Current options include stable, failing, slow and unstable behaviors. See the [Resilience4J section](#resilience4j) below for details.
 
 #### microcoffeeoncloud-database
 Contains the MongoDB database. The database image is based on the official [mongo](https://hub.docker.com/r/_/mongo/) image on DockerHub.
@@ -638,9 +641,13 @@ To open the dashboard, navigate to https://192.168.99.100:8455.
 
 ### <a name="hystrix"></a>Hystrix
 
-[Hystrix](https://github.com/Netflix/Hystrix/wiki), an implementation of the [Circuit Breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html), is a latency and fault tolerance library provided by Spring Cloud Netflix. See the [Hystrix section](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) of the Spring Cloud Netflix reference doc for how to integrate Hystrix in an application.
+[Spring Cloud Netflix Hystrix](https://github.com/Netflix/Hystrix/wiki) is discontinued in Spring Cloud 2020, hence Microcoffee has migrated to [Resilience4J](https://github.com/resilience4j/resilience4j).
 
-The Order service is using Hystrix to supervise calls to CreditRating, a service that can be configured to behave in an unreliable manner.
+## <a name="resilience4j"></a>Resilience4J
+
+[Resilience4J](https://github.com/resilience4j/resilience4j) is a lightweight fault tolerance library inspired by Netflix Hystrix, but designed for Java 8 and functional programming. It offers classic Hystrix functions like circuit breaker, rate limiter, bulkhead and retry.
+
+The Order service is using Resilience4J to retry failed calls to CreditRating, a service that can be configured to behave in an unreliable manner.
 
 The desired behavior of CreditRating is configurable by means of configuration properties in `creditrating-${profile}.properties`.
 
@@ -657,22 +664,6 @@ Stable | 0 | All service calls returns after a brief delay.
 Failing | 1 | All service calls throws an exception after a brief delay.
 Slow | 2 | All service calls is delayed by ${app.creditrating.service.behavior.delay} secs.
 Unstable | 3 | A random mix of stable, failing and slow behaviors.
-
-#### <a name="hystrix-dashboard"></a>Hystrix Dashboard
-
-The [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) allows you to monitor Hystrix metrics in real time.
-
-To start monitoring the Order service, navigate to https://192.168.99.100:8445/hystrix and enter the following values:
-
-- Stream: https://192.168.99.100:8445/hystrix.stream
-- Delay: 2000 ms (default is fine)
-- Title: Order
-
-Then, click Monitor Stream. (A snippet of the dashboard is shown below.)
-
-![Snapshot of Order Hystrix Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/hystrix-dashboard-ok.png "Snapshot of Order Hystrix Dashboard")
-
-:no_entry: For the time being, the Hystrix Dashboard appears to be broken. When trying to open the stream, the message "<span style="color:red">**Unable to connect to Command Metric Stream.**</span>" is displayed.
 
 ## <a name="extras"></a>Extras
 
