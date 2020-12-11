@@ -33,8 +33,8 @@ import study.microcoffee.order.repository.OrderRepository;
 public class OrderController {
 
     static final String BASIC_CONSUMER = "Basic";
-    static final String HYSTRIX_CONSUMER = "Hystrix";
-    static final String CREDIT_RATING_CONSUMER = HYSTRIX_CONSUMER;
+    static final String RESILIENCE4J_CONSUMER = "Resilience4J";
+    static final String CREDIT_RATING_CONSUMER = RESILIENCE4J_CONSUMER;
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
@@ -62,7 +62,8 @@ public class OrderController {
      *         containing the URL for reading the saved order.
      */
     @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrderModel> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody OrderModel orderModel) {
+    public ResponseEntity<OrderModel> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId,
+        @RequestBody OrderModel orderModel) {
         logger.debug("POST /{}/order body={}", coffeeShopId, orderModel);
 
         Order order = convertToEntity(orderModel);

@@ -25,11 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * Unit tests of {@link HystrixCreditRatingConsumer}.
+ * Unit tests of {@link Resilience4JCreditRatingConsumer}.
  */
-@RestClientTest(HystrixCreditRatingConsumer.class)
-@TestPropertySource(properties = { "app.creditrating.url=http://dummy" })
-public class HystrixCreditRatingConsumerTest {
+@RestClientTest(Resilience4JCreditRatingConsumer.class)
+@TestPropertySource("/application-test.properties")
+public class Resilience4JCreditRatingConsumerTest {
 
     @Autowired
     private ObjectMapper objectMapper;

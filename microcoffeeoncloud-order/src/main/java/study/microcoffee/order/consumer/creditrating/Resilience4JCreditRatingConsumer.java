@@ -11,43 +11,43 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-
+import io.github.resilience4j.retry.annotation.Retry;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * Hystrix-augmented implementation of REST-based CreditRatingConsumer.
+ * Resilience4J implementation of REST-based CreditRatingConsumer.
  */
 @Component
-@Qualifier("Hystrix")
-public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
+@Qualifier("Resilience4J")
+public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
-    private final Logger logger = LoggerFactory.getLogger(HystrixCreditRatingConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(Resilience4JCreditRatingConsumer.class);
 
     private RestTemplate restTemplate;
 
-    private String creditRatingRootUrl;
+    private String creditRatingEndpointUrl;
 
-    public HystrixCreditRatingConsumer(RestTemplateBuilder builder, @Value("${app.creditrating.url}") String rootUrl) {
-        restTemplate = builder.rootUri(rootUrl).build();
-        creditRatingRootUrl = rootUrl;
+    public Resilience4JCreditRatingConsumer(RestTemplateBuilder builder, @Value("${app.creditrating.url}") String endpointUrl) {
+        restTemplate = builder.rootUri(endpointUrl).build();
+        this.creditRatingEndpointUrl = endpointUrl;
 
         logger.debug("restTemplate.requestFactory={}", restTemplate.getRequestFactory());
-        logger.debug("app.creditrating.url={}", rootUrl);
+        logger.debug("app.creditrating.url={}", endpointUrl);
     }
 
-    @HystrixCommand(fallbackMethod = "getMinimumCreditRating", commandKey = "getCreditRating", commandProperties = {})
     @Override
+    @Retry(name = "creditRating", fallbackMethod = "getMinimumCreditRating")
     public int getCreditRating(String customerId) {
-        logger.debug("GET request to {}{}, customerId={}", creditRatingRootUrl, GET_CREDIT_RATING_RESOURCE, customerId);
+        String url = creditRatingEndpointUrl + GET_CREDIT_RATING_RESOURCE;
+
+        logger.debug("GET request to {}, customerId={}", url, customerId);
 
         try {
-            ResponseEntity<CreditRating> response = restTemplate.getForEntity(GET_CREDIT_RATING_RESOURCE, CreditRating.class,
-                customerId);
+            ResponseEntity<CreditRating> response = restTemplate.getForEntity(url, CreditRating.class, customerId);
 
-            logger.debug("GET response from {}{}, response={}", creditRatingRootUrl, GET_CREDIT_RATING_RESOURCE, response.getBody());
+            logger.debug("GET response from {}, response={}", url, response.getBody());
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return response.getBody().getRating();
@@ -66,7 +66,7 @@ public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
      *            the customer ID.
      * @return The minimum credit rating.
      */
-    public int getMinimumCreditRating(String customerId) {
+    public int getMinimumCreditRating(String customerId, Exception e) {
         logger.debug("Fallback method getMinimumCreditRating called => credit rating 0");
 
         return 0;
