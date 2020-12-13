@@ -19,6 +19,7 @@ Date | Change
 15.10.2020 | Added extra on how to run Microcoffee on Microsoft Azure Kubernetes Service (AKS).
 30.10.2020 | Added AmazonSSMReadOnlyAccess to Amazon EKS Minimum policy configuration.
 30.11.2020 | Migrated from Spring Cloud Netflix Zuul to Spring Cloud Gateway. Support of Zuul is discontinued in Spring Cloud 2020.
+30.11.2020 | HTTP is no longer supported by API gateway after migration to Spring Cloud Gateway. (Netty, which is used by Spring Cloud Gateway under the hood, does not support multiple ports.)
 11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
 
 ## Contents
@@ -222,15 +223,15 @@ In particular, you need to pay attention to the IP address of the VM. Default va
 
 The port numbers are:
 
-Microservice | http port | https port
------------- | --------- | ----------
-gateway | 8080 | 8443
-location | 8081 | 8444
-order | 8082 | 8445
-creditrating | 8083 | 8446
-configserver | 8091 | 8454
-discovery | 8092 | 8455
-database | 27017 | 27017
+Microservice | http port | https port | Note
+------------ | --------- | ---------- | ----------
+gateway | - | 8443 | gateway is based on Spring Cloud Gateway running Netty under the hood. Netty only supports a single port in one and the same application, hence gateway has no port to spare for http.
+location | 8081 | 8444 |
+order | 8082 | 8445 |
+creditrating | 8083 | 8446 |
+configserver | 8091 | 8454 |
+discovery | 8092 | 8455 |
+database | 27017 | 27017 |
 
 ## <a name="setting-up-database"></a>Setting up the database
 
@@ -1210,7 +1211,7 @@ Verify that both the resource group and the node resource group of Microcoffee a
 
 Microservice | http port | https port | Comment
 ------------ | --------- | ---------- | -------
-gateway | 8080 | 8443 |
+gateway | - | 8443 |
 location | 8081 | 8444 |
 order | 8082 | 8445 |
 creditrating | 8083 | 8446 |
