@@ -20,19 +20,22 @@ spec:
         readinessProbe:
           httpGet:
             path: /internal/isready
-            port: 8080
-          initialDelaySeconds: 60
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 5
         livenessProbe:
           httpGet:
             path: /internal/isalive
-            port: 8080
-          initialDelaySeconds: 60
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 5
         ports:
-        - containerPort: 8080
+        # Netty (used by Spring Cloud Gateway) doesn't appear to support multiple ports.
+        #- containerPort: 8080
         - containerPort: 8443
         env:
         - name: SPRING_PROFILES_ACTIVE
@@ -49,9 +52,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 8080
-      targetPort: 8080
-      name: gateway-http
+    #- port: 8080
+    #  targetPort: 8080
+    #  name: gateway-http
     - port: 8443
       targetPort: 8443
       name: gateway-https
