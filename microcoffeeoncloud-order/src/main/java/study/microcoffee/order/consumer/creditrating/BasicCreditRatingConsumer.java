@@ -27,7 +27,7 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
 
     private String creditRatingEndpointUrl;
 
-    public BasicCreditRatingConsumer(@Qualifier("creditRatingRestTemplate") RestTemplate restTemplate,
+    public BasicCreditRatingConsumer(@Qualifier("basicRestTemplate") RestTemplate restTemplate,
         @Value("${app.creditrating.url}") String endpointUrl) {
         this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;

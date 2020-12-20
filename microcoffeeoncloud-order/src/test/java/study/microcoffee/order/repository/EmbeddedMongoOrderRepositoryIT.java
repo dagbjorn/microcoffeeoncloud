@@ -7,10 +7,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.repository.Repository;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
+import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
 
 /**
  * Integration tests of {@link OrderRepository} that uses an auto-configured Embedded MongoDB database.
@@ -18,6 +20,7 @@ import study.microcoffee.order.domain.Order;
  * The @DataMongoTest annotation will scan for @Document classes and Spring {@link Repository} classes.
  */
 @DataMongoTest
+@Import(DiscoveryRestTemplateTestConfig.class)
 public class EmbeddedMongoOrderRepositoryIT {
 
     @Autowired

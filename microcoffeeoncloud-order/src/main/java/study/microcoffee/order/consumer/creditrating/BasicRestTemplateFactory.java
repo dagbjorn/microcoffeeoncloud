@@ -19,15 +19,15 @@ import study.microcoffee.order.consumer.common.http.HttpClientFactory;
  * Note! RestTemplate instances are supposed to be thread-safe.
  */
 @Component
-public class CreditRatingRestTemplateFactory {
+public class BasicRestTemplateFactory {
 
-    private final Logger logger = LoggerFactory.getLogger(CreditRatingRestTemplateFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(BasicRestTemplateFactory.class);
 
     /**
      * Creates a RestTemplate instance that uses a {@link BufferingClientHttpRequestFactory}.
      */
     @Bean
-    public RestTemplate creditRatingRestTemplate(@Value("${app.creditrating.timeout}") int timeout) {
+    public RestTemplate basicRestTemplate(@Value("${app.creditrating.timeout}") int timeout) {
         logger.info("app.creditrating.timeout={}", timeout);
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
