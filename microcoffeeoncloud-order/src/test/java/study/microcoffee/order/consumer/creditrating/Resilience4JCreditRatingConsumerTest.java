@@ -74,10 +74,6 @@ public class Resilience4JCreditRatingConsumerTest {
         });
     }
 
-    private String buildServicePath(String customerId) throws UnsupportedEncodingException {
-        return "/api/coffeeshop/creditrating/" + UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name());
-    }
-
     private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
         UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
             .path("/api/coffeeshop/creditrating") //
