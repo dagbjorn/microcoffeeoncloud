@@ -11,13 +11,14 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,25 +28,31 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 /**
  * Unit tests of {@link Resilience4JCreditRatingConsumer}.
  */
-@RestClientTest(Resilience4JCreditRatingConsumer.class)
-@TestPropertySource("/application-test.properties")
 public class Resilience4JCreditRatingConsumerTest {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private static final String CREDITRATING_SERVICE_URL = "http://dummy";
 
-    @Autowired
     private MockRestServiceServer server;
 
-    @Autowired
+    private RestTemplate restTemplate = new RestTemplate();
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private CreditRatingConsumer creditRatingConsumer;
+
+    @BeforeEach
+    public void setUp() {
+        server = MockRestServiceServer.bindTo(restTemplate).build();
+
+        creditRatingConsumer = new Resilience4JCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
+    }
 
     @Test
     public void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
         final String customerId = "john@company.com";
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
 
-        server.expect(once(), requestTo(buildServicePath(customerId))) //
+        server.expect(once(), requestTo(buildServiceUrl(customerId))) //
             .andExpect(method(HttpMethod.GET)) //
             .andRespond(withSuccess(expectedContent, MediaType.APPLICATION_JSON));
 
@@ -59,7 +66,7 @@ public class Resilience4JCreditRatingConsumerTest {
         Assertions.assertThrows(ServiceCallFailedException.class, () -> {
             final String customerId = "john@company.com";
 
-            server.expect(once(), requestTo(buildServicePath(customerId))) //
+            server.expect(once(), requestTo(buildServiceUrl(customerId))) //
                 .andExpect(method(HttpMethod.GET)) //
                 .andRespond(withServerError());
 
@@ -67,7 +74,11 @@ public class Resilience4JCreditRatingConsumerTest {
         });
     }
 
-    private String buildServicePath(String customerId) throws UnsupportedEncodingException {
-        return "/api/coffeeshop/creditrating/" + UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name());
+    private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
+        UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
+            .path("/api/coffeeshop/creditrating") //
+            .pathSegment(UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name())) //
+            .build();
+        return serviceUrl.toUriString();
     }
 }

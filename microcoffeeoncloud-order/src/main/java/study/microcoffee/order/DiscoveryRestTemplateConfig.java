@@ -1,42 +1,30 @@
 package study.microcoffee.order;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
-import org.springframework.cloud.netflix.ribbon.RibbonClientHttpRequestFactory;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
-import com.netflix.client.http.HttpRequest;
+import study.microcoffee.order.common.logging.HttpLoggingInterceptor;
 
 /**
  * Discovery-supported RestTemplate configuration.
  */
 @Configuration
-@ConditionalOnClass(HttpRequest.class)
-@ConditionalOnProperty(value = "ribbon.http.client.enabled", matchIfMissing = false)
+@ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
 public class DiscoveryRestTemplateConfig {
 
-    private final Logger logger = LoggerFactory.getLogger(DiscoveryRestTemplateConfig.class);
-
-    /**
-     * Customizes the RestTemplate to use Ribbon load balancer to resolve service endpoints on format
-     * <code>http://SERVICE_ID/path</code>. SERVICE_ID is identical to the Spring application name defined by
-     * ${spring.application.name}.
-     * <p>
-     * Based on <a href=
-     * "https://github.com/hotblac/spanners/blob/master/spanners-mvc/src/main/java/org/dontpanic/spanners/springmvc/config/RestClientConfig.java">
-     * this source on GitHub</a>.
-     */
+    @LoadBalanced
     @Bean
-    public RestTemplateCustomizer ribbonClientRestTemplateCustomizer(
-        final RibbonClientHttpRequestFactory ribbonClientHttpRequestFactory) {
-        return restTemplate -> {
-            logger.debug("RestTemplateCustomizer => requestFactory={}", ribbonClientHttpRequestFactory);
+    public RestTemplate discoveryRestTemplate() {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 
-            restTemplate.setRequestFactory(ribbonClientHttpRequestFactory);
-        };
+        RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
+        restTemplate.getInterceptors().add(new HttpLoggingInterceptor(false));
+
+        return restTemplate;
     }
 }

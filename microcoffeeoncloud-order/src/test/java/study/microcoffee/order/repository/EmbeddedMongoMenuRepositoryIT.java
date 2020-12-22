@@ -8,11 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
+import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
 
 /**
  * Integration tests of {@link MongoMenuRepository}.
@@ -21,6 +24,7 @@ import com.mongodb.client.MongoDatabase;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
+@Import(DiscoveryRestTemplateTestConfig.class)
 public class EmbeddedMongoMenuRepositoryIT {
 
     @Autowired

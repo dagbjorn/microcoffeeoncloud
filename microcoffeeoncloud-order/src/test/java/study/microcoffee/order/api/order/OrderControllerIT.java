@@ -12,8 +12,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,12 +35,15 @@ import io.github.resilience4j.retry.RetryRegistry;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
+import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
 
 /**
  * Integration tests of {@link OrderController}.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMetrics
 @TestPropertySource("/application-test.properties")
+@Import(DiscoveryRestTemplateTestConfig.class)
 @ActiveProfiles("itest")
 @Profile("itest")
 public class OrderControllerIT {

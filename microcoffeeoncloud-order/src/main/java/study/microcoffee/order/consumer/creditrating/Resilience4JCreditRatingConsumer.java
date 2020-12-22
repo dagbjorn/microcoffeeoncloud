@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -29,8 +28,9 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
 
     private String creditRatingEndpointUrl;
 
-    public Resilience4JCreditRatingConsumer(RestTemplateBuilder builder, @Value("${app.creditrating.url}") String endpointUrl) {
-        restTemplate = builder.rootUri(endpointUrl).build();
+    public Resilience4JCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
+        @Value("${app.creditrating.url}") String endpointUrl) {
+        this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;
 
         logger.debug("restTemplate.requestFactory={}", restTemplate.getRequestFactory());
