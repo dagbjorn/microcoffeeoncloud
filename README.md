@@ -21,6 +21,7 @@ Date | Change
 30.11.2020 | Migrated from Spring Cloud Netflix Zuul to Spring Cloud Gateway. Support of Zuul is discontinued in Spring Cloud 2020.
 30.11.2020 | HTTP is no longer supported by API gateway after migration to Spring Cloud Gateway. (Netty, which is used by Spring Cloud Gateway under the hood, does not support multiple ports.)
 11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
+22.12.2020 | Migrated to Spring Boot 2.4.1 and Spring Cloud 2020.0.0-RC1.
 
 ## Contents
 
@@ -191,7 +192,7 @@ To inspect the created keystore, run:
 
 To specify a different VM host IP, run:
 
-    mvn clean install -DvmHostIp=10.0.0.100
+    mvn clean install -Pgen-certs -DvmHostIp=10.0.0.100
 
 :bulb: The keystore properties are specified in `${application}-${profile}.properties` of each microservice that is using the `microcoffeeoncloud-certificates` artifact.
 
