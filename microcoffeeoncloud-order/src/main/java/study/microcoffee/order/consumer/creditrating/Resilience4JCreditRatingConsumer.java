@@ -33,7 +33,6 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
         this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;
 
-        logger.debug("restTemplate={}", restTemplate);
         logger.debug("restTemplate.requestFactory={}", restTemplate.getRequestFactory());
         logger.debug("app.creditrating.url={}", endpointUrl);
     }

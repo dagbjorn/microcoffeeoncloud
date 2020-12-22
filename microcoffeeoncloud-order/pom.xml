@@ -33,7 +33,6 @@
         <spring-cloud.version>2020.0.0-RC1</spring-cloud.version>
 
         <modelmapper.version>2.3.8</modelmapper.version>
-        <resilience4j.version>1.6.1</resilience4j.version>
         <springfox.version>3.0.0</springfox.version>
 
         <!-- Plugin versions -->
