@@ -30,7 +30,7 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2020.0.0-RC1</spring-cloud.version>
+        <spring-cloud.version>2020.0.0</spring-cloud.version>
 
         <modelmapper.version>2.3.8</modelmapper.version>
         <springfox.version>3.0.0</springfox.version>
