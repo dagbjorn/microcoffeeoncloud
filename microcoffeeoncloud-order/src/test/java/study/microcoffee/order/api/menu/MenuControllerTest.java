@@ -22,7 +22,7 @@ import study.microcoffee.order.repository.MenuRepository;
  * Unit tests of {@link MenuController}.
  */
 @WebMvcTest(MenuController.class)
-@TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class })
 public class MenuControllerTest {
 
