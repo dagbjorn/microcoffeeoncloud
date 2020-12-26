@@ -2,6 +2,8 @@
 
 setlocal
 
-mvn spring-boot:run -Dspring-boot.run.profiles=devlocal
+set SPRING_PROFILES_ACTIVE=devlocal
+
+mvn spring-boot:run
 
 endlocal
