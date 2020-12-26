@@ -40,7 +40,7 @@ import study.microcoffee.order.repository.OrderRepository;
  * Unit tests of {@link OrderController}.
  */
 @WebMvcTest(OrderController.class)
-@TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
+@TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class })
 public class OrderControllerTest {
 

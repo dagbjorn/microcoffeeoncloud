@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.TestPropertySource;
 
 import de.codecentric.hikaku.Hikaku;
 import de.codecentric.hikaku.HikakuConfig;
@@ -29,6 +30,7 @@ import kotlin.jvm.functions.Function1;
  * @see <a href="https://github.com/codecentric/hikaku">https://github.com/codecentric/hikaku</a>
  */
 @SpringBootTest
+@TestPropertySource("/application-test.properties")
 public class LocationSpecificationTest {
 
     private static final String API_SPEC_FILE = "static/swagger/location-apispec-3.0.yml";

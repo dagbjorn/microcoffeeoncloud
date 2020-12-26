@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.repository.Repository;
+import org.springframework.test.context.TestPropertySource;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
@@ -20,6 +21,7 @@ import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
  * The @DataMongoTest annotation will scan for @Document classes and Spring {@link Repository} classes.
  */
 @DataMongoTest
+@TestPropertySource("/application-test.properties")
 @Import(DiscoveryRestTemplateTestConfig.class)
 public class EmbeddedMongoOrderRepositoryIT {
 
