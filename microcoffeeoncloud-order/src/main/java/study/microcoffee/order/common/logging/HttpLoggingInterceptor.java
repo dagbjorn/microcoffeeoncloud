@@ -108,10 +108,9 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
 
         for (Entry<String, List<String>> header : headers.entrySet()) {
             String headerName = header.getKey();
+            List<String> values = header.getValue();
 
             builder.append(headerName + ": ");
-
-            List<String> values = headers.get(headerName);
 
             for (int i = 0; i < values.size(); i++) {
                 if (i > 0) {

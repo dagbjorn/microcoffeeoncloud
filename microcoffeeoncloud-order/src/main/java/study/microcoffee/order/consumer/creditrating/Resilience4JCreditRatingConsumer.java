@@ -50,7 +50,7 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
             logger.debug("GET response from {}, response={}", url, response.getBody());
 
             if (response.getStatusCode().equals(HttpStatus.OK)) {
-                return response.getBody().getRating();
+                return response.getBody().getRating(); // NOSONAR Allow NPE
             } else {
                 throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
             }
@@ -67,7 +67,7 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
      * @return The minimum credit rating.
      */
     public int getMinimumCreditRating(String customerId, Exception e) {
-        logger.debug("Fallback method getMinimumCreditRating called => credit rating 0");
+        logger.debug("Fallback method getMinimumCreditRating called => credit rating 0", e);
 
         return 0;
     }

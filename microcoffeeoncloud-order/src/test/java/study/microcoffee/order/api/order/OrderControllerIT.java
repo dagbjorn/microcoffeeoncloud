@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -128,10 +129,11 @@ public class OrderControllerIT {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
-        assertThat(readBackOrder.toString()).isEqualTo(savedOrder.toString());
+        assertThat(readBackOrder).hasToString(savedOrder.toString());
     }
 
     @Test
+    @EnabledIf("isResilience4jConsumer")
     public void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
         float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
@@ -171,5 +173,11 @@ public class OrderControllerIT {
 
         String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
+    }
+
+    /* Used by @EnableIf annotation. */
+    @SuppressWarnings("unused")
+    private boolean isResilience4jConsumer() {
+        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER);
     }
 }

@@ -47,8 +47,8 @@ public class EmbeddedMongoOrderRepositoryIT {
 
         System.out.println(readbackOrder.get());
 
-        assertThat(readbackOrder.isPresent()).isTrue();
-        assertThat(readbackOrder.get().toString()).isEqualTo(savedOrder.toString());
+        assertThat(readbackOrder).isPresent();
+        assertThat(readbackOrder.get()).hasToString(savedOrder.toString());
     }
 
     @Test
@@ -57,6 +57,6 @@ public class EmbeddedMongoOrderRepositoryIT {
 
         System.err.println(order);
 
-        assertThat(order.isPresent()).isFalse();
+        assertThat(order).isNotPresent();
     }
 }
