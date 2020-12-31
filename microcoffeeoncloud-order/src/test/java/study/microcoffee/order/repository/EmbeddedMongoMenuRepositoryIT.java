@@ -15,7 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
+import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
  * Integration tests of {@link MongoMenuRepository}.
@@ -24,7 +24,7 @@ import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryRestTemplateTestConfig.class)
+@Import(DiscoveryTestConfig.class)
 public class EmbeddedMongoMenuRepositoryIT {
 
     @Autowired

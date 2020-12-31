@@ -36,7 +36,7 @@ import io.github.resilience4j.retry.RetryRegistry;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
-import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
+import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
  * Integration tests of {@link OrderController}.
@@ -44,7 +44,7 @@ import study.microcoffee.order.test.DiscoveryRestTemplateTestConfig;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMetrics
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryRestTemplateTestConfig.class)
+@Import(DiscoveryTestConfig.class)
 @ActiveProfiles("itest")
 @Profile("itest")
 public class OrderControllerIT {
@@ -178,6 +178,7 @@ public class OrderControllerIT {
     /* Used by @EnableIf annotation. */
     @SuppressWarnings("unused")
     private boolean isResilience4jConsumer() {
-        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER);
+        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
     }
 }

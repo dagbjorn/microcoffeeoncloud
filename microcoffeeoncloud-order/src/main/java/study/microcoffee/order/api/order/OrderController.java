@@ -33,8 +33,10 @@ import study.microcoffee.order.repository.OrderRepository;
 public class OrderController {
 
     public static final String BASIC_CONSUMER = "Basic";
+    public static final String BASIC_WEB_CLIENT_CONSUMER = "BasicWebClient";
     public static final String RESILIENCE4J_CONSUMER = "Resilience4J";
-    public static final String CREDIT_RATING_CONSUMER = RESILIENCE4J_CONSUMER;
+    public static final String RESILIENCE4J_WEB_CLIENT_CONSUMER = "Resilience4JWebClient";
+    public static final String CREDIT_RATING_CONSUMER = RESILIENCE4J_WEB_CLIENT_CONSUMER;
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
