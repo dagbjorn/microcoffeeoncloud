@@ -30,10 +30,8 @@ public class DiscoveredServiceLogger implements ApplicationListener<ContextRefre
             return;
         }
 
-        services.forEach((String serviceName) -> {
-            discoveryClient.getInstances(serviceName).forEach((ServiceInstance s) -> {
-                logger.info("DISCOVERED SERVICE: serviceId={}, uri={}, metadata={}", s.getServiceId(), s.getUri(), s.getMetadata());
-            });
-        });
+        services.forEach((String serviceName) -> discoveryClient.getInstances(serviceName) //
+            .forEach((ServiceInstance s) -> logger.info("DISCOVERED SERVICE: serviceId={}, uri={}, metadata={}", s.getServiceId(),
+                s.getUri(), s.getMetadata())));
     }
 }
