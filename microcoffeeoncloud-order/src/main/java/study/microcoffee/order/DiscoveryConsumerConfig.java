@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.extern.slf4j.Slf4j;
 import study.microcoffee.order.common.logging.HttpLoggingInterceptor;
+import study.microcoffee.order.common.logging.JettyHttpClientLogEnhancer;
 import study.microcoffee.order.consumer.common.http.JettyHttpClientFactory;
 
 /**
@@ -43,7 +44,7 @@ public class DiscoveryConsumerConfig {
 
         log.info("app.creditrating.timeout={}", timeout);
 
-        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout);
+        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout, new JettyHttpClientLogEnhancer(true));
 
         return WebClient.builder() //
             .filter(lbFunction) //

@@ -10,6 +10,7 @@ import org.springframework.http.client.reactive.JettyResourceFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import study.microcoffee.order.common.logging.JettyHttpClientLogEnhancer;
 import study.microcoffee.order.consumer.common.http.JettyHttpClientFactory;
 
 /**
@@ -24,7 +25,7 @@ public class BasicWebClientFactory {
     public WebClient basicWebClient(JettyResourceFactory resourceFactory, @Value("${app.creditrating.timeout}") int timeout) {
         logger.info("app.creditrating.timeout={}", timeout);
 
-        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout);
+        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout, new JettyHttpClientLogEnhancer(true));
 
         return WebClient.builder() //
             .clientConnector(new JettyClientHttpConnector(httpClient, resourceFactory)) //

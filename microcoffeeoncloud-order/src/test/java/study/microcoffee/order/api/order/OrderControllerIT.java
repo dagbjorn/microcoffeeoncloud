@@ -13,10 +13,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -36,7 +40,6 @@ import io.github.resilience4j.retry.RetryRegistry;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
-import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
  * Integration tests of {@link OrderController}.
@@ -44,7 +47,6 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMetrics
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryTestConfig.class)
 @ActiveProfiles("itest")
 @Profile("itest")
 public class OrderControllerIT {
@@ -133,6 +135,25 @@ public class OrderControllerIT {
     }
 
     @Test
+    @EnabledIf("isBasicConsumer")
+    public void saveOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+        stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
+            .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
+
+        OrderModel newOrder = OrderModel.builder() //
+            .type(new DrinkType("Latte", "Coffee")) //
+            .size("Small") //
+            .drinker("Dagbjørn") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
+            .build();
+
+        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, newOrder, OrderModel.class,
+            COFFEE_SHOP_ID);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
     @EnabledIf("isResilience4jConsumer")
     public void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
         float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
@@ -175,10 +196,36 @@ public class OrderControllerIT {
         return Float.valueOf(value);
     }
 
-    /* Used by @EnableIf annotation. */
+    //
+    // Used by @EnableIf annotations
+    //
+
+    @SuppressWarnings("unused")
+    private boolean isBasicConsumer() {
+        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.BASIC_CONSUMER)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.BASIC_WEB_CLIENT_CONSUMER);
+    }
+
     @SuppressWarnings("unused")
     private boolean isResilience4jConsumer() {
         return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
             || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
+    }
+
+    /**
+     * Test configuration that uses basic RestTemplate/WebClient beans because Discovery-aware beans cannot be used without Eureka.
+     */
+    @TestConfiguration
+    static class TestConfig {
+
+        @Bean
+        public RestTemplate discoveryRestTemplate(@Qualifier("basicRestTemplate") RestTemplate restTemplate) {
+            return restTemplate;
+        }
+
+        @Bean
+        public WebClient discoveryWebClient(@Qualifier("basicWebClient") WebClient webClient) {
+            return webClient;
+        }
     }
 }
