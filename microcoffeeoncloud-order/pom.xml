@@ -169,11 +169,6 @@
             <artifactId>httpclient</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpasyncclient</artifactId>
-        </dependency>
-
         <!-- Jetty HTTP Client -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
