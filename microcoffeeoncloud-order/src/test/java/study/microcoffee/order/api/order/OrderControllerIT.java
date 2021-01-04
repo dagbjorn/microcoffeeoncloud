@@ -102,12 +102,7 @@ public class OrderControllerIT {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //
                 .withBody(creditRatingResponse)));
 
-        OrderModel newOrder = OrderModel.builder() //
-            .type(new DrinkType("Latte", "Coffee")) //
-            .size("Small") //
-            .drinker("Dagbjørn") //
-            .selectedOptions(new String[] { "skimmed milk" }) //
-            .build();
+        OrderModel newOrder = createOrder();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Forwarded-Host", "forwardedhost.no");
@@ -140,14 +135,7 @@ public class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        OrderModel newOrder = OrderModel.builder() //
-            .type(new DrinkType("Latte", "Coffee")) //
-            .size("Small") //
-            .drinker("Dagbjørn") //
-            .selectedOptions(new String[] { "skimmed milk" }) //
-            .build();
-
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, newOrder, OrderModel.class,
+        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
             COFFEE_SHOP_ID);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -161,14 +149,7 @@ public class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        OrderModel newOrder = OrderModel.builder() //
-            .type(new DrinkType("Latte", "Coffee")) //
-            .size("Small") //
-            .drinker("Dagbjørn") //
-            .selectedOptions(new String[] { "skimmed milk" }) //
-            .build();
-
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, newOrder, OrderModel.class,
+        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
             COFFEE_SHOP_ID);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
@@ -183,6 +164,15 @@ public class OrderControllerIT {
             orderId);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    private OrderModel createOrder() {
+        return OrderModel.builder() //
+            .type(new DrinkType("Latte", "Coffee")) //
+            .size("Small") //
+            .drinker("Dagbjørn") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
+            .build();
     }
 
     private static String getMetricName(String metric, String application, String kind, String backend) {
