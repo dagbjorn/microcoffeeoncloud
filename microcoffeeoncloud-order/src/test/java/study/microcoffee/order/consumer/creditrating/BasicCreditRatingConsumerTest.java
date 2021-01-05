@@ -63,13 +63,13 @@ public class BasicCreditRatingConsumerTest {
 
     @Test
     public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
-        Assertions.assertThrows(ServiceCallFailedException.class, () -> {
             final String customerId = "john@company.com";
 
             server.expect(once(), requestTo(buildServiceUrl(customerId))) //
                 .andExpect(method(HttpMethod.GET)) //
                 .andRespond(withServerError());
 
+            Assertions.assertThrows(ServiceCallFailedException.class, () -> {
             creditRatingConsumer.getCreditRating(customerId);
         });
     }

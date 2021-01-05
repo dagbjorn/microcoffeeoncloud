@@ -84,7 +84,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
     }
 
     /**
-     * Formats the response data consisting av HTTP status (code and text), HTTP headers and body data (if any).
+     * Formats the response data consisting of HTTP status (code and text), HTTP headers and body data (if any).
      */
     private String formatResponse(ClientHttpResponse response) throws IOException {
         StringBuilder builder = new StringBuilder();

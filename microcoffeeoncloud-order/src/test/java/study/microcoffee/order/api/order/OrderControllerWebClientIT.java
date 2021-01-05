@@ -6,6 +6,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -17,17 +18,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -36,20 +35,19 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
-import io.github.resilience4j.retry.RetryRegistry;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
 
 /**
- * Integration tests of {@link OrderController}.
+ * Integration tests of {@link OrderController} based on {@link WebTestClient}.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMetrics
-@TestPropertySource("/application-test.properties")
+@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class OrderControllerIT {
+public class OrderControllerWebClientIT {
 
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
@@ -62,16 +60,14 @@ public class OrderControllerIT {
     private static final String PROMETHEUS_METRIC_FAILED_WITH_RETRY = getMetricName("resilience4j_retry_calls_total", "order",
         "failed_with_retry", "creditRating");
 
+    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(CREDIT_RATING_PORT));
+
+    // SSL must be disabled to get a correct URL injected. (Otherwise it will be a http URL with SSL port.)
     @Autowired
-    private TestRestTemplate restTemplate;
+    private WebTestClient webTestClient;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    protected RetryRegistry retryRegistry;
-
-    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(CREDIT_RATING_PORT));
 
     @BeforeAll
     public static void beforeAll() {
@@ -104,29 +100,35 @@ public class OrderControllerIT {
 
         OrderModel newOrder = createOrder();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Forwarded-Host", "forwardedhost.no");
-        HttpEntity<OrderModel> requestEntity = new HttpEntity<>(newOrder, headers);
+        EntityExchangeResult<OrderModel> response = webTestClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .header("X-Forwarded-Host", "forwardedhost.no") //
+            .contentType(MediaType.APPLICATION_JSON) //
+            .bodyValue(newOrder) //
+            .exchange() //
+            .expectStatus().isCreated() //
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
+            .expectHeader().value(HttpHeaders.LOCATION, containsString("forwardedhost.no")) //
+            .expectBody(OrderModel.class) //
+            .consumeWith(result -> {
+                assertThat(result.getResponseHeaders().getLocation().toString()).endsWith(result.getResponseBody().getId());
+                assertThat(result.getResponseBody().getType()).isEqualTo(newOrder.getType());
+                assertThat(result.getResponseBody().getDrinker()).isEqualTo(newOrder.getDrinker());
+            }) //
+            .returnResult();
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST, requestEntity,
-            OrderModel.class, COFFEE_SHOP_ID);
+        OrderModel savedOrder = response.getResponseBody();
 
-        OrderModel savedOrder = response.getBody();
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
-        assertThat(response.getHeaders().getLocation().toString()).contains("forwardedhost.no");
-        assertThat(response.getHeaders().getLocation().toString()).endsWith(savedOrder.getId());
-        assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
-        assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
-
-        response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, savedOrder.getId());
-
-        OrderModel readBackOrder = response.getBody();
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
-        assertThat(readBackOrder).hasToString(savedOrder.toString());
+        webTestClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, savedOrder.getId()) //
+            .accept(MediaType.APPLICATION_JSON) //
+            .exchange() //
+            .expectStatus().isOk() //
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
+            .expectBody(OrderModel.class) //
+            .consumeWith(result -> {
+                assertThat(result.getResponseBody()).hasToString(savedOrder.toString());
+            });
     }
 
     @Test
@@ -135,10 +137,12 @@ public class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
-            COFFEE_SHOP_ID);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        webTestClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .contentType(MediaType.APPLICATION_JSON) //
+            .bodyValue(createOrder()) //
+            .exchange() //
+            .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -149,10 +153,13 @@ public class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
-            COFFEE_SHOP_ID);
+        webTestClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .contentType(MediaType.APPLICATION_JSON) //
+            .bodyValue(createOrder()) //
+            .exchange() //
+            .expectStatus().isEqualTo(HttpStatus.PAYMENT_REQUIRED);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
         assertThat(getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
     }
 
@@ -160,10 +167,11 @@ public class OrderControllerIT {
     public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
-            orderId);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        webTestClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
+            .accept(MediaType.APPLICATION_JSON) //
+            .exchange() //
+            .expectStatus().isNoContent();
     }
 
     private OrderModel createOrder() {
@@ -175,14 +183,25 @@ public class OrderControllerIT {
             .build();
     }
 
+    /**
+     * Returns a properly formatted Prometheus metric.
+     */
     private static String getMetricName(String metric, String application, String kind, String backend) {
         return metric + "{application=\"" + application + "\",kind=\"" + kind + "\",name=\"" + backend + "\",} ";
     }
 
+    /**
+     * Reads the current metric value from the Actuator Prometheus endpoint.
+     */
     private float getMetricValue(String key) {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class);
+        EntityExchangeResult<String> response = webTestClient.get() //
+            .uri("/actuator/prometheus") //
+            .exchange() //
+            .expectStatus().isOk() //
+            .expectBody(String.class) //
+            .returnResult();
 
-        String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
+        String value = response.getResponseBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
     }
 

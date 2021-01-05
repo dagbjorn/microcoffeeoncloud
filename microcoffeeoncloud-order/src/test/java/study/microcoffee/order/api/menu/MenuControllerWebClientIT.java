@@ -1,4 +1,4 @@
-package study.microcoffee.order.repository;
+package study.microcoffee.order.api.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,8 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -18,20 +23,23 @@ import com.mongodb.client.MongoDatabase;
 import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
- * Integration tests of {@link MongoMenuRepository}.
- * <p>
- * Spring Boot autoconfigures a MongoTemplate instance when de.flapdoodle.embed.mongo is found on the classpath.
+ * Integration tests of {@link MenuController} based on {@link WebTestClient}.
  */
-@SpringBootTest
-@TestPropertySource("/application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
 @Import(DiscoveryTestConfig.class)
-public class EmbeddedMongoMenuRepositoryIT {
+@ActiveProfiles("itest")
+@Profile("itest")
+public class MenuControllerWebClientIT {
+
+    private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    // SSL must be disabled to get a correct URL injected. (Otherwise it will be a http URL with SSL port.)
     @Autowired
-    private MenuRepository menuRepository;
+    private WebTestClient webTestClient;
 
     @BeforeEach
     public void init() {
@@ -59,12 +67,18 @@ public class EmbeddedMongoMenuRepositoryIT {
 
     @Test
     public void getCoffeeMenuShouldReturnCoffeeMenu() {
-        Object coffeeMenu = menuRepository.getCoffeeMenu();
+        EntityExchangeResult<String> response = webTestClient.get() //
+            .uri(SERVICE_PATH) //
+            .accept(MediaType.APPLICATION_JSON) //
+            .exchange() //
+            .expectStatus().isOk() //
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
+            .expectBody(String.class) //
+            .consumeWith(result -> {
+                assertThat(result.getResponseBody()).contains("Americano");
+            }) //
+            .returnResult();
 
-        System.out.println(coffeeMenu);
-
-        assertThat(coffeeMenu.toString()).contains("Americano");
-        assertThat(coffeeMenu.toString()).contains("Large");
-        assertThat(coffeeMenu.toString()).contains("extra hot");
+        System.err.println(response.getResponseBody());
     }
 }
