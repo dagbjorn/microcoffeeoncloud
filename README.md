@@ -22,6 +22,7 @@ Date | Change
 30.11.2020 | HTTP is no longer supported by API gateway after migration to Spring Cloud Gateway. (Netty, which is used by Spring Cloud Gateway under the hood, does not support multiple ports.)
 11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
 23.12.2020 | Migrated to Spring Boot 2.4.1 and Spring Cloud 2020.0.0.
+05.01.2020 | Added support for Spring WebClient since RestTemplate is in maintenance mode. However, still using RestTemplate as an alternative.
 
 ## Contents
 
