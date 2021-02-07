@@ -30,8 +30,15 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2020.0.0</spring-cloud.version>
+        <spring-cloud.version>2020.0.1</spring-cloud.version>
 
+        <!-- 3.2.0 gives unexpected test result
+            Expected, but unable to find:
+            < GET /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}  QueryParameters[]  PathParameters[latitude, longitude, maxdistance]  HeaderParameters[]  Produces[application/json]  Consumes[] >
+
+            Unexpected, but found:
+            < GET /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}  QueryParameters[]  PathParameters[latitude, longitude, maxdistance]  HeaderParameters[]  Produces[]  Consumes[] >
+         -->
         <hikaku-version>3.1.2</hikaku-version>
         <springfox.version>3.0.0</springfox.version>
 
