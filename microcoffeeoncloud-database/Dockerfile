@@ -1,4 +1,4 @@
-FROM mongo:4.4.4
+FROM mongo:4.4.5
 WORKDIR /
 COPY target/keystore/*.p12 ./
 RUN openssl pkcs12 -in microcoffee.study.p12 -password pass:12345678 -nodes -out microcoffee.study-key.pem \
