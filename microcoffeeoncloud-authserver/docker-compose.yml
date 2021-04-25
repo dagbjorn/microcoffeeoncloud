@@ -1,0 +1,14 @@
+version: '3'
+services:
+    keycloak:
+        image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
+        ports:
+            - "8093:8080"
+            - "8456:8443"
+        environment:
+            - KEYCLOAK_USER=admin
+            - KEYCLOAK_PASSWORD=admin
+            - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
+        domainname: microcoffee.study
+        entrypoint: ["/opt/microcoffee/authserver-entrypoint.sh", "-b", "0.0.0.0"]
+        

@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>microcoffeeoncloud-authserver</module>
         <module>microcoffeeoncloud-configserver</module>
         <module>microcoffeeoncloud-database</module>
         <module>microcoffeeoncloud-discovery</module>

@@ -1,0 +1,6 @@
+/.kube
+/.settings
+/dump
+/target
+.classpath
+.project
