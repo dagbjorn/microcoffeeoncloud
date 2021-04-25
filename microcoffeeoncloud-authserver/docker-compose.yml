@@ -8,7 +8,8 @@ services:
         environment:
             - KEYCLOAK_USER=admin
             - KEYCLOAK_PASSWORD=admin
+            - KEYCLOAK_IMPORT=/opt/microcoffee/keycloak/microcoffee-export.json
             - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
         domainname: microcoffee.study
-        entrypoint: ["/opt/microcoffee/authserver-entrypoint.sh", "-b", "0.0.0.0"]
+        entrypoint: ["/opt/microcoffee/scripts/authserver-entrypoint.sh", "-b", "0.0.0.0"]
         

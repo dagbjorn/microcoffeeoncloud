@@ -2,5 +2,5 @@
 
 set -x
 
-/opt/microcoffee/init-tls.sh
+/opt/microcoffee/scripts/init-tls.sh
 /opt/jboss/tools/docker-entrypoint.sh "$@"
