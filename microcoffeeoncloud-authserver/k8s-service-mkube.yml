@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authserver
+  template:
+    metadata:
+      labels:
+        app: authserver
+    spec:
+      containers:
+      - name: authserver
+        image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
+        imagePullPolicy: Always
+        command: ["/opt/microcoffee/scripts/authserver-entrypoint.sh"]
+        args: ["-b", "0.0.0.0", "-Djboss.http.port=8093", "-Djboss.https.port=8456"]
+        readinessProbe:
+          httpGet:
+            path: /auth/realms/microcoffee
+            port: 8093
+          initialDelaySeconds: 180
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /auth
+            port: 8093
+          initialDelaySeconds: 180
+          periodSeconds: 10
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8093
+        - containerPort: 8456
+        env:
+        - name: KEYCLOAK_USER
+          value: "admin"
+        - name: KEYCLOAK_PASSWORD
+          value: "admin"
+        - name: KEYCLOAK_IMPORT
+          value: "/opt/microcoffee/keycloak/microcoffee-realm.json"
+        - name: MICROCOFFEE_CERT_DOMAIN
+          value: "microcoffee.study"        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authserver
+  labels:
+    app: authserver
+spec:
+  type: NodePort
+  ports:
+    - port: 8093
+      targetPort: 8093
+      nodePort: 30093
+      name: auth-http
+    - port: 8456
+      targetPort: 8456
+      nodePort: 30456
+      name: auth-https
+  selector:
+    app: authserver
