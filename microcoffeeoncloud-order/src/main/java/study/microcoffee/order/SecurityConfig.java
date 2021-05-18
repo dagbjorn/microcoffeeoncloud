@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/actuator/**").permitAll() //
             .anyRequest().authenticated() //
             //.and() //
-            //.oauth2Client()
+            //.oauth2Client() // Only needed for the authorization code grant flow which we don't use.
             ;
     }
 }
