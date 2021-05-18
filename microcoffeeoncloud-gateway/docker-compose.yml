@@ -43,9 +43,11 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
             - SPRING_CLOUD_CONFIG_URI=https://configserver.microcoffee.study:8454
+        env_file: order_client_secret.env
         domainname: microcoffee.study
         networks:
             - microcoffee
+            - authserver
             - configserver
             - discovery
     creditrating:
@@ -59,6 +61,7 @@ services:
         domainname: microcoffee.study
         networks:
             - microcoffee
+            - authserver
             - configserver
             - discovery
     mongodb:
@@ -81,6 +84,9 @@ volumes:
 
 networks:
     microcoffee:
+    authserver:
+        external:
+            name: microcoffeeoncloud-authserver_authserver
     configserver:
         external:
             name: microcoffeeoncloud-configserver_configserver

@@ -12,4 +12,11 @@ services:
             - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
         domainname: microcoffee.study
         entrypoint: ["/opt/microcoffee/scripts/authserver-entrypoint.sh", "-b", "0.0.0.0", "-Djboss.http.port=8093", "-Djboss.https.port=8456"]
+        networks:
+            authserver:
+                aliases:
+                    - authserver.microcoffee.study
+
+networks:
+    authserver:
         

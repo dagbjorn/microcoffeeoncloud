@@ -21,6 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import study.microcoffee.order.SecurityTestConfig;
 import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
@@ -28,7 +29,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryTestConfig.class)
+@Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")
 @Profile("itest")
 public class MenuControllerIT {

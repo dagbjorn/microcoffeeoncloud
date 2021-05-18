@@ -11,11 +11,15 @@ services:
         domainname: microcoffee.study
         networks:
             - microcoffee
+            - authserver
             - configserver
             - discovery
 
 networks:
     microcoffee:
+    authserver:
+        external:
+            name: microcoffeeoncloud-authserver_authserver
     configserver:
         external:
             name: microcoffeeoncloud-configserver_configserver

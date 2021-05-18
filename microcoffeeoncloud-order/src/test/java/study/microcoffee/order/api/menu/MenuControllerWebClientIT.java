@@ -20,6 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import study.microcoffee.order.SecurityTestConfig;
 import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
@@ -27,7 +28,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
-@Import(DiscoveryTestConfig.class)
+@Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")
 @Profile("itest")
 public class MenuControllerWebClientIT {

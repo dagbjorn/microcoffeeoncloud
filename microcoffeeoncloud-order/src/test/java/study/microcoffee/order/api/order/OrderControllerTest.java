@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import study.microcoffee.order.CharacterEncodingFilterTestConfig;
+import study.microcoffee.order.SecurityTestConfig;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
@@ -41,7 +42,7 @@ import study.microcoffee.order.repository.OrderRepository;
  */
 @WebMvcTest(OrderController.class)
 @TestPropertySource("/application-test.properties")
-@Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class })
+@Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class })
 public class OrderControllerTest {
 
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
