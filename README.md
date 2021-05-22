@@ -23,6 +23,7 @@ Date | Change
 11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
 23.12.2020 | Migrated to Spring Boot 2.4.1 and Spring Cloud 2020.0.0.
 05.01.2021 | Added support for Spring WebClient since RestTemplate is in maintenance mode. However, still using RestTemplate as an alternative.
+19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now using the OAuth2 client credentials grant.
 
 ## Contents
 
@@ -55,7 +56,7 @@ The application has a simple user interface written in AngularJS and uses REST c
 ### The microservices
 The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the central technologies in the backend. AngularJS and Bootstrap in the frontend.
 
-![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202012.png "Microcoffee architecture")
+![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202105.png "Microcoffee architecture")
 
 The application is made up by the following microservices, each running in its own Docker container:
 
@@ -63,9 +64,10 @@ The application is made up by the following microservices, each running in its o
 * The Discovery server for service discovery with Eureka.
 * The API Gateway for proxying of calls to the backend REST services. Static web resources are also served by the API gateway.
 * The backend REST API provided as three different microservices.
+* The Keycloak authorization server for securing the APIs. (So far only the CreditRating API is secured.)
 * The MongoDB database.
 
-Each microservice, apart from the database, is implemented by a Spring Boot application.
+Each microservice, apart from the authorization server and the database, is implemented by a Spring Boot application.
 
 The application supports both http and https on all communication channels. However, https is a requirement in most browsers to get the HTML Geolocation API going, so https is needed to unlock all available functions in Microcoffee.
 
@@ -101,6 +103,12 @@ Contains an extremely simple credit rating service. Provides an API for reading 
 
 Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by configuration properties. Current options include stable, failing, slow and unstable behaviors. See the [Resilience4J section](#resilience4j) below for details.
 
+#### microcoffeeoncloud-authserver
+Contains the Keycloak authorization server. The authorization server image is based on the official [jboss/keycloak](https://hub.docker.com/r/jboss/keycloak) image on DockerHub.
+
+A microcoffee realm is automatically imported when starting Keycloak. The realm contains the necessary configuration for securing the
+CreditRating API with an OAuth2 client credentials grant.
+
 #### microcoffeeoncloud-database
 Contains the MongoDB database. The database image is based on the official [mongo](https://hub.docker.com/r/_/mongo/) image on DockerHub.
 
@@ -122,10 +130,15 @@ Creates a self-signed PKI certificate, contained in the Java keystore `microcoff
 
 :bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
 
+#### microcoffeeoncloud-jwttest
+A test library with support for creating signed JWT access tokens. The tokens are signed using the self-signed PKI certificate provided
+by `microcoffeeoncloud-certificates`. Also a suite of types to use when mocking an OIDC provider's metadata and JWKS API is
+provided.
+
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.18.
 
-The code was originally written in Java 8, but later migrated to Java 11. Only three issues were found during the migration:
+The code was originally written in Java 8, but is later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
 * Incompatibility with wro4j-maven-plugin. Fixed by adding plugin dependency to org.mockito:mockito-core:2.18.0 or above.
 * Starting with Java 9, keytool creates PKCS12 keystores by default. This broke SSL for some still not understood reason. Fixed for now
@@ -137,11 +150,11 @@ For building and testing the application, you need to install Docker on a suitab
 
 A Docker VM is needed. To create a Docker VM called `docker-vm` for use with VirtualBox, execute the following command:
 
-    docker-machine create --driver virtualbox docker-vm
+    docker-machine create --driver virtualbox --virtualbox-memory "1536" docker-vm
 
 In addition, you'll need the basic Java development tools (IDE w/ Java 11 and Maven) installed on your development machine.
 
-Finally, OpenSSL is needed to create a self-signed wildcard certificate.
+You will also need OpenSSL to create a self-signed wildcard certificate. Finally, (curl)[https://curl.se/] and (jq)[https://stedolan.github.io/jq/] are needed.
 
 :warning: Java keytool won't work because it doesn't support wildcard host names as SAN (Subject Alternative Name) values.
 
@@ -216,12 +229,10 @@ Application and environment-specific properties are defined in standard Spring m
 
 In addition, the gateway routing configuration is defined in `gateway.yml`.
 
-Configuration is served by the configuration server. The URL of the configuration server itself is defined in each microservice project as follows, depending on the current profile:
+Configuration is served by the configuration server. The URL of the configuration server itself is defined by an environment variable in each microservice project as follows, depending on the current profile:
 
 * devdocker: In `docker-compose.yml`.
-* devlocal: In `bootstrap-devlocal.properties`.
-
-In particular, you need to pay attention to the IP address of the VM. Default value used by the application is **192.168.99.100**. (Suits VirtualBox.)
+* devlocal: In `run-local.bat`.
 
 The port numbers are:
 
@@ -233,6 +244,7 @@ order | 8082 | 8445 |
 creditrating | 8083 | 8446 |
 configserver | 8091 | 8454 |
 discovery | 8092 | 8455 |
+authserver | 8092 | 8456 |
 database | 27017 | 27017 |
 
 ## <a name="setting-up-database"></a>Setting up the database
@@ -247,7 +259,7 @@ Verify by:
     docker volume inspect mongodbdata
 
 ### Load data into the database collections
-The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. (We run it twice to also load the test database, *microcoffee-test*.) Make sure to specify the correct IP address of your VM.
+The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. Make sure to specify the correct IP address of your VM.
 
 But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
@@ -256,7 +268,6 @@ But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 Then run:
 
     mvn gplus:execute -Ddbhost=192.168.99.100 -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
-    mvn gplus:execute -Ddbhost=192.168.99.100 -Ddbport=27017 -Ddbname=microcoffee-test -Dshopfile=oslo-coffee-shops.xml
 
 To verify the database loading, start the MongoDB client in a Docker container. (Use `docker ps` to find the container ID or name.)
 
@@ -308,25 +319,30 @@ Finally, stop the database container:
     docker-compose down
 
 ## <a name="run-microcoffee"></a>Run Microcoffee
-When running microcoffee, the config server must be started first followed by the discovery server. Finally, the other microservices are started all together. Make sure the previous microservice has started completely, before starting the next.
+When running microcoffee, you need to observe dependencies between the microservices so they are started in the correct order.
+
+1. Start with the authorization server (Keycloak). Keycloak takes quite a long time to start.
+1. Start the config server. This may be done in parallel with the authorization server.
+1. When the config server is running, start the discovery server.
+1. When all three servers are running, start the other microservices, including the database, all together.
 
 A microservice is started by running `docker-compose up -d` or by using the convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
 
 :warning: The startup time is rather long, at least on my machine.
 
-From the `configserver`folder, run:
+From the `authserver` and `configserver` folders, run:
 
     run-docker.bat
 
-Then, when the config server is up and running (takes about 40 secs), move on to the `discovery` folder and start the discovery server.
+Then, when the config server is up and running, move on to the `discovery` folder and start the discovery server.
 
-Finally, when the discovery server is up and running (takes another 60 secs), move on to the `gateway` folder and start the remaining microservices (may take as long as 5 minutes or even more).
+Finally, when all three servers are up and running, move on to the `gateway` folder and start the remaining microservices.
 
 For testing individual projects outside Docker, run:
 
     run-local.bat
 
-This is a batch file that starts a Spring Boot application by running `mvn spring-boot:run -Dspring-boot.run.profiles=devlocal`.
+:point_right: Check the contents of each batch file to see what it does. For instance, for starting the database and the authorization server, MongoDB and Keycloak must be installed locally.
 
 ## <a name="give-a-spin"></a>Give Microcoffee a spin
 After microcoffee has started, navigate to the coffee shop to place your first coffee order:
