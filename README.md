@@ -175,12 +175,9 @@ Next, configure the Docker environment variables in your shell by following the 
 
 :bulb: On Windows, it is handy to create a batch file to do this, e.g. `docker-setenv.bat`. The file should be placed in a folder on your Windows path.
 
-To check the status of your Docker VM, run:
+To check the status and the IP address of your Docker VM, run:
 
     docker-machine status docker-vm
-
-To get the current IP address of the Docker VM, run:
-
     docker-machine ip docker-vm
 
 ## <a name="building-microcoffee"></a>Building Microcoffee
@@ -271,7 +268,7 @@ The `microcoffeeoncloud-database` project is used to load coffee shop locations,
 
 But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
-    docker-compose up -d
+    run-docker.bat
 
 Then run:
 
@@ -323,25 +320,33 @@ To verify the database loading, start the MongoDB client in a Docker container. 
     > exit
     bye
 
-Finally, stop the database container:
-
-    docker-compose down
-
 ## <a name="setting-up-authserver"></a>Setting up the authorization server
 
-### Regenerate client secret of order-service
-All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated. This can be done in two ways, either manually from the administration console, or by using the Keycloak CLI.
+### Start Keycloak
+Start by get Keyclock up and running (from `microcoffee-authserver`):
 
-#### Using the administration console
+    run-docker.bat
+
+### Regenerate client secret of order-service
+All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated. This can be done in two ways, either manually from the administration console, or by using the Keycloak Admin REST API.
+
+Additionally, the client secret must be stored as a key-value pair in a file called `order_client_secret.env`. This file is specified by the **env_file** attribute in `docker-compose.yml` and should be located in the same directory.
+
+Contents of `order_client_secret.env`:
+
+    ORDER_CLIENT_SECRET=<secret>
+
+#### Using the Admin Console
 Assuming the default VM IP `192.168.99.100`, open https://192.168.99.100:8456/auth/ in a browser.
 
 1. Log in as user `admin` and password `admin`.
 1. Navigate to Microcoffee realm > Clients > order-service > Credentials and click Regenerate Secret.
 1. Copy the Secret value.
-1. In `microcoffee-order`, create a file called `order_client_secret.env` containing the following key=value:   `ORDER_CLIENT_SECRET=<secret>`
+1. In `microcoffee-order`, create `order_client_secret.env` as described above.
+1. Also copy `order_client_secret.env` to the `microcoffee-gateway` folder.
 
-#### Using the command line
-Assuming the default VM IP `192.168.99.100`, run the following commands (Windows):
+#### Using the Admin REST API
+Assuming the default VM IP `192.168.99.100`, run the following commands (Windows) from the top-level folder of Microcoffee:
 
     set AUTHSERVER=192.168.99.100:8456
 
@@ -355,7 +360,8 @@ Assuming the default VM IP `192.168.99.100`, run the following commands (Windows
 
     :: Read the client secret and save it in order_client_secret.env
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
-    echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > order_client_secret.env
+    echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > microcoffeeoncloud-order\order_client_secret.env
+    echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > microcoffeeoncloud-gateway\order_client_secret.env
 
 Verify the contents of `order_client_secret.env` and we are good to go.
 
