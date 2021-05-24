@@ -54,7 +54,7 @@ The &micro;Coffee Shop application is based on the coffee shop application coded
 The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### The microservices
-The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the central technologies in the backend. AngularJS and Bootstrap in the frontend.
+The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the key technologies in the backend. AngularJS and Bootstrap in the frontend. Spring Security OAuth and Keycloak are used for securing one of the backend APIs.
 
 ![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202105.png "Microcoffee architecture")
 
@@ -98,10 +98,14 @@ Contains the Menu and Order REST services. Provides APIs for reading the coffee 
 
 Order uses the CreditRating REST service as a backend service for checking if a customer is creditworthy when placing an order. CreditRating is an unreliable service, hence giving us an "excuse" to use Resilience4J for retrying service calls that fail.
 
+Order is an OAuth2 client and uses the [client credentials flow](https://auth0.com/docs/flows/client-credentials-flow) to access CreditRating.
+
 #### microcoffeeoncloud-creditrating
 Contains an extremely simple credit rating service. Provides an API for reading the credit rating of a customer. Used by the Order service.
 
 Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by configuration properties. Current options include stable, failing, slow and unstable behaviors. See the [Resilience4J section](#resilience4j) below for details.
+
+CreditRating is an OAuth2 resource server. It requires a Bearer JWT access token with proper scope and audience claim values for access.
 
 #### microcoffeeoncloud-authserver
 Contains the Keycloak authorization server. The authorization server image is based on the official [jboss/keycloak](https://hub.docker.com/r/jboss/keycloak) image on DockerHub.
@@ -125,10 +129,10 @@ A word of warning: Common artifacts should be used wisely in a microservice arch
 Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. As a matter of fact, two certificates are created:
 
 * A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application with Docker Compose.
-* A wildcard certificare with common name (CN) `*.default` for use when running the application on Kubernetes. (See Extras)
+* A wildcard certificate with common name (CN) `*.default` for use when running the application on Kubernetes. (See Extras)
 * A certificate with common name (CN) `localhost` for use when testing outside Docker.
 
-:bulb: The application creates three user-defined bridge networks for networking; one for the config server, another for the discovery server and finally a network for the rest of the microservices.
+:bulb: The application creates four user-defined bridge networks for networking; one for the each of the config, discovery and authorization servers, and finally one for the rest of the microservices.
 
 #### microcoffeeoncloud-jwttest
 A test library with support for creating signed JWT access tokens. The tokens are signed using the self-signed PKI certificate provided
@@ -154,7 +158,7 @@ A Docker VM is needed. To create a Docker VM called `docker-vm` for use with Vir
 
 In addition, you'll need the basic Java development tools (IDE w/ Java 11 and Maven) installed on your development machine.
 
-You will also need OpenSSL to create a self-signed wildcard certificate. Finally, (curl)[https://curl.se/] and (jq)[https://stedolan.github.io/jq/] are needed.
+You will also need OpenSSL to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
 
 :warning: Java keytool won't work because it doesn't support wildcard host names as SAN (Subject Alternative Name) values.
 
@@ -174,6 +178,10 @@ Next, configure the Docker environment variables in your shell by following the 
 To check the status of your Docker VM, run:
 
     docker-machine status docker-vm
+
+To get the current IP address of the Docker VM, run:
+
+    docker-machine ip docker-vm
 
 ## <a name="building-microcoffee"></a>Building Microcoffee
 
@@ -213,7 +221,7 @@ To specify a different VM host IP, run:
 ### Build the microservices
 Use Maven to build each microservice in turn by running:
 
-    mvn clean package [-Pbuild,push]
+    mvn clean install [-Pbuild,push]
 
 Specify the `build` and `push` profiles to build and push, respectively, the Docker image to Docker Hub.
 
@@ -229,7 +237,7 @@ Application and environment-specific properties are defined in standard Spring m
 
 In addition, the gateway routing configuration is defined in `gateway.yml`.
 
-Configuration is served by the configuration server. The URL of the configuration server itself is defined by an environment variable in each microservice project as follows, depending on the current profile:
+Configuration is served by the configuration server. The URL of the configuration server itself is defined by an environment variable in each microservice project depending on the current profile as follows:
 
 * devdocker: In `docker-compose.yml`.
 * devlocal: In `run-local.bat`.
@@ -259,7 +267,7 @@ Verify by:
     docker volume inspect mongodbdata
 
 ### Load data into the database collections
-The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. Make sure to specify the correct IP address of your VM.
+The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. Make sure to specify the correct IP address of your VM. (Run `docker-machine ip docker-vm`)
 
 But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
@@ -271,13 +279,13 @@ Then run:
 
 To verify the database loading, start the MongoDB client in a Docker container. (Use `docker ps` to find the container ID or name.)
 
-    docker exec -it microcoffeeonclouddatabase_mongodb_1 mongo microcoffee
+    docker exec -it microcoffeeoncloud-database_mongodb_1 mongo microcoffee
 
     > show databases
-    admin             0.000GB
-    local             0.000GB
-    microcoffee       0.000GB
-    microcoffee-test  0.000GB
+    admin        0.000GB
+    config       0.000GB
+    local        0.000GB
+    microcoffee  0.000GB
     > use microcoffee
     switched to db microcoffee
     > show collections
@@ -312,14 +320,47 @@ To verify the database loading, start the MongoDB client in a Docker container. 
             "website" : "http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_thorvald_meyersgate_55/",
             "wheelchair" : "no"
     }
-    >
+    > exit
+    bye
 
 Finally, stop the database container:
 
     docker-compose down
 
+## <a name="setting-up-authserver"></a>Setting up the authorization server
+
+### Regenerate client secret of order-service
+All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated. This can be done in two ways, either manually from the administration console, or by using the Keycloak CLI.
+
+#### Using the administration console
+Assuming the default VM IP `192.168.99.100`, open https://192.168.99.100:8456/auth/ in a browser.
+
+1. Log in as user `admin` and password `admin`.
+1. Navigate to Microcoffee realm > Clients > order-service > Credentials and click Regenerate Secret.
+1. Copy the Secret value.
+1. In `microcoffee-order`, create a file called `order_client_secret.env` containing the following key=value:   `ORDER_CLIENT_SECRET=<secret>`
+
+#### Using the command line
+Assuming the default VM IP `192.168.99.100`, run the following commands (Windows):
+
+    set AUTHSERVER=192.168.99.100:8456
+
+    :: Get an admin token (only valid for 60s secs)
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%AUTHSERVER%/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    :: Regenerate the client secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+
+    :: Read the client secret and save it in order_client_secret.env
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > order_client_secret.env
+
+Verify the contents of `order_client_secret.env` and we are good to go.
+
 ## <a name="run-microcoffee"></a>Run Microcoffee
-When running microcoffee, you need to observe dependencies between the microservices so they are started in the correct order.
+When running microcoffee, you need to observe the dependencies between the microservices so they are started in the correct order.
 
 1. Start with the authorization server (Keycloak). Keycloak takes quite a long time to start.
 1. Start the config server. This may be done in parallel with the authorization server.
