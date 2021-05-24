@@ -323,14 +323,14 @@ To verify the database loading, start the MongoDB client in a Docker container. 
 ## <a name="setting-up-authserver"></a>Setting up the authorization server
 
 ### Start Keycloak
-Start by get Keyclock up and running (from `microcoffee-authserver`):
+Start by getting Keyclock up and running (from `microcoffeeoncloud-authserver`):
 
     run-docker.bat
 
 ### Regenerate client secret of order-service
 All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated. This can be done in two ways, either manually from the administration console, or by using the Keycloak Admin REST API.
 
-Additionally, the client secret must be stored as a key-value pair in a file called `order_client_secret.env`. This file is specified by the **env_file** attribute in `docker-compose.yml` and should be located in the same directory.
+Additionally, the client secret must be stored as a key-value pair in a file called `order_client_secret.env`. This file is specified by the *env_file* attribute in `docker-compose.yml` and should be located in the same directory.
 
 Contents of `order_client_secret.env`:
 
@@ -342,8 +342,8 @@ Assuming the default VM IP `192.168.99.100`, open https://192.168.99.100:8456/au
 1. Log in as user `admin` and password `admin`.
 1. Navigate to Microcoffee realm > Clients > order-service > Credentials and click Regenerate Secret.
 1. Copy the Secret value.
-1. In `microcoffee-order`, create `order_client_secret.env` as described above.
-1. Also copy `order_client_secret.env` to the `microcoffee-gateway` folder.
+1. In `microcoffeeoncloud-order`, create `order_client_secret.env` as described above.
+1. Also copy `order_client_secret.env` to the `microcoffeeoncloud-gateway` folder.
 
 #### Using the Admin REST API
 Assuming the default VM IP `192.168.99.100`, run the following commands (Windows) from the top-level folder of Microcoffee:
@@ -373,17 +373,17 @@ When running microcoffee, you need to observe the dependencies between the micro
 1. When the config server is running, start the discovery server.
 1. When all three servers are running, start the other microservices, including the database, all together.
 
-A microservice is started by running `docker-compose up -d` or by using the convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
+A microservice is started by running `docker-compose up -d` or by using the already mentioned convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
 
 :warning: The startup time is rather long, at least on my machine.
 
-From the `authserver` and `configserver` folders, run:
+Given that the authorization server is already running, start the config server from the `microcoffeeoncloud-configserver`:
 
     run-docker.bat
 
-Then, when the config server is up and running, move on to the `discovery` folder and start the discovery server.
+Then, move on to the `microcoffeeoncloud-discovery` folder and start the discovery server.
 
-Finally, when all three servers are up and running, move on to the `gateway` folder and start the remaining microservices.
+Finally, move on to the `microcoffeeoncloud-gateway` folder and start the remaining microservices (including the database).
 
 For testing individual projects outside Docker, run:
 
@@ -392,7 +392,7 @@ For testing individual projects outside Docker, run:
 :point_right: Check the contents of each batch file to see what it does. For instance, for starting the database and the authorization server, MongoDB and Keycloak must be installed locally.
 
 ## <a name="give-a-spin"></a>Give Microcoffee a spin
-After microcoffee has started, navigate to the coffee shop to place your first coffee order:
+After Microcoffee has started, navigate to the coffee shop to place your first coffee order:
 
     https://192.168.99.100:8443/coffee.html
 
