@@ -355,6 +355,7 @@ Assuming the default VM IP `192.168.99.100`, run the following commands (Windows
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
     :: Regenerate the client secret
     curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret
 
