@@ -29,9 +29,9 @@ public class JwtValidatorConfig {
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, new AudienceValidator());
+        OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator();
 
-        jwtDecoder.setJwtValidator(withAudience);
+        jwtDecoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer, withAudience));
 
         return jwtDecoder;
     }
@@ -40,14 +40,13 @@ public class JwtValidatorConfig {
      * Custom token validator class for validating that the aud claim contains the application name.
      */
     class AudienceValidator implements OAuth2TokenValidator<Jwt> {
-        OAuth2Error error = new OAuth2Error("invalid_token", "Expected token audience", null);
 
         @Override
         public OAuth2TokenValidatorResult validate(Jwt jwt) {
             if (jwt.getAudience() != null && jwt.getAudience().contains(expectedAudience)) {
                 return OAuth2TokenValidatorResult.success();
             } else {
-                return OAuth2TokenValidatorResult.failure(error);
+                return OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token", "Expected token audience", null));
             }
         }
     }
