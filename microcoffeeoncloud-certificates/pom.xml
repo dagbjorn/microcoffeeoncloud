@@ -58,6 +58,26 @@
                                     </resources>
                                 </configuration>
                             </execution>
+
+                            <!-- Also include pem files in certificate jar artifact -->
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.outputDirectory}/certs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/openssl</directory>
+                                            <includes>
+                                                <include>*.pem</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
 

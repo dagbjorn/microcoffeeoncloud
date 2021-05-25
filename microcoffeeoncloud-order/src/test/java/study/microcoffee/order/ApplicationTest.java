@@ -12,7 +12,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryTestConfig.class)
+@Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 public class ApplicationTest {
 
     @Test

@@ -1,6 +1,8 @@
 ::
 :: build-all-images [-Pbuild] [-Pbuild,push] [-Pitest]
 ::
+call mvn clean install -f microcoffeeoncloud-jwttest\pom.xml %* || goto :error
+call mvn clean install -f microcoffeeoncloud-authserver\pom.xml %* || goto :error
 call mvn clean install -f microcoffeeoncloud-configserver\pom.xml %* || goto :error
 call mvn clean install -f microcoffeeoncloud-database\pom.xml %* || goto :error
 call mvn clean install -f microcoffeeoncloud-discovery\pom.xml %* || goto :error

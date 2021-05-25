@@ -2,8 +2,10 @@ package study.microcoffee.order.api.order;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -11,6 +13,7 @@ import static org.hamcrest.Matchers.containsString;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +33,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
+import study.microcoffee.jwttest.TestTokens;
+import study.microcoffee.jwttest.oidcprovider.model.BearerToken;
+import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
 import study.microcoffee.order.domain.DrinkType;
@@ -49,18 +56,24 @@ import study.microcoffee.order.domain.DrinkType;
 @Profile("itest")
 public class OrderControllerWebClientIT {
 
+    private static final int WIREMOCK_PORT = 9999;
+
+    // Issuer must match value in application-test.properties.
+    private static final String ISSUER = "http://localhost:" + WIREMOCK_PORT;
+    private static final String WELLKNOWN_PATH = "/.well-known/openid-configuration";
+    private static final String AUTHORIZATION_PATH = "/protocol/openid-connect/auth";
+    private static final String TOKEN_PATH = "/protocol/openid-connect/token";
+    private static final String JWKS_PATH = "/protocol/openid-connect/certs";
+
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
-
-    // Credit rating port
-    private static final int CREDIT_RATING_PORT = 8083;
 
     private static final int COFFEE_SHOP_ID = 10;
 
     private static final String PROMETHEUS_METRIC_FAILED_WITH_RETRY = getMetricName("resilience4j_retry_calls_total", "order",
         "failed_with_retry", "creditRating");
 
-    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(CREDIT_RATING_PORT));
+    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
 
     // SSL must be disabled to get a correct URL injected. (Otherwise it will be a http URL with SSL port.)
     @Autowired
@@ -70,16 +83,24 @@ public class OrderControllerWebClientIT {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    public static void beforeAll() {
+    public static void beforeAll() throws Exception {
         wireMockServer.start();
 
         // Client-side configuration (default port is 8080)
-        WireMock.configureFor(CREDIT_RATING_PORT);
+        WireMock.configureFor(WIREMOCK_PORT);
+
+        // Stub response of OIDC Discovery using WellKnown URL. Must be done before Spring context is created.
+        stubWireMockWellKnownResponse();
     }
 
     @AfterAll
     public static void afterAll() {
         wireMockServer.stop();
+    }
+
+    @BeforeEach
+    public void beforeEach() throws Exception {
+        stubWireMockTokenResponse();
     }
 
     @AfterEach
@@ -150,6 +171,8 @@ public class OrderControllerWebClientIT {
     public void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
         float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
+        stubWireMockTokenResponse();
+
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -219,6 +242,46 @@ public class OrderControllerWebClientIT {
     private boolean isResilience4jConsumer() {
         return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
             || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
+    }
+
+    /**
+     * Static stubbing of WellKnown API response from WireMock.
+     */
+    private static void stubWireMockWellKnownResponse() throws JsonProcessingException {
+        ProviderMetadata expectedMetadata = ProviderMetadata.builder() //
+            .issuer(ISSUER) //
+            .authorizationEndpoint(ISSUER + AUTHORIZATION_PATH) //
+            .tokenEndpoint(ISSUER + TOKEN_PATH) //
+            .jwksUri(ISSUER + JWKS_PATH) //
+            .subjectTypesSupported(new String[] { "public" }) //
+            .build();
+
+        String expectedMetadataBody = new ObjectMapper().writeValueAsString(expectedMetadata);
+
+        stubFor(get(urlEqualTo(WELLKNOWN_PATH)) //
+            .willReturn(aResponse() //
+                .withStatus(HttpStatus.OK.value()) //
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
+                .withBody(expectedMetadataBody)));
+    }
+
+    /**
+     * Stubbing of Token API response from WireMock.
+     */
+    private void stubWireMockTokenResponse() throws JsonProcessingException {
+        BearerToken bearerToken = BearerToken.builder() //
+            .accessToken(TestTokens.Access.valid()) //
+            .tokenType("Bearer") //
+            .expiresIn(60) //
+            .build();
+
+        String expectedTokenBody = objectMapper.writeValueAsString(bearerToken);
+
+        stubFor(post(urlEqualTo(TOKEN_PATH)) //
+            .willReturn(aResponse() //
+                .withStatus(HttpStatus.OK.value()) //
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
+                .withBody(expectedTokenBody)));
     }
 
     /**

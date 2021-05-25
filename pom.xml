@@ -9,11 +9,13 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>microcoffeeoncloud-authserver</module>
         <module>microcoffeeoncloud-configserver</module>
+        <module>microcoffeeoncloud-creditrating</module>
         <module>microcoffeeoncloud-database</module>
         <module>microcoffeeoncloud-discovery</module>
         <module>microcoffeeoncloud-gateway</module>
-        <module>microcoffeeoncloud-creditrating</module>
+        <module>microcoffeeoncloud-jwttest</module>
         <module>microcoffeeoncloud-location</module>
         <module>microcoffeeoncloud-order</module>
     </modules>

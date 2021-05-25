@@ -15,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import study.microcoffee.order.SecurityTestConfig;
 import study.microcoffee.order.test.DiscoveryTestConfig;
 
 /**
@@ -24,7 +25,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-@Import(DiscoveryTestConfig.class)
+@Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 public class EmbeddedMongoMenuRepositoryIT {
 
     @Autowired

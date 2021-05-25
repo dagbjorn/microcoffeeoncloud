@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
-import org.springframework.http.client.reactive.JettyResourceFactory;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -39,15 +40,20 @@ public class DiscoveryConsumerConfig {
     }
 
     @Bean
-    public WebClient discoveryWebClient(ReactorLoadBalancerExchangeFilterFunction lbFunction, JettyResourceFactory resourceFactory,
-        @Value("${app.creditrating.timeout}") int timeout) {
+    public WebClient discoveryWebClient(ReactorLoadBalancerExchangeFilterFunction lbFunction,
+        OAuth2AuthorizedClientManager authorizedClientManager, @Value("${app.creditrating.timeout}") int timeout) {
 
         log.info("app.creditrating.timeout={}", timeout);
+
+        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
+            authorizedClientManager);
+        oauth2Client.setDefaultClientRegistrationId("order-service");
 
         HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout, new JettyHttpClientLogEnhancer(true));
 
         return WebClient.builder() //
             .filter(lbFunction) //
+            .apply(oauth2Client.oauth2Configuration()) //
             .clientConnector(new JettyClientHttpConnector(httpClient)) //
             .build();
     }
