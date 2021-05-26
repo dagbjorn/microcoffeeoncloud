@@ -787,7 +787,7 @@ See [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/do
 
 Create a default cluster consisting of three nodes.
 
-    gcloud container clusters create microcoffeeoncloud-cluster
+    gcloud container clusters create microcoffeeoncloud-cluster --machine-type=n1-standard-1 --disk-size=10GB
 
 List all created VM instances.
 
@@ -831,13 +831,47 @@ Delete the firewall rules.
     gcloud compute firewall-rules delete microcoffee --quiet
     gcloud compute firewall-rules delete microcoffee-database --quiet
 
-#### Run Microcoffee
+#### Regenerate secret in authorization server
 
-From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+The authorization server, Keycloak, is automatically configured by importing a previously exported Microcoffee realm when the server starts. However, secrets are not exported and need to be regenerated.
+
+From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
 
     deploy-k8s-1-servers.bat gke
+
+When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
+
+*EXTERNAL-IP* is found by listing the created VM instances by running `gcloud compute disks list`.
+
+    set EXTERNAL_IP=EXTERNAL-IP
+
+    :: Get an admin token (only valid for 60s secs)
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
+    :: Regenerate the client secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+
+    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+
+Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
+
+    kubectl create secret generic order-client-secret --from-literal=client-secret=%CLIENT_SECRET%
+
+Verify the secret.
+
+    kubectl get secret order-client-secret -o json | jq -r ".data.\"client-secret\"" | base64 -i -d
+
+#### Run Microcoffee
+
+From the `microcoffeeoncloud` top-level folder, run the following batch files in turn:
+
     deploy-k8s-2-servers.bat gke
-    deploy-k8s-3-apps.bat gke
+    deploy-k8s-3-servers.bat gke
+    deploy-k8s-4-apps.bat gke
 
 Make sure that the pods are up and running before starting the next. (Check the log from each pod.)
 
@@ -845,9 +879,10 @@ Make sure that the pods are up and running before starting the next. (Check the 
 
 From the `microcoffeeoncloud-database` project, run:
 
-    mvn gplus:execute -Ddbhost=EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    set EXTERNAL_IP=EXTERNAL-IP
+    mvn gplus:execute -Ddbhost=%EXTERNAL_IP% -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-EXTERNAL_IP is found by listing the created VM instances by running `gcloud compute disks list`.
+*EXTERNAL-IP* is found by listing the created VM instances by running `gcloud compute disks list`.
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
@@ -871,6 +906,7 @@ order | 30082 | 30445
 creditrating | 30083 | 30446
 configserver | 30091 | 30454
 discovery | 30092 | 30455
+authserver | 30093 | 30456
 database | 30017 | 30017
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
@@ -959,13 +995,47 @@ The volume details may also be listed by running:
 
     aws ec2 describe-volumes --filters="Name=tag:app,Values=mongodb"
 
+#### Regenerate secret in authorization server
+
+The authorization server, Keycloak, is automatically configured by importing a previously exported Microcoffee realm when the server starts. However, secrets are not exported and need to be regenerated.
+
+From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
+
+    deploy-k8s-1-servers.bat gke
+
+When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
+
+*EXTERNAL_IP* is found by listing the created VM instances by running `gcloud compute disks list`.
+
+    set EXTERNAL_IP=EXTERNAL-IP
+
+    :: Get an admin token (only valid for 60s secs)
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
+    :: Regenerate the client secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+
+    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+
+Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
+
+    kubectl create secret generic order-client-secret --from-literal=client-secret=%CLIENT_SECRET%
+
+Verify the secret.
+
+    kubectl get secret order-client-secret -o json | jq -r ".data.\"client-secret\"" | base64 -i -d
+
 #### Run Microcoffee
 
-From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+From the `microcoffeeoncloud` top-level folder, run the following batch files in turn:
 
-    deploy-k8s-1-servers.bat eks
-    deploy-k8s-2-servers.bat eks
-    deploy-k8s-3-apps.bat eks
+    deploy-k8s-2-servers.bat gke
+    deploy-k8s-3-servers.bat gke
+    deploy-k8s-4-apps.bat gke
 
 Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
 STATUS = Running and READY = 1/1.)
@@ -1000,9 +1070,10 @@ And similar, for accessing the node ports of the Microcoffee services, run.
 
 From the `microcoffeeoncloud-database` project, run:
 
-    mvn gplus:execute -Ddbhost=EXTERNAL-IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    set EXTERNAL_IP=EXTERNAL-IP
+    mvn gplus:execute -Ddbhost=%EXTERNAL_IP% -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-EXTERNAL-IP is found by listing the created nodes by running `kubectl get nodes -o wide`. You can pick any node.
+*EXTERNAL-IP* is found by listing the created nodes by running `kubectl get nodes -o wide`. You can pick any node.
 
 To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
@@ -1014,26 +1085,24 @@ Navigate to:
 
     https://EXTERNAL-IP/coffee.html
 
-Run `kubectl get services gateway-lb` to get the EXTERNAL-IP (hostname) of the gateway load balancer service.
+Run `kubectl get services gateway-lb` to get the *EXTERNAL-IP* (hostname) of the gateway load balancer service.
 Example value for region eu-west-1: `aa6937282f5b811e9ae9e02466ed2eca-133344008.eu-west-1.elb.amazonaws.com`
 
 Alternatively, use the static node port:
 
     https://EXTERNAL-IP:30443/coffee.html
 
-However, this time run `kubectl get nodes -o wide` to find an EXTERNAL-IP (IP address). You can pick any node.
+However, this time run `kubectl get nodes -o wide` to find an *EXTERNAL-IP* (IP address). You can pick any node.
 
 #### <a name="eks-cleanup"></a>Clean-up of resources
 
 ##### Undeploy application
 
-From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+From the `microcoffeeoncloud` top-level folder, run the following batch file.
 
-    undeploy-k8s-1-apps.bat
-    undeploy-k8s-2-servers.bat
-    undeploy-k8s-3-servers.bat
+    undeploy-k8s-all.bat
 
-:point_right: It is important to explicitly delete any services that have an associated EXTERNAL-IP value. These services are
+:point_right: It is important to explicitly delete any services that have an associated *EXTERNAL-IP* value. These services are
 fronted by an Elastic Load Balancing load balancer, and you must delete them in Kubernetes to allow the load balancer and associated resources to be properly released. In Microcoffee, the `gateway` microservice offers a service of type LoadBalancer.
 
 ##### Delete cluster
@@ -1105,6 +1174,7 @@ order | 30082 | 30445 |
 creditrating | 30083 | 30446 |
 configserver | 30091 | 30454 |
 discovery | 30092 | 30455 |
+authserver | 30093 | 30456 |
 database | 30017 | 30017 |
 
 #### Overview of AWS dashboards
@@ -1228,13 +1298,47 @@ Then, create the disk specifying the above node resource group name in the `--re
 
 :point_right: The *id* must be specified in `microcoffeeoncloud-database/k8s-service.aks.yml` before deploying the application.
 
+#### Regenerate secret in authorization server
+
+The authorization server, Keycloak, is automatically configured by importing a previously exported Microcoffee realm when the server starts. However, secrets are not exported and need to be regenerated.
+
+From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
+
+    deploy-k8s-1-servers.bat gke
+
+When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
+
+*EXTERNAL-IP* is found by listing the created VM instances by running `gcloud compute disks list`.
+
+    set EXTERNAL_IP=EXTERNAL-IP
+
+    :: Get an admin token (only valid for 60s secs)
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
+    :: Regenerate the client secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+
+    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+
+Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
+
+    kubectl create secret generic order-client-secret --from-literal=client-secret=%CLIENT_SECRET%
+
+Verify the secret.
+
+    kubectl get secret order-client-secret -o json | jq -r ".data.\"client-secret\"" | base64 -i -d
+
 #### Run Microcoffee
 
-From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows) in turn.
+From the `microcoffeeoncloud` top-level folder, run the following batch files in turn:
 
-    deploy-k8s-1-servers.bat aks
-    deploy-k8s-2-servers.bat aks
-    deploy-k8s-3-apps.bat aks
+    deploy-k8s-2-servers.bat gke
+    deploy-k8s-3-servers.bat gke
+    deploy-k8s-4-apps.bat gke
 
 Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
 STATUS = Running and READY = 1/1.)
@@ -1243,9 +1347,10 @@ STATUS = Running and READY = 1/1.)
 
 From the `microcoffeeoncloud-database` project, run:
 
-    mvn gplus:execute -Ddbhost=EXTERNAL-IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    set EXTERNAL_IP=EXTERNAL-IP
+    mvn gplus:execute -Ddbhost=%EXTERNAL_IP% -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-EXTERNAL-IP is found by listing the database service by running `kubectl get service database`.
+*EXTERNAL-IP* is found by listing the database service by running `kubectl get service database`.
 
 To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
@@ -1257,7 +1362,7 @@ Navigate to:
 
     https://EXTERNAL-IP:8443/coffee.html
 
-Run `kubectl get services gateway` to get the EXTERNAL-IP of the gateway service.
+Run `kubectl get services gateway` to get the *EXTERNAL-IP* of the gateway service.
 
 #### Clean-up of resources
 
@@ -1284,6 +1389,7 @@ order | 8082 | 8445 |
 creditrating | 8083 | 8446 |
 configserver | 8091 | 8454 |
 discovery | 8092 | 8455 | NodePort => No external IP.
+authserver | 8093 | 8456 |
 database | 27017 | 27017 |
 
 Only LoadBalancer services are externally available.
@@ -1323,13 +1429,47 @@ To check the status of your local Kubernetes cluster, run:
 
     minikube status
 
+#### Regenerate secret in authorization server
+
+The authorization server, Keycloak, is automatically configured by importing a previously exported Microcoffee realm when the server starts. However, secrets are not exported and need to be regenerated.
+
+From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
+
+    deploy-k8s-1-servers.bat mkube
+
+When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
+
+*VM_IP* is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
+
+    set EXTERNAL_IP=VM_IP
+
+    :: Get an admin token (only valid for 60s secs)
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
+    :: Regenerate the client secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+
+    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+
+Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
+
+    kubectl create secret generic order-client-secret --from-literal=client-secret=%CLIENT_SECRET%
+
+Verify the secret.
+
+    kubectl get secret order-client-secret -o json | jq -r ".data.\"client-secret\"" | base64 -i -d
+
 #### Run Microcoffee
 
 From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
 
-    deploy-k8s-1-servers.bat mkube
     deploy-k8s-2-servers.bat mkube
-    deploy-k8s-3-apps.bat mkube
+    deploy-k8s-3-servers.bat mkube
+    deploy-k8s-4-apps.bat mkube
 
 Make sure that the pods are up and running before starting the next. (Check the log from each pod. Use `kubectl get pods` to
 find the PODNAME.)
@@ -1353,7 +1493,7 @@ From the `microcoffeeoncloud-database` project, run:
 
     mvn gplus:execute -Ddbhost=VM_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-VM_IP is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
+*VM_IP* is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
@@ -1377,6 +1517,7 @@ order | 30082 | 30445
 creditrating | 30083 | 30446
 configserver | 30091 | 30454
 discovery | 30092 | 30455
+authserver | 30093 | 30456
 database | 27017 | 27017
 
 ### <a name="api-load-testing-gatling"></a>API load testing with Gatling

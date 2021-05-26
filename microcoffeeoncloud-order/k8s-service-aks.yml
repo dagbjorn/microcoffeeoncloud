@@ -39,6 +39,12 @@ spec:
           value: "devgke"
         - name: SPRING_CLOUD_CONFIG_URI
           value: "https://configserver.default:8454"
+        - name: ORDER_CLIENT_SECRET
+          # Assumes: kubectl create secret generic order-client-secret --from-literal=client-secret=******
+          valueFrom:
+            secretKeyRef:
+              name: order-client-secret
+              key: client-secret
 ---
 apiVersion: v1
 kind: Service
