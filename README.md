@@ -1410,8 +1410,8 @@ for guidelines.
    * KUBECONFIG: The Kubernetes config file. Example value (on Windows): `D:\var\kubectl\config`
 
 :bulb: Recommended versions:
-* minikube v1.0.0
-* kubectl v1.14.0
+* minikube v1.20.0
+* kubectl v1.21.1
 
 #### Start Minikube
 
