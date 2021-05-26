@@ -47,6 +47,7 @@ Date | Change
   - [Microcoffee on Microsoft Azure Kubernetes Service (AKS)](#microcoffee-on-aks)
   - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
+  - [Keycloak - configuration examples](#keycloak-config)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -1587,3 +1588,87 @@ The file name of the HTML test report is displayed upon termination of a load te
 browser is shown below.
 
 ![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report.png "Snapshot of Gatling Test Report")
+
+### <a name="keycloak-config"></a>Keycloak - configuration examples
+
+#### Realm
+
+##### Create a new realm
+
+###### By adding a new one
+
+Hover current realm > Add realm
+- Name: microcoffee
+- Enabled: ON
+- Create
+- Display name: Microcoffee
+- Save
+
+###### By importing a realm file
+
+Hoover current realm > Add realm
+- Select file: microcoffeeoncloud-authserver\src\main\keycloak\microcoffee-realm.json
+- Create
+
+##### Export a realm
+
+Microcoffee realm > Export
+- Export groups and roles: ON
+- Export clients: ON
+- Export
+- File name: microcoffeeoncloud-authserver\src\main\keyclock\microcoffee-realm.json
+
+#### Configuration of credit credentials grant
+
+##### Create OAuth2 client
+
+Microcoffee realm > Clients > Create
+- Client ID: order-service
+- Client Protocol: openid-connect
+- Save
+
+##### Enable client credentials grant
+
+Microcoffee realm > Clients > order-service > Settings
+- Access Type: confidential
+- Standard Flow Enabled: OFF
+- Direct Access Grants Enabled: OFF
+- Service Accounts Enabled: ON
+- Save
+
+##### Increase access token life time
+
+Microcoffee realm > Realm Settings > Tokens
+- Access Token Lifespan: 60 min
+- Save
+
+#####  Create creditrating scope
+
+Microcoffee realm > Client Scopes > Create
+- Name: creditrating
+- Protocol: openid-connect
+- Display on Consent Screen: OFF
+- Include in Token Scope: ON
+- Save
+
+##### Add creditrating scope to order-service client
+
+Microcoffee realm > Clients > order-service > Client Scopes > Setup
+- Default Client Scopes: Add creditrating
+
+##### Add audience mapping to CreditRating API in order-service client
+
+Microcoffee realm > Clients > order-service > Mappers > Create
+- Name: CreditRating API
+- Mapper Type: Audience
+- Included Custom Audience: creditrating
+- Add to access token: ON
+- Save
+
+##### Get client_id and client_secret
+
+Microcoffee realm > Clients > order-service > Settings
+- Client ID: <Copy ID>
+Microcoffee realm > Clients > order-service > Credentials
+- Client Authenticator: Client id and Secret
+- Secret: <Copy secret>
