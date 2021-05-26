@@ -3,7 +3,7 @@
 setlocal
 
 D:
-cd \bin\keycloak-12.0.4
+cd \bin\keycloak-13.0.1
 bin\standalone.bat -Djboss.http.port=8093 -Djboss.https.port=8456
 
 endlocal

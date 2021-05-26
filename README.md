@@ -1665,10 +1665,14 @@ Microcoffee realm > Clients > order-service > Mappers > Create
 - Add to access token: ON
 - Save
 
-##### Get client_id and client_secret
+##### Get client_id and client_secret of order-service client
 
 Microcoffee realm > Clients > order-service > Settings
 - Client ID: <Copy ID>
 Microcoffee realm > Clients > order-service > Credentials
 - Client Authenticator: Client id and Secret
 - Secret: <Copy secret>
+
+##### Regenerate secret of order-service client
+
+Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
