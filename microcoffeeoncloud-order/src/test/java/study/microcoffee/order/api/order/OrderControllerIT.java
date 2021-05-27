@@ -57,7 +57,7 @@ import study.microcoffee.order.domain.DrinkType;
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class OrderControllerIT {
+class OrderControllerIT {
 
     private static final int WIREMOCK_PORT = 9999;
 
@@ -88,7 +88,7 @@ public class OrderControllerIT {
     private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
 
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    static void beforeAll() throws Exception {
         wireMockServer.start();
 
         // Client-side configuration (default port is 8080)
@@ -99,22 +99,22 @@ public class OrderControllerIT {
     }
 
     @AfterAll
-    public static void afterAll() {
+    static void afterAll() {
         wireMockServer.stop();
     }
 
     @BeforeEach
-    public void beforeEach() throws Exception {
+    void beforeEach() throws Exception {
         stubWireMockTokenResponse();
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         wireMockServer.resetAll();
     }
 
     @Test
-    public void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
+    void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
         // WireMock stubbing of CreditRating API
         final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
 
@@ -154,7 +154,7 @@ public class OrderControllerIT {
 
     @Test
     @EnabledIf("isBasicConsumer")
-    public void saveOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+    void saveOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -166,7 +166,7 @@ public class OrderControllerIT {
 
     @Test
     @EnabledIf("isResilience4jConsumer")
-    public void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
+    void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
         float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
@@ -180,7 +180,7 @@ public class OrderControllerIT {
     }
 
     @Test
-    public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
+    void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
         ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,

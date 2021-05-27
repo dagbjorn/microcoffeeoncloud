@@ -25,7 +25,7 @@ import study.microcoffee.location.repository.LocationRepository;
 @WebMvcTest(LocationController.class)
 @TestPropertySource("/application-test.properties")
 @Import(HttpLoggingFilterTestConfig.class)
-public class LocationControllerTest {
+class LocationControllerTest {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
@@ -36,7 +36,7 @@ public class LocationControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void getNearestCoffeeShopWhenFoundShouldReturnLocation() throws Exception {
+    void getNearestCoffeeShopWhenFoundShouldReturnLocation() throws Exception {
         final String expectedContent = "{ location: 'Ålesund' }";
 
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong())).willReturn(expectedContent);
@@ -49,14 +49,14 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() throws Exception {
+    void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() throws Exception {
         mockMvc.perform(get(SERVICE_PATH, 4, 5, 6) //
             .accept(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isNoContent());
     }
 
     @Test
-    public void getNearestCoffeeShopWhenParameterTypeMismatchShouldReturnBadRequest() throws Exception {
+    void getNearestCoffeeShopWhenParameterTypeMismatchShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get(SERVICE_PATH, 4, 5, "6x") //
             .accept(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isBadRequest()) //
@@ -64,7 +64,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void getNearestCoffeeShopWhenRepositoryErrorShouldReturnInternalServerError() throws Exception {
+    void getNearestCoffeeShopWhenRepositoryErrorShouldReturnInternalServerError() throws Exception {
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong()))
             .willThrow(new RuntimeException(("Mocked exception")));
 
@@ -75,7 +75,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void getNearestCoffeeShopWhenRepositoryErrorAndAcceptAllContentTypesShouldReturnInternalServerError() throws Exception {
+    void getNearestCoffeeShopWhenRepositoryErrorAndAcceptAllContentTypesShouldReturnInternalServerError() throws Exception {
         given(locationRepositoryMock.findNearestCoffeeShop(anyDouble(), anyDouble(), anyLong()))
             .willThrow(new RuntimeException(("Mocked exception")));
 

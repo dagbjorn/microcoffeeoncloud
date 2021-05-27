@@ -44,7 +44,7 @@ import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CreditRatingControllerIT {
+class CreditRatingControllerIT {
 
     private static final int WIREMOCK_PORT = 9999;
 
@@ -66,7 +66,7 @@ public class CreditRatingControllerIT {
     private TestRestTemplate restTemplate;
 
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    static void beforeAll() throws Exception {
         wireMockServer.start();
 
         // Client-side configuration (default port is 8080)
@@ -77,22 +77,22 @@ public class CreditRatingControllerIT {
     }
 
     @AfterAll
-    public static void afterAll() {
+    static void afterAll() {
         wireMockServer.stop();
     }
 
     @BeforeEach
-    public void beforeEach() throws Exception {
+    void beforeEach() throws Exception {
         stubWireMockJwksResponse();
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         wireMockServer.resetAll();
     }
 
     @Test
-    public void getCreditRatingShouldReturnRating() throws Exception {
+    void getCreditRatingShouldReturnRating() throws Exception {
         String accessToken = TestTokens.Access.custom() //
             .withAudience("creditrating") //
             .withClaim("scope", "creditrating") //
@@ -108,7 +108,7 @@ public class CreditRatingControllerIT {
     }
 
     @Test
-    public void getCreditRatingWhenMissingAudienceShouldReturn401() throws Exception {
+    void getCreditRatingWhenMissingAudienceShouldReturn401() throws Exception {
         String accessToken = TestTokens.Access.custom() //
             .withClaim("scope", "creditrating") //
             .sign(TestTokens.Access.algorithm());
@@ -122,7 +122,7 @@ public class CreditRatingControllerIT {
     }
 
     @Test
-    public void getCreditRatingWhenMissingScopeShouldReturn403() throws Exception {
+    void getCreditRatingWhenMissingScopeShouldReturn403() throws Exception {
         String accessToken = TestTokens.Access.custom() //
             .withAudience("creditrating") //
             .sign(TestTokens.Access.algorithm());
@@ -136,7 +136,7 @@ public class CreditRatingControllerIT {
     }
 
     @Test
-    public void getCreditRatingWhenExpiredTokenShouldReturn401() throws Exception {
+    void getCreditRatingWhenExpiredTokenShouldReturn401() throws Exception {
         HttpEntity<Void> entity = createHttpEntity(TestTokens.Access.expired());
 
         ResponseEntity<CreditRating> response = restTemplate.exchange(SERVICE_PATH, HttpMethod.GET, entity, CreditRating.class,

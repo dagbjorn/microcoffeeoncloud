@@ -19,7 +19,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-public class EmbeddedMongoLocationRepositoryIT {
+class EmbeddedMongoLocationRepositoryIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -28,17 +28,17 @@ public class EmbeddedMongoLocationRepositoryIT {
     private LocationRepository locationRepository;
 
     @BeforeEach
-    public void init() throws Exception {
+    void init() throws Exception {
         MongoDBUtils.loadCoffeeshopCollection(mongoTemplate, "testdata/coffeeshop.json");
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         MongoDBUtils.dropCoffeeshopLocation(mongoTemplate);
     }
 
     @Test
-    public void findNearestCoffeeShopShouldReturnLocation() {
+    void findNearestCoffeeShopShouldReturnLocation() {
         Object coffeeShop = locationRepository.findNearestCoffeeShop(59.969048, 10.774445, 2500);
 
         System.out.println(coffeeShop);
@@ -47,7 +47,7 @@ public class EmbeddedMongoLocationRepositoryIT {
     }
 
     @Test
-    public void findNearestCoffeeShopWhenNotFoundShouldReturnNull() {
+    void findNearestCoffeeShopWhenNotFoundShouldReturnNull() {
         Object coffeeShop = locationRepository.findNearestCoffeeShop(59.969048, 10.774445, 10); // within 10 meters
 
         System.out.println(coffeeShop);

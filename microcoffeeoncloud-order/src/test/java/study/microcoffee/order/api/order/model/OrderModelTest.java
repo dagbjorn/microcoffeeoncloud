@@ -11,12 +11,12 @@ import study.microcoffee.order.domain.Order;
 /**
  * Unit tests of {@link OrderModel} mapping.
  */
-public class OrderModelTest {
+class OrderModelTest {
 
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
-    public void orderModelShouldMapToOrderEntity() {
+    void orderModelShouldMapToOrderEntity() {
         OrderModel orderModel = OrderModel.builder() //
             .id("1234567890abcdf") //
             .type(new DrinkType("Latte", "Coffee")) //
@@ -37,7 +37,7 @@ public class OrderModelTest {
     }
 
     @Test
-    public void orderEntityShouldMapToOrderModel() {
+    void orderEntityShouldMapToOrderModel() {
         Order order = Order.builder() //
             .id("1234567890abcdf") //
             .type(new DrinkType("Latte", "Coffee")) //

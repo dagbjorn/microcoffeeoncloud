@@ -13,20 +13,20 @@ import org.springframework.test.web.servlet.MockMvc;
  * Unit tests of {@link HealthCheckController}.
  */
 @WebMvcTest(HealthCheckController.class)
-public class HealthCheckControllerTest {
+class HealthCheckControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void isReadyShouldSucceed() throws Exception {
+    void isReadyShouldSucceed() throws Exception {
         mockMvc.perform(get("/internal/isready") //
             .accept(MediaType.ALL_VALUE)) //
             .andExpect(status().isOk());
     }
 
     @Test
-    public void isAliveShouldSucceed() throws Exception {
+    void isAliveShouldSucceed() throws Exception {
         mockMvc.perform(get("/internal/isalive") //
             .accept(MediaType.ALL_VALUE)) //
             .andExpect(status().isOk());

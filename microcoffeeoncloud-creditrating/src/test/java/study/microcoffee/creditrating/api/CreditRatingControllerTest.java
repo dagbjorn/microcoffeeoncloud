@@ -31,7 +31,7 @@ import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, SecurityTestConfig.class })
-public class CreditRatingControllerTest {
+class CreditRatingControllerTest {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/creditrating/{customerId}";
 
@@ -42,7 +42,7 @@ public class CreditRatingControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void getCreditRatingShouldReturnRating() throws Exception {
+    void getCreditRatingShouldReturnRating() throws Exception {
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(70));
 
         mockMvc.perform(get(SERVICE_PATH, 123) //
@@ -55,7 +55,7 @@ public class CreditRatingControllerTest {
     }
 
     @Test
-    public void getCreditRatingWhenNoCreditratingScopeShouldReturn403() throws Exception {
+    void getCreditRatingWhenNoCreditratingScopeShouldReturn403() throws Exception {
         mockMvc.perform(get(SERVICE_PATH, 123) //
             .accept(MediaType.APPLICATION_JSON_VALUE) //
             .with(jwt())) //

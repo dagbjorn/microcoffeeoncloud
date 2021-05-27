@@ -27,7 +27,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 /**
  * Unit tests of {@link Resilience4JWebClientCreditRatingConsumer}.
  */
-public class Resilience4JWebClientCreditRatingConsumerTest {
+class Resilience4JWebClientCreditRatingConsumerTest {
 
     private MockWebServer server;
 
@@ -38,7 +38,7 @@ public class Resilience4JWebClientCreditRatingConsumerTest {
     private CreditRatingConsumer creditRatingConsumer;
 
     @BeforeEach
-    public void startServer() {
+    void startServer() {
         server = new MockWebServer();
 
         webClient = WebClient.builder() //
@@ -54,7 +54,7 @@ public class Resilience4JWebClientCreditRatingConsumerTest {
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
+    void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
         final String customerId = "john@company.com";
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
 
@@ -74,7 +74,7 @@ public class Resilience4JWebClientCreditRatingConsumerTest {
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
         final String customerId = "john@company.com";
 
         server.enqueue(new MockResponse() //
@@ -86,7 +86,7 @@ public class Resilience4JWebClientCreditRatingConsumerTest {
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() throws Exception {
         final String customerId = "john@company.com";
 
         server.enqueue(new MockResponse() //

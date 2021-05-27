@@ -7,12 +7,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 /**
  * Unit tests of {@link HealthCheckController}.
  */
-public class HealthCheckControllerTest {
+class HealthCheckControllerTest {
 
     private WebTestClient client = WebTestClient.bindToController(new HealthCheckController()).build();
 
     @Test
-    public void isReadyShouldSucceed() throws Exception {
+    void isReadyShouldSucceed() throws Exception {
         client.get().uri("/internal/isready") //
             .accept(MediaType.ALL) //
             .exchange() //
@@ -20,7 +20,7 @@ public class HealthCheckControllerTest {
     }
 
     @Test
-    public void isAliveShouldSucceed() throws Exception {
+    void isAliveShouldSucceed() throws Exception {
         client.get().uri("/internal/isalive") //
             .accept(MediaType.ALL) //
             .exchange() //

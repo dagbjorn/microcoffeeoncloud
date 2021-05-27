@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests of {@link HttpClientFactory}.
  */
-public class HttpClientFactoryTest {
+class HttpClientFactoryTest {
 
     @Test
-    public void createDefaultClientShouldCreateHttpClient() {
+    void createDefaultClientShouldCreateHttpClient() {
         CloseableHttpClient httpClient = HttpClientFactory.createDefaultClient(-1);
 
         assertThat(httpClient).isNotNull();
     }
 
     @Test
-    public void createTrustAnyHostnameClientShouldCreateHttpClient() {
+    void createTrustAnyHostnameClientShouldCreateHttpClient() {
         CloseableHttpClient httpClient = HttpClientFactory.createTrustAnyHostnameClient(60);
 
         assertThat(httpClient).isNotNull();

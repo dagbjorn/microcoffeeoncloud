@@ -9,9 +9,9 @@ import org.springframework.test.context.ActiveProfiles;
  */
 @SpringBootTest
 @ActiveProfiles("devlocal")
-public class ApplicationTest {
+class ApplicationTest {
 
     @Test
-    public void applicationContextShouldLoad() {
+    void applicationContextShouldLoad() { // NOSONAR Allow no asserts
     }
 }

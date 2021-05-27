@@ -26,7 +26,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
-public class EmbeddedMongoMenuRepositoryIT {
+class EmbeddedMongoMenuRepositoryIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -35,7 +35,7 @@ public class EmbeddedMongoMenuRepositoryIT {
     private MenuRepository menuRepository;
 
     @BeforeEach
-    public void init() {
+    void init() {
         MongoDatabase db = mongoTemplate.getDb();
 
         MongoCollection<Document> collection = db.getCollection("drinktypes");
@@ -52,14 +52,14 @@ public class EmbeddedMongoMenuRepositoryIT {
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         mongoTemplate.getCollection("drinktypes").drop();
         mongoTemplate.getCollection("drinksizes").drop();
         mongoTemplate.getCollection("drinkoptions").drop();
     }
 
     @Test
-    public void getCoffeeMenuShouldReturnCoffeeMenu() {
+    void getCoffeeMenuShouldReturnCoffeeMenu() {
         Object coffeeMenu = menuRepository.getCoffeeMenu();
 
         System.out.println(coffeeMenu);

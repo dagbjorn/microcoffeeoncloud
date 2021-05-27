@@ -31,7 +31,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")
 @Profile("itest")
-public class MenuControllerWebClientIT {
+class MenuControllerWebClientIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
@@ -43,7 +43,7 @@ public class MenuControllerWebClientIT {
     private WebTestClient webTestClient;
 
     @BeforeEach
-    public void init() {
+    void init() {
         MongoDatabase db = mongoTemplate.getDb();
 
         MongoCollection<Document> collection = db.getCollection("drinktypes");
@@ -60,14 +60,14 @@ public class MenuControllerWebClientIT {
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         mongoTemplate.getCollection("drinktypes").drop();
         mongoTemplate.getCollection("drinksizes").drop();
         mongoTemplate.getCollection("drinkoptions").drop();
     }
 
     @Test
-    public void getCoffeeMenuShouldReturnCoffeeMenu() {
+    void getCoffeeMenuShouldReturnCoffeeMenu() {
         EntityExchangeResult<String> response = webTestClient.get() //
             .uri(SERVICE_PATH) //
             .accept(MediaType.APPLICATION_JSON) //

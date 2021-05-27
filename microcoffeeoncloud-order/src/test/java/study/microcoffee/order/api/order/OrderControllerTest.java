@@ -2,7 +2,6 @@ package study.microcoffee.order.api.order;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,7 +42,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @WebMvcTest(OrderController.class)
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class })
-public class OrderControllerTest {
+class OrderControllerTest {
 
     private static final String POST_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order";
     private static final String GET_SERVICE_PATH = "/api/coffeeshop/{coffeeShopId}/order/{orderId}";
@@ -66,7 +65,7 @@ public class OrderControllerTest {
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
-    public void saveOrderShouldReturnCreated() throws Exception {
+    void saveOrderShouldReturnCreated() throws Exception {
         OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
@@ -93,7 +92,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
+    void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
         OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
@@ -111,7 +110,7 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void getOrderShouldReturnOrder() throws Exception {
+    void getOrderShouldReturnOrder() throws Exception {
         Order expectedOrder = Order.builder() //
             .id("1234567890abcdef") //
             .type(new DrinkType("Americano", "Coffee")) //
@@ -120,7 +119,7 @@ public class OrderControllerTest {
             .selectedOptions(new String[] { "soy milk" }) //
             .build();
 
-        given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(Optional.of(expectedOrder));
+        given(orderRepositoryMock.findById(expectedOrder.getId())).willReturn(Optional.of(expectedOrder));
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, expectedOrder.getId()) //
             .accept(MediaType.APPLICATION_JSON)) //
@@ -130,10 +129,10 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
+    void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        given(orderRepositoryMock.findById(eq(orderId))).willReturn(Optional.empty());
+        given(orderRepositoryMock.findById(orderId)).willReturn(Optional.empty());
 
         mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
             .accept(MediaType.APPLICATION_JSON)) //

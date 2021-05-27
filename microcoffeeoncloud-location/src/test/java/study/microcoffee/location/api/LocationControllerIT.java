@@ -25,7 +25,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class LocationControllerIT {
+class LocationControllerIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
@@ -36,17 +36,17 @@ public class LocationControllerIT {
     private TestRestTemplate restTemplate;
 
     @BeforeEach
-    public void init() throws Exception {
+    void init() throws Exception {
         MongoDBUtils.loadCoffeeshopCollection(mongoTemplate, "testdata/coffeeshop.json");
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         MongoDBUtils.dropCoffeeshopLocation(mongoTemplate);
     }
 
     @Test
-    public void getNearestCoffeeShopWhenFoundShouldReturnLocation() {
+    void getNearestCoffeeShopWhenFoundShouldReturnLocation() {
         ResponseEntity<String> response = restTemplate.getForEntity(SERVICE_PATH, String.class, 59.969048, 10.774445, 2500);
 
         System.out.println(response);
@@ -57,7 +57,7 @@ public class LocationControllerIT {
     }
 
     @Test
-    public void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() {
+    void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() {
         ResponseEntity<String> response = restTemplate.getForEntity(SERVICE_PATH, String.class, 59.969048, 10.774445, 5);
 
         System.out.println(response);

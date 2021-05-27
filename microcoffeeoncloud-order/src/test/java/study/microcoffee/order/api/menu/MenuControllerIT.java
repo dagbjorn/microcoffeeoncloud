@@ -32,7 +32,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")
 @Profile("itest")
-public class MenuControllerIT {
+class MenuControllerIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
@@ -43,7 +43,7 @@ public class MenuControllerIT {
     private TestRestTemplate restTemplate;
 
     @BeforeEach
-    public void init() {
+    void init() {
         MongoDatabase db = mongoTemplate.getDb();
 
         MongoCollection<Document> collection = db.getCollection("drinktypes");
@@ -60,14 +60,14 @@ public class MenuControllerIT {
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         mongoTemplate.getCollection("drinktypes").drop();
         mongoTemplate.getCollection("drinksizes").drop();
         mongoTemplate.getCollection("drinkoptions").drop();
     }
 
     @Test
-    public void getCoffeeMenuShouldReturnCoffeeMenu() {
+    void getCoffeeMenuShouldReturnCoffeeMenu() {
         ResponseEntity<String> response = restTemplate.getForEntity(SERVICE_PATH, String.class);
 
         System.out.println(response);

@@ -28,7 +28,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 /**
  * Unit tests of {@link BasicCreditRatingConsumer}.
  */
-public class BasicCreditRatingConsumerTest {
+class BasicCreditRatingConsumerTest {
 
     private static final String CREDITRATING_SERVICE_URL = "http://dummy";
 
@@ -41,14 +41,14 @@ public class BasicCreditRatingConsumerTest {
     private CreditRatingConsumer creditRatingConsumer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
         creditRatingConsumer = new BasicCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
+    void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
         final String customerId = "john@company.com";
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
 
@@ -62,7 +62,7 @@ public class BasicCreditRatingConsumerTest {
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
             final String customerId = "john@company.com";
 
             server.expect(once(), requestTo(buildServiceUrl(customerId))) //

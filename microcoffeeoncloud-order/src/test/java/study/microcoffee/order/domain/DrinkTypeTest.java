@@ -7,29 +7,29 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests of {@link DrinkType}.
  */
-public class DrinkTypeTest {
+class DrinkTypeTest {
 
     @Test
-    public void equalsWhenDrinkTypeIsEqualShouldReturnTrue() {
+    void equalsWhenDrinkTypeIsEqualShouldReturnTrue() {
         DrinkType drink1 = new DrinkType("Americano", "Coffee");
         DrinkType drink2 = new DrinkType("Americano", "Coffee");
 
-        assertThat(drink1.equals(drink2)).isTrue();
+        assertThat(drink1).isEqualTo(drink2);
     }
 
     @Test
-    public void equalsWhenDrinkTypeIsNotEqualShouldReturnFalse() {
+    void equalsWhenDrinkTypeIsNotEqualShouldReturnFalse() {
         DrinkType drink1 = new DrinkType("Americano", "Coffee");
         DrinkType drink2 = new DrinkType("Latte", "Coffee");
 
-        assertThat(drink1.equals(drink2)).isFalse();
+        assertThat(drink1).isNotEqualTo(drink2);
     }
 
     @Test
-    public void equalsWhenDrinkFamilyIsNotEqualShouldReturnFalse() {
+    void equalsWhenDrinkFamilyIsNotEqualShouldReturnFalse() {
         DrinkType drink1 = new DrinkType("Regular", "Coffee");
         DrinkType drink2 = new DrinkType("Regular", "Tea");
 
-        assertThat(drink1.equals(drink2)).isFalse();
+        assertThat(drink1).isNotEqualTo(drink2);
     }
 }

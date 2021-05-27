@@ -28,7 +28,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 /**
  * Unit tests of {@link Resilience4JCreditRatingConsumer}.
  */
-public class Resilience4JCreditRatingConsumerTest {
+class Resilience4JCreditRatingConsumerTest {
 
     private static final String CREDITRATING_SERVICE_URL = "http://dummy";
 
@@ -41,14 +41,14 @@ public class Resilience4JCreditRatingConsumerTest {
     private CreditRatingConsumer creditRatingConsumer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
         creditRatingConsumer = new Resilience4JCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
+    void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
         final String customerId = "john@company.com";
         final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
 
@@ -62,7 +62,7 @@ public class Resilience4JCreditRatingConsumerTest {
     }
 
     @Test
-    public void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
             final String customerId = "john@company.com";
 
             server.expect(once(), requestTo(buildServiceUrl(customerId))) //

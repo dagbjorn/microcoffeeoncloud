@@ -19,20 +19,20 @@ import study.microcoffee.order.SecurityTestConfig;
 @WebMvcTest(HealthCheckController.class)
 @TestPropertySource("/application-test.properties")
 @Import(SecurityTestConfig.class)
-public class HealthCheckControllerTest {
+class HealthCheckControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void isReadyShouldSucceed() throws Exception {
+    void isReadyShouldSucceed() throws Exception {
         mockMvc.perform(get("/internal/isready") //
             .accept(MediaType.ALL_VALUE)) //
             .andExpect(status().isOk());
     }
 
     @Test
-    public void isAliveShouldSucceed() throws Exception {
+    void isAliveShouldSucceed() throws Exception {
         mockMvc.perform(get("/internal/isalive") //
             .accept(MediaType.ALL_VALUE)) //
             .andExpect(status().isOk());

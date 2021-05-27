@@ -11,10 +11,10 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @Import(SecurityTestConfig.class)
-public class ApplicationTest {
+class ApplicationTest {
 
     @Test
-    public void applicationContextShouldLoad() {
+    void applicationContextShouldLoad() { // NOSONAR Allow no asserts
 
     }
 }

@@ -24,7 +24,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 @TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
 @ActiveProfiles("itest")
 @Profile("itest")
-public class LocationControllerWebClientIT {
+class LocationControllerWebClientIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
 
@@ -36,17 +36,17 @@ public class LocationControllerWebClientIT {
     private WebTestClient webTestClient;
 
     @BeforeEach
-    public void init() throws Exception {
+    void init() throws Exception {
         MongoDBUtils.loadCoffeeshopCollection(mongoTemplate, "testdata/coffeeshop.json");
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         MongoDBUtils.dropCoffeeshopLocation(mongoTemplate);
     }
 
     @Test
-    public void getNearestCoffeeShopWhenFoundShouldReturnLocation() {
+    void getNearestCoffeeShopWhenFoundShouldReturnLocation() {
         EntityExchangeResult<String> response = webTestClient.get() //
             .uri(SERVICE_PATH, 59.969048, 10.774445, 2500) //
             .accept(MediaType.APPLICATION_JSON) //
@@ -63,7 +63,7 @@ public class LocationControllerWebClientIT {
     }
 
     @Test
-    public void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() {
+    void getNearestCoffeeShopWhenNotFoundShouldReturnNoContent() {
         webTestClient.get() //
             .uri(SERVICE_PATH, 59.969048, 10.774445, 5) //
             .accept(MediaType.APPLICATION_JSON) //

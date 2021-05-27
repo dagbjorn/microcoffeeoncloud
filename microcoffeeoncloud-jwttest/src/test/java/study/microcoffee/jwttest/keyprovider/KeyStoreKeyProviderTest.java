@@ -17,12 +17,12 @@ import study.microcoffee.jwttest.exception.KeyProviderException;
 /**
  * Unit tests of {@link KeyStoreKeyProvider}.
  */
-public class KeyStoreKeyProviderTest {
+class KeyStoreKeyProviderTest {
 
     private KeyStoreConfig keyStoreConfig;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         keyStoreConfig = new KeyStoreConfig();
         keyStoreConfig.setKeyStoreName(TestTokens.KEY_STORE_NAME);
         keyStoreConfig.setKeyStorePassword(TestTokens.KEY_STORE_PASSWORD);
@@ -32,7 +32,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPublicKeyByIdShouldReturnPublicKey() {
+    void getPublicKeyByIdShouldReturnPublicKey() {
         RSAKeyProvider rsaKeyProvider = new KeyStoreKeyProvider(keyStoreConfig);
 
         RSAPublicKey publicKey = rsaKeyProvider.getPublicKeyById(null);
@@ -43,7 +43,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPublicKeyByIdWhenInvalidKeyStoreNameShouldThrowKeyProviderException() {
+    void getPublicKeyByIdWhenInvalidKeyStoreNameShouldThrowKeyProviderException() {
         keyStoreConfig.setKeyStoreName("nosuchkeystore.jks");
 
         Assertions.assertThrows(KeyProviderException.class, () -> {
@@ -52,7 +52,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPublicKeyByIdWhenInvalidKeyStorePasswordShouldThrowKeyProviderException() {
+    void getPublicKeyByIdWhenInvalidKeyStorePasswordShouldThrowKeyProviderException() {
         keyStoreConfig.setKeyStorePassword("nosuchpassword");
 
         Assertions.assertThrows(KeyProviderException.class, () -> {
@@ -61,7 +61,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPrivateKeyShouldReturnPrivateKey() {
+    void getPrivateKeyShouldReturnPrivateKey() {
         RSAKeyProvider rsaKeyProvider = new KeyStoreKeyProvider(keyStoreConfig);
 
         RSAPrivateKey privateKey = rsaKeyProvider.getPrivateKey();
@@ -71,7 +71,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPrivateKeyShouldWhenInvalidKeyAliasShouldThrowKeyProviderException() {
+    void getPrivateKeyShouldWhenInvalidKeyAliasShouldThrowKeyProviderException() {
         keyStoreConfig.setKeyAlias("nosuchkeyalias");
 
         Assertions.assertThrows(KeyProviderException.class, () -> {
@@ -80,7 +80,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPrivateKeyShouldWhenInvalidKeyPasswordShouldThrowKeyProviderException() {
+    void getPrivateKeyShouldWhenInvalidKeyPasswordShouldThrowKeyProviderException() {
         keyStoreConfig.setKeyPassword("nosuchpassword");
 
         Assertions.assertThrows(KeyProviderException.class, () -> {
@@ -89,7 +89,7 @@ public class KeyStoreKeyProviderTest {
     }
 
     @Test
-    public void getPrivateKeyIdShouldReturnKeyId() {
+    void getPrivateKeyIdShouldReturnKeyId() {
         RSAKeyProvider rsaKeyProvider = new KeyStoreKeyProvider(keyStoreConfig);
 
         String keyId = rsaKeyProvider.getPrivateKeyId();

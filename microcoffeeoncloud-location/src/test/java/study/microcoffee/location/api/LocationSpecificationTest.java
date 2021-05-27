@@ -31,7 +31,7 @@ import kotlin.jvm.functions.Function1;
  */
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-public class LocationSpecificationTest {
+class LocationSpecificationTest {
 
     private static final String API_SPEC_FILE = "static/swagger/location-apispec-3.0.yml";
 
@@ -39,7 +39,7 @@ public class LocationSpecificationTest {
     private ApplicationContext applicationContext;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         /*
          * Make sure that the test is run using the same file encoding as used by the API spec file. See maven-surefire-plugin
          * config in pom.
@@ -48,7 +48,7 @@ public class LocationSpecificationTest {
     }
 
     @Test
-    public void implementationShouldMatchApiSpecification() throws Exception {
+    void implementationShouldMatchApiSpecification() throws Exception { // NOSONAR Allow no asserts
         URL apiSpec = getClass().getClassLoader().getResource(API_SPEC_FILE);
         OpenApiConverter openApiConverter = new OpenApiConverter(Paths.get(apiSpec.toURI()));
         SpringConverter springConverter = new SpringConverter(applicationContext);

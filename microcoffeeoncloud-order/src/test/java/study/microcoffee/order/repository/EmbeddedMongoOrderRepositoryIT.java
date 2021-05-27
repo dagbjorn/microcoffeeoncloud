@@ -23,13 +23,13 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 @DataMongoTest
 @TestPropertySource("/application-test.properties")
 @Import(DiscoveryTestConfig.class)
-public class EmbeddedMongoOrderRepositoryIT {
+class EmbeddedMongoOrderRepositoryIT {
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Test
-    public void saveOrderWhenReadBackShouldReturnSavedOrder() {
+    void saveOrderWhenReadBackShouldReturnSavedOrder() {
         Order order = Order.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
@@ -52,7 +52,7 @@ public class EmbeddedMongoOrderRepositoryIT {
     }
 
     @Test
-    public void findByIdWhenNoOrderShouldReturnNull() {
+    void findByIdWhenNoOrderShouldReturnNull() {
         Optional<Order> order = orderRepository.findById("123");
 
         System.err.println(order);

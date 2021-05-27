@@ -51,7 +51,7 @@ public class BasicWebClientCreditRatingConsumer implements CreditRatingConsumer 
                 throw new ServiceCallFailedException(e);
             }).block();
 
-        logger.debug("GET response from {}, response={}", url, response.getBody());
+        logger.debug("GET response from {}, response={}", url, response.getBody()); // NOSONAR Allow NPE
 
         if (response.getStatusCode().equals(HttpStatus.OK)) {
             return response.getBody().getRating(); // NOSONAR Allow NPE

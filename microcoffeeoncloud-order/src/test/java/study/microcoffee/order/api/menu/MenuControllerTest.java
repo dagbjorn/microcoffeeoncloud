@@ -25,7 +25,7 @@ import study.microcoffee.order.repository.MenuRepository;
 @WebMvcTest(MenuController.class)
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class })
-public class MenuControllerTest {
+class MenuControllerTest {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/menu";
 
@@ -36,7 +36,7 @@ public class MenuControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void getCoffeeMenuShouldReturnCoffeeMenu() throws Exception {
+    void getCoffeeMenuShouldReturnCoffeeMenu() throws Exception {
         final String expectedMenu = "{ \"menu\": \"coffee (kå·fee)\" }";
 
         given(menuRepositoryMock.getCoffeeMenu()).willReturn(expectedMenu);

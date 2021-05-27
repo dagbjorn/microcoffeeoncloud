@@ -10,10 +10,10 @@ import study.microcoffee.order.common.logging.JettyHttpClientLogEnhancer;
 /**
  * Unit tests of {@link JettyHttpClientFactory}.
  */
-public class JettyHttpClientFactoryTest {
+class JettyHttpClientFactoryTest {
 
     @Test
-    public void createDefaultClientShouldCreateHttpClient() {
+    void createDefaultClientShouldCreateHttpClient() {
         HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(30, new JettyHttpClientLogEnhancer(false));
 
         assertThat(httpClient).isNotNull();
