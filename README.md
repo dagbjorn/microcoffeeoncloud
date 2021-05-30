@@ -21,9 +21,10 @@ Date | Change
 30.11.2020 | Migrated from Spring Cloud Netflix Zuul to Spring Cloud Gateway. Support of Zuul is discontinued in Spring Cloud 2020.
 30.11.2020 | HTTP is no longer supported by API gateway after migration to Spring Cloud Gateway. (Netty, which is used by Spring Cloud Gateway under the hood, does not support multiple ports.)
 11.12.2020 | Migrated from Spring Cloud Netflix Hystrix to Resilience4J. Support of Hystrix is discontinued in Spring Cloud 2020.
-23.12.2020 | Migrated to Spring Boot 2.4.1 and Spring Cloud 2020.0.0.
+23.12.2020 | Upgraded to Spring Boot 2.4.1 and Spring Cloud 2020.0.0.
 05.01.2021 | Added support for Spring WebClient since RestTemplate is in maintenance mode. However, still using RestTemplate as an alternative.
-19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now using the OAuth2 client credentials grant.
+19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now requiring the OAuth2 client credentials grant.
+30.05.2021 | Upgraded to Spring Boot 2.5.0 and Spring Cloud 2020.0.3.
 
 ## Contents
 
@@ -1309,9 +1310,13 @@ From the `microcoffeeoncloud` top-level folder, start Keycloak by running the fo
 
 When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
 
-*EXTERNAL-IP* is found by listing the created VM instances by running `gcloud compute disks list`.
+*EXTERNAL-IP* of a cluster node is found by listing the created VM instances by running `gcloud compute disks list` and then set the environment variable *EXTERNAL_IP* to one of the instances.
 
-    set EXTERNAL_IP=EXTERNAL-IP
+However, this can be automated by the following command, picking the external IP address of the first instance:
+
+    for /f "delims=" %I in ('gcloud compute instances list --format json ^| jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP"') do set EXTERNAL_IP=%I
+
+Then carry on and regenerate the secret.
 
     :: Get an admin token (only valid for 60s secs)
     for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
@@ -1351,7 +1356,7 @@ From the `microcoffeeoncloud-database` project, run:
     set EXTERNAL_IP=EXTERNAL-IP
     mvn gplus:execute -Ddbhost=%EXTERNAL_IP% -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-*EXTERNAL-IP* is found by listing the database service by running `kubectl get service database`.
+*EXTERNAL-IP* is found by listing the cluster nodes by running `gcloud compute instances list` or see above for how to automate setting of the environment variable.
 
 To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
@@ -1363,7 +1368,7 @@ Navigate to:
 
     https://EXTERNAL-IP:8443/coffee.html
 
-Run `kubectl get services gateway` to get the *EXTERNAL-IP* of the gateway service.
+Run `gcloud compute instances list` to get the *EXTERNAL-IP* of one of the cluster nodes.
 
 #### Clean-up of resources
 

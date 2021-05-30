@@ -23,14 +23,14 @@ spec:
           httpGet:
             path: /auth/realms/microcoffee
             port: 8093
-          initialDelaySeconds: 180
+          initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 5
         livenessProbe:
           httpGet:
             path: /auth
             port: 8093
-          initialDelaySeconds: 180
+          initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 5
         ports:

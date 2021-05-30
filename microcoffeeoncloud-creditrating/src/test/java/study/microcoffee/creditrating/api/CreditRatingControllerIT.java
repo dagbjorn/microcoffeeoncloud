@@ -11,7 +11,6 @@ import java.util.Arrays;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,9 +59,6 @@ class CreditRatingControllerIT {
     private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private TestRestTemplate restTemplate;
 
     @BeforeAll
@@ -72,18 +68,14 @@ class CreditRatingControllerIT {
         // Client-side configuration (default port is 8080)
         WireMock.configureFor(WIREMOCK_PORT);
 
-        // Stub response of OIDC Discovery using WellKnown URL. Must be done before Spring context is created.
+        // Stub response of OIDC Discovery and JWKS. Must be done before Spring context is created.
         stubWireMockWellKnownResponse();
+        stubWireMockJwksResponse();
     }
 
     @AfterAll
     static void afterAll() {
         wireMockServer.stop();
-    }
-
-    @BeforeEach
-    void beforeEach() throws Exception {
-        stubWireMockJwksResponse();
     }
 
     @AfterEach
@@ -173,9 +165,9 @@ class CreditRatingControllerIT {
     }
 
     /**
-     * Stubbing of JWKS API response from WireMock.
+     * Static stubbing of JWKS API response from WireMock.
      */
-    private void stubWireMockJwksResponse() throws JsonProcessingException {
+    private static void stubWireMockJwksResponse() throws JsonProcessingException {
         JwkSet expectedJwkSet = JwkSet.builder() //
             .keys(Arrays.asList(Jwk.builder() //
                 .kty(TestTokens.KEY_TYPE) //
@@ -185,7 +177,7 @@ class CreditRatingControllerIT {
                 .build()))
             .build();
 
-        String expectedJwkSetBody = objectMapper.writeValueAsString(expectedJwkSet);
+        String expectedJwkSetBody = new ObjectMapper().writeValueAsString(expectedJwkSet);
 
         stubFor(get(urlEqualTo(JWKS_PATH)) //
             .willReturn(aResponse() //

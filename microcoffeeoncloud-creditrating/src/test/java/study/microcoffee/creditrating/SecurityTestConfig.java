@@ -39,7 +39,7 @@ public class SecurityTestConfig {
 
         return ClientRegistration.withRegistrationId("mockclient") //
             .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}") // The default redirect URI template
-            .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC) //
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC) //
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) //
             .scope("creditrating") //
             .authorizationUri("https://mock.org/login/oauth/authorize") //
