@@ -22,6 +22,24 @@
         <vmHostIp>192.168.99.100</vmHostIp>
     </properties>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>keytool-maven-plugin</artifactId>
+                    <version>${keytool-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
     <profiles>
         <!--
             Profile that generates certificates with openssl. We must use openssl instead of keytool since openssl
@@ -84,7 +102,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>${exec-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>create-output-directory</id>
@@ -257,7 +274,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>keytool-maven-plugin</artifactId>
-                        <version>${keytool-maven-plugin.version}</version>
                         <executions>
                             <!-- Import PKCS12 keystore to JKS keystore -->
                             <execution>
@@ -339,7 +355,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>keytool-maven-plugin</artifactId>
-                        <version>${keytool-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-keystore</id>
