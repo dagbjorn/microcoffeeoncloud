@@ -1,3 +1,6 @@
 /microcoffeeoncloud-notes
 /microcoffeeoncloud-xnotes
 /target
+/.settings
+.classpath
+.project

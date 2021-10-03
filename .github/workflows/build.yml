@@ -1,0 +1,18 @@
+name: Build microcoffeeoncloud
+on:
+  push:
+    # branches: [ master ]
+    paths-ignore:
+      - "**/README.md"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-all:
+    name: Build all projects with Maven and Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Run unit and integration tests
+        run: mvn clean verify -Pitest
