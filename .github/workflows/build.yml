@@ -13,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Generate certificate
+        run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install Pgen-certs -B
+
       - name: Run unit and integration tests
-        run: mvn clean verify -Pitest
+        run: mvn clean verify -Pitest -B
