@@ -23,3 +23,6 @@ jobs:
 
       - name: Run unit and integration tests
         run: mvn clean verify -Pitest -B
+
+      - name: Build and push Docker images to DockerHub
+        run: mvn package -DskipTests -Pbuild,push -B
