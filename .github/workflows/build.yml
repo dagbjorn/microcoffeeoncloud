@@ -32,5 +32,7 @@ jobs:
       - name: Run unit and integration tests
         run: mvn clean verify -Pitest -B
 
-#      - name: Build and push Docker images to DockerHub
-#        run: mvn package -DskipTests -Pbuild,push -B
+      - name: Build and push Docker images to DockerHub
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login https://index.docker.io/v1/ --username ${{ secrets.DOCKERHUB_USER }} --password-stdin
+          mvn package -DskipTests -Pbuild,push -B
