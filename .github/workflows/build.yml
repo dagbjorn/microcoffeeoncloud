@@ -1,4 +1,4 @@
-name: Build microcoffeeoncloud
+name: Build microcoffeeoncloud and push images to DockerHub
 on:
   push:
     # branches: [ master ]
