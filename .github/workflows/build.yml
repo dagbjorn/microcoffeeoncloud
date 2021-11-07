@@ -1,7 +1,7 @@
 name: Build microcoffeeoncloud and push images to DockerHub
 on:
   push:
-    # branches: [ master ]
+    branches: [ master ]
     paths-ignore:
       - "**/README.md"
   # Allows you to run this workflow manually from the Actions tab
