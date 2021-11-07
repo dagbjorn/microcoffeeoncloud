@@ -8,7 +8,7 @@ env:
   GKE_ZONE: europe-west1-b
 
 jobs:
-  authenticate:
+  deploy:
     name: Deploy to GKE cluster
     runs-on: ubuntu-latest
     steps:
