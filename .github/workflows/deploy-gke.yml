@@ -1,0 +1,38 @@
+name: Deploy Microcoffee to Google Kubernetes Engine
+on:
+  workflow_dispatch:
+
+env:
+  GKE_PROJECT: microcoffeoncloud
+  GKE_CLUSTER: microcoffeeoncloud-cluster
+  GKE_ZONE: europe-west1-b
+
+jobs:
+  authenticate:
+    name: Deploy to GKE cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
+          project_id: ${{ env.GKE_PROJECT }}
+
+      # Configure Docker to use the gcloud CLI as a credential helper for authentication.
+      - run: |-
+          gcloud --quite auth configure-docker
+
+      # https://github.com/marketplace/actions/get-gke-credentials
+      - uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SRVGHA_KEY }}
+
+      - name: Deploy authorization server
+        run: |-
+          kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
