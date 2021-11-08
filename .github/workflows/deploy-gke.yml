@@ -36,4 +36,5 @@ jobs:
 
       - name: Deploy Keycloak authorization server
         run: |-
+          cat $KUBECONFIG
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
