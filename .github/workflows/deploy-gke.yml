@@ -22,9 +22,10 @@ jobs:
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
 
-      # Configure Docker to use the gcloud CLI as a credential helper for authentication.
-      - run: |-
-          gcloud --quite auth configure-docker
+      # Register Docker to use the gcloud CLI as a credential helper for authentication.
+      - name: Register gcloud as a Docker credential helper
+        run: |-
+          gcloud --quiet auth configure-docker
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - uses: google-github-actions/get-gke-credentials@main
@@ -33,6 +34,6 @@ jobs:
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_SRVGHA_KEY }}
 
-      - name: Deploy authorization server
+      - name: Deploy Keycloak authorization server
         run: |-
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
