@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  GKE_PROJECT: microcoffeoncloud
+  GKE_PROJECT: microcoffeeoncloud
   GKE_CLUSTER: microcoffeeoncloud-cluster
   GKE_ZONE: europe-west1-b
 
