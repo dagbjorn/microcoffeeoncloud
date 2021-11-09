@@ -38,3 +38,12 @@ jobs:
       - name: Deploy Keycloak authorization server
         run: |-
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
+
+      - name: Wait for Keycloak authorization server to become ready
+        run: |-
+          kubectl wait --for=condition=Ready pod -l app=authserver --timeout=300s
+
+        name: Configure Keycloak authorization server
+        run: |-
+          export EXTERNAL_IP=$(gcloud compute instances list --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
+          echo $EXTERNAL_IP
