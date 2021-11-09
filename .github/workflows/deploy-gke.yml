@@ -28,7 +28,8 @@ jobs:
           gcloud --quiet auth configure-docker
 
       # https://github.com/marketplace/actions/get-gke-credentials
-      - uses: google-github-actions/get-gke-credentials@main
+      - name: Get the GKE credentials so we can deploy to the cluster
+        uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
@@ -36,5 +37,4 @@ jobs:
 
       - name: Deploy Keycloak authorization server
         run: |-
-          cat $KUBECONFIG
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
