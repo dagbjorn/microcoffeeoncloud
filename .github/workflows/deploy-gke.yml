@@ -45,5 +45,6 @@ jobs:
 
       - name: Configure Keycloak authorization server
         run: |-
+          gcloud compute instances list --format json
           export EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
           echo $EXTERNAL_IP
