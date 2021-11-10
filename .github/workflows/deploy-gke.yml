@@ -67,4 +67,4 @@ jobs:
         run: |-
           kubectl apply -f microcoffeeoncloud-configserver/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-database/k8s-service-gke.yml
-          kubectl wait --for=condition=Ready pod -l app=configserver,mongodb --timeout=120s
+          kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=120s
