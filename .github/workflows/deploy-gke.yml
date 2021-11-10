@@ -51,7 +51,7 @@ jobs:
       - name: Configure Keycloak authorization server
         run: |-
           # Get EXTERNAL_IP of one of the cluster nodes
-          EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
+          export EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
           echo "EXTERNAL_IP=$EXTERNAL_IP"
 
           # Get an admin token
@@ -92,4 +92,4 @@ jobs:
 
       - name: Load database
         run: |-
-          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml
+          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml -B
