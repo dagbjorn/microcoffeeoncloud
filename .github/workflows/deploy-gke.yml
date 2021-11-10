@@ -92,4 +92,4 @@ jobs:
 
       - name: Load database
         run: |-
-          mvn -f microcoffeeoncloud-database\pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database\oslo-coffee-shops.xml
+          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml
