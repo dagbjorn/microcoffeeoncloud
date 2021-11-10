@@ -60,6 +60,7 @@ jobs:
           CLIENT_SECRET=$(curl -s -k -H "Authorization: Bearer $ADMINTOKEN" https://$EXTERNAL_IP:30456/auth/admin/realms/microcoffee/clients/$ID/client-secret | jq -r ".value")
 
           # Create Kubernetes secret where the new secret of order-service client is stored
+          kubectl delete secret order-client-secret --ignore-not-found
           kubectl create secret generic order-client-secret --from-literal=client-secret=$CLIENT_SECRET
 
       - name: Deploy and wait for config server and database to start
