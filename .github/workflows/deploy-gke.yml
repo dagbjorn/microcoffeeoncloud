@@ -15,6 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Cache Maven artifacts
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
@@ -67,7 +75,7 @@ jobs:
         run: |-
           kubectl apply -f microcoffeeoncloud-configserver/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-database/k8s-service-gke.yml
-          kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=120s
+          kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=180s
 
       - name: Deploy and wait for discovery server to start
         run: |-
@@ -80,4 +88,8 @@ jobs:
           kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-order/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-creditrating/k8s-service-gke.yml
-          kubectl wait --for=condition=Ready pod -l "app in (gateway,location,order,creditrating)" --timeout=180s
+          kubectl wait --for=condition=Ready pod -l "app in (gateway,location,order,creditrating)" --timeout=300s
+
+      - name: Load database
+        run: |-
+          mvn -f microcoffeeoncloud-database\pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database\oslo-coffee-shops.xml
