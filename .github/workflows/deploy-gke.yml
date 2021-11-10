@@ -68,3 +68,16 @@ jobs:
           kubectl apply -f microcoffeeoncloud-configserver/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-database/k8s-service-gke.yml
           kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=120s
+
+      - name: Deploy and wait for discovery server to start
+        run: |-
+          kubectl apply -f microcoffeeoncloud-discovery/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l app=discovery --timeout=120s
+
+      - name: Deploy and wait for apps to start
+        run: |-
+          kubectl apply -f microcoffeeoncloud-gateway/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-order/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-creditrating/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l "app in (gateway,location,order,creditrating)" --timeout=180s
