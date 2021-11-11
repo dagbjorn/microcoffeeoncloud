@@ -48,7 +48,7 @@ jobs:
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
           kubectl wait --for=condition=Ready pod -l app=authserver --timeout=300s
 
-      - name: Regenerate secret of order-service client in Keycloak and create Kubernetes secret
+      - name: Regenerate Keycloak secret of order-service client and create Kubernetes secret
         run: |-
           # Get EXTERNAL_IP of one of the cluster nodes
           EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
