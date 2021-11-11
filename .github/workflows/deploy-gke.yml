@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  GKE_PROJECT: microcoffeoncloud
+  GKE_PROJECT: microcoffeeoncloud
   GKE_CLUSTER: microcoffeeoncloud-cluster
   GKE_ZONE: europe-west1-b
 
@@ -15,6 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Cache Maven artifacts
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
@@ -22,17 +30,74 @@ jobs:
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
 
-      # Configure Docker to use the gcloud CLI as a credential helper for authentication.
-      - run: |-
-          gcloud --quite auth configure-docker
+      # Register Docker to use the gcloud CLI as a credential helper for authentication.
+      - name: Register gcloud as a Docker credential helper
+        run: |-
+          gcloud --quiet auth configure-docker
 
       # https://github.com/marketplace/actions/get-gke-credentials
-      - uses: google-github-actions/get-gke-credentials@main
+      - name: Get the GKE credentials so we can deploy to the cluster
+        uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_SRVGHA_KEY }}
 
-      - name: Deploy authorization server
+      - name: Deploy and wait for Keycloak authorization server to start
         run: |-
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l app=authserver --timeout=300s
+
+      - name: Regenerate Keycloak secret of order-service client and create Kubernetes secret
+        run: |-
+          # Get EXTERNAL_IP of one of the cluster nodes
+          EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
+          echo "EXTERNAL_IP=$EXTERNAL_IP"
+
+          # Get an admin token
+          ADMINTOKEN=$(curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://$EXTERNAL_IP:30456/auth/realms/master/protocol/openid-connect/token | jq -r ".access_token")
+
+          # Get id of order-service client
+          ID=$(curl -s -k -H "Authorization: Bearer $ADMINTOKEN" https://$EXTERNAL_IP:30456/auth/admin/realms/microcoffee/clients | jq -r ".[] | select(.clientId == \"order-service\") | .id")
+          echo "ID=$ID"
+
+          # Generate new secret of order-service client
+          curl -i -k -X POST -H "Authorization: Bearer $ADMINTOKEN" https://$EXTERNAL_IP:30456/auth/admin/realms/microcoffee/clients/$ID/client-secret
+
+          # Get generated client secret
+          CLIENT_SECRET=$(curl -s -k -H "Authorization: Bearer $ADMINTOKEN" https://$EXTERNAL_IP:30456/auth/admin/realms/microcoffee/clients/$ID/client-secret | jq -r ".value")
+
+          # Create Kubernetes secret where the new secret of the order-service client is stored
+          kubectl delete secret order-client-secret --ignore-not-found
+          kubectl create secret generic order-client-secret --from-literal=client-secret=$CLIENT_SECRET
+
+      - name: Deploy and wait for config server and database to start
+        run: |-
+          kubectl apply -f microcoffeeoncloud-configserver/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-database/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=180s
+
+      - name: Load database
+        run: |-
+          # Get EXTERNAL_IP of one of the cluster nodes
+          EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
+          echo "EXTERNAL_IP=$EXTERNAL_IP"
+
+          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml -B
+
+      - name: Deploy and wait for discovery server to start
+        run: |-
+          kubectl apply -f microcoffeeoncloud-discovery/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l app=discovery --timeout=120s
+
+      - name: Deploy and wait for apps to start
+        run: |-
+          # Always redeploy order to make sure that it reads the latest Kubernetes secret
+          kubectl delete deployment order --ignore-not-found
+          kubectl wait --for=delete pod -l app=order --timeout=60s
+
+          kubectl apply -f microcoffeeoncloud-gateway/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-order/k8s-service-gke.yml
+          kubectl apply -f microcoffeeoncloud-creditrating/k8s-service-gke.yml
+          kubectl wait --for=condition=Ready pod -l "app in (gateway,location,order,creditrating)" --timeout=300s

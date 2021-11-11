@@ -1,0 +1,45 @@
+name: Undeploy Microcoffee from Google Kubernetes Engine
+on:
+  workflow_dispatch:
+
+env:
+  GKE_PROJECT: microcoffeeoncloud
+  GKE_CLUSTER: microcoffeeoncloud-cluster
+  GKE_ZONE: europe-west1-b
+
+jobs:
+  undeploy:
+    name: Undeploy from GKE cluster
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
+          project_id: ${{ env.GKE_PROJECT }}
+
+      # Register Docker to use the gcloud CLI as a credential helper for authentication.
+      - name: Register gcloud as a Docker credential helper
+        run: |-
+          gcloud --quiet auth configure-docker
+
+      # https://github.com/marketplace/actions/get-gke-credentials
+      - name: Get the GKE credentials so we can deploy to the cluster
+        uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SRVGHA_KEY }}
+
+      - name: Undeploy all and wait for pods to terminate
+        run: |-
+          kubectl delete service,deployment creditrating --ignore-not-found
+          kubectl delete service,deployment location --ignore-not-found
+          kubectl delete service,deployment order --ignore-not-found
+          kubectl delete service,deployment gateway --ignore-not-found
+          kubectl delete service,deployment authserver --ignore-not-found
+          kubectl delete service,deployment configserver --ignore-not-found
+          kubectl delete service,deployment discovery --ignore-not-found
+          kubectl delete service,deployment database --ignore-not-found
+          kubectl wait --for=delete pod -l "app in (authserver,configserver,mongodb,discovery,gateway,location,order,creditrating)" --timeout=120s
