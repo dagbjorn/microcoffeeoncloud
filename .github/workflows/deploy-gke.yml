@@ -85,7 +85,8 @@ jobs:
       - name: Deploy and wait for apps to start
         run: |-
           # Always redeploy order to make sure that it reads the latest Kubernetes secret
-          kubectl delete deployment order
+          kubectl delete deployment order --ignore-not-found
+          kubectl wait --for=delete deployment -l app=order --timeout=60s
 
           kubectl apply -f microcoffeeoncloud-gateway/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml

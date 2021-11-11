@@ -34,11 +34,12 @@ jobs:
 
       - name: Undeploy all and wait for pods to terminate
         run: |-
-          kubectl delete service,deployment creditrating
-          kubectl delete service,deployment location
-          kubectl delete service,deployment order
-          kubectl delete service,deployment gateway
-          kubectl delete service,deployment authserver
-          kubectl delete service,deployment configserver
-          kubectl delete service,deployment discovery
-          kubectl delete service,deployment database
+          kubectl delete service,deployment creditrating --ignore-not-found
+          kubectl delete service,deployment location --ignore-not-found
+          kubectl delete service,deployment order --ignore-not-found
+          kubectl delete service,deployment gateway --ignore-not-found
+          kubectl delete service,deployment authserver --ignore-not-found
+          kubectl delete service,deployment configserver --ignore-not-found
+          kubectl delete service,deployment discovery --ignore-not-found
+          kubectl delete service,deployment database --ignore-not-found
+          kubectl wait --for=delete deployment -l "app in (authserver,configserver,mongodb,discovery,gateway,location,order,creditrating)" --timeout=120s
