@@ -77,6 +77,14 @@ jobs:
           kubectl apply -f microcoffeeoncloud-database/k8s-service-gke.yml
           kubectl wait --for=condition=Ready pod -l "app in (configserver,mongodb)" --timeout=180s
 
+      - name: Load database
+        run: |-
+          # Get EXTERNAL_IP of one of the cluster nodes
+          EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
+          echo "EXTERNAL_IP=$EXTERNAL_IP"
+
+          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml -B
+
       - name: Deploy and wait for discovery server to start
         run: |-
           kubectl apply -f microcoffeeoncloud-discovery/k8s-service-gke.yml
@@ -86,22 +94,10 @@ jobs:
         run: |-
           # Always redeploy order to make sure that it reads the latest Kubernetes secret
           kubectl delete deployment order --ignore-not-found
-          kubectl wait --for=delete deployment -l app=order --timeout=60s
+          kubectl wait --for=delete pod -l app=order --timeout=60s
 
           kubectl apply -f microcoffeeoncloud-gateway/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-order/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-creditrating/k8s-service-gke.yml
           kubectl wait --for=condition=Ready pod -l "app in (gateway,location,order,creditrating)" --timeout=300s
-
-      - name: Load database
-        run: |-
-          # Get EXTERNAL_IP of one of the cluster nodes
-          EXTERNAL_IP=$(gcloud compute instances list --project $GKE_PROJECT --format json | jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP")
-          echo "EXTERNAL_IP=$EXTERNAL_IP"
-
-          mvn -f microcoffeeoncloud-database/pom.xml gplus:execute -Ddbhost=$EXTERNAL_IP -Ddbport=30017 -Ddbname=microcoffee -Dshopfile=microcoffeeoncloud-database/oslo-coffee-shops.xml -B
-
-      - name: Fix "not saving cache" issue
-        run: |-
-          ls -l ~/.m2/repository

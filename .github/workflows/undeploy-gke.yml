@@ -42,4 +42,4 @@ jobs:
           kubectl delete service,deployment configserver --ignore-not-found
           kubectl delete service,deployment discovery --ignore-not-found
           kubectl delete service,deployment database --ignore-not-found
-          kubectl wait --for=delete deployment -l "app in (authserver,configserver,mongodb,discovery,gateway,location,order,creditrating)" --timeout=120s
+          kubectl wait --for=delete pod -l "app in (authserver,configserver,mongodb,discovery,gateway,location,order,creditrating)" --timeout=120s
