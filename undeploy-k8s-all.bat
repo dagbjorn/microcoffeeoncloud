@@ -8,5 +8,6 @@ kubectl delete service,deployment authserver
 kubectl delete service,deployment configserver
 kubectl delete service,deployment discovery
 kubectl delete service,deployment database
+kubectl delete secret order-client-secret
 kubectl get services
 kubectl get pods -w

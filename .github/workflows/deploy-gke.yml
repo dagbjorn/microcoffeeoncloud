@@ -55,7 +55,7 @@ jobs:
           echo "EXTERNAL_IP=$EXTERNAL_IP"
 
           # Get an admin token
-          ADMINTOKEN=$(curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://$EXTERNAL_IP:30456/auth/realms/master/protocol/openid-connect/token | jq -r ".access_token")
+          ADMINTOKEN=$(curl -s -k -d "client_id=admin-cli" -d "username=${{secrets.KEYCLOAK_ADMIN_USER}}" -d "password=${{secrets.KEYCLOAK_ADMIN_PASSWORD}}" -d "grant_type=password" https://$EXTERNAL_IP:30456/auth/realms/master/protocol/openid-connect/token | jq -r ".access_token")
 
           # Get id of order-service client
           ID=$(curl -s -k -H "Authorization: Bearer $ADMINTOKEN" https://$EXTERNAL_IP:30456/auth/admin/realms/microcoffee/clients | jq -r ".[] | select(.clientId == \"order-service\") | .id")
