@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
+      # Exports credentials as env variable GOOGLE_APPLICATION_CREDENTIALS.
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -28,7 +29,6 @@ jobs:
       - name: Create cluster
         run: |-
           gcloud info
-          echo $GOOGLE_APPLICATION_CREDENTIALS
           gcloud container clusters create ${{ env.GKE_CLUSTER }} --machine-type=n1-standard-1 --num-nodes=4 --disk-size=10GB --zone=${{ env.GKE_ZONE }}
           gcloud compute instances list
 
