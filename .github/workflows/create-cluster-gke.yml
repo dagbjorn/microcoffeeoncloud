@@ -36,7 +36,7 @@ jobs:
         run: |-
           gcloud compute firewall-rules create microcoffee --allow tcp:30080-30099,tcp:30443-30462
           gcloud compute firewall-rules create microcoffee-database --allow tcp:30017
-          gcloud compute firewall-rules listt
+          gcloud compute firewall-rules list
 
       - name: Create MongoDB disk
         run: |-
