@@ -1,4 +1,4 @@
-name: Undeploy Microcoffee from Google Kubernetes Engine
+name: Undeploy Microcoffee from GKE
 on:
   workflow_dispatch:
 
@@ -16,16 +16,15 @@ jobs:
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
+          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
 
-      # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      - name: Register gcloud as a Docker credential helper
+      - name: Display current gcloud environment
         run: |-
-          gcloud --quiet auth configure-docker
+         gcloud info
 
       # https://github.com/marketplace/actions/get-gke-credentials
-      - name: Get the GKE credentials so we can deploy to the cluster
+      - name: Get GKE credentials and setup a kubeconfig file
         uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}

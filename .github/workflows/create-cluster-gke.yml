@@ -1,4 +1,4 @@
-name: Create cluster on Google Kubernetes Engine
+name: Create cluster on GKE
 on:
   workflow_dispatch:
 
@@ -16,18 +16,25 @@ jobs:
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
+          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
 
-      # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      - name: Register gcloud as a Docker credential helper
+      - name: Display current gcloud environment
         run: |-
-          gcloud --quiet auth configure-docker
+         gcloud info
 
-      # https://github.com/marketplace/actions/get-gke-credentials
-      - name: Get the GKE credentials so we can deploy to the cluster
-        uses: google-github-actions/get-gke-credentials@main
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SRVGHA_KEY }}
+      - name: Create cluster
+        run: |-
+          gcloud container clusters create ${{ env.GKE_CLUSTER }} --machine-type=n1-standard-1 --num-nodes=4 --disk-size=10GB --zone=${{ env.GKE_ZONE }}
+          gcloud compute instances list
+
+      - name: Create firewall rules
+        run: |-
+          gcloud compute firewall-rules create microcoffee --allow tcp:30080-30099,tcp:30443-30462
+          gcloud compute firewall-rules create microcoffee-database --allow tcp:30017
+          gcloud compute firewall-rules list
+
+      - name: Create MongoDB disk
+        run: |-
+          gcloud compute disks create mongodb-disk --size=10GB --zone=${{ env.GKE_ZONE }}
+          gcloud compute disks list
