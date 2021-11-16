@@ -31,7 +31,7 @@ jobs:
 
       - name: Delete cluster
         run: |-
-          gcloud container clusters delete ${{ env.GKE_CLUSTER }} --quiet
+          gcloud container clusters delete ${{ env.GKE_CLUSTER }} --zone=${{ env.GKE_ZONE }} --quiet
           gcloud compute instances list
 
       - name: Delete MongoDB disk
