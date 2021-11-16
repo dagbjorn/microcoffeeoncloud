@@ -19,10 +19,9 @@ jobs:
           project_id: ${{ env.GKE_PROJECT }}
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
 
-      # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      #- name: Register gcloud as a Docker credential helper
-      #  run: |-
-      #    gcloud --quiet auth configure-docker
+      - name: Display current gcloud environment
+        run: |-
+         gcloud info
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
