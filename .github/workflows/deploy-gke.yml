@@ -36,7 +36,7 @@ jobs:
           gcloud --quiet auth configure-docker
 
       # https://github.com/marketplace/actions/get-gke-credentials
-      - name: Get the GKE credentials so we can deploy to the cluster
+      - name: Get GKE credentials and setup a kubeconfig file
         uses: google-github-actions/get-gke-credentials@main
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
