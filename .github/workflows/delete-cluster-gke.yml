@@ -1,4 +1,4 @@
-name: Delete cluster on Google Kubernetes Engine
+name: Delete cluster on GKE
 on:
   workflow_dispatch:
 
@@ -25,16 +25,16 @@ jobs:
 
       - name: Delete firewall rules
         run: |-
-          gcloud compute firewall-rules delete microcoffee --quiet
-          gcloud compute firewall-rules delete microcoffee-database --quiet
+          gcloud compute firewall-rules delete microcoffee --quiet || true
+          gcloud compute firewall-rules delete microcoffee-database --quiet || true
           gcloud compute firewall-rules list
 
       - name: Delete cluster
         run: |-
-          gcloud container clusters delete ${{ env.GKE_CLUSTER }} --zone=${{ env.GKE_ZONE }} --quiet
+          gcloud container clusters delete ${{ env.GKE_CLUSTER }} --zone=${{ env.GKE_ZONE }} --quiet || true
           gcloud compute instances list
 
       - name: Delete MongoDB disk
         run: |-
-          gcloud compute disks delete mongodb-disk --quiet
+          gcloud compute disks delete mongodb-disk --quiet || true
           gcloud compute disks list

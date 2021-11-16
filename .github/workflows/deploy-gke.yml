@@ -1,4 +1,4 @@
-name: Deploy Microcoffee to Google Kubernetes Engine
+name: Deploy Microcoffee to GKE
 on:
   workflow_dispatch:
 

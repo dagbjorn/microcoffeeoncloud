@@ -1,4 +1,4 @@
-name: Create cluster on Google Kubernetes Engine
+name: Create cluster on GKE
 on:
   workflow_dispatch:
 
@@ -19,12 +19,12 @@ jobs:
         with:
           project_id: ${{ env.GKE_PROJECT }}
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
-          export_default_credentials: true
+      #    export_default_credentials: true
 
       # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      - name: Register gcloud as a Docker credential helper
-        run: |-
-          gcloud --quiet auth configure-docker
+      #- name: Register gcloud as a Docker credential helper
+      #  run: |-
+      #    gcloud --quiet auth configure-docker
 
       - name: Display current gcloud environment
         run: |-

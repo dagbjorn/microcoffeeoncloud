@@ -1,4 +1,4 @@
-name: Undeploy Microcoffee from Google Kubernetes Engine
+name: Undeploy Microcoffee from GKE
 on:
   workflow_dispatch:
 
