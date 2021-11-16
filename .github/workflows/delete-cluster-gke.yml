@@ -36,5 +36,5 @@ jobs:
 
       - name: Delete MongoDB disk
         run: |-
-          gcloud compute disks delete mongodb-disk --quiet || true
+          gcloud compute disks delete mongodb-disk --zone=${{ env.GKE_ZONE }} --quiet || true
           gcloud compute disks list

@@ -13,18 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
-      # Exports credentials as env variable GOOGLE_APPLICATION_CREDENTIALS.
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
         with:
           project_id: ${{ env.GKE_PROJECT }}
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
-      #    export_default_credentials: true
-
-      # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      #- name: Register gcloud as a Docker credential helper
-      #  run: |-
-      #    gcloud --quiet auth configure-docker
 
       - name: Display current gcloud environment
         run: |-
