@@ -19,15 +19,22 @@ jobs:
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
 
-      # Register Docker to use the gcloud CLI as a credential helper for authentication.
-      - name: Register gcloud as a Docker credential helper
+      - name: Display current gcloud environment
         run: |-
-          gcloud --quiet auth configure-docker
+         gcloud info
 
-      # https://github.com/marketplace/actions/get-gke-credentials
-      - name: Get the GKE credentials so we can deploy to the cluster
-        uses: google-github-actions/get-gke-credentials@main
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SRVGHA_KEY }}
+      - name: Delete firewall rules
+        run: |-
+          gcloud compute firewall-rules delete microcoffee --quiet
+          gcloud compute firewall-rules delete microcoffee-database --quiet
+          gcloud compute firewall-rules list
+
+      - name: Delete cluster
+        run: |-
+          gcloud container clusters delete ${{ env.GKE_CLUSTER }} --quiet
+          gcloud compute instances list
+
+      - name: Delete MongoDB disk
+        run: |-
+          gcloud compute disks delete mongodb-disk --quiet
+          gcloud compute disks list

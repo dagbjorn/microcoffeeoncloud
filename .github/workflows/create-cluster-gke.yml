@@ -26,9 +26,12 @@ jobs:
         run: |-
           gcloud --quiet auth configure-docker
 
+      - name: Display current gcloud environment
+        run: |-
+         gcloud info
+
       - name: Create cluster
         run: |-
-          gcloud info
           gcloud container clusters create ${{ env.GKE_CLUSTER }} --machine-type=n1-standard-1 --num-nodes=4 --disk-size=10GB --zone=${{ env.GKE_ZONE }}
           gcloud compute instances list
 
