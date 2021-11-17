@@ -21,7 +21,7 @@ jobs:
 
       - name: Display current gcloud environment
         run: |-
-         gcloud info
+          gcloud info
 
       - name: Create cluster
         run: |-
