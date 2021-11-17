@@ -32,7 +32,13 @@ jobs:
 
       - name: Display current gcloud environment
         run: |-
-         gcloud info
+          gcloud info
+
+      # https://github.com/marketplace/actions/authenticate-to-google-cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@main
+        with:
+          credentials_json: ${{ secrets.GKE_SRVGHA_KEY }}
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
@@ -40,7 +46,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SRVGHA_KEY }}
+          #credentials: ${{ secrets.GKE_SRVGHA_KEY }}
 
       - name: Deploy and wait for Keycloak authorization server to start
         run: |-

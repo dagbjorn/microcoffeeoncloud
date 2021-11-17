@@ -16,12 +16,12 @@ jobs:
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
           project_id: ${{ env.GKE_PROJECT }}
+          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
 
       - name: Display current gcloud environment
         run: |-
-         gcloud info
+          gcloud info
 
       - name: Delete firewall rules
         run: |-
