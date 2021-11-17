@@ -30,7 +30,6 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          #credentials: ${{ secrets.GKE_SRVGHA_KEY }}
 
       - name: Undeploy all and wait for pods to terminate
         run: |-
