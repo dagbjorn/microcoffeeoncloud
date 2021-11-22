@@ -1753,45 +1753,45 @@ If not, enable them:
 
 ##### Configure a service account and store its credentials in the GitHub repo
 
-1. Create a new service account called `srvgha`.
+1: Create a new service account called `srvgha`.
 
     gcloud iam service-accounts create srvgha
 
-1. Find its email address.
+2: Find its email address.
 
     $ gcloud iam service-accounts list
     DISPLAY NAME                            EMAIL                                               DISABLED
     Compute Engine default service account  MY_PROJECT_NUMBER-compute@developer.gserviceaccount.com  False
                                             srvgha@microcoffeeoncloud.iam.gserviceaccount.com   False
 
-1. Add `compute.admin` and `container.admin` roles to the service account.
+3: Add `compute.admin` and `container.admin` roles to the service account.
 
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/compute.admin
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/container.admin
 
-1. Verify roles.
+4: Verify roles.
 
     $ gcloud projects get-iam-policy microcoffeeoncloud --flatten="bindings[].members" --format="table(bindings.role)" --filter="bindings.members:srvgha@microcoffeeoncloud.iam.gserviceaccount.com"
     ROLE
     roles/compute.admin
     roles/container.admin
 
-1. Create a private key for the service account and download the JSON keyfile.
+5: Create a private key for the service account and download the JSON keyfile.
 
     gcloud iam service-accounts keys create key.json --iam-account=srvgha@microcoffeeoncloud.iam.gserviceaccount.com
 
-1. Base64 encode the JSON keyfile.
+6: Base64 encode the JSON keyfile.
 
     cat key.json | base64
 
-1. Add secret in GitHub repo.
+7:. Add secret in GitHub repo.
 
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: GKE_SRVGHA_KEY
 - Value: <base64 above>
 - Add secret
 
-1. Add Keycloak username and password secrets.
+8: Add Keycloak username and password secrets.
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: KEYCLOAK_USERNAME
 - Value: admin
