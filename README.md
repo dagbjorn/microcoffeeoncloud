@@ -1718,12 +1718,14 @@ Select your username > Account Settings > Security > New Access Token
 
 ##### Store DockerHub access token in GitHub secrets
 
-Go back to your GitHub repo and add your DockerHub username and access token in two secrets.
+Go back to your GitHub repo and add your DockerHub username and access token in GitHub secrets.
 
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: DOCKERHUB_USER
 - Value: <username>
 - Add secret
+
+And add another one for the token.
 
 - Name: DOCKERHUB_TOKEN
 - Value: <access token>
