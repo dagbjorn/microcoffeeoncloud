@@ -1691,13 +1691,18 @@ Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
 
 For Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
 
-All workflows are stored in `.github/workflows`.
+All workflows are stored in the `.github/workflows` folder.
 
 #### Resources
 
 Some useful resources:
 - (GitHub Actions docs)[https://docs.github.com/en/actions]
 - (GitHub Marketplace for Actions)[https://github.com/marketplace?type=actions]
+- (Deploying to Google Kubernetes Engine)[https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine]
+- (Understanding roles in Google Cloud)[https://cloud.google.com/iam/docs/understanding-roles] :bulb: Very useful mapping between roles and permissions.
+- (Google Kubernetes Engine API permissions)[https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions]
+- (Compute Engine IAM roles and permissions)[https://cloud.google.com/compute/docs/access/iam]
+
 
 #### Setup for running the workflows
 
@@ -1729,4 +1734,71 @@ And add another one for the token.
 
 - Name: DOCKERHUB_TOKEN
 - Value: <access token>
+- Add secret
+
+##### Make sure Kubernetes Engine and Container Registry APIs are enabled
+
+Run:
+
+    gcloud services list --enabled | grep "container"
+
+Verify that the follow APIs are listed.
+
+    container.googleapis.com          Kubernetes Engine API
+    containerregistry.googleapis.com  Container Registry API
+
+If not, enable them:
+
+    gcloud services enable container.googleapis.com containerregistry.googleapis.com
+
+##### Configure a service account and store its credentials in the GitHub repo
+
+1. Create a new service account called `srvgha`.
+
+    gcloud iam service-accounts create srvgha
+
+1. Find its email address.
+
+    $ gcloud iam service-accounts list
+    DISPLAY NAME                            EMAIL                                               DISABLED
+    Compute Engine default service account  MY_PROJECT_NUMBER-compute@developer.gserviceaccount.com  False
+                                            srvgha@microcoffeeoncloud.iam.gserviceaccount.com   False
+
+1. Add `compute.admin` and `container.admin` roles to the service account.
+
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/compute.admin
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/container.admin
+
+1. Verify roles.
+
+    $ gcloud projects get-iam-policy microcoffeeoncloud --flatten="bindings[].members" --format="table(bindings.role)" --filter="bindings.members:srvgha@microcoffeeoncloud.iam.gserviceaccount.com"
+    ROLE
+    roles/compute.admin
+    roles/container.admin
+
+1. Create a private key for the service account and download the JSON keyfile.
+
+    gcloud iam service-accounts keys create key.json --iam-account=srvgha@microcoffeeoncloud.iam.gserviceaccount.com
+
+1. Base64 encode the JSON keyfile.
+
+    cat key.json | base64
+
+1. Add secret in GitHub repo.
+
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: GKE_SRVGHA_KEY
+- Value: <base64 above>
+- Add secret
+
+1. Add Keycloak username and password secrets.
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: KEYCLOAK_USERNAME
+- Value: admin
+- Add secret
+
+And add another one for the password.
+
+- Name: KEYCLOAK_PASSWORD
+- Value: admin
 - Add secret
