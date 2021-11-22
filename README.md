@@ -49,6 +49,7 @@ Date | Change
   - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
   - [Keycloak - configuration examples](#keycloak-config)
+  - [GitHub Actions](#github-action)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -1681,3 +1682,47 @@ Microcoffee realm > Clients > order-service > Credentials
 ##### Regenerate secret of order-service client
 
 Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
+
+### <a name="github-actions"></a>GitHub Actions
+
+#### About GitHub Actions
+
+[GitHub Actions](https://docs.github.com/en) is a CI tool for creating workflows that automate software building, testing and deploying right out of your GitHub repos. With GitHub Free for user accounts, GitHub Actions is free for public repositories. For private repositories, you get 2000 automation minutes/month for free.
+
+For Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
+
+#### Resources
+
+Some useful resources:
+- (GitHub Actions docs)[https://docs.github.com/en/actions]
+- (GitHub Marketplace for Actions)[https://github.com/marketplace?type=actions]
+
+#### Setup for running the workflows
+
+##### Create an access token in DockerHub
+
+The `.github/workflows/build.yml` workflow requires an access token for authenticating to DockerHub.
+
+Open https://hub.docker.com, sign in to your DockerHub account and create an access token as follows.
+
+:information_source: With free accounts, you can only create one single access token.
+
+Select USERNAME > Account Settings > Security > New Access Token
+- Access Token Description: My only access token
+- Access permissions: Read, Write, Delete (Only choice available for personal accounts)
+- Generatee
+:point_right: Make a copy of the generated copy; you won't see it again..
+
+##### Store DockerHub access token in a GitHub secret
+
+Go back to your GitHub repo and add the DockerHub access token in a secret.
+
+Add secrets in GitHub repo:
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: DOCKERHUB_USER
+- Value: <username>
+- Add secret
+
+- Name: DOCKERHUB_TOKEN
+- Value: <access token>
+- Add secret
