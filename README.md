@@ -1768,6 +1768,7 @@ If not, enable them:
 
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/compute.admin
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/container.admin
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/iam.serviceAccountUser
 
 4: Verify roles.
 
@@ -1775,6 +1776,7 @@ If not, enable them:
     ROLE
     roles/compute.admin
     roles/container.admin
+    roles/iam.serviceAccountUser
 
 5: Create a private key for the service account and download the JSON keyfile.
 
@@ -1784,7 +1786,7 @@ If not, enable them:
 
     cat key.json | base64
 
-7:. Add secret in GitHub repo.
+7: Add secret in GitHub repo.
 
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: GKE_SRVGHA_KEY
@@ -1792,6 +1794,7 @@ microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Add secret
 
 8: Add Keycloak username and password secrets.
+
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: KEYCLOAK_USERNAME
 - Value: admin
