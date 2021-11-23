@@ -1712,22 +1712,22 @@ The `build.yml` workflow requires an access token for authenticating to DockerHu
 
 Open https://hub.docker.com, sign in to your DockerHub account and create an access token as follows.
 
-:information_source: With free accounts, you can only create one single access token.
-
 Select your username > Account Settings > Security > New Access Token
 - Access Token Description: My only access token
-- Access permissions: Read, Write, Delete (Only choice available for personal accounts)
+- Access permissions: Read, Write, Delete (Only choice available for free accounts)
 - Generate
 
 :point_right: Make a copy of the generated token; you won't see it again...
 
-##### Store DockerHub access token in GitHub secrets
+:information_source: With free accounts, you can only create one single access token.
+
+##### Store DockerHub access token in a GitHub secret
 
 Go back to your GitHub repo and add your DockerHub username and access token in GitHub secrets.
 
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: DOCKERHUB_USER
-- Value: <username>
+- Value: \<username\>
 - Add secret
 
 And add another one for the token.
