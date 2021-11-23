@@ -25,6 +25,7 @@ Date | Change
 05.01.2021 | Added support for Spring WebClient since RestTemplate is in maintenance mode. However, still using RestTemplate as an alternative.
 19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now requiring the OAuth2 client credentials grant.
 30.05.2021 | Upgraded to Spring Boot 2.5.0 and Spring Cloud 2020.0.3.
+23.11.2021 | Added extra on required setup for GitHub Actions workflows.
 
 ## Contents
 
@@ -49,6 +50,7 @@ Date | Change
   - [Microcoffee on Minikube](#microcoffee-on-minikube)
   - [API load testing with Gatling](#api-load-testing-gatling)
   - [Keycloak - configuration examples](#keycloak-config)
+  - [Setup for GitHub Actions workflows](#github-actions-setup)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -1681,3 +1683,130 @@ Microcoffee realm > Clients > order-service > Credentials
 ##### Regenerate secret of order-service client
 
 Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
+
+### <a name="github-actions-setup"></a>Setup for GitHub Actions workflows
+
+#### About GitHub Actions
+
+[GitHub Actions](https://docs.github.com/en) is a CI tool for creating workflows that automate software building, testing and deploying right out of your GitHub repos. With GitHub Free for user accounts, GitHub Actions is free for public repositories. For private repositories, you get 2000 automation minutes/month for free.
+
+For Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
+
+All workflows are stored in the standard `.github/workflows` folder.
+
+#### Resources
+
+Some useful resources:
+- (GitHub Actions docs)[https://docs.github.com/en/actions]
+- (GitHub Marketplace for Actions)[https://github.com/marketplace?type=actions]
+- (Deploying to Google Kubernetes Engine)[https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine]
+- (Understanding roles in Google Cloud)[https://cloud.google.com/iam/docs/understanding-roles] :bulb: Very useful mapping between roles and permissions.
+- (Google Kubernetes Engine API permissions)[https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions]
+- (Compute Engine IAM roles and permissions)[https://cloud.google.com/compute/docs/access/iam]
+
+
+#### Setup for running the workflows
+
+##### Create an access token in DockerHub
+
+The build workflow requires an access token for authenticating to DockerHub.
+
+Open https://hub.docker.com, sign in to your DockerHub account and create an access token as follows.
+
+Select your username > Account Settings > Security > New Access Token
+- Access Token Description: My only access token
+- Access permissions: Read, Write, Delete (Only choice available for free accounts)
+- Generate
+
+:point_right: Make a copy of the generated token; you won't see it again...
+
+:information_source: With free accounts, you can only create one single access token.
+
+##### Store DockerHub access token in a GitHub secret
+
+Go back to your GitHub repo and add your DockerHub username and access token in two separate GitHub secrets.
+
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: DOCKERHUB_USER
+- Value: \<username\>
+- Add secret
+
+And another one for the token.
+
+- Name: DOCKERHUB_TOKEN
+- Value: \<access token\>
+- Add secret
+
+##### Make sure Kubernetes Engine and Container Registry APIs are enabled
+
+Run:
+
+    gcloud services list --enabled | grep "container"
+
+Verify that the follow APIs are listed.
+
+    container.googleapis.com          Kubernetes Engine API
+    containerregistry.googleapis.com  Container Registry API
+
+If not, enable them:
+
+    gcloud services enable container.googleapis.com containerregistry.googleapis.com
+
+##### Create a service account and store its credentials in the GitHub repo
+
+Create a service account in Google Cloud with the necessary roles to create and deploy to GKE clusters.
+
+1: Create a new service account called `srvgha`.
+
+    gcloud iam service-accounts create srvgha
+
+2: Find its email address.
+
+    $ gcloud iam service-accounts list
+    DISPLAY NAME                            EMAIL                                               DISABLED
+    Compute Engine default service account  MY_PROJECT_NUMBER-compute@developer.gserviceaccount.com  False
+                                            srvgha@microcoffeeoncloud.iam.gserviceaccount.com   False
+
+Observe the email address `srvgha@microcoffeeoncloud.iam.gserviceaccount.com`. This is the address that will be used when configuring the service account.
+
+3: Add `compute.admin`, `container.admin` and `iam.serviceAccountUser` roles to the service account.
+
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/compute.admin
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/container.admin
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/iam.serviceAccountUser
+
+4: Verify the roles.
+
+    $ gcloud projects get-iam-policy microcoffeeoncloud --flatten="bindings[].members" --format="table(bindings.role)" --filter="bindings.members:srvgha@microcoffeeoncloud.iam.gserviceaccount.com"
+    ROLE
+    roles/compute.admin
+    roles/container.admin
+    roles/iam.serviceAccountUser
+
+5: Create a private key for the service account and download it to a JSON key file.
+
+    gcloud iam service-accounts keys create key.json --iam-account=srvgha@microcoffeeoncloud.iam.gserviceaccount.com
+
+6: Base64 encode the JSON key file.
+
+    cat key.json | base64
+
+7: Add key secret in the GitHub repo.
+
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: GKE_SRVGHA_KEY
+- Value: \<base64 encoded content of JSON key file\>
+- Add secret
+
+8: Add Keycloak admin username and password secrets.
+
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: KEYCLOAK_USERNAME
+- Value: admin
+- Add secret
+
+And another one for the password.
+
+- Name: KEYCLOAK_PASSWORD
+- Value: admin
+- Add secret
