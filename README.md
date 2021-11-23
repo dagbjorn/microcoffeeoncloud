@@ -25,7 +25,7 @@ Date | Change
 05.01.2021 | Added support for Spring WebClient since RestTemplate is in maintenance mode. However, still using RestTemplate as an alternative.
 19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now requiring the OAuth2 client credentials grant.
 30.05.2021 | Upgraded to Spring Boot 2.5.0 and Spring Cloud 2020.0.3.
-23.11.2021 | Add extra on GitHub Actions workflows.
+23.11.2021 | Added extra on required setup for GitHub Actions workflows.
 
 ## Contents
 
@@ -1692,7 +1692,7 @@ Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
 
 For Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
 
-All workflows are stored in the `.github/workflows` folder.
+All workflows are stored in the standard `.github/workflows` folder.
 
 #### Resources
 
@@ -1783,11 +1783,11 @@ Observe the email address `srvgha@microcoffeeoncloud.iam.gserviceaccount.com`. T
     roles/container.admin
     roles/iam.serviceAccountUser
 
-5: Create a private key for the service account and download the JSON keyfile.
+5: Create a private key for the service account and download it to a JSON key file.
 
     gcloud iam service-accounts keys create key.json --iam-account=srvgha@microcoffeeoncloud.iam.gserviceaccount.com
 
-6: Base64 encode the JSON keyfile.
+6: Base64 encode the JSON key file.
 
     cat key.json | base64
 
@@ -1795,7 +1795,7 @@ Observe the email address `srvgha@microcoffeeoncloud.iam.gserviceaccount.com`. T
 
 microcoffeeoncloud repo > Settings > Secrets > New repository secret
 - Name: GKE_SRVGHA_KEY
-- Value: \<base64 encoded content of JSON keyfile\>
+- Value: \<base64 encoded content of JSON key file\>
 - Add secret
 
 8: Add Keycloak admin username and password secrets.
