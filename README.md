@@ -26,6 +26,7 @@ Date | Change
 19.05.2021 | Integrated Keycloak, an authorization server, in Microcoffee. CreditRating API is now requiring the OAuth2 client credentials grant.
 30.05.2021 | Upgraded to Spring Boot 2.5.0 and Spring Cloud 2020.0.3.
 23.11.2021 | Added extra on required setup for GitHub Actions workflows.
+09.12.2021 | Upgraded to Spring Boot 2.6.1 and Spring Cloud 2021.0.0.
 
 ## Contents
 
@@ -145,7 +146,7 @@ by `microcoffeeoncloud-certificates`. Also a suite of types to use when mocking 
 provided.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.18.
+Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.28.
 
 The code was originally written in Java 8, but is later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
@@ -1704,7 +1705,6 @@ Some useful resources:
 - (Google Kubernetes Engine API permissions)[https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions]
 - (Compute Engine IAM roles and permissions)[https://cloud.google.com/compute/docs/access/iam]
 
-
 #### Setup for running the workflows
 
 ##### Create an access token in DockerHub
@@ -1810,3 +1810,11 @@ And another one for the password.
 - Name: KEYCLOAK_PASSWORD
 - Value: admin
 - Add secret
+
+#### Tips & tricks
+
+##### Fetch credentials for a running cluster
+
+If you need to connect to a running cluster from your local development machine, run the following command.
+
+    gcloud container clusters get-credentials microcoffeeoncloud-cluster
