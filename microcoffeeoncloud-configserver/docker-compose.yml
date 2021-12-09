@@ -8,6 +8,7 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=devdocker
             - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/dagbjorn/microcoffeeoncloud-appconfig.git
+            - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT-LABEL=master
         domainname: microcoffee.study
         networks:
             configserver:
