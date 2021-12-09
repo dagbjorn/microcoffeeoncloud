@@ -15,8 +15,9 @@ import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 
 /**
- * Configuration class to hack Springfox WebMvcRequestHandlerProvider to filter out actuator controllers which don't respect
- * spring.mvc.pathmatch.matching-strategy.
+ * Configuration class to hack Springfox WebMvcRequestHandlerProvider to filter out Actuator controllers which don't respect
+ * spring.mvc.pathmatch.matching-strategy. The code is copied from
+ * <a href="https://github.com/springfox/springfox/issues/3462">Springfox issue 3462</a>.
  * <p>
  * This configuration class complements reverting the matching strategy spring.mvc.pathmatch.matching-strategy to ant-path-matcher
  * in <code>application.properties</code> as follows.
@@ -28,7 +29,6 @@ import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
  * This configuration is needed until a final fix is applied, either and preferably 1) Springfox fixes the issue, or 2) Migrate away
  * from Springfox to Springdoc.
  *
- * @see <a href="https://github.com/springfox/springfox/issues/3462">Springfox issue 3462</a>
  * @see <a href=
  *      "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.6-Release-Notes#pathpattern-based-path-matching-strategy-for-spring-mvc">Spring-Boot-2.6-Release-Notes
  *      pathpattern-based-path-matching-strategy-for-spring-mvc</a>
