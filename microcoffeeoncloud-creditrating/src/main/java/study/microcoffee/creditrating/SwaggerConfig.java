@@ -3,34 +3,27 @@ package study.microcoffee.creditrating;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
 
 /**
  * Configuration class of Swagger.
+ * <p>
+ * See <code>application.properties</code> for more configuration.
  */
 @Configuration
 public class SwaggerConfig {
 
     @Bean
-    public Docket apiSwaggerConfig() {
-        return new Docket(DocumentationType.SWAGGER_2) //
-            .select() //
-            .paths(PathSelectors.ant("/api/**")) //
-            .build() //
-            .apiInfo(apiInfo());
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder() //
-            .title("Credit Rating API") //
-            .description("API to get the credit rating of customers.") //
-            .version("1.0") //
-            .contact(new Contact("Dagbjørn Nogva", "https://github.com/dagbjorn", "")) //
-            .build();
+    public OpenAPI apiInfo() {
+        return new OpenAPI() //
+            .info(new Info() //
+                .title("Credit Rating API") //
+                .description("API to get the credit rating of customers.") //
+                .version("1.0") //
+                .contact(new Contact() //
+                    .name("Dagbjørn Nogva") //
+                    .url("https://github.com/dagbjorn")));
     }
 }
