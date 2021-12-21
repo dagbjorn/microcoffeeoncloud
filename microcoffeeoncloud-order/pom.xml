@@ -33,7 +33,7 @@
         <spring-cloud.version>2021.0.0</spring-cloud.version>
 
         <modelmapper.version>2.4.5</modelmapper.version>
-        <springdoc-openapi-ui.version>1.6.0</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.2</springdoc-openapi-ui.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
