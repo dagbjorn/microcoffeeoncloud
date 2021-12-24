@@ -26,9 +26,9 @@ import reactor.core.publisher.Mono;
  * - Log incoming request url and corresponding route URI</a>
  */
 @Component
-public class LoggingFilter implements GlobalFilter {
+public class RouteLoggingFilter implements GlobalFilter {
 
-    private final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+    private final Logger logger = LoggerFactory.getLogger(RouteLoggingFilter.class);
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
