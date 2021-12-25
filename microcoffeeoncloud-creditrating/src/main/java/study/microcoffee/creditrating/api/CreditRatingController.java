@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import study.microcoffee.creditrating.SwaggerConfig;
 import study.microcoffee.creditrating.behavior.ServiceBehavior;
 import study.microcoffee.creditrating.domain.CreditRating;
 
@@ -23,6 +25,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
 @RefreshScope
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = { MediaType.APPLICATION_JSON_VALUE })
+@Tag(name = SwaggerConfig.CREDIT_RATING_TAG)
 public class CreditRatingController {
 
     private Logger logger = LoggerFactory.getLogger(CreditRatingController.class);
@@ -31,6 +34,7 @@ public class CreditRatingController {
     public ServiceBehavior serviceBehavior;
 
     @GetMapping(path = "/creditrating/{customerId}")
+    @GetCreditRatingSwagger
     public CreditRating getCreditRating(@PathVariable("customerId") String customerId) {
         logger.debug("GET /creditrating/{}", customerId);
 
