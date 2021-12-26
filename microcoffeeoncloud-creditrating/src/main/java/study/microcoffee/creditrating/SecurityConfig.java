@@ -13,6 +13,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity //
+            .cors() // Bypasses the authorization checks for OPTIONS requests
+            .and() //
             .authorizeRequests() //
             .mvcMatchers("/api/**").hasAuthority("SCOPE_creditrating") //
             .and() //

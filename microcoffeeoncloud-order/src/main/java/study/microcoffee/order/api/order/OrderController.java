@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ import study.microcoffee.order.repository.OrderRepository;
 /**
  * Controller class of the Order REST API for handling coffee orders.
  */
+@CrossOrigin // Needed for Swagger/SpringDoc to work from gateway.
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = SwaggerConfig.ORDER_TAG, description = "API for handling coffee orders.")
@@ -55,7 +57,7 @@ public class OrderController {
     private ModelMapper modelMapper = new ModelMapper();
 
     /**
-     * Saves the order in the database.
+     * Creates a new order and saves it in the database.
      * <p>
      * If the order is successfully created, HTTP status 201 (Created) is returned.
      *
@@ -67,8 +69,8 @@ public class OrderController {
      *         containing the URL for reading the saved order.
      */
     @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @SaveOrderSwagger
-    public ResponseEntity<OrderModel> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId,
+    @CreateOrderSwagger
+    public ResponseEntity<OrderModel> createOrder(@PathVariable("coffeeShopId") long coffeeShopId,
         @RequestBody OrderModel orderModel) {
         logger.debug("POST /{}/order body={}", coffeeShopId, orderModel);
 

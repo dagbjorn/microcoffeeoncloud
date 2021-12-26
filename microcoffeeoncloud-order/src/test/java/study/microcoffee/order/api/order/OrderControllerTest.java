@@ -65,7 +65,7 @@ class OrderControllerTest {
     private ModelMapper modelMapper = new ModelMapper();
 
     @Test
-    void saveOrderShouldReturnCreated() throws Exception {
+    void createOrderShouldReturnCreated() throws Exception {
         OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //
@@ -92,7 +92,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
+    void createOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
         OrderModel orderModel = OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
             .size("Small") //

@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import study.microcoffee.order.SwaggerConfig;
 
@@ -20,7 +19,7 @@ import study.microcoffee.order.SwaggerConfig;
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Operation(operationId = "saveOrder", //
+@Operation(operationId = "createOrder", //
     tags = { SwaggerConfig.ORDER_TAG }, //
     summary = "Creates an order.", //
     parameters = { //
@@ -28,7 +27,6 @@ import study.microcoffee.order.SwaggerConfig;
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "201", description = "New order created."), //
-        @ApiResponse(responseCode = "402", description = "Too low credit rating to accept order. Payment required!", content = @Content), //
-        @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content) })
-public @interface SaveOrderSwagger {
+        @ApiResponse(responseCode = "402", description = "Too low credit rating to accept order. Payment required!") })
+public @interface CreateOrderSwagger {
 }

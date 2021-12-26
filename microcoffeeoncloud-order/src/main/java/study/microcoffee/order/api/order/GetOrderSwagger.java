@@ -29,7 +29,6 @@ import study.microcoffee.order.SwaggerConfig;
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "200", description = "Order found and returned in the JSON-formatted HTTP response body."), //
-        @ApiResponse(responseCode = "204", description = "Requested order ID is not found.", content = @Content), //
-        @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content) })
+        @ApiResponse(responseCode = "204", description = "Requested order ID is not found.", content = @Content) })
 public @interface GetOrderSwagger {
 }

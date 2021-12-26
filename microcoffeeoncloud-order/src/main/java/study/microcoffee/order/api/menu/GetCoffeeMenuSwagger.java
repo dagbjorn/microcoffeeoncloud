@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import study.microcoffee.order.SwaggerConfig;
 
@@ -26,7 +24,6 @@ import study.microcoffee.order.SwaggerConfig;
     parameters = { //
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
-        @ApiResponse(responseCode = "200", description = "Returns the coffee menu."), //
-        @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content(schema = @Schema(hidden = true))) })
+        @ApiResponse(responseCode = "200", description = "Returns the coffee menu.") })
 public @interface GetCoffeeMenuSwagger {
 }

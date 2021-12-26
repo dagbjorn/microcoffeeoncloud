@@ -30,7 +30,6 @@ import study.microcoffee.creditrating.SwaggerConfig;
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "200", description = "Returns the credit rating."), //
-        @ApiResponse(responseCode = "401", description = "Authentication error.", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error.", content = @Content) })
+        @ApiResponse(responseCode = "401", description = "Authentication error.", content = @Content) })
 public @interface GetCreditRatingSwagger {
 }
