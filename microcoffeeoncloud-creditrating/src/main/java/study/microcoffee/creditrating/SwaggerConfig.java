@@ -51,8 +51,7 @@ public class SwaggerConfig {
                         .name(CORRELATION_ID_HEADER) //
                         .description("Correlation ID primarily used as cross-reference in logs.") //
                         .example(UUID.randomUUID().toString()) //
-                        .schema(new StringSchema())) //
-            ) //
+                        .schema(new StringSchema()))) //
             .tags(List.of(new Tag() //
                 .name(CREDIT_RATING_TAG) //
                 .description("API to get the credit rating of a customer.")));
