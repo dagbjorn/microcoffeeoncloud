@@ -9,5 +9,6 @@ kubectl delete service,deployment configserver
 kubectl delete service,deployment discovery
 kubectl delete service,deployment database
 kubectl delete secret order-client-secret
+kubectl wait --for=delete pod -l "app in (authserver,configserver,mongodb,discovery,gateway,location,order,creditrating)" --timeout=120s
 kubectl get services
-kubectl get pods -w
+kubectl get pods
