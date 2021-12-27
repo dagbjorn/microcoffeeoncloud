@@ -27,6 +27,7 @@ Date | Change
 30.05.2021 | Upgraded to Spring Boot 2.5.0 and Spring Cloud 2020.0.3.
 23.11.2021 | Added extra on required setup for GitHub Actions workflows.
 09.12.2021 | Upgraded to Spring Boot 2.6.1 and Spring Cloud 2021.0.0.
+27.12.2021 | Migrated from Springfox to SpringDoc. Springfox appears to be a more or less dead project.
 
 ## Contents
 
@@ -425,7 +426,7 @@ assuming the VM host IP 192.168.99.100.
 
 Centralized browsing of API documentation is available at the following URL:
 
-    https://192.168.99.100:8443/swagger-ui/index.html
+    https://192.168.99.100:8443/swagger-ui.html
 
 Select the spec of interest in the upper right corner.
 
