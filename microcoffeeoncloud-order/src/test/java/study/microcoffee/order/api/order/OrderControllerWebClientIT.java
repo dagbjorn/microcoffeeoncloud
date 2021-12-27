@@ -109,7 +109,7 @@ class OrderControllerWebClientIT {
     }
 
     @Test
-    void saveOrderAndReadBackShouldReturnSavedOrder() throws Exception {
+    void createOrderAndReadBackShouldReturnSavedOrder() throws Exception {
         // WireMock stubbing of CreditRating API
         final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
 
@@ -154,7 +154,7 @@ class OrderControllerWebClientIT {
 
     @Test
     @EnabledIf("isBasicConsumer")
-    void saveOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -168,7 +168,7 @@ class OrderControllerWebClientIT {
 
     @Test
     @EnabledIf("isResilience4jConsumer")
-    void saveOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
         float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubWireMockTokenResponse();

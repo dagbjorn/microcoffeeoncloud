@@ -1,14 +1,18 @@
 package study.microcoffee.order;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.tags.Tag;
 
 /**
  * Configuration class of Swagger.
@@ -16,21 +20,34 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public Docket apiSwaggerConfig() {
-        return new Docket(DocumentationType.SWAGGER_2) //
-            .select() //
-            .paths(PathSelectors.ant("/api/**")) //
-            .build() //
-            .apiInfo(apiInfo());
-    }
+    public static final String MENU_TAG = "Menu";
+    public static final String ORDER_TAG = "Order";
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder() //
-            .title("Menu/Order API") //
-            .description("API for use by customers to read the menu and order drinks.") //
-            .version("1.0") //
-            .contact(new Contact("Dagbjørn Nogva", "https://github.com/dagbjorn", "")) //
-            .build();
+    public static final String CORRELATION_ID_HEADER = "Correlation-Id";
+
+    @Bean
+    public OpenAPI apiInfo() {
+        return new OpenAPI() //
+            .info(new Info() //
+                .title("Menu/Order API") //
+                .description("API for use by customers to read the menu and order drinks.") //
+                .version("1.0") //
+                .contact(new Contact() //
+                    .name("Dagbjørn Nogva") //
+                    .url("https://github.com/dagbjorn")))
+            .components(new Components() //
+                .addParameters(CORRELATION_ID_HEADER, //
+                    new Parameter() //
+                        .in("header") //
+                        .name(CORRELATION_ID_HEADER) //
+                        .description("Correlation ID primarily used as cross-reference in logs.") //
+                        .schema(new StringSchema().example(UUID.randomUUID().toString())))) //
+            .tags(List.of( //
+                new Tag() //
+                    .name(MENU_TAG) //
+                    .description("API to get the coffee menu."), //
+                new Tag() //
+                    .name(ORDER_TAG) //
+                    .description("API for handling coffee orders.")));
     }
 }

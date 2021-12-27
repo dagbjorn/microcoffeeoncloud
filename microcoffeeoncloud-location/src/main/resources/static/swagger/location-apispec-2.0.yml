@@ -1,46 +1,58 @@
 swagger: '2.0'
 info:
-    description: '[FROM CUSTOM SPEC] Finds the coffee shop closest to the current
-        position.'
-    version: '1.0'
-    title: Location API
-    contact:
-        name: Dagbjørn Nogva
-        url: https://github.com/dagbjorn
+  description: '[FROM CUSTOM SPEC] Finds the coffee shop closest to a given position.'
+  version: '1.0'
+  title: Location API
+  contact:
+    name: Dagbjørn Nogva
+    url: https://github.com/dagbjorn
 basePath: /
 tags:
--   name: Location
+- name: Location
+  description: API to find the coffee shop closest to a given position.
 paths:
-    /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}:
-        get:
-            tags:
-            - Location
-            summary: Get nearest coffee shop closest to the current position.
-            operationId: getNearestCoffeeShop
-            produces:
-            - application/json
-            parameters:
-            -   name: latitude
-                in: path
-                description: latitude
-                required: true
-                type: number
-                format: double
-            -   name: longitude
-                in: path
-                description: longitude
-                required: true
-                type: number
-                format: double
-            -   name: maxdistance
-                in: path
-                description: maxdistance
-                required: true
-                type: integer
-            responses:
-                '200':
-                    description: OK
-                    schema:
-                        type: object
-                '204':
-                    description: No coffee shop found
+  /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}:
+    get:
+      tags:
+      - Location
+      summary: Get nearest coffee shop closest to the given position.
+      operationId: getNearestCoffeeShop
+      produces:
+      - application/json
+      parameters:
+      - name: latitude
+        in: path
+        description: Latitude of the given position.
+        required: true
+        schema:
+          type: number
+          format: double
+          example: 59.969048
+      - name: longitude
+        in: path
+        description: Longitude of the given position.
+        required: true
+        schema:
+          type: number
+          format: double
+          example: 10.774445
+      - name: maxdistance
+        in: path
+        description: Maximum distance to the coffee shop from the given position.
+        required: true
+        schema:
+          type: integer
+          example: 2500
+      - name: Correlation-Id
+        in: header
+        description: Correlation ID primarily used as cross-reference in logs.
+        schema:
+          type: string
+          example: ed7ea13c-fff5-40a9-a059-a1c6c1656ef5
+      responses:
+        '200':
+          description: The nearest coffee shop formatted as JSON data.
+          schema:
+            type: object
+        '204':
+          description: No coffee shop found.

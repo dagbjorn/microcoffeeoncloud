@@ -32,7 +32,7 @@
 
         <spring-cloud.version>2021.0.0</spring-cloud.version>
 
-        <springfox.version>3.0.0</springfox.version>
+        <springdoc-openapi.version>1.6.3</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
@@ -141,9 +141,9 @@
 
         <!-- Swagger -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
 
         <!-- Test -->
