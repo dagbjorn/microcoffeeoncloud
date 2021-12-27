@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import study.microcoffee.creditrating.SwaggerConfig;
@@ -26,7 +27,7 @@ import study.microcoffee.creditrating.SwaggerConfig;
     summary = "Gets the credit rating of a customer.", //
     security = { @SecurityRequirement(name = SwaggerConfig.BEARER_TOKEN_AUTH) }, //
     parameters = { //
-        @Parameter(in = ParameterIn.PATH, name = "customerId", description = "Customer ID.", example = "12345"), //
+        @Parameter(in = ParameterIn.PATH, name = "customerId", description = "Customer ID.", schema = @Schema(type = "string", example = "12345")), //
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "200", description = "Returns the credit rating."), //

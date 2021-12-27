@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import study.microcoffee.order.SwaggerConfig;
 
@@ -24,8 +25,8 @@ import study.microcoffee.order.SwaggerConfig;
     tags = { SwaggerConfig.ORDER_TAG }, //
     summary = "Gets an order.", //
     parameters = { //
-        @Parameter(in = ParameterIn.PATH, name = "coffeeShopId", description = "Coffee shop ID.", example = "1"), //
-        @Parameter(in = ParameterIn.PATH, name = "orderId", description = "Order ID.", example = "61c8229a9501224146c670ce"), //
+        @Parameter(in = ParameterIn.PATH, name = "coffeeShopId", description = "Coffee shop ID.", schema = @Schema(type = "string", example = "1")), //
+        @Parameter(in = ParameterIn.PATH, name = "orderId", description = "Order ID.", schema = @Schema(type = "string", example = "61c8229a9501224146c670ce")), //
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "200", description = "Order found and returned in the JSON-formatted HTTP response body."), //

@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import study.microcoffee.order.SwaggerConfig;
 
@@ -23,10 +25,10 @@ import study.microcoffee.order.SwaggerConfig;
     tags = { SwaggerConfig.ORDER_TAG }, //
     summary = "Creates an order.", //
     parameters = { //
-        @Parameter(in = ParameterIn.PATH, name = "coffeeShopId", description = "Coffee shop ID.", example = "1"), //
+        @Parameter(in = ParameterIn.PATH, name = "coffeeShopId", description = "Coffee shop ID.", schema = @Schema(type = "string", example = "1")), //
         @Parameter(ref = SwaggerConfig.CORRELATION_ID_HEADER) }, //
     responses = { //
         @ApiResponse(responseCode = "201", description = "New order created."), //
-        @ApiResponse(responseCode = "402", description = "Too low credit rating to accept order. Payment required!") })
+        @ApiResponse(responseCode = "402", description = "Too low credit rating to accept order. Payment required!", content = @Content) })
 public @interface CreateOrderSwagger {
 }
