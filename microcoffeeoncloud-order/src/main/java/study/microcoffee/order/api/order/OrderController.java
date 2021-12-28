@@ -34,7 +34,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @CrossOrigin // Needed for Swagger/SpringDoc to work from gateway.
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = SwaggerConfig.ORDER_TAG, description = "API for handling coffee orders.")
+@Tag(name = SwaggerConfig.ORDER_TAG, description = SwaggerConfig.ORDER_DESCRIPTION)
 public class OrderController {
 
     public static final String BASIC_CONSUMER = "Basic";
