@@ -19,7 +19,7 @@ import study.microcoffee.order.repository.MenuRepository;
 @CrossOrigin // Needed for Swagger/SpringDoc to work from gateway.
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = SwaggerConfig.MENU_TAG, description = "API to get the coffee menu.")
+@Tag(name = SwaggerConfig.MENU_TAG, description = SwaggerConfig.MENU_DESCRIPTION)
 public class MenuController {
 
     private Logger logger = LoggerFactory.getLogger(MenuController.class);
