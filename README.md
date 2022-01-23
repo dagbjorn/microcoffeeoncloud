@@ -1692,7 +1692,7 @@ Microcoffee realm > Clients > order-service > Credentials > Regenerate Secret
 
 [GitHub Actions](https://docs.github.com/en) is a CI tool for creating workflows that automate software building, testing and deploying right out of your GitHub repos. With GitHub Free for user accounts, GitHub Actions is free for public repositories. For private repositories, you get 2000 automation minutes/month for free.
 
-For Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
+In Microcoffee, workflows are created for building the Microcoffee Docker images, creating/deleting clusters on Google Kubernetes Engine (GKE) and deploy/undeploying the Microcoffee Docker images in the GKE cluster.
 
 All workflows are stored in the standard `.github/workflows` folder.
 
