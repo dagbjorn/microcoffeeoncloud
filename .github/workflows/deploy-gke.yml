@@ -25,7 +25,7 @@ jobs:
 
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GKE_PROJECT }}
           service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
