@@ -14,31 +14,24 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/authenticate-to-google-cloud
       - id: auth
+        name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.GKE_SRVGHA_KEY }}'
-
-      - name: Display current gcloud environment 1
-        run: |-
-          gcloud info
-          printenv
 
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GKE_PROJECT }}
-#          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
-#          export_default_credentials: true
 
-      - name: Display current gcloud environment 2
+      - name: Display current gcloud environment
         run: |-
           gcloud info
-          printenv
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
-        uses: google-github-actions/get-gke-credentials@main
+        uses: google-github-actions/get-gke-credentials@v0
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
