@@ -25,6 +25,8 @@ jobs:
           gcloud info
           printenv
           cat $GOOGLE_APPLICATION_CREDENTIALS
+          echo ${{ secrets.GKE_SRVGHA_KEY }} | base64 -d > $GITHUB_WORKSPACE/gke-srvgha-key.json
+          cat $GITHUB_WORKSPACE/gke-srvgha-key.json
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
