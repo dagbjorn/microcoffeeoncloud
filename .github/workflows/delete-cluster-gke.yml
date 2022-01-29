@@ -12,12 +12,18 @@ jobs:
     name: Delete GKE cluster
     runs-on: ubuntu-latest
     steps:
+      # https://github.com/marketplace/actions/authenticate-to-google-cloud
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GKE_SRVGHA_KEY }}
+
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GKE_PROJECT }}
-          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
 
       - name: Display current gcloud environment
         run: |-
