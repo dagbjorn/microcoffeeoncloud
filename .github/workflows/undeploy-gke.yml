@@ -12,21 +12,29 @@ jobs:
     name: Undeploy from GKE cluster
     runs-on: ubuntu-latest
     steps:
+      # https://github.com/marketplace/actions/authenticate-to-google-cloud
+      - id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GKE_SRVGHA_KEY }}'
+
+      - name: Display current gcloud environment 1
+        run: |-
+          gcloud info
+          printenv
+
       # https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GKE_PROJECT }}
-          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
-          export_default_credentials: true
+#          service_account_key: ${{ secrets.GKE_SRVGHA_KEY }}
+#          export_default_credentials: true
 
-      - name: Display current gcloud environment
+      - name: Display current gcloud environment 2
         run: |-
           gcloud info
           printenv
-          cat $GOOGLE_APPLICATION_CREDENTIALS
-          echo ${{ secrets.GKE_SRVGHA_KEY }} | base64 -d > $GITHUB_WORKSPACE/gke-srvgha-key.json
-          cat $GITHUB_WORKSPACE/gke-srvgha-key.json
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
