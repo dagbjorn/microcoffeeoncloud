@@ -50,7 +50,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           # org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          mvn --projects microcoffeeoncloud-configserver sonar:sonar -B
+          mvn -f microcoffeeoncloud-configserver/pom.xml sonar:sonar -B
           mvn --projects microcoffeeoncloud-creditrating sonar:sonar -B
           mvn --projects microcoffeeoncloud-discovery sonar:sonar -B
           mvn --projects microcoffeeoncloud-gateway sonar:sonar -B
