@@ -42,7 +42,7 @@ jobs:
         run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
 
       - name: Run unit and integration tests
-        run: mvn clean verify -Pitest -B
+        run: mvn clean verify -Pcoverage,itest -B
 
       - name: Analyze with SonarCloud
         env:
@@ -50,14 +50,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd microcoffeeoncloud-configserver && mvn sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-creditrating sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-discovery sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-gateway sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-jwttest sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-location sonar:sonar -B
-          mvn --projects .,microcoffeeoncloud-order sonar:sonar -B
-          # testing all projects
-          mvn sonar:sonar -B
+          cd microcoffeeoncloud-creditrating && mvn sonar:sonar -B
+          cd microcoffeeoncloud-discovery && mvn sonar:sonar -B
+          cd microcoffeeoncloud-gateway && mvn sonar:sonar -B
+          cd microcoffeeoncloud-jwttest && mvn sonar:sonar -B
+          cd microcoffeeoncloud-location && mvn sonar:sonar -B
+          cd microcoffeeoncloud-order && mvn sonar:sonar -B
 
       - name: Build and push Docker images to DockerHub
         run: |
