@@ -39,7 +39,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Generate certificate
-        run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
+        run: mvn --projects microcoffeeoncloud-certificates clean install -Pgen-certs -B
 
       - name: Run unit and integration tests
         run: mvn clean verify -Pitest -B
@@ -49,7 +49,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn sonar:sonar -B
+          # org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn --projects microcoffeeoncloud-configserver sonar:sonar -B
+          mvn --projects microcoffeeoncloud-creditrating sonar:sonar -B
+          mvn --projects microcoffeeoncloud-discovery sonar:sonar -B
+          mvn --projects microcoffeeoncloud-gateway sonar:sonar -B
+          mvn --projects microcoffeeoncloud-jwttest sonar:sonar -B
+          mvn --projects microcoffeeoncloud-location sonar:sonar -B
+          mvn --projects microcoffeeoncloud-order sonar:sonar -B
 
       - name: Build and push Docker images to DockerHub
         run: |
