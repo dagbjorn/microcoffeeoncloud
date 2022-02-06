@@ -42,13 +42,15 @@ jobs:
         run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
 
       - name: Run unit and integration tests
-        run: mvn clean verify -Pcoverage,itest -B
+        run: mvn clean install -Pcoverage,itest -B
 
       - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          # sonar-maven-plugin is quite fuzzy about how it should be invoked.
+          # Our aggregator pom is too simple for invoking sonar:sonar on it.
           cd microcoffeeoncloud-configserver && mvn sonar:sonar -B && cd ..
           cd microcoffeeoncloud-creditrating && mvn sonar:sonar -B && cd ..
           cd microcoffeeoncloud-discovery && mvn sonar:sonar -B && cd ..
