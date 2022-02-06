@@ -49,14 +49,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          mvn -f microcoffeeoncloud-configserver/pom.xml sonar:sonar -B
-          mvn --projects microcoffeeoncloud-creditrating sonar:sonar -B
-          mvn --projects microcoffeeoncloud-discovery sonar:sonar -B
-          mvn --projects microcoffeeoncloud-gateway sonar:sonar -B
-          mvn --projects microcoffeeoncloud-jwttest sonar:sonar -B
-          mvn --projects microcoffeeoncloud-location sonar:sonar -B
-          mvn --projects microcoffeeoncloud-order sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-configserver sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-creditrating sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-discovery sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-gateway sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-jwttest sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-location sonar:sonar -B
+          mvn --projects .,microcoffeeoncloud-order sonar:sonar -B
+          # testing all projects
+          mvn sonar:sonar -B
 
       - name: Build and push Docker images to DockerHub
         run: |
