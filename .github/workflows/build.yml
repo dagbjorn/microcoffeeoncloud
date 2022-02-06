@@ -39,7 +39,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Generate certificate
-        run: mvn --projects microcoffeeoncloud-certificates clean install -Pgen-certs -B
+        run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
 
       - name: Run unit and integration tests
         run: mvn clean verify -Pitest -B
