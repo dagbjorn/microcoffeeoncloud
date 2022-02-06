@@ -304,11 +304,6 @@
 
 
         <!-- Generate code coverage: mvn clean verify -Pcoverage -->
-        <!--
-                This profile supports the JaCoCo XML format for code coverage instead of the old JaCoCo .exec file format which is
-                deprecated in SonarQube 7.x. Also, starting from SonarQube 7.7, the "Coverage per Test" feature is removed.
-                Drop of JaCoCo .exec file format support is planned for September 2019.
-         -->
         <profile>
             <id>coverage</id>
             <properties>
