@@ -30,6 +30,7 @@
         <sonar.organization>dagbjorn</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
+        <sonar.verbose>true</sonar.verbose>
 
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
