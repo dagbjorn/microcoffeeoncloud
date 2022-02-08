@@ -49,15 +49,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # sonar-maven-plugin is quite fuzzy about how it should be invoked.
-          # Our aggregator pom is too simple for invoking sonar:sonar on it.
+          # Analyze as separate projects
           cd microcoffeeoncloud-configserver && mvn sonar:sonar -B && cd .. && \
           cd microcoffeeoncloud-creditrating && mvn sonar:sonar -B && cd .. && \
           cd microcoffeeoncloud-discovery && mvn sonar:sonar -B && cd .. && \
           cd microcoffeeoncloud-gateway && mvn sonar:sonar -B && cd .. && \
-          cd microcoffeeoncloud-jwttest && mvn sonar:sonar -B -Dsonar.verbose=true && cd .. && \
+          cd microcoffeeoncloud-jwttest && mvn sonar:sonar -B && cd .. && \
           cd microcoffeeoncloud-location && mvn sonar:sonar -B && cd .. && \
-          cd microcoffeeoncloud-order && mvn sonar:sonar -B -Dsonar.verbose=true && cd ..
+          cd microcoffeeoncloud-order && mvn sonar:sonar -B && cd ..
 
       - name: Build and push Docker images to DockerHub
         run: |
