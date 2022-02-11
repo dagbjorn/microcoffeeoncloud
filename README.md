@@ -28,6 +28,7 @@ Date | Change
 23.11.2021 | Added extra on required setup for GitHub Actions workflows.
 09.12.2021 | Upgraded to Spring Boot 2.6.1 and Spring Cloud 2021.0.0.
 27.12.2021 | Migrated from Springfox to SpringDoc. Springfox appears to be a more or less dead project.
+11.02.2022 | Extended GitHub Action build workflow with Sonar analysis using SonarCloud.
 
 ## Contents
 
@@ -1696,15 +1697,17 @@ In Microcoffee, workflows are created for building the Microcoffee Docker images
 
 All workflows are stored in the standard `.github/workflows` folder.
 
+:point_right: The build flow performs a Sonar analysis of the Microcoffee projects. This requires an account on SonarCloud. Please note that SonarCloud are free for open-source projects :-)
+
 #### Resources
 
 Some useful resources:
-- (GitHub Actions docs)[https://docs.github.com/en/actions]
-- (GitHub Marketplace for Actions)[https://github.com/marketplace?type=actions]
-- (Deploying to Google Kubernetes Engine)[https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine]
-- (Understanding roles in Google Cloud)[https://cloud.google.com/iam/docs/understanding-roles] :bulb: Very useful mapping between roles and permissions.
-- (Google Kubernetes Engine API permissions)[https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions]
-- (Compute Engine IAM roles and permissions)[https://cloud.google.com/compute/docs/access/iam]
+- [GitHub Actions docs](https://docs.github.com/en/actions)
+- [GitHub Marketplace for Actions]([https://github.com/marketplace?type=actions)
+- [Deploying to Google Kubernetes Engine](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine)
+- [Understanding roles in Google Cloud](https://cloud.google.com/iam/docs/understanding-roles) :bulb: Very useful mapping between roles and permissions.
+- [Google Kubernetes Engine API permissions](https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions)
+- [Compute Engine IAM roles and permissions](https://cloud.google.com/compute/docs/access/iam)
 
 #### Setup for running the workflows
 
@@ -1810,6 +1813,27 @@ And another one for the password.
 
 - Name: KEYCLOAK_PASSWORD
 - Value: admin
+- Add secret
+
+##### Create a Sonar token in SonarCloud
+
+The build workflow requires a Sonar token for authenticating to SonarCloud.
+
+Open https://sonarcloud.io, sign in to your SonarCloud account and create a Sonar token as follows.
+
+Select Account avatar > My Account > Security
+- In Generate Tokens, enter a name: GitHub Microcoffee
+- Generate
+
+:point_right: Make a copy of the generated token; you won't see it again...
+
+##### Store a Sonar token in a GitHub secret
+
+Go back to your GitHub repo and add your Sonar token in a GitHub secret.
+
+microcoffeeoncloud repo > Settings > Secrets > New repository secret
+- Name: SONAR_TOKEN
+- Value: \<base64 encoded content of JSON key file\>
 - Add secret
 
 #### Tips & tricks
