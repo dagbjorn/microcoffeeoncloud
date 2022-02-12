@@ -1,5 +1,6 @@
 package study.microcoffee.creditrating.behavior;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ public class UnstableServiceBehavior extends AbstractServiceBehavior {
 
     private final Logger logger = LoggerFactory.getLogger(UnstableServiceBehavior.class);
 
-    private Random random = new Random();
+    private Random random = new SecureRandom();
 
     private int delaySecs;
 

@@ -19,10 +19,10 @@ import study.microcoffee.jwttest.keyprovider.KeyStoreKeyProvider;
 public class TestTokens {
 
     public static final String KEY_STORE_NAME = "microcoffee-keystore.jks";
-    public static final String KEY_STORE_PASSWORD = "12345678";
+    public static final String KEY_STORE_PASSWORD = "12345678";  // NOSONAR Allow for tests
     public static final String KEY_STORE_TYPE = "JKS";
     public static final String KEY_ALIAS = "localhost";
-    public static final String KEY_PASSWORD = "12345678";
+    public static final String KEY_PASSWORD = "12345678";   // NOSONAR Allow for tests
     public static final String KEY_TYPE = "RSA";
 
     // Default values in tokens
