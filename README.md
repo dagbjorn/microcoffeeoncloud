@@ -1815,7 +1815,7 @@ And another one for the password.
 - Value: admin
 - Add secret
 
-##### Create a Sonar token in SonarCloud
+##### Create Sonar token in SonarCloud
 
 The build workflow requires a Sonar token for authenticating to SonarCloud.
 
@@ -1827,7 +1827,7 @@ Select Account avatar > My Account > Security
 
 :point_right: Make a copy of the generated token; you won't see it again...
 
-##### Store a Sonar token in a GitHub secret
+##### Store Sonar token in a GitHub secret
 
 Go back to your GitHub repo and add your Sonar token in a GitHub secret.
 
