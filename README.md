@@ -1697,7 +1697,7 @@ In Microcoffee, workflows are created for building the Microcoffee Docker images
 
 All workflows are stored in the standard `.github/workflows` folder.
 
-:point_right: The build flow performs a Sonar analysis of the Microcoffee projects. This requires an account on [SonarCloud](https://sonarcloud.io). Please note that SonarCloud are free for open-source projects :slightly_smiling_face:
+:point_right: The build flow performs a Sonar analysis of the Microcoffee projects. This requires an account on [SonarCloud](https://sonarcloud.io). Please note that SonarCloud is free for open-source projects :slightly_smiling_face:
 
 #### Resources
 
