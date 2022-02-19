@@ -1697,13 +1697,13 @@ In Microcoffee, workflows are created for building the Microcoffee Docker images
 
 All workflows are stored in the standard `.github/workflows` folder.
 
-:point_right: The build flow performs a Sonar analysis of the Microcoffee projects. This requires an account on SonarCloud. Please note that SonarCloud are free for open-source projects :-)
+:point_right: The build flow performs a Sonar analysis of the Microcoffee projects. This requires an account on [SonarCloud](https://sonarcloud.io). Please note that SonarCloud are free for open-source projects :slightly_smiling_face:
 
 #### Resources
 
 Some useful resources:
 - [GitHub Actions docs](https://docs.github.com/en/actions)
-- [GitHub Marketplace for Actions]([https://github.com/marketplace?type=actions)
+- [GitHub Marketplace for Actions](https://github.com/marketplace?type=actions)
 - [Deploying to Google Kubernetes Engine](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/deploying-to-your-cloud-provider/deploying-to-google-kubernetes-engine)
 - [Understanding roles in Google Cloud](https://cloud.google.com/iam/docs/understanding-roles) :bulb: Very useful mapping between roles and permissions.
 - [Google Kubernetes Engine API permissions](https://cloud.google.com/kubernetes-engine/docs/reference/api-permissions)
