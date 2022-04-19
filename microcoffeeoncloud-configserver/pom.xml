@@ -265,7 +265,7 @@
                             <repository>${docker.image.prefix}/${project.artifactId}</repository>
                             <tag>${project.version}</tag>
                         </configuration>
-                         <executions>
+                        <executions>
                             <execution>
                                 <id>push-image</id>
                                 <phase>package</phase>
