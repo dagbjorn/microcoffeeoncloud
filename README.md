@@ -1886,7 +1886,9 @@ and add the last line:
 
 :bulb: On Windows, the location of the Ubuntu file system is `%LOCALAPPDATA%\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx` (or similar).
 
-#### Installing Docker on Linux
+#### Installing Docker on WSL
+
+##### Installing Docker
 
 From the Ubuntu shell, install Docker.
 
@@ -1919,7 +1921,7 @@ From the Ubuntu shell, install Docker.
     sudo apt-get update
     sudo apt-get -y install net-tools ncat
 
-#### Start Docker and verify installation
+##### Start Docker and verify installation
 
 Start Docker daemon and check status.
 
@@ -1932,9 +1934,19 @@ Verify the installation.
 
 :warning: Each time WSL is shut down, Docker must be started again. As of Windows 10, there is no easy way to autostart services on WSL.
 
-#### Install Minikube and create kubectl alias
+##### Add DOCKER_HOST on Windows
 
-Download latest version of Minikube and install it in `/usr/local/bin`.
+To make the docker daemon available for tools like `dockerfile-maven-plugin` on Windows, add the environment variable:
+
+    DOCKER_HOST=tcp://localhost:2375
+
+from `Control Panel` > `Edit the system environment variables`.
+
+##### Install Minikube and create kubectl alias
+
+In addition to Docker, we also install Minikube which is single-node Kubernetes cluster.
+
+Download the latest version of Minikube and install it in `/usr/local/bin`.
 
     mkdir -p ~/download/minikube/latest
     cd ~/download/minikube/latest
@@ -1945,15 +1957,7 @@ Minikube comes with [kubectl built-in](https://minikube.sigs.k8s.io/docs/handboo
 
     echo 'alias kubectl="minikube kubectl --"' | sudo tee -a /etc/profile.d/kubernetes.sh
 
-#### Add DOCKER_HOST on Windows
-
-To make the docker daemon available for tools like `dockerfile-maven-plugin` on Windows, add the environment variable:
-
-    DOCKER_HOST=tcp://localhost:2375
-
-from `Control Panel` > `Edit the system environment variables`.
-
-#### Create PowerShell aliases in $PROFILE
+##### Create PowerShell aliases in $PROFILE
 
 With WSL, we can run Linux commands on Windows by preceding the command with "wsl". (Linux aliases don't appear to be supported.)
 
@@ -2026,3 +2030,9 @@ Finally, create the shortcut (e.g. called `PowerShell Java 17`) and set the foll
 With Docker running in WSL, everything should now be in place for building the Docker images and push them to DockerHub.
 
     mvn clean install -Pbuild,push
+
+#### WSL tips
+
+##### Find WSL host IP
+
+TBD
