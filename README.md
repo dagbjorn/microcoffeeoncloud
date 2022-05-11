@@ -1860,7 +1860,7 @@ In Microcoffee, WSL has been tested as an alternative platform for building Dock
 
 #### Installing WSL
 
-Start a Windows Command Prompt (or PowerShell) as administrator, and run:
+Let's start by installing WSL. Open a Windows Command Prompt (or PowerShell) as administrator, and run:
 
     wsl --install
 
@@ -1869,13 +1869,13 @@ This will enable the Windows features:
 * Virtual Machine Platform
 * Windows Subsystem for Linux,
 
-and set WSL 2 as the default version. Then the default Ubuntu Linux distribution is downloaded and installed. During the linux installation, a Ubuntu shell will open in which you will be prompted to enter the username and password of your user account on Linux. Any username will do, for instance `admin`.
+and set WSL 2 as the default version. Then, a Ubuntu Linux distribution is downloaded and installed. During the Linux installation, a Ubuntu shell will open in which you will be prompted to enter the username and password of your user account on Linux. Any username will do, for instance `admin`.
 
     Enter new UNIX username: admin
     New password: ********
     Retype new password: ********
 
-The user has sudo previleges, however, to avoid the hazzle of typing the password each time, configure sudo without password for `admin` as follows in the Ubuntu shell:
+The user has sudo previleges, however, to avoid the hazzle of typing the password each time, configure sudo without password for `admin`. In the Ubuntu shell, run:
 
     sudo visudo
 
@@ -1890,7 +1890,7 @@ and add the last line:
 
 From the Ubuntu shell, install Docker.
 
-:pray: Credits to https://www.objectivity.co.uk/blog/how-to-live-without-docker-desktop-developers-perspective/ for sharing the major part of this script (1-5).
+:pray: Credits to https://www.objectivity.co.uk/blog/how-to-live-without-docker-desktop-developers-perspective for sharing the major part of this script (1-5).
 
     #/bin/bash
 
@@ -1941,13 +1941,13 @@ Download latest version of Minikube and install it in `/usr/local/bin`.
     curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
     sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-Minikube comes with (kubectl built-in)[https://minikube.sigs.k8s.io/docs/handbook/kubectl/]. Just create an alias to make the use more convenient.
+Minikube comes with [kubectl built-in](https://minikube.sigs.k8s.io/docs/handbook/kubectl). Just create an alias to make the use more convenient.
 
     echo 'alias kubectl="minikube kubectl --"' | sudo tee -a /etc/profile.d/kubernetes.sh
 
 #### Add DOCKER_HOST on Windows
 
-To make the docker daemon available for tools like dockerfile-maven-plugin on Windows, add the environment variable
+To make the docker daemon available for tools like `dockerfile-maven-plugin` on Windows, add the environment variable:
 
     DOCKER_HOST=tcp://localhost:2375
 
@@ -1955,12 +1955,12 @@ from `Control Panel` > `Edit the system environment variables`.
 
 #### Create PowerShell aliases in $PROFILE
 
-With WSL, we can run Linux commands on Windows by preceding the command with "wsl" as follows. (Linux aliases don't appear to be supported.)
+With WSL, we can run Linux commands on Windows by preceding the command with "wsl". (Linux aliases don't appear to be supported.)
 
     wsl minikube start
     wsl docker ps
 
-However, with PowerShell this can be made more convenient by adding some stuff in the start script that is executed when a PowerShell window is opened.
+However, with PowerShell this can be made more convenient by adding aliases in the start script that is executed when a PowerShell window is opened.
 
 The location and name of the start script is defined by `$PROFILE`. Make sure the script folder exists and open it in your favorite editor. (Here, we simply use notepad.)
 
@@ -1996,13 +1996,15 @@ Set-Alias -Name kubectl -Value Start-WslKubectl
 
 `docker`, `docker-compose`, `minikube` and `kubectl` are now available when opening a new PowerShell window.
 
-:point_right: Remember that kubectl will use the Kubernetes cluster configured on Linux, not Windows.
+:point_right: Remember that `kubectl` will use the Kubernetes cluster configured on Linux, not Windows.
 
 #### Building Microcoffee
 
+##### Create PowerShell shortcut for Java 17
+
 Microcoffee is built on Java 17. If Java 17 is not the default JDK, a PowerShell window can be configured to use Java 17 as follows.
 
-Create a PowerShell script called `set-java17.ps1` (here in or instance in `C:\apps\utils`.
+Create a PowerShell script called `set-java17.ps1` (here in `C:\apps\utils`).
 
     notepad C:\apps\utils\set-java17.ps1
 
@@ -2013,7 +2015,14 @@ $env:JAVA_HOME = 'C:\apps\java\jdk-17.0.2'
 $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 ```
 
-Create a shortcut, for instance called `PowerShell Java 17`, to open a PowerShell for Java 17:
-- Target: `%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -ExecutionPolicy Bypass -File C:\apps\utils\set-java17.ps1`
+Finally, create the shortcut (e.g. called `PowerShell Java 17`) and set the following `Target` value:
 
+```
+%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -ExecutionPolicy Bypass -File C:\apps\utils\set-java17.ps1
+```
 
+##### Build Microcoffee
+
+With Docker running in WSL, everything should now be in place for building the Docker images and push them to DockerHub.
+
+    mvn clean install -Pbuild,push
