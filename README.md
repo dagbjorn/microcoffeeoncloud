@@ -29,6 +29,7 @@ Date | Change
 09.12.2021 | Upgraded to Spring Boot 2.6.1 and Spring Cloud 2021.0.0.
 27.12.2021 | Migrated from Springfox to SpringDoc. Springfox appears to be a more or less dead project.
 11.02.2022 | Extended GitHub Action build workflow with Sonar analysis using SonarCloud.
+10.05.2022 | Added extra on WSL installation.
 
 ## Contents
 
@@ -54,6 +55,7 @@ Date | Change
   - [API load testing with Gatling](#api-load-testing-gatling)
   - [Keycloak - configuration examples](#keycloak-config)
   - [Setup for GitHub Actions workflows](#github-actions-setup)
+  - [Building Microcoffee on WSL](#building-microcoffee-on-wsl)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -150,11 +152,13 @@ provided.
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.28.
 
-The code was originally written in Java 8, but is later migrated to Java 11. Only three issues were found during the migration:
+The code was originally written in Java 8, but was later migrated to Java 11. Only three issues were found during the migration:
 * ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
 * Incompatibility with wro4j-maven-plugin. Fixed by adding plugin dependency to org.mockito:mockito-core:2.18.0 or above.
 * Starting with Java 9, keytool creates PKCS12 keystores by default. This broke SSL for some still not understood reason. Fixed for now
 by changing the certificate generation to create JKS keystores.
+
+Then, in early 2022, Microcoffee was migrated to Java 17. No issues were found.
 
 For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
 
@@ -164,7 +168,7 @@ A Docker VM is needed. To create a Docker VM called `docker-vm` for use with Vir
 
     docker-machine create --driver virtualbox --virtualbox-memory "1536" docker-vm
 
-In addition, you'll need the basic Java development tools (IDE w/ Java 11 and Maven) installed on your development machine.
+In addition, you'll need the basic Java development tools (IDE w/ Java 17 and Maven) installed on your development machine.
 
 You will also need OpenSSL to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
 
@@ -1843,3 +1847,173 @@ microcoffeeoncloud repo > Settings > Secrets > New repository secret
 If you need to connect to a running cluster from your local development machine, run the following command.
 
     gcloud container clusters get-credentials microcoffeeoncloud-cluster
+
+### <a name="building-microcoffee-on-wsl"></a>Building Microcoffee on WSL
+
+#### About WSL
+
+[Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about) (WSL) makes it possible to run a Linux environment directly on Windows without the overhead of a traditional virtual machine (like Oracle VirtualBox) or dual-boot setup.
+
+In Microcoffee, WSL has been tested as an alternative platform for building Docker images during development. Historically, VirtualBox and Docker Toolbox have been used for this. However, [Docker Toolbox](https://github.com/docker-archive/toolbox) is now discontinued and the last release is 19.03.1 from July 31, 2019. Needless to say, Docker Toolbox is becoming more and more outdated for each day that passes.
+
+[Docker Desktop](https://www.docker.com/products/docker-desktop) has become the primary tool for running Docker on Windows and Mac, however with the recent change of licensing policy, people have started to look for alternative solutions. This is where WSL comes into play. By installing Docker on WSL, we can make the Docker CLI available in a Windows PowerShell even though both the Docker client and server are running on Linux.
+
+#### Installing WSL
+
+Start a Windows Command Prompt (or PowerShell) as administrator, and run:
+
+    wsl --install
+
+This will enable the Windows features:
+
+* Virtual Machine Platform
+* Windows Subsystem for Linux,
+
+and set WSL 2 as the default version. Then the default Ubuntu Linux distribution is downloaded and installed. During the linux installation, a Ubuntu shell will open in which you will be prompted to enter the username and password of your user account on Linux. Any username will do, for instance `admin`.
+
+    Enter new UNIX username: admin
+    New password: ********
+    Retype new password: ********
+
+The user has sudo previleges, however, to avoid the hazzle of typing the password each time, configure sudo without password for `admin` as follows in the Ubuntu shell:
+
+    sudo visudo
+
+and add the last line:
+
+    #includedir /etc/sudoers.d
+    admin ALL=(ALL) NOPASSWD:ALL
+
+:bulb: On Windows, the location of the Ubuntu file system is `%LOCALAPPDATA%\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx` (or similar).
+
+#### Installing Docker on Linux
+
+From the Ubuntu shell, install Docker.
+
+:pray: Credits to https://www.objectivity.co.uk/blog/how-to-live-without-docker-desktop-developers-perspective/ for sharing the major part of this script (1-5).
+
+    #/bin/bash
+
+    # 1. Required dependencies
+    sudo apt-get update
+    sudo apt-get -y install apt-transport-https ca-certificates curl gnupg lsb-release
+
+    # 2. GPG key
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+    # 3. Use stable repository for Docker
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    # 4. Install Docker
+    sudo apt-get update
+    sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose
+
+    # 5. Add user to docker group
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+
+    # 6. Make Docker available on TCP port 2375
+    echo '{ "hosts": ["unix:///var/run/docker.sock", "tcp://0.0.0.0:2375"] }' | sudo tee -a /etc/docker/daemon.json
+
+    # 7. Install network utilities
+    sudo apt-get update
+    sudo apt-get -y install net-tools ncat
+
+#### Start Docker and verify installation
+
+Start Docker daemon and check status.
+
+    sudo service docker start
+    sudo service docker status
+
+Verify the installation.
+
+    docker run hello-world
+
+:warning: Each time WSL is shut down, Docker must be started again. As of Windows 10, there is no easy way to autostart services on WSL.
+
+#### Install Minikube and create kubectl alias
+
+Download latest version of Minikube and install it in `/usr/local/bin`.
+
+    mkdir -p ~/download/minikube/latest
+    cd ~/download/minikube/latest
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+Minikube comes with (kubectl built-in)[https://minikube.sigs.k8s.io/docs/handbook/kubectl/]. Just create an alias to make the use more convenient.
+
+    echo 'alias kubectl="minikube kubectl --"' | sudo tee -a /etc/profile.d/kubernetes.sh
+
+#### Add DOCKER_HOST on Windows
+
+To make the docker daemon available for tools like dockerfile-maven-plugin on Windows, add the environment variable
+
+    DOCKER_HOST=tcp://localhost:2375
+
+from `Control Panel` > `Edit the system environment variables`.
+
+#### Create PowerShell aliases in $PROFILE
+
+With WSL, we can run Linux commands on Windows by preceding the command with "wsl" as follows. (Linux aliases don't appear to be supported.)
+
+    wsl minikube start
+    wsl docker ps
+
+However, with PowerShell this can be made more convenient by adding some stuff in the start script that is executed when a PowerShell window is opened.
+
+The location and name of the start script is defined by `$PROFILE`. Make sure the script folder exists and open it in your favorite editor. (Here, we simply use notepad.)
+
+    mkdir -Force (Split-Path $PROFILE)
+    notepad $PROFILE
+
+Then, add the following and save the file:
+
+```
+# Add WSL aliases. Will override any commands with the same name on the Windows path.
+
+Function Start-WslDocker {
+    wsl docker $args
+}
+
+Function Start-WslDockerCompose {
+    wsl docker-compose $args
+}
+
+Function Start-WslMinikube {
+    wsl minikube $args
+}
+
+Function Start-WslKubectl {
+    wsl minikube kubectl -- $args
+}
+
+Set-Alias -Name docker -Value Start-WslDocker
+Set-Alias -Name docker-compose -Value Start-WslDockerCompose
+Set-Alias -Name minikube -Value Start-WslMinikube
+Set-Alias -Name kubectl -Value Start-WslKubectl
+```
+
+`docker`, `docker-compose`, `minikube` and `kubectl` are now available when opening a new PowerShell window.
+
+:point_right: Remember that kubectl will use the Kubernetes cluster configured on Linux, not Windows.
+
+#### Building Microcoffee
+
+Microcoffee is built on Java 17. If Java 17 is not the default JDK, a PowerShell window can be configured to use Java 17 as follows.
+
+Create a PowerShell script called `set-java17.ps1` (here in or instance in `C:\apps\utils`.
+
+    notepad C:\apps\utils\set-java17.ps1
+
+Add the following (provided a Java 17 installation in `C:\apps\java\jdk-17.0.2`):
+
+```
+$env:JAVA_HOME = 'C:\apps\java\jdk-17.0.2'
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+```
+
+Create a shortcut, for instance called `PowerShell Java 17`, to open a PowerShell for Java 17:
+- Target: `%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -ExecutionPolicy Bypass -File C:\apps\utils\set-java17.ps1`
+
+
