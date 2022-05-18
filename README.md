@@ -1944,7 +1944,7 @@ from `Control Panel` > `Edit the system environment variables`.
 
 ##### Install Minikube and create kubectl alias
 
-In addition to Docker, we also install Minikube which is single-node Kubernetes cluster.
+In addition to Docker, we also install Minikube which is a single-node Kubernetes cluster.
 
 Download the latest version of Minikube and install it in `/usr/local/bin`.
 
@@ -1964,14 +1964,14 @@ With WSL, we can run Linux commands on Windows by preceding the command with "ws
     wsl minikube start
     wsl docker ps
 
-However, with PowerShell this can be made more convenient by adding aliases in the start script that is executed when a PowerShell window is opened.
+However, with PowerShell this can be made more convenient by creating aliases in the start script that is executed when a PowerShell window is opened.
 
 The location and name of the start script is defined by `$PROFILE`. Make sure the script folder exists and open it in your favorite editor. (Here, we simply use notepad.)
 
     mkdir -Force (Split-Path $PROFILE)
     notepad $PROFILE
 
-Then, add the following and save the file:
+Then, paste the following into the file and save it:
 
 ```
 # Add WSL aliases. Will override any commands with the same name on the Windows path.
@@ -2019,7 +2019,7 @@ $env:JAVA_HOME = 'C:\apps\java\jdk-17.0.2'
 $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 ```
 
-Finally, create the shortcut (e.g. called `PowerShell Java 17`) and set the following `Target` value:
+Finally, create the shortcut (called `PowerShell Java 17`) and set the following `Target` value:
 
 ```
 %SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -noexit -ExecutionPolicy Bypass -File C:\apps\utils\set-java17.ps1
@@ -2031,8 +2031,37 @@ With Docker running in WSL, everything should now be in place for building the D
 
     mvn clean install -Pbuild,push
 
-#### WSL tips
+#### Running Microcoffee on WSL
 
-##### Find WSL host IP
+##### Running on Docker
 
-TBD
+To run Microcoffee on Docker, we need to configure the host IP. Unfortunately, on WSL, this is a dynamic address that changes each time WSL is restarted. This makes Docker on WSL a suboptimal platform for running Microcoffee.
+
+The host IP is used in two places:
+
+1. Subject alternative name (SAN) when generating the SSL certificate.
+1. The value of the eureka.instance.hostname property.
+
+To get the host IP, run:
+
+    wsl hostname -I
+
+If several IP addresses are listed, the host IP is always the first listed.
+
+Then, regenerate the `microcoffeeoncloud-certificate` artifact and rebuild all services.
+
+    mvn -f microcoffeeoncloud-certificates\pom.xml clean install -Pgen-certs "-DvmHostIp=HOST_IP"
+    mvn clean install -Pbuild
+
+Finally, in `microcoffeeoncloud-appconfig`, update `eureka.instance.hostname` of the following property files:
+
+    creditrating-devdocker.properties
+    gateway-devdocker.properties
+    location-devdocker.properties
+    order-devdocker.properties
+
+    eureka.instance.hostname=HOST_IP
+
+To run Microcoffee, see the main documentation above.
+
+:point_right: Remember to use `run-docker.ps1` from PowerShell windows when starting the services.
