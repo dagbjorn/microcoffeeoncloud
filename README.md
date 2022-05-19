@@ -1865,9 +1865,8 @@ Let's start by installing WSL. Open a Windows Command Prompt (or PowerShell) as 
     wsl --install
 
 This will enable the Windows features:
-
-* Virtual Machine Platform
-* Windows Subsystem for Linux,
+- Virtual Machine Platform
+- Windows Subsystem for Linux,
 
 and set WSL 2 as the default version. Then, a Ubuntu Linux distribution is downloaded and installed. During the Linux installation, a Ubuntu shell will open in which you will be prompted to enter the username and password of your user account on Linux. Any username will do, for instance `admin`.
 
@@ -1875,7 +1874,7 @@ and set WSL 2 as the default version. Then, a Ubuntu Linux distribution is downl
     New password: ********
     Retype new password: ********
 
-The user has sudo previleges, however, to avoid the hazzle of typing the password each time, configure sudo without password for `admin`. In the Ubuntu shell, run:
+The user has sudo privileges, however, to avoid the hazzle of typing the password each time, configure sudo without password for `admin` as follows. In the Ubuntu shell, run:
 
     sudo visudo
 
@@ -1892,7 +1891,7 @@ and add the last line:
 
 From the Ubuntu shell, install Docker.
 
-:pray: Credits to https://www.objectivity.co.uk/blog/how-to-live-without-docker-desktop-developers-perspective for sharing the major part of this script (1-5).
+:thumbsup: Credits to https://www.objectivity.co.uk/blog/how-to-live-without-docker-desktop-developers-perspective for sharing the major part of this script (1-5).
 
     #/bin/bash
 
@@ -1944,7 +1943,7 @@ from `Control Panel` > `Edit the system environment variables`.
 
 ##### Install Minikube and create kubectl alias
 
-In addition to Docker, we also install Minikube which is a single-node Kubernetes cluster.
+In addition to Docker, we also install Minikube, the single-node Kubernetes cluster.
 
 Download the latest version of Minikube and install it in `/usr/local/bin`.
 
@@ -2015,7 +2014,7 @@ Create a PowerShell script called `set-java17.ps1` (here in `C:\apps\utils`).
 Add the following (provided a Java 17 installation in `C:\apps\java\jdk-17.0.2`):
 
 ```
-$env:JAVA_HOME = 'C:\apps\java\jdk-17.0.2'
+$env:JAVA_HOME = "C:\apps\java\jdk-17.0.2"
 $env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
 ```
 
@@ -2029,7 +2028,9 @@ Finally, create the shortcut (called `PowerShell Java 17`) and set the following
 
 With Docker running in WSL, everything should now be in place for building the Docker images and push them to DockerHub.
 
-    mvn clean install -Pbuild,push
+Then, build
+
+    mvn clean install "-Pbuild,push"
 
 #### Running Microcoffee on WSL
 
@@ -2038,7 +2039,6 @@ With Docker running in WSL, everything should now be in place for building the D
 To run Microcoffee on Docker, we need to configure the host IP. Unfortunately, on WSL, this is a dynamic address that changes each time WSL is restarted. This makes Docker on WSL a suboptimal platform for running Microcoffee.
 
 The host IP is used in two places:
-
 1. Subject alternative name (SAN) when generating the SSL certificate.
 1. The value of the eureka.instance.hostname property.
 
@@ -2046,11 +2046,11 @@ To get the host IP, run:
 
     wsl hostname -I
 
-If several IP addresses are listed, the host IP is always the first listed.
+If several IP addresses are listed, the host IP is always the first one listed.
 
 Then, regenerate the `microcoffeeoncloud-certificate` artifact and rebuild all services.
 
-    mvn -f microcoffeeoncloud-certificates\pom.xml clean install -Pgen-certs "-DvmHostIp=HOST_IP"
+    mvn -f microcoffeeoncloud-certificates\pom.xml clean install -Pgen-certs -DvmHostIp="HOST_IP"
     mvn clean install -Pbuild
 
 Finally, in `microcoffeeoncloud-appconfig`, update `eureka.instance.hostname` of the following property files:
@@ -2062,6 +2062,25 @@ Finally, in `microcoffeeoncloud-appconfig`, update `eureka.instance.hostname` of
 
     eureka.instance.hostname=HOST_IP
 
-To run Microcoffee, see the main documentation above.
+To run Microcoffee, see the main documentation above. To test Microcoffee, open the URL https://localhost:8443/coffee.html.
 
-:point_right: Remember to use `run-docker.ps1` from PowerShell windows when starting the services.
+:point_right: Remember to use `run-docker.ps1` when starting the services from PowerShell windows.
+
+##### Running on Minikube
+
+When starting Minikube with the docker driver (will be auto-detected by default), we need to expose all ports used by Microcoffee by specifying a number of `--ports` flags on command-line as follows.
+
+    minikube start --ports=27017:27017 --ports=30080:30080 --ports=30081:30081 --ports=30082:30082 --ports=30083:30083 --ports=30091:30091 --ports=30092:30092 --ports=30093:30093 --ports=30443:30443 --ports=30444:30444 --ports=30445:30445 --ports=30446:30446 --ports=30454:30454 --ports=30455:30455 --ports=30456:30456
+
+:warning: Port mappings cannot be changed once the Minikube cluster is created. Any `--ports` flags specified are ignored when starting an existing cluster. To change the port mappings, delete the cluster first by running `minikube delete`.
+
+See [Microcoffee on Minikube](#microcoffee-on-minikube) for how to run Microcoffee on Minikube, however, please note the following:
+- The Docker environment is already set by means of the DOCKER_HOST variable.
+- Use the `.ps1` scripts instead of the `.bat` files when deploying/undeploying Microcoffee.
+- The VM_IP variable takes the value `localhost`.
+- The commands to regenerate the client secret of the OAuth2 `order_service` client must be run from a command prompt (if not rewritten to PowerShell syntax).
+- A PowerShell compatible mvn command line to load the database may look as follows:
+
+    mvn -f microcoffeeoncloud-database\pom.xml gplus:execute -Ddbhost=localhost -Ddbport=27017 -Ddbname=microcoffee -Dshopfile="microcoffeeoncloud-database\oslo-coffee-shops.xml"
+
+Finally, with everything is up and running, navigate to https://localhost:8443/coffee.html.
