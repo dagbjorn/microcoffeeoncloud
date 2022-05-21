@@ -56,6 +56,7 @@ Date | Change
   - [Keycloak - configuration examples](#keycloak-config)
   - [Setup for GitHub Actions workflows](#github-actions-setup)
   - [Building Microcoffee on WSL](#building-microcoffee-on-wsl)
+    - [Installing WSL](#installing-wsl)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
