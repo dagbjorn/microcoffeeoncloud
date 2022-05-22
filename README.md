@@ -57,6 +57,7 @@ Date | Change
   - [Setup for GitHub Actions workflows](#github-actions-setup)
   - [Building Microcoffee on WSL](#building-microcoffee-on-wsl)
     - [Installing WSL](#installing-wsl)
+    - [Installing Docker on WSL](#installing-docker-on-wsl)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -1859,7 +1860,7 @@ In Microcoffee, WSL has been tested as an alternative platform for building Dock
 
 [Docker Desktop](https://www.docker.com/products/docker-desktop) has become the primary tool for running Docker on Windows and Mac, however with the recent change of licensing policy, people have started to look for alternative solutions. This is where WSL comes into play. By installing Docker on WSL, we can make the Docker CLI available in a Windows PowerShell even though both the Docker client and server are running on Linux.
 
-#### Installing WSL
+#### <a name="installing-wsl"></a>Installing WSL
 
 Let's start by installing WSL. Open a Windows Command Prompt (or PowerShell) as administrator, and run:
 
@@ -1886,7 +1887,7 @@ and add the last line:
 
 :bulb: On Windows, the location of the Ubuntu file system is `%LOCALAPPDATA%\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx` (or similar).
 
-#### Installing Docker on WSL
+#### <a name="installing-docker-on-wsl"></a>Installing WSL on WSL
 
 ##### Installing Docker
 
