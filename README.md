@@ -2080,7 +2080,7 @@ See [Microcoffee on Minikube](#microcoffee-on-minikube) for how to run Microcoff
 - The Docker environment is already set by means of the DOCKER_HOST variable.
 - Use the `.ps1` scripts instead of the `.bat` files when deploying/undeploying Microcoffee.
 - The VM_IP variable takes the value `localhost`.
-- The commands to regenerate the client secret of the OAuth2 `order_service` client must be run from a command prompt (if not rewritten to PowerShell syntax).
+- The commands to regenerate the client secret of the OAuth2 `order_service` client must be run from a command prompt (if not rewritten in PowerShell syntax).
 - A PowerShell compatible mvn command line to load the database may look as follows:
 
     mvn -f microcoffeeoncloud-database\pom.xml gplus:execute -Ddbhost=localhost -Ddbport=27017 -Ddbname=microcoffee -Dshopfile="microcoffeeoncloud-database\oslo-coffee-shops.xml"
