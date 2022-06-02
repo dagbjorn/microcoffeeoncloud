@@ -1,4 +1,4 @@
-FROM jboss/keycloak:16.1.0
+FROM jboss/keycloak:16.1.1
 
 COPY --chown=jboss src/main/scripts/*.sh /opt/microcoffee/scripts/
 COPY --chown=jboss src/main/keycloak/*.json /opt/microcoffee/keycloak/
