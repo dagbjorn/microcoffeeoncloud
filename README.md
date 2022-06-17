@@ -1887,7 +1887,7 @@ and add the last line:
 
 :bulb: On Windows, the location of the Ubuntu file system is `%LOCALAPPDATA%\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx` (or similar).
 
-#### <a name="installing-docker-on-wsl"></a>Installing WSL on WSL
+#### <a name="installing-docker-on-wsl"></a>Installing Docker on WSL
 
 ##### Installing Docker
 
