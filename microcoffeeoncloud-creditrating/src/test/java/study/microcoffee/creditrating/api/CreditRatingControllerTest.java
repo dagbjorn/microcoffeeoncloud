@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.creditrating.SecurityConfig;
 import study.microcoffee.creditrating.SecurityTestConfig;
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
@@ -30,7 +31,7 @@ import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
 @WebMvcTest(CreditRatingController.class)
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
-@Import({ HttpLoggingFilterTestConfig.class, SecurityTestConfig.class })
+@Import({ HttpLoggingFilterTestConfig.class, SecurityTestConfig.class, SecurityConfig.class })
 class CreditRatingControllerTest {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/creditrating/{customerId}";

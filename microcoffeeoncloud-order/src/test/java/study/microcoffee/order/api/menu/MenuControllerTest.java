@@ -15,6 +15,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import study.microcoffee.order.CharacterEncodingFilterTestConfig;
+import study.microcoffee.order.SecurityConfig;
 import study.microcoffee.order.SecurityTestConfig;
 import study.microcoffee.order.common.logging.HttpLoggingFilterTestConfig;
 import study.microcoffee.order.repository.MenuRepository;
@@ -24,7 +25,8 @@ import study.microcoffee.order.repository.MenuRepository;
  */
 @WebMvcTest(MenuController.class)
 @TestPropertySource("/application-test.properties")
-@Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class })
+@Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class,
+    SecurityConfig.class })
 class MenuControllerTest {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/menu";

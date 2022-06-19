@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import study.microcoffee.creditrating.SecurityConfig;
 import study.microcoffee.creditrating.SecurityTestConfig;
 
 /**
@@ -18,7 +19,7 @@ import study.microcoffee.creditrating.SecurityTestConfig;
  */
 @WebMvcTest(HealthCheckController.class)
 @TestPropertySource("/application-test.properties")
-@Import(SecurityTestConfig.class)
+@Import({ SecurityTestConfig.class, SecurityConfig.class })
 class HealthCheckControllerTest {
 
     @Autowired
