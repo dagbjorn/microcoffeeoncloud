@@ -36,9 +36,8 @@ volumes:
 networks:
     microcoffee:
     configserver:
-        external:
-            name: microcoffeeoncloud-configserver_configserver
+        name: microcoffeeoncloud-configserver_configserver
+        external: true
     discovery:
-        external:
-            name: microcoffeeoncloud-discovery_discovery
- 
+        name: microcoffeeoncloud-discovery_discovery
+        external: true
