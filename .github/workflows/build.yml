@@ -23,15 +23,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-          cache: 'maven'
+          #cache: 'maven'
 
-#      - name: Cache Maven artifacts
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.m2/repository
-#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-maven-
+      - name: Cache Maven artifacts
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
