@@ -23,7 +23,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-          #cache: 'maven'
 
       - name: Cache Maven artifacts
         uses: actions/cache@v3
