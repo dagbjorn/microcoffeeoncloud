@@ -18,6 +18,5 @@ services:
 networks:
     discovery:
     configserver:
-        external:
-            name: microcoffeeoncloud-configserver_configserver
-            
+        name: microcoffeeoncloud-configserver_configserver
+        external: true

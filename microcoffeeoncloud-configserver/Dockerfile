@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2-slim
+FROM eclipse-temurin:17.0.4.1_1-jre-alpine
 VOLUME /tmp
 WORKDIR /
 ARG JAR_FILE
@@ -6,6 +6,6 @@ COPY target/$JAR_FILE app.jar
 COPY target/keystore/microcoffee-keystore.jks .
 RUN touch app.jar \
     && find / -iname "cacerts" \
-    && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore /usr/local/openjdk-17/lib/security/cacerts -deststorepass changeit \
+    && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore /opt/java/openjdk/lib/security/cacerts -deststorepass changeit \
     && rm microcoffee-keystore.jks
 ENTRYPOINT ["java","-jar","/app.jar"]
