@@ -3,19 +3,18 @@ services:
     keycloak:
         image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
         ports:
-            - "8093:8093"
-            - "8456:8456"
+          - "8093:8093"
+          - "8456:8456"
         environment:
-            - KEYCLOAK_USER=admin
-            - KEYCLOAK_PASSWORD=admin
-            - KEYCLOAK_IMPORT=/opt/microcoffee/keycloak/microcoffee-realm.json
-            - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
+          - KEYCLOAK_ADMIN=admin
+          - KEYCLOAK_ADMIN_PASSWORD=admin
+          - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
         domainname: microcoffee.study
-        entrypoint: ["/opt/microcoffee/scripts/authserver-entrypoint.sh", "-b", "0.0.0.0", "-Djboss.http.port=8093", "-Djboss.https.port=8456"]
+        entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/$$MICROCOFFEE_CERT_DOMAIN.p12", "--https-key-store-password=12345678"]
         networks:
             authserver:
                 aliases:
-                    - authserver.microcoffee.study
+                  - authserver.microcoffee.study
 
 networks:
     authserver:
