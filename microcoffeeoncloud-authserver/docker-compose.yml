@@ -8,9 +8,8 @@ services:
         environment:
           - KEYCLOAK_ADMIN=admin
           - KEYCLOAK_ADMIN_PASSWORD=admin
-          - MICROCOFFEE_CERT_DOMAIN=microcoffee.study
         domainname: microcoffee.study
-        entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/$$MICROCOFFEE_CERT_DOMAIN.p12", "--https-key-store-password=12345678"]
+        entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/microcoffee.study.p12", "--https-key-store-password=12345678", "--health-enabled=true"]
         networks:
             authserver:
                 aliases:
