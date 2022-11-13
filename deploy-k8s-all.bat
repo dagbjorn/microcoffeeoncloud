@@ -4,6 +4,7 @@
 ::
 
 if "%1" == "gke" (
+    @echo Step 0 of 7: Get IP address of a node
     for /f "delims=" %%i in ('gcloud compute instances list --format json ^| jq -r ".[0].networkInterfaces[0].accessConfigs[0].natIP"') do set EXTERNAL_IP=%%i
     set DB_PORT=30017
     goto :deploy
@@ -17,6 +18,7 @@ if "%1" == "aks" (
     goto :EOF
 )
 if "%1" == "mkube" (
+    @echo Step 0 of 7: Get IP address of Minikube cluster
     for /f "delims=" %%i in ('gsudo minikube ip') do set EXTERNAL_IP=%%i
     set DB_PORT=27017
     goto :deploy
