@@ -17,34 +17,30 @@ spec:
       - name: authserver
         image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
         imagePullPolicy: Always
-        command: ["/opt/microcoffee/scripts/authserver-entrypoint.sh"]
-        args: ["-b", "0.0.0.0", "-Djboss.http.port=8093", "-Djboss.https.port=8456"]
+        command: ["/opt/keycloak/bin/kc.sh"]
+        args: ["start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/wildcard.default.p12", "--https-key-store-password=12345678", "--health-enabled=true"]
         readinessProbe:
           httpGet:
-            path: /auth/realms/microcoffee
+            path: /health/ready
             port: 8093
-          initialDelaySeconds: 180
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         livenessProbe:
           httpGet:
-            path: /auth
+            path: /health/live
             port: 8093
-          initialDelaySeconds: 180
+          initialDelaySeconds: 60
           periodSeconds: 10
           timeoutSeconds: 5
         ports:
         - containerPort: 8093
         - containerPort: 8456
         env:
-        - name: KEYCLOAK_USER
+        - name: KEYCLOAK_ADMIN
           value: "admin"
-        - name: KEYCLOAK_PASSWORD
+        - name: KEYCLOAK_ADMIN_PASSWORD
           value: "admin"
-        - name: KEYCLOAK_IMPORT
-          value: "/opt/microcoffee/keycloak/microcoffee-realm.json"
-        - name: MICROCOFFEE_CERT_DOMAIN
-          value: "wildcard.default"
 ---
 apiVersion: v1
 kind: Service
