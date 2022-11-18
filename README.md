@@ -1,4 +1,4 @@
-# microcoffeeoncloud - The &micro;Coffee Shop powered by ![Spring Boot 2.0](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/spring-boot-2.0.png "Spring Boot 2.0") and ![Docker](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/docker-horizontal.png "Docker")
+r# microcoffeeoncloud - The &micro;Coffee Shop powered by ![Spring Boot 2.0](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/spring-boot-2.0.png "Spring Boot 2.0") and ![Docker](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/docker-horizontal.png "Docker")
 
 ## Change log
 
@@ -30,6 +30,7 @@ Date | Change
 27.12.2021 | Migrated from Springfox to SpringDoc. Springfox appears to be a more or less dead project.
 11.02.2022 | Extended GitHub Action build workflow with Sonar analysis using SonarCloud.
 10.05.2022 | Added extra on WSL installation.
+18.11.2022 | Replaced Docker Toolbox with Docker Desktop for local building and testing. Updated Minikube doc. General brush-up of outdated info.
 
 ## Contents
 
@@ -81,7 +82,7 @@ The application is made up by the following microservices, each running in its o
 
 Each microservice, apart from the authorization server and the database, is implemented by a Spring Boot application.
 
-The application supports both http and https on all communication channels. However, https is a requirement in most browsers to get the HTML Geolocation API going, so https is needed to unlock all available functions in Microcoffee.
+The application supports both http and https on all communication channels (apart from API Gateway which only supports https). However, https is a requirement in most browsers to get the HTML Geolocation API going, so https is needed to unlock all available functions in Microcoffee.
 
 #### microcoffeeoncloud-configserver
 Contains the configuration server for serving externalized configuration to the application. The configuration server is based on the Spring Cloud Config Server.
@@ -120,7 +121,7 @@ Mainly introduced to act as an unreliable backend service. The actual behavior m
 CreditRating is an OAuth2 resource server. It requires a Bearer JWT access token with proper scope and audience claim values for access.
 
 #### microcoffeeoncloud-authserver
-Contains the Keycloak authorization server. The authorization server image is based on the official [jboss/keycloak](https://hub.docker.com/r/jboss/keycloak) image on DockerHub.
+Contains the Keycloak authorization server. The authorization server image is based on the official [quay.io/keycloak/keycloak](https://quay.io/repository/keycloak/keycloak) image on Redhat quay.io.
 
 A microcoffee realm is automatically imported when starting Keycloak. The realm contains the necessary configuration for securing the
 CreditRating API with an OAuth2 client credentials grant.
@@ -138,9 +139,9 @@ The application also contains common artifacts (for the time being only one) whi
 A word of warning: Common artifacts should be used wisely in a microservice architecture.
 
 #### microcoffeeoncloud-certificates
-Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. As a matter of fact, two certificates are created:
+Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. As a matter of fact, three certificates are created:
 
-* A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application with Docker Compose.
+* A wildcard certificate with common name (CN) `*.microcoffee.study` for use when running the application on Docker.
 * A wildcard certificate with common name (CN) `*.default` for use when running the application on Kubernetes. (See Extras)
 * A certificate with common name (CN) `localhost` for use when testing outside Docker.
 
@@ -152,23 +153,19 @@ by `microcoffeeoncloud-certificates`. Also a suite of types to use when mocking 
 provided.
 
 ## <a name="prerequisite"></a>Prerequisite
-Microcoffee is developed on Windows 10 and tested on Docker 19.03.1/Docker Compose 1.24.1 running on Oracle VM VirtualBox 6.1.28.
+Microcoffee was originally developed on Windows 10 and tested on Docker running on Oracle VirtualBox. Late 2022, the development environment was modernized and consists now of Windows 11 Pro with Docker Desktop running with WSL2 based engine.
 
-The code was originally written in Java 8, but was later migrated to Java 11. Only three issues were found during the migration:
-* ClassNotFoundException for javax.xml.bind.JAXBContext. Fixed by adding dependency to org.glassfish.jaxb:jaxb-runtime.
-* Incompatibility with wro4j-maven-plugin. Fixed by adding plugin dependency to org.mockito:mockito-core:2.18.0 or above.
-* Starting with Java 9, keytool creates PKCS12 keystores by default. This broke SSL for some still not understood reason. Fixed for now
-by changing the certificate generation to create JKS keystores.
+The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee migrated to Java 17.
 
-Then, in early 2022, Microcoffee was migrated to Java 17. No issues were found.
+For building and testing the application on Windows, Docker Desktop with the WSL 2 engine is recommended. See [Install on Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows) for installation guidelines.
 
-For building and testing the application, you need to install Docker on a suitable Linux host environment (native, Vagrant, Oracle VM VirtualBox etc.)
+:bulb: Some experiences from the trenches.
+* Always install WSL 2 before Docker Desktop. This installation order reduces the possibilities for issues.
+* If Docker Desktop at some later time fails to start (or stop), try to unregister docker-desktop from WSL before trying to start Docker Desktop again.
 
-:bulb: On Windows, install [Docker Toolbox](https://github.com/docker/toolbox/releases) to get all necessary tools (Docker client, Compose, Machine, Kitematic and VirtualBox).
-
-A Docker VM is needed. To create a Docker VM called `docker-vm` for use with VirtualBox, execute the following command:
-
-    docker-machine create --driver virtualbox --virtualbox-memory "1536" docker-vm
+    wsl --list -v
+    wsl --unregister docker-desktop
+    wsl --unregister docker-desktop-data
 
 In addition, you'll need the basic Java development tools (IDE w/ Java 17 and Maven) installed on your development machine.
 
@@ -176,23 +173,14 @@ You will also need OpenSSL to create a self-signed wildcard certificate. Finally
 
 :warning: Java keytool won't work because it doesn't support wildcard host names as SAN (Subject Alternative Name) values.
 
-## <a name="start-docker-vm"></a>Start Docker VM
-Before moving on and start building Microcoffee, we need a running VM. The reason is that the Docker images being built are stored in the local Docker repository inside the VM.
+## <a name="start-docker-vm"></a>Start Docker Desktop
+Before moving on and start building Microcoffee, we need Docker Desktop running. But first, make sure that "Expose daemon on tcp://localhost:2375 without TLS" is checked in Docker Settings > General. This is required for the Maven building to work.
 
-To start your Docker VM (called `docker-vm`), run:
+To verify that Docker is running, run:
 
-    docker-machine start docker-vm
+    docker version
 
-Next, configure the Docker environment variables in your shell by following the instructions displayed by:
-
-    docker-machine env docker-vm
-
-:bulb: On Windows, it is handy to create a batch file to do this, e.g. `docker-setenv.bat`. The file should be placed in a folder on your Windows path.
-
-To check the status and the IP address of your Docker VM, run:
-
-    docker-machine status docker-vm
-    docker-machine ip docker-vm
+If both client and server information is listed, you are good to go.
 
 ## <a name="building-microcoffee"></a>Building Microcoffee
 
@@ -209,11 +197,13 @@ In order for https to work, a self-signed certificate needs to be created. The `
 
 Key alias | Common Name (CN) | Subject Alternative Name (SAN) | Comment
 --------- | ---------------- | ------------------------------ | --------
-microcoffee.study | \*.microcoffee.study | \*.microcoffee.study, ${vmHostIp} | Wildcard certificate used when running with Docker.
+microcoffee.study | \*.microcoffee.study | \*.microcoffee.study, host.docker.internal, ${vmHostIp} | Wildcard certificate used when running with Docker.
 wildcard.default | \*.default | \*.default | Wildcard certificate used when running on Kubernetes.
 localhost | localhost | | Certificate used when testing outside Docker.
 
-`${vmHostIp}` is a Maven property defining the IP address of VM host. Default value is `192.168.99.100`.
+`host.docker.internal` is the hostname of the development machine added by Docker Desktop in the local hosts file.
+
+`${vmHostIp}` is a Maven property defining the IP address of a VM host. Historically, this has been used with Oracle VirtualBox. With Docker Desktop this is not required. Default value is `192.168.99.100`.
 
 To generate new certificates, run:
 
@@ -238,13 +228,13 @@ Specify the `build` and `push` profiles to build and push, respectively, the Doc
 
 Or take advantage of the aggregator pom in the top-level folder and build all microservices in one go.
 
-:exclamation: Just remember that your Docker VM must be running for building the Docker images successfully.
+:exclamation: Just remember that Docker must be running for building the Docker images successfully.
 
 ## <a name="configuration"></a>Application configuration
 Application and environment-specific properties are defined in standard Spring manner by `${application}-${profile}.properties` files in the `microcoffeeoncloud-appconfig` project. Supported profiles are:
 
-* devdocker: Development environment on Docker (VM host).
-* devlocal: Development environment on development machine (localhost).
+* devdocker: Run Microcoffee on Docker.
+* devlocal: Run Microcoffee without Docker.
 
 In addition, the gateway routing configuration is defined in `gateway.yml`.
 
@@ -278,7 +268,7 @@ Verify by:
     docker volume inspect mongodbdata
 
 ### Load data into the database collections
-The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command. Make sure to specify the correct IP address of your VM. (Run `docker-machine ip docker-vm`)
+The `microcoffeeoncloud-database` project is used to load coffee shop locations, `oslo-coffee-shops.xml`, and menu data into a database called  *microcoffee*. This is accomplished by running the below Maven command.
 
 But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
@@ -286,53 +276,48 @@ But first, we need to start MongoDB (from `microcoffeeoncloud-database`):
 
 Then run:
 
-    mvn gplus:execute -Ddbhost=192.168.99.100 -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    mvn gplus:execute -Ddbhost=localhost -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
 To verify the database loading, start the MongoDB client in a Docker container. (Use `docker ps` to find the container ID or name.)
 
-    docker exec -it microcoffeeoncloud-database_mongodb_1 mongo microcoffee
+    docker exec -it microcoffeeoncloud-database-mongodb-1 mongosh microcoffee
 
-    > show databases
-    admin        0.000GB
-    config       0.000GB
-    local        0.000GB
-    microcoffee  0.000GB
-    > use microcoffee
-    switched to db microcoffee
-    > show collections
+    microcoffee> show databases
+    admin         40.00 KiB
+    config        12.00 KiB
+    local         40.00 KiB
+    microcoffee  188.00 KiB
+    microcoffee> show collections
     coffeeshop
     drinkoptions
     drinksizes
     drinktypes
-    > db.coffeeshop.count()
+    microcoffee> db.coffeeshop.db.coffeeshop.countDocuments()
     94
-    > db.coffeeshop.findOne()
+    microcoffee> db.coffeeshop.findOne()
     {
-            "_id" : ObjectId("58610703e113eb24f46a97a8"),
-            "openStreetMapId" : "292135703",
-            "location" : {
-                    "coordinates" : [
-                            10.7587531,
-                            59.9234799
-                    ],
-                    "type" : "Point"
-            },
-            "addr:city" : "Oslo",
-            "addr:country" : "NO",
-            "addr:housenumber" : "55",
-            "addr:postcode" : "0555",
-            "addr:street" : "Thorvald Meyers gate",
-            "amenity" : "cafe",
-            "cuisine" : "coffee_shop",
-            "name" : "Kaffebrenneriet",
-            "opening_hours" : "Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00",
-            "operator" : "Kaffebrenneriet",
-            "phone" : "+47 95262675",
-            "website" : "http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_thorvald_meyersgate_55/",
-            "wheelchair" : "no"
+      _id: ObjectId("63752874dd36ed3fb1c1f378"),
+      openStreetMapId: '292135703',
+      location: { coordinates: [ 10.7587531, 59.9234799 ], type: 'Point' },
+      'addr:city': 'Oslo',
+      'addr:country': 'NO',
+      'addr:housenumber': '55',
+      'addr:postcode': '0555',
+      'addr:street': 'Thorvald Meyers gate',
+      amenity: 'cafe',
+      cuisine: 'coffee_shop',
+      name: 'Kaffebrenneriet',
+      opening_hours: 'Mo-Fr 07:00-19:00; Sa-Su 09:00-17:00',
+      operator: 'Kaffebrenneriet',
+      phone: '+47 95262675',
+      website: 'http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_thorvald_meyersgate_55/',
+      wheelchair: 'no'
     }
-    > exit
-    bye
+    microcoffee> exit
+
+Finally, stop MongoDB:
+
+    docker-compose down
 
 ## <a name="setting-up-authserver"></a>Setting up the authorization server
 
@@ -342,7 +327,7 @@ Start by getting Keyclock up and running (from `microcoffeeoncloud-authserver`):
     run-docker.bat
 
 ### Regenerate client secret of order-service
-All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated. This can be done in two ways, either manually from the administration console, or by using the Keycloak Admin REST API.
+All required configuration of Keycloak is automatically imported when the Docker container starts. However, the client secret of the OAuth2 client `order-service` must be regenerated each time Keycloak is restarted. This can be done in two ways, either manually from the administration console, or by using the Keycloak Admin REST API.
 
 Additionally, the client secret must be stored as a key-value pair in a file called `order_client_secret.env`. This file is specified by the *env_file* attribute in `docker-compose.yml` and should be located in the same directory.
 
@@ -351,30 +336,31 @@ Contents of `order_client_secret.env`:
     ORDER_CLIENT_SECRET=<secret>
 
 #### Using the Admin Console
-Assuming the default VM IP `192.168.99.100`, open https://192.168.99.100:8456/auth/ in a browser.
+Open https://localhost:8456/admin/ in a browser.
 
 1. Log in as user `admin` and password `admin`.
-1. Navigate to Microcoffee realm > Clients > order-service > Credentials and click Regenerate Secret.
+1. Switch realm from `master` to `microcoffee`.
+1. Navigate to Clients > order-service > Credentials and regenerate Client secret. Click Yes to confirm regenerating the client secret.
 1. Copy the Secret value.
 1. In `microcoffeeoncloud-order`, create `order_client_secret.env` as described above.
 1. Also copy `order_client_secret.env` to the `microcoffeeoncloud-gateway` folder.
 
 #### Using the Admin REST API
-Assuming the default VM IP `192.168.99.100`, run the following commands (Windows) from the top-level folder of Microcoffee:
+Run the following commands (Windows) from the top-level folder of Microcoffee:
 
-    set AUTHSERVER=192.168.99.100:8456
+    set AUTHSERVER=localhost:8456
 
     :: Get an admin token (only valid for 60s secs)
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%AUTHSERVER%/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%AUTHSERVER%/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
     :: Regenerate the client secret
-    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/admin/realms/microcoffee/clients/%ID%/client-secret
 
     :: Read the client secret and save it in order_client_secret.env
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%AUTHSERVER%/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
     echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > microcoffeeoncloud-order\order_client_secret.env
     echo ORDER_CLIENT_SECRET=%CLIENT_SECRET% > microcoffeeoncloud-gateway\order_client_secret.env
 
@@ -383,16 +369,16 @@ Verify the contents of `order_client_secret.env` and we are good to go.
 ## <a name="run-microcoffee"></a>Run Microcoffee
 When running microcoffee, you need to observe the dependencies between the microservices so they are started in the correct order.
 
-1. Start with the authorization server (Keycloak). Keycloak takes quite a long time to start.
+1. Start with the authorization server (Keycloak).
 1. Start the config server. This may be done in parallel with the authorization server.
 1. When the config server is running, start the discovery server.
 1. When all three servers are running, start the other microservices, including the database, all together.
 
 A microservice is started by running `docker-compose up -d` or by using the already mentioned convenience batch file `run-docker.bat` as shown below. The batch file will stop any running containers before bringing them up again.
 
-:warning: The startup time is rather long, at least on my machine.
+:warning: Depending on the machine, the startup time can be rather long.
 
-Given that the authorization server is already running, start the config server from the `microcoffeeoncloud-configserver`:
+Given that the authorization server is already running and the client secret is regenerated, start the config server from the `microcoffeeoncloud-configserver`:
 
     run-docker.bat
 
@@ -409,16 +395,13 @@ For testing individual projects outside Docker, run:
 ## <a name="give-a-spin"></a>Give Microcoffee a spin
 After Microcoffee has started, navigate to the coffee shop to place your first coffee order:
 
-    https://192.168.99.100:8443/coffee.html
-
-assuming the VM host IP 192.168.99.100.
+    https://localhost:8443/coffee.html
 
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
-* Firefox: Click Advanced, then click Add Exception... and Confirm Security Exception.
-* Chrome: Click ADVANCED and hit the "Proceed to 192.168.99.100 (unsafe)" link.
-* Opera: Just click Continue anyway.
-
-:no_entry: The application doesn't work on IE11. Error logged in console: "Object doesn't support property or method 'assign'." Object.assign is used in coffee.js. Needs some fixing... And Microsoft Edge? Cannot even find the site...
+* Firefox: Click Advanced and then "Accept the Risk and Continue".
+* Chrome: Click ADVANCED and hit the "Proceed to localhost (unsafe)" link.
+* Opera: Click "Help me understand" and hit the "Proceed to localhost (unsafe)" link.
+* Edge: Click Advanced and hit the "Continue to localhost (unsafe)" link.
 
 ## <a name="rest-api"></a>REST API
 
@@ -433,9 +416,11 @@ assuming the VM host IP 192.168.99.100.
 
 Centralized browsing of API documentation is available at the following URL:
 
-    https://192.168.99.100:8443/swagger-ui.html
+    https://host.docker.internal:8443/swagger-ui.html
 
 Select the spec of interest in the upper right corner.
+
+:point_right: To avoid a CORS issue, specify `host.docker.internal` in stead of `localhost` in the Swagger URL.
 
 ### <a name="location-api"></a>Location API
 
@@ -458,19 +443,13 @@ HTTP status | Description
 
 Find the coffee shop closest to the Capgemini Skøyen office:
 
-    GET http://192.168.99.100:8081/api/coffeeshop/nearest/59.920161/10.683517/200
+    GET http://localhost:8081/api/coffeeshop/nearest/59.920161/10.683517/200
 
 Response:
 
     {
       "_id": {
-        "timestamp": 1482086231,
-        "machineIdentifier": 5422646,
-        "processIdentifier": 19508,
-        "counter": 9117700,
-        "time": 1482086231000,
-        "date": 1482086231000,
-        "timeSecond": 1482086231
+        "$oid": "63752874dd36ed3fb1c1f37b"
       },
       "openStreetMapId": "428063059",
       "location": {
@@ -491,13 +470,14 @@ Response:
       "opening_hours": "Mo-Fr 07:00-18:00; Sa-Su 09:00-17:00",
       "operator": "Kaffebrenneriet",
       "phone": "+47 22561324",
-      "website": "http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_karenslyst_alle_22/"
+      "website": "http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_karenslyst_alle_22/",
+      "wheelchair": "yes"
     }
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8081/api/coffeeshop/nearest/59.920161/10.683517/200
-    curl -i --insecure https://192.168.99.100:8444/api/coffeeshop/nearest/59.920161/10.683517/200
+    curl -i http://localhost:8081/api/coffeeshop/nearest/59.920161/10.683517/200
+    curl -i --insecure https://localhost:8444/api/coffeeshop/nearest/59.920161/10.683517/200
 
 :bulb: For testing with https, use a recent curl version that supports SSL. (7.46.0 is good.)
 
@@ -519,64 +499,49 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8082/api/coffeeshop/menu
+    GET http://localhost:8082/api/coffeeshop/menu
 
 Response (abbreviated):
 
     {
-        "types": [
-            {
-                "_id": {
-                    "timestamp": 1482086232,
-                    "machineIdentifier": 5422646,
-                    "processIdentifier": 19508,
-                    "counter": 9117791,
-                    "time": 1482086232000,
-                    "date": 1482086232000,
-                    "timeSecond": 1482086232
-                },
-                "name": "Americano",
-                "family": "Coffee"
-            },
-            ..
-        ],
-        "sizes": [
-            {
-                "_id": {
-                    "timestamp": 1482086232,
-                    "machineIdentifier": 5422646,
-                    "processIdentifier": 19508,
-                    "counter": 9117795,
-                    "time": 1482086232000,
-                    "date": 1482086232000,
-                    "timeSecond": 1482086232
-                },
-                "name": "Small"
-            },
-            ..
-        ],
-        "availableOptions": [
-            {
-                "_id": {
-                    "timestamp": 1482086232,
-                    "machineIdentifier": 5422646,
-                    "processIdentifier": 19508,
-                    "counter": 9117800,
-                    "time": 1482086232000,
-                    "date": 1482086232000,
-                    "timeSecond": 1482086232
-                },
-                "name": "soy",
-                "appliesTo": "milk"
-            },
-            ..
-        ]
+      "types": [
+        {
+          "_id": {
+            "timestamp": 1668622453,
+            "date": "2022-11-16T18:14:13.000+00:00"
+          },
+          "name": "Americano",
+          "family": "Coffee"
+        },
+        ..
+      ],
+      "sizes": [
+        {
+          "_id": {
+            "timestamp": 1668622453,
+            "date": "2022-11-16T18:14:13.000+00:00"
+          },
+          "name": "Small"
+        },
+        ..
+      ],
+      "availableOptions": [
+        {
+          "_id": {
+            "timestamp": 1668622453,
+            "date": "2022-11-16T18:14:13.000+00:00"
+          },
+          "name": "soy",
+          "appliesTo": "milk"
+        },
+        ..
+      ]
     }
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8082/api/coffeeshop/menu
-    curl -i --insecure https://192.168.99.100:8445/api/coffeeshop/menu
+    curl -i http://localhost:8082/api/coffeeshop/menu
+    curl -i --insecure https://localhost:8445/api/coffeeshop/menu
 
 ### <a name="order-api"></a>Order API
 
@@ -599,7 +564,7 @@ HTTP status | Description
 
 **Example**
 
-    POST http://192.168.99.100:8082/api/coffeeshop/1/order
+    POST http://localhost:8082/api/coffeeshop/1/order
 
     {
         "coffeeShopId": 1,
@@ -634,8 +599,8 @@ Response:
 
 :white_check_mark: Must be run from `microcoffee-order` to find the JSON file `src\test\curl\order.json`.
 
-    curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://192.168.99.100:8082/api/coffeeshop/1/order
-    curl -i --insecure -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://192.168.99.100:8445/api/coffeeshop/1/order
+    curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://localhost:8082/api/coffeeshop/1/order
+    curl -i --insecure -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://localhost:8445/api/coffeeshop/1/order
 
 #### Get order details
 
@@ -654,7 +619,7 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
+    GET http://localhost:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
 
 Response:
 
@@ -674,8 +639,8 @@ Response:
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
-    curl -i --insecure https://192.168.99.100:8445/api/coffeeshop/1/order/585fe5230d248f00011173ce
+    curl -i http://localhost:8082/api/coffeeshop/1/order/585fe5230d248f00011173ce
+    curl -i --insecure https://localhost:8445/api/coffeeshop/1/order/585fe5230d248f00011173ce
 
 ### <a name="creditrating-api"></a>CreditRating API
 
@@ -695,7 +660,7 @@ HTTP status | Description
 
 **Example**
 
-    GET http://192.168.99.100:8083/api/coffeeshop/creditrating/john
+    GET http://localhost:8083/api/coffeeshop/creditrating/john
 
 Response:
 
@@ -705,8 +670,25 @@ Response:
 
 **Testing with curl**
 
-    curl -i http://192.168.99.100:8083/api/coffeeshop/creditrating/john
-    curl -i --insecure https://192.168.99.100:8446/api/coffeeshop/creditrating/john
+The example below automates the process of getting the client secret of the order-service client from Keycloak. The client id and secret are needed for authentication to get an access token for calling the CreditRating API. Alternatively, the client secret could be read manually by logging on to the Keycloak admin UI at https://localhost:8456/admin.
+
+    set AUTHSERVER=https://localhost:8456
+
+    :: To read the client secret, we need an admin token.
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" %AUTHSERVER%/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set   ADMINTOKEN=%I
+
+    :: Get the internal id of the order-service client.
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" %AUTHSERVER%/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+
+    :: Use the internal id to get the client secret of the order-service.
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" %AUTHSERVER%/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+
+    :: Get access token authenticating with clientId and clientSecret
+    for /f "delims=" %I in ('curl -s -k -H "Host: authserver.microcoffee.study:8456" -H "Content-Type: application/x-www-form-urlencoded" --data-urlencode "grant_type=client_credentials" --data-urlencode "scope=creditrating" --data-urlencode "client_id=order-service" --data-urlencode "client_secret=%CLIENT_SECRET%" -X POST %AUTHSERVER%/realms/microcoffee/protocol/openid-connect/token ^| jq -r ".access_token"') do set ACCESSTOKEN=%I
+
+    :: Finally, call the CreditRating
+    curl -i -H "Authorization: Bearer %ACCESSTOKEN%" http://localhost:8083/api/coffeeshop/creditrating/john
+    curl -i --insecure -H "Authorization: Bearer %ACCESSTOKEN%" https://localhost:8446/api/coffeeshop/creditrating/john
 
 ## <a name="spring-cloud-netflix"></a>Spring Cloud Netflix
 
@@ -716,7 +698,7 @@ Response:
 
 The Eureka Dashboard allows you to inspect the registered instances.
 
-To open the dashboard, navigate to https://192.168.99.100:8455.
+To open the dashboard, navigate to https://localhost:8455.
 
 ![Snapshot of Eureka Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/eureka-dashboard.png "Snapshot of Eureka Dashboard")
 
@@ -859,16 +841,16 @@ When Keycloak is up and running, regenerate the client secret of the OAuth2 clie
     set EXTERNAL_IP=EXTERNAL-IP
 
     :: Get an admin token (only valid for 60s secs)
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
     :: Regenerate the client secret
-    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret
 
     :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
 Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
 
@@ -899,7 +881,7 @@ From the `microcoffeeoncloud-database` project, run:
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
-    kubectl exec -it PODNAME -- mongo microcoffee
+    kubectl exec -it PODNAME -- mongosh microcoffee
 
 #### Give Microcoffee a spin - in the Google cloud
 
@@ -1014,7 +996,7 @@ The authorization server, Keycloak, is automatically configured by importing a p
 
 From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
 
-    deploy-k8s-1-servers.bat gke
+    deploy-k8s-1-servers.bat eks
 
 When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
 
@@ -1023,16 +1005,16 @@ When Keycloak is up and running, regenerate the client secret of the OAuth2 clie
     set EXTERNAL_IP=EXTERNAL-IP
 
     :: Get an admin token (only valid for 60s secs)
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
     :: Regenerate the client secret
-    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret
 
     :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
 Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
 
@@ -1046,9 +1028,9 @@ Verify the secret.
 
 From the `microcoffeeoncloud` top-level folder, run the following batch files in turn:
 
-    deploy-k8s-2-servers.bat gke
-    deploy-k8s-3-servers.bat gke
-    deploy-k8s-4-apps.bat gke
+    deploy-k8s-2-servers.bat eks
+    deploy-k8s-3-servers.bat eks
+    deploy-k8s-4-apps.bat eks
 
 Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
 STATUS = Running and READY = 1/1.)
@@ -1090,7 +1072,7 @@ From the `microcoffeeoncloud-database` project, run:
 
 To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
-    kubectl exec -it PODNAME -- mongo microcoffee
+    kubectl exec -it PODNAME -- mongosh microcoffee
 
 #### Give Microcoffee a spin - in the AWS cloud
 
@@ -1317,7 +1299,7 @@ The authorization server, Keycloak, is automatically configured by importing a p
 
 From the `microcoffeeoncloud` top-level folder, start Keycloak by running the following batch file:
 
-    deploy-k8s-1-servers.bat gke
+    deploy-k8s-1-servers.bat aks
 
 When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
 
@@ -1330,16 +1312,16 @@ However, this can be automated by the following command, picking the external IP
 Then carry on and regenerate the secret.
 
     :: Get an admin token (only valid for 60s secs)
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
     :: Regenerate the client secret
-    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret
 
     :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
 Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
 
@@ -1353,9 +1335,9 @@ Verify the secret.
 
 From the `microcoffeeoncloud` top-level folder, run the following batch files in turn:
 
-    deploy-k8s-2-servers.bat gke
-    deploy-k8s-3-servers.bat gke
-    deploy-k8s-4-apps.bat gke
+    deploy-k8s-2-servers.bat aks
+    deploy-k8s-3-servers.bat aks
+    deploy-k8s-4-apps.bat aks
 
 Make sure that the pods are up and running before starting the next. (Run `kubectl get pods -w` and wait for
 STATUS = Running and READY = 1/1.)
@@ -1371,7 +1353,7 @@ From the `microcoffeeoncloud-database` project, run:
 
 To verify the database loading, start the MongoDB client in the database pod. (Run `kubectl get pods` to find the PODNAME.)
 
-    kubectl exec -it PODNAME -- mongo microcoffee
+    kubectl exec -it PODNAME -- mongosh microcoffee
 
 #### Give Microcoffee a spin - in the Azure cloud
 
@@ -1415,36 +1397,38 @@ Only LoadBalancer services are externally available.
 
 #### Getting started
 
-Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. See [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/setup/minikube) to getting started with Minikube. In particular, the following has to be carried out:
+Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. See [minikube start](https://minikube.sigs.k8s.io/docs/start/) to getting started with Minikube. In particular, the following has to be carried out:
 
-1. A VM must be installed on your development machine, e.g. Oracle VirtualBox.
 1. Install Minikube. Download the executable from the [Minikube repo on GitHub](https://github.com/kubernetes/minikube/releases) and
 place it in a folder on the OS path.
-1. Install kubectl - the Kubernetes CLI. See [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl)
+1. Install kubectl - the Kubernetes CLI. See [Install Tools - kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 for guidelines.
 1. Optionally, define the following environment variables if you don't like the default locations in your user home directory.
    * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): `D:\var\minikube`
    * KUBECONFIG: The Kubernetes config file. Example value (on Windows): `D:\var\kubectl\config`
+1. On Windows, Minikube requires admin privileges. Usually this requires that you need to run all Minikube commands from an administrator prompt. To avoid this, install [gsudo - a sudo for Windows](https://github.com/gerardog/gsudo).
 
-:bulb: Recommended versions:
-* minikube v1.20.0
-* kubectl v1.21.1
+:bulb: The setup is verified with the following versions:
+* minikube v1.28.0
+* kubectl v1.25.2
 
 #### Start Minikube
 
 To start Minikube, run:
 
-    minikube start
+    gsudo minikube start
+
+:bulb: To avoid the UAC popup each time gsudo is run, start an elevated cache session by running `gsudo cache on`.
 
 Next, configure the Docker environment variables in your shell following the instructions displayed by:
 
-    minikube docker-env
+    gsudo minikube docker-env
 
 :bulb: On Windows, it is handy to create a batch file to do this. The file should be placed in a folder on your Windows path. A sample batch file, `minikube-setenv.bat`, is located in the `utils` folder of `microcoffeeoncloud-utils`.
 
 To check the status of your local Kubernetes cluster, run:
 
-    minikube status
+    gsudo minikube status
 
 #### Regenerate secret in authorization server
 
@@ -1456,21 +1440,21 @@ From the `microcoffeeoncloud` top-level folder, start Keycloak by running the fo
 
 When Keycloak is up and running, regenerate the client secret of the OAuth2 client called *order-service*.
 
-*VM_IP* is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
+*NODE_IP* is the IP address assigned to the Minikube single-node cluster. (Displayed by `gsudo minikube ip`.)
 
-    set EXTERNAL_IP=VM_IP
+    for /f "delims=" %I in ('gsudo minikube ip') do set NODE_IP=%I
 
     :: Get an admin token (only valid for 60s secs)
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%EXTERNAL_IP%:30456/auth/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%NODE_IP%:30456/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
     :: Regenerate the client secret
-    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret
+    curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret
 
     :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
-    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%EXTERNAL_IP%:30456/auth/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
+    for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
 Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
 
@@ -1508,21 +1492,21 @@ The data stored in the volume survive restarts. This is because Minikube by defa
 
 From the `microcoffeeoncloud-database` project, run:
 
-    mvn gplus:execute -Ddbhost=VM_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    mvn gplus:execute -Ddbhost=NODE_IP -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
 
-*VM_IP* is the IP address assigned to the Minikube VM. (Displayed by `minikube ip`.)
+*NODE_IP* is the IP address assigned to the Minikube single-node cluster. (Displayed by `gsudo minikube ip`.)
 
 To verify the database loading, start the MongoDB client in the database pod. (Use `kubectl get pods` to find the PODNAME.)
 
-    kubectl exec -it PODNAME -- mongo microcoffee
+    kubectl exec -it PODNAME -- mongosh microcoffee
 
 #### Give Microcoffee a spin
 
 Navigate to:
 
-    https://VM_IP:30443/coffee.html
+    https://NODE_IP:30443/coffee.html
 
-As usual, run `minikube ip` to get the VM_IP of the Minikube VM.
+As usual, run `gsudo minikube ip` to get the NODE_IP of the Minikube cluster.
 
 #### Summary of port numbers
 
@@ -1571,7 +1555,7 @@ The simulation classes use the following system properties for test configuratio
 
 System property     | Mandatory | Default value | Description
 ------------------- | --------- | ------------- | -----------
-app.baseUrl         | Yes       |               | Base URL of API. Example value: https://192.168.99.100:8443
+app.baseUrl         | Yes       |               | Base URL of API. Example value: https://localhost:8443
 app.numberOfUsers   | No        | 1             | Number of concurrent REST calls.
 app.durationMinutes | No        | 1             | Duration of a test run in number of minutes.
 
@@ -1582,7 +1566,7 @@ fully qualified name (FQN) of the simulation class to run.
 
 From the `microcoffeeoncloud-gatlingtest` project, run:
 
-    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=10 -Dapp.durationMinutes=30
+    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://localhost:8443 -Dapp.numberOfUsers=10 -Dapp.durationMinutes=30
 
 #### Running load tests in Scala IDE
 
@@ -1596,7 +1580,7 @@ Run Configurations... > Scala Application > New
   - Main class: io.gatling.app.Gatling
 * Arguments
   - Program arguments: -s study.microcoffee.scenario.LocationApiTest -sf src/test/scala -rf target/gatling
-  - VM arguments: -Dapp.baseUrl=https://192.168.99.100:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
+  - VM arguments: -Dapp.baseUrl=https://localhost:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
 
 #### Test report
 
