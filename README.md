@@ -61,7 +61,7 @@ Date | Change
     - [Installing Docker on WSL](#installing-docker-on-wsl)
 
 ## <a name="acknowledgements"></a>Acknowledgements
-The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
+The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee in her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
 
 ## <a name="application"></a>The application
 The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
@@ -155,7 +155,7 @@ provided.
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee was originally developed on Windows 10 and tested on Docker running on Oracle VirtualBox. Late 2022, the development environment was modernized and consists now of Windows 11 Pro with Docker Desktop running with WSL2 based engine.
 
-The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee migrated to Java 17.
+The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee moved on to Java 17.
 
 For building and testing the application on Windows, Docker Desktop with the WSL 2 engine is recommended. See [Install on Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows) for installation guidelines.
 
@@ -163,9 +163,9 @@ For building and testing the application on Windows, Docker Desktop with the WSL
 * Always install WSL 2 before Docker Desktop. This installation order reduces the possibilities for issues.
 * If Docker Desktop at some later time fails to start (or stop), try to unregister docker-desktop from WSL before trying to start Docker Desktop again.
 
-    wsl --list -v
-    wsl --unregister docker-desktop
-    wsl --unregister docker-desktop-data
+        wsl --list -v
+        wsl --unregister docker-desktop
+        wsl --unregister docker-desktop-data
 
 In addition, you'll need the basic Java development tools (IDE w/ Java 17 and Maven) installed on your development machine.
 
@@ -203,7 +203,7 @@ localhost | localhost | | Certificate used when testing outside Docker.
 
 `host.docker.internal` is the hostname of the development machine added by Docker Desktop in the local hosts file.
 
-`${vmHostIp}` is a Maven property defining the IP address of a VM host. Historically, this has been used with Oracle VirtualBox. With Docker Desktop this is not required. Default value is `192.168.99.100`.
+`${vmHostIp}` is a Maven property defining the IP address of a VM host. Historically, this has been used with Oracle VirtualBox. With Docker Desktop it is not required. Default value is `192.168.99.100`.
 
 To generate new certificates, run:
 
@@ -399,7 +399,7 @@ After Microcoffee has started, navigate to the coffee shop to place your first c
 
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
 * Firefox: Click Advanced and then "Accept the Risk and Continue".
-* Chrome: Click ADVANCED and hit the "Proceed to localhost (unsafe)" link.
+* Chrome: Click Advanced and hit the "Proceed to localhost (unsafe)" link.
 * Opera: Click "Help me understand" and hit the "Proceed to localhost (unsafe)" link.
 * Edge: Click Advanced and hit the "Continue to localhost (unsafe)" link.
 
@@ -420,7 +420,7 @@ Centralized browsing of API documentation is available at the following URL:
 
 Select the spec of interest in the upper right corner.
 
-:point_right: To avoid a CORS issue, specify `host.docker.internal` in stead of `localhost` in the Swagger URL.
+:point_right: To avoid a CORS issue, use `host.docker.internal` in stead of `localhost` in the Swagger URL.
 
 ### <a name="location-api"></a>Location API
 
@@ -675,18 +675,18 @@ The example below automates the process of getting the client secret of the orde
     set AUTHSERVER=https://localhost:8456
 
     :: To read the client secret, we need an admin token.
-    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" %AUTHSERVER%/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set   ADMINTOKEN=%I
+    for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" %AUTHSERVER%/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
     :: Get the internal id of the order-service client.
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" %AUTHSERVER%/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
-    :: Use the internal id to get the client secret of the order-service.
+    :: Use the internal id to locate the client secret of the order-service.
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" %AUTHSERVER%/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
-    :: Get access token authenticating with clientId and clientSecret
+    :: Get access token by authenticating with clientId and clientSecret.
     for /f "delims=" %I in ('curl -s -k -H "Host: authserver.microcoffee.study:8456" -H "Content-Type: application/x-www-form-urlencoded" --data-urlencode "grant_type=client_credentials" --data-urlencode "scope=creditrating" --data-urlencode "client_id=order-service" --data-urlencode "client_secret=%CLIENT_SECRET%" -X POST %AUTHSERVER%/realms/microcoffee/protocol/openid-connect/token ^| jq -r ".access_token"') do set ACCESSTOKEN=%I
 
-    :: Finally, call the CreditRating
+    :: Finally, call the CreditRating API.
     curl -i -H "Authorization: Bearer %ACCESSTOKEN%" http://localhost:8083/api/coffeeshop/creditrating/john
     curl -i --insecure -H "Authorization: Bearer %ACCESSTOKEN%" https://localhost:8446/api/coffeeshop/creditrating/john
 
@@ -895,7 +895,7 @@ As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the cr
 
 Microservice | http port | https port
 ------------ | --------- | ----------
-gateway | 30080 | 30443
+gateway | - | 30443
 location | 30081 | 30444
 order | 30082 | 30445
 creditrating | 30083 | 30446
@@ -1163,7 +1163,7 @@ In addition to the managed policies above, create the following inline policy to
 
 Microservice | http port | https port | Comment
 ------------ | --------- | ---------- | -------
-gateway | 80/30080 | 443/30443 | Load balancer: 80/443, Node port: 30080/30443
+gateway | - | 443/30443 | Load balancer: 443, Node port: 30443
 location | 30081 | 30444 |
 order | 30082 | 30445 |
 creditrating | 30083 | 30446 |
@@ -1403,12 +1403,12 @@ Minikube runs a single-node Kubernetes cluster inside a VM on your development m
 place it in a folder on the OS path.
 1. Install kubectl - the Kubernetes CLI. See [Install Tools - kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 for guidelines.
-1. Optionally, define the following environment variables if you don't like the default locations in your user home directory.
+1. Optionally, define the following environment variables if you don't want the default locations in your user home directory.
    * MINIKUBE\_HOME: The location of the .minikube folder in which the Minikube VM is created. Example value (on Windows): `D:\var\minikube`
    * KUBECONFIG: The Kubernetes config file. Example value (on Windows): `D:\var\kubectl\config`
 1. On Windows, Minikube requires admin privileges. Usually this requires that you need to run all Minikube commands from an administrator prompt. To avoid this, install [gsudo - a sudo for Windows](https://github.com/gerardog/gsudo).
 
-:bulb: The setup is verified with the following versions:
+:bulb: This setup is verified with the following versions:
 * minikube v1.28.0
 * kubectl v1.25.2
 
@@ -1444,16 +1444,16 @@ When Keycloak is up and running, regenerate the client secret of the OAuth2 clie
 
     for /f "delims=" %I in ('gsudo minikube ip') do set NODE_IP=%I
 
-    :: Get an admin token (only valid for 60s secs)
+    :: Get an admin token (only valid for 60s secs).
     for /f "delims=" %I in ('curl -s -k -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" https://%NODE_IP%:30456/realms/master/protocol/openid-connect/token ^| jq -r ".access_token"') do set ADMINTOKEN=%I
 
-    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret
+    :: Get the id value of the order-service client to use in the resource URL for regenerating the client secret.
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients ^| jq -r ".[] | select(.clientId == \"order-service\") | .id"') do set ID=%I
 
-    :: Regenerate the client secret
+    :: Regenerate the client secret.
     curl -i -k -X POST -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret
 
-    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET
+    :: Read the client secret and assign it to an environment variable called CLIENT_SECRET.
     for /f "delims=" %I in ('curl -s -k -H "Authorization: Bearer %ADMINTOKEN%" https://%NODE_IP%:30456/admin/realms/microcoffee/clients/%ID%/client-secret ^| jq -r ".value"') do set CLIENT_SECRET=%I
 
 Create a Kubernetes secret called *order-client-secret* which will contain the client secret of *order-service*.
@@ -1466,7 +1466,7 @@ Verify the secret.
 
 #### Run Microcoffee
 
-From the `microcoffeeoncloud` top-level folder, run the following batch files (Windows!) in turn.
+From the `microcoffeeoncloud` top-level folder, run the following batch files in turn.
 
     deploy-k8s-2-servers.bat mkube
     deploy-k8s-3-servers.bat mkube
@@ -1484,7 +1484,7 @@ use by the MongoDB database. The properties of the volume are as follows:
 
 * Name: `mongodbdata`
 * mountPath (inside the container): `/data/db`
-* hostPath (on the VM): `/mnt/sda1/data/mongodbdata`
+* hostPath (on the host): `/mnt/sda1/data/mongodbdata`
 
 The data stored in the volume survive restarts. This is because Minikube by default is configured to persist files stored in `/data` (a softlink to `/mnt/sda1/data`).
 
@@ -1512,7 +1512,7 @@ As usual, run `gsudo minikube ip` to get the NODE_IP of the Minikube cluster.
 
 Microservice | http port | https port
 ------------ | --------- | ----------
-gateway | 30080 | 30443
+gateway | - | 30443
 location | 30081 | 30444
 order | 30082 | 30445
 creditrating | 30083 | 30446
