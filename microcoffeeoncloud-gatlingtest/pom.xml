@@ -11,15 +11,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<scala.version>2.12</scala.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 
-		<gatling.version>3.4.2</gatling.version>
-		<json4s-jackson.version>3.6.10</json4s-jackson.version>
+		<gatling.version>3.8.4</gatling.version>
+		<json4s-jackson.version>4.0.6</json4s-jackson.version>
 
-		<build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
-		<gatling-maven-plugin.version>3.1.1</gatling-maven-plugin.version>
+		<build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
+		<gatling-maven-plugin.version>4.2.7</gatling-maven-plugin.version>
+		<scala-maven-plugin.version>4.7.2</scala-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -31,7 +31,7 @@
 
 		<dependency>
 			<groupId>org.json4s</groupId>
-			<artifactId>json4s-jackson_${scala.version}</artifactId>
+			<artifactId>json4s-jackson_2.13</artifactId>
 			<version>${json4s-jackson.version}</version>
 		</dependency>
 	</dependencies>
@@ -71,6 +71,36 @@
 						 -->
 					</jvmArgs>
 				</configuration>
+			</plugin>
+
+			<!--
+				gatling-maven-plugin 4.x kompilerer ikke lenger Scala-koden.
+				scala-maven-plugin må derfor konfigureres opp i prosjektet.
+			-->
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<version>${scala-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+						<configuration>
+							<jvmArgs>
+								<jvmArg>-Xss100M</jvmArg>
+							</jvmArgs>
+							<args>
+								<arg>-target:jvm-17</arg>
+								<arg>-deprecation</arg>
+								<arg>-feature</arg>
+								<arg>-unchecked</arg>
+								<arg>-language:implicitConversions</arg>
+								<arg>-language:postfixOps</arg>
+							</args>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

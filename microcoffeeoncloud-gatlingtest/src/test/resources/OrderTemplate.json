@@ -1,10 +1,10 @@
 {
-    "coffeeShopId": ${coffeeShopId},
-    "drinker": "${drinker}",
-    "size": "${size}",
+    "coffeeShopId": #{coffeeShopId},
+    "drinker": "#{drinker}",
+    "size": "#{size}",
     "type": {
-        "name": "${drinkName}",
-        "family": "${drinkFamily}"
+        "name": "#{drinkName}",
+        "family": "#{drinkFamily}"
     },
-    "selectedOptions": ${selectedOptions}
+    "selectedOptions": #{selectedOptions}
 }
