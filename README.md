@@ -31,6 +31,7 @@ Date | Change
 11.02.2022 | Extended GitHub Action build workflow with Sonar analysis using SonarCloud.
 10.05.2022 | Added extra on WSL installation.
 18.11.2022 | Replaced Docker Toolbox with Docker Desktop for local building and testing. Updated Minikube doc. General brush-up of outdated info.
+28.11.2022 | Updated section on API testing with Gatling. Migrated from Scala IDE to IntelliJ.
 
 ## Contents
 
@@ -1535,11 +1536,9 @@ Gatling may be used in two ways:
 2. Use Gatling with a build tool (Maven or sbt).
 
 For load testing of the Microcoffee API we use Gatling with Maven. This requires no separate tool installation, however it is very
-useful to install an IDE that supports Scala. The Eclipse-based [Scala IDE](http://scala-ide.org) is an ok alternative.
+useful to install an IDE that supports Scala. [IntelliJ](https://www.jetbrains.com/idea/) is a good alternative.
 
-:warning: The current version of Scala IDE is based on Eclipse Oxygen (4.7). Hence, installing the plugin option in a newer Eclipse
-release is not recommended and will only give you grief. (E.g. in Eclipse 2018-09, the auto-completion feature is broken and
-produces very annoying error messages.)
+:point_right: When configuring a Scala SDK in IntelliJ from File > Project Structure... > Platform Settings > Global Libraries, make sure to select a Scala 2.13 SDK.
 
 #### The test scenarios
 
@@ -1553,11 +1552,14 @@ OrderApiTest      | orders.csv     | OrderTemplate.json
 
 The simulation classes use the following system properties for test configuration:
 
-System property     | Mandatory | Default value | Description
-------------------- | --------- | ------------- | -----------
-app.baseUrl         | Yes       |               | Base URL of API. Example value: https://localhost:8443
-app.numberOfUsers   | No        | 1             | Number of concurrent REST calls.
-app.durationMinutes | No        | 1             | Duration of a test run in number of minutes.
+System property      | Mandatory | Default value | Description
+-------------------- | --------- | ------------- | -----------
+app.baseUrl          | Yes       |               | Base URL of API. Example value: https://localhost:8443
+test.numberOfUsers   | No        | 1             | Number of concurrent REST calls.
+test.durationMinutes | No        | 0             | Duration of a test run in number of minutes.
+test.durationSeconds | No        | 1             | Duration of a test run in number of seconds.
+
+The test duration will be the total of `test.durationMinutes` and `test.durationSeconds`.
 
 #### Running load tests from Maven
 
@@ -1566,28 +1568,25 @@ fully qualified name (FQN) of the simulation class to run.
 
 From the `microcoffeeoncloud-gatlingtest` project, run:
 
-    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://localhost:8443 -Dapp.numberOfUsers=10 -Dapp.durationMinutes=30
+    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.OrderApiTest -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=5 -Dtest.durationMinutes=30 -Dtest.durationSeconds=0
 
-#### Running load tests in Scala IDE
+#### Running load tests in IntelliJ
 
 During development of simulation classes, it is very handy to test scenarios in the IDE. To accomplish this, create
 a Run Configuration like the following example shows:
 
-Run Configurations... > Scala Application > New
-* Name: LocationApiTest
-* Main
-  - Project: microcoffeeoncloud-gatlingtest
-  - Main class: io.gatling.app.Gatling
-* Arguments
-  - Program arguments: -s study.microcoffee.scenario.LocationApiTest -sf src/test/scala -rf target/gatling
-  - VM arguments: -Dapp.baseUrl=https://localhost:8443 -Dapp.numberOfUsers=2 -Dapp.durationMinutes=2
+Run > Edit Configurations... > + (Add New Configuration) > Application
+* Name: OrderApiTest
+* Main class: study.microcoffee.scenario.OrderApiTestRunner
+* Modify options > Add VM options
+    * VM options: -Dapp.baseUrl=https\://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
 
 #### Test report
 
 The file name of the HTML test report is displayed upon termination of a load test. A snapshot of the test report opened in a web
 browser is shown below.
 
-![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report.png "Snapshot of Gatling Test Report")
+![Snapshot of Gatling Test Report](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/gatling-test-report-384.png "Snapshot of Gatling Test Report")
 
 ### <a name="keycloak-config"></a>Keycloak - configuration examples
 
