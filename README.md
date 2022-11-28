@@ -1579,7 +1579,7 @@ Run > Edit Configurations... > + (Add New Configuration) > Application
 * Name: OrderApiTest
 * Main class: study.microcoffee.scenario.OrderApiTestRunner
 * Modify options > Add VM options
-    -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
+    * VM options: -Dapp.baseUrl=https\://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
 
 #### Test report
 
