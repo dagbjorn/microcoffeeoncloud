@@ -1538,7 +1538,7 @@ Gatling may be used in two ways:
 For load testing of the Microcoffee API we use Gatling with Maven. This requires no separate tool installation, however it is very
 useful to install an IDE that supports Scala. [IntelliJ](https://www.jetbrains.com/idea/) is a good alternative.
 
-:point_right: When configuring a Scala SDK in IntelliJ from from File > Project Structure... > Platform Settings > Global Libraries, make sure to select a Scala 2.13 SDK.
+:point_right: When configuring a Scala SDK in IntelliJ from File > Project Structure... > Platform Settings > Global Libraries, make sure to select a Scala 2.13 SDK.
 
 #### The test scenarios
 
@@ -1568,7 +1568,7 @@ fully qualified name (FQN) of the simulation class to run.
 
 From the `microcoffeeoncloud-gatlingtest` project, run:
 
-    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.LocationApiTest -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=5 -Dtest.durationMinutes=30 -Dtest.durationSeconds=0
+    mvn gatling:test -Dgatling.simulationClass=study.microcoffee.scenario.OrderApiTest -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=5 -Dtest.durationMinutes=30 -Dtest.durationSeconds=0
 
 #### Running load tests in IntelliJ
 
@@ -1576,10 +1576,10 @@ During development of simulation classes, it is very handy to test scenarios in 
 a Run Configuration like the following example shows:
 
 Run > Edit Configurations... > + (Add New Configuration) > Application
-* Name: LocationApiTest
-* Main class: study.microcoffee.scenario.LocationApiTestRunner
+* Name: OrderApiTest
+* Main class: study.microcoffee.scenario.OrderApiTestRunner
 * Modify options > Add VM options
-    * VM options: -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
+    -Dapp.baseUrl=https://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
 
 #### Test report
 
