@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
@@ -24,6 +25,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 @TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
 @ActiveProfiles("itest")
 @Profile("itest")
+@DirtiesContext // Fixes "Address already in use: bind" for port 8081
 class LocationControllerWebClientIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";
