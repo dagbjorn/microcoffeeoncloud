@@ -44,7 +44,8 @@
             < GET /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}  QueryParameters[]  PathParameters[latitude, longitude, maxdistance]  HeaderParameters[]  Produces[]  Consumes[] >
          -->
         <hikaku.version>3.3.0</hikaku.version>
-        <flapdoodle-embed-mongo.version>4.3.3</flapdoodle-embed-mongo.version>
+        <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
+        <flapdoodle-embed-mongo.version>4.3.2</flapdoodle-embed-mongo.version>
         <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
 
         <!-- Plugin versions -->
@@ -164,7 +165,7 @@
 
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
             <version>${flapdoodle-embed-mongo.version}</version>
             <scope>test</scope>
         </dependency>
