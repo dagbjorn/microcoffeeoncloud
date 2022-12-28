@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.1</version>
         <relativePath/>
     </parent>
 
@@ -34,7 +34,7 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2021.0.4</spring-cloud.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
 
         <!-- 3.2.0 and higher gives unexpected test result (test is now disabled)
             Expected, but unable to find:
@@ -43,8 +43,10 @@
             Unexpected, but found:
             < GET /api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}  QueryParameters[]  PathParameters[latitude, longitude, maxdistance]  HeaderParameters[]  Produces[]  Consumes[] >
          -->
+        <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
+        <flapdoodle-embed-mongo.version>4.3.2</flapdoodle-embed-mongo.version>
         <hikaku.version>3.3.0</hikaku.version>
-        <springdoc-openapi.version>1.6.12</springdoc-openapi.version>
+        <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
@@ -112,7 +114,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <artifactId>spring-boot-starter-jetty</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -128,10 +130,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- Use Jetty instead of Tomcat (default) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
         <!-- Supports automatic reload on code changes -->
@@ -144,7 +145,7 @@
         <!-- Swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
         </dependency>
 
@@ -164,7 +165,8 @@
 
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
+            <version>${flapdoodle-embed-mongo.version}</version>
             <scope>test</scope>
         </dependency>
 

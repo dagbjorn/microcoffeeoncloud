@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.1</version>
         <relativePath/>
     </parent>
 
@@ -34,12 +34,12 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2021.0.4</spring-cloud.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
 
         <angularjs.version>1.8.2</angularjs.version>
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
         <bootstrap.version>5.2.2</bootstrap.version>
-        <springdoc-openapi.version>1.6.12</springdoc-openapi.version>
+        <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
@@ -126,7 +126,7 @@
         <!-- Swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webflux-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
             <version>${springdoc-openapi.version}</version>
         </dependency>
 

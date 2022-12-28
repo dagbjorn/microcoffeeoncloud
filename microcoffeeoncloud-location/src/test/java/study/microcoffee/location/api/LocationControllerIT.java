@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -25,6 +26,7 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
+@DirtiesContext // Fixes "Address already in use: bind" for port 8081
 class LocationControllerIT {
 
     private static final String SERVICE_PATH = "/api/coffeeshop/nearest/{latitude}/{longitude}/{maxdistance}";

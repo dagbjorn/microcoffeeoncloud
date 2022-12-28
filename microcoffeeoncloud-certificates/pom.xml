@@ -264,7 +264,7 @@
                                     </arguments>
                                 </configuration>
                             </execution>
-                         </executions>
+                        </executions>
                         <configuration>
                             <executable>openssl</executable>
                             <workingDirectory>${project.build.directory}/openssl</workingDirectory>
@@ -322,7 +322,54 @@
                                 </configuration>
                             </execution>
 
-                            <!-- List contents of keystore -->
+                            <!-- Import certificates to a PKCS12 truststore (required by Tomcat) -->
+                            <execution>
+                                <id>import-cert-to-pkcs12-truststore-microcoffee-study</id>
+                                <goals>
+                                    <goal>importCertificate</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <file>${project.build.directory}/openssl/microcoffee.study-cert.pem</file>
+                                    <alias>microcoffee.study</alias>
+                                    <noprompt>true</noprompt>
+                                    <keystore>${project.build.outputDirectory}/microcoffee-truststore.jks</keystore>
+                                    <storepass>12345678</storepass>
+                                    <storetype>PKCS12</storetype>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>import-cert-to-pkcs12-truststore-localhost</id>
+                                <goals>
+                                    <goal>importCertificate</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <file>${project.build.directory}/openssl/localhost-cert.pem</file>
+                                    <alias>localhost</alias>
+                                    <noprompt>true</noprompt>
+                                    <keystore>${project.build.outputDirectory}/microcoffee-truststore.jks</keystore>
+                                    <storepass>12345678</storepass>
+                                    <storetype>PKCS12</storetype>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>import-cert-to-pkcs12-truststore-wildcard-default</id>
+                                <goals>
+                                    <goal>importCertificate</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <file>${project.build.directory}/openssl/wildcard.default-cert.pem</file>
+                                    <alias>wildcard.default</alias>
+                                    <noprompt>true</noprompt>
+                                    <keystore>${project.build.outputDirectory}/microcoffee-truststore.jks</keystore>
+                                    <storepass>12345678</storepass>
+                                    <storetype>PKCS12</storetype>
+                                </configuration>
+                            </execution>
+
+                            <!-- List contents of keystore and truststore -->
                             <execution>
                                 <id>list-keystore</id>
                                 <goals>
@@ -331,6 +378,18 @@
                                 <phase>process-resources</phase>
                                 <configuration>
                                     <keystore>${project.build.outputDirectory}/microcoffee-keystore.jks</keystore>
+                                    <storepass>12345678</storepass>
+                                    <verbose>true</verbose>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>list-truststore</id>
+                                <goals>
+                                    <goal>list</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <keystore>${project.build.outputDirectory}/microcoffee-truststore.jks</keystore>
                                     <storepass>12345678</storepass>
                                     <verbose>true</verbose>
                                 </configuration>
