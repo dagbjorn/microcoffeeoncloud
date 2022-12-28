@@ -16,8 +16,10 @@ public class SecurityConfig {
         httpSecurity //
             .cors() // Bypasses the authorization checks for OPTIONS requests
             .and() //
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/**").hasAuthority("SCOPE_creditrating")) //
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) //
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/api/**").hasAuthority("SCOPE_creditrating");
+                auth.anyRequest().permitAll();
+            }) //
             .oauth2ResourceServer() //
             .jwt();
         return httpSecurity.build();
