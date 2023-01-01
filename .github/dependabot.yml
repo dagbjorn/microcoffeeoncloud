@@ -1,22 +1,60 @@
 version: 2
 updates:
-  # Configuration for Dockerfile
+  # Configurations for Dockerfile
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/microcoffee-authserver"
     schedule:
       interval: "daily"
-      time: "10:20"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-configserver"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-creditrating"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-database"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-discovery"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-gateway"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-location"
+    schedule:
+      interval: "daily"
+      time: "20:05"
+  - package-ecosystem: "docker"
+    directory: "/microcoffee-order"
+    schedule:
+      interval: "daily"
+      time: "20:05"
 
   # Configuration for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-      time: "10:20"
+      time: "20:05"
 
   # Configuration for Maven
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
-      time: "10:20"
+      time: "20:05"
+    ignore:
+      # wro4j-maven-plugin related version conflict. Keep current version.
+      - dependency-name: "org.webjars.npm:glob"
