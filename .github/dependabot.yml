@@ -11,11 +11,19 @@ updates:
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker"
     directory: "/microcoffeeoncloud-creditrating"
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker"
     directory: "/microcoffeeoncloud-database"
     schedule:
@@ -26,21 +34,37 @@ updates:
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker"
     directory: "/microcoffeeoncloud-gateway"
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker"
     directory: "/microcoffeeoncloud-location"
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker"
     directory: "/microcoffeeoncloud-order"
     schedule:
       interval: "daily"
       time: "06:00"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
 
   # Configuration for GitHub Actions
   - package-ecosystem: "github-actions"
