@@ -32,6 +32,7 @@ Date | Change
 10.05.2022 | Added extra on WSL installation.
 18.11.2022 | Replaced Docker Toolbox with Docker Desktop for local building and testing. Updated Minikube doc. General brush-up of outdated info.
 28.11.2022 | Updated section on API testing with Gatling. Migrated from Scala IDE to IntelliJ.
+28.12.2022 | Upgraded to Spring Boot 3.0.1 and Spring Cloud 2022.0.0.
 
 ## Contents
 
