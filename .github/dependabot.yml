@@ -2,59 +2,59 @@ version: 2
 updates:
   # Configurations for Dockerfile
   - package-ecosystem: "docker"
-    directory: "/microcoffee-authserver"
+    directory: "/microcoffeeoncloud-authserver"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-configserver"
+    directory: "/microcoffeeoncloud-configserver"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-creditrating"
+    directory: "/microcoffeeoncloud-creditrating"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-database"
+    directory: "/microcoffeeoncloud-database"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-discovery"
+    directory: "/microcoffeeoncloud-discovery"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-gateway"
+    directory: "/microcoffeeoncloud-gateway"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-location"
+    directory: "/microcoffeeoncloud-location"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
   - package-ecosystem: "docker"
-    directory: "/microcoffee-order"
+    directory: "/microcoffeeoncloud-order"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
 
   # Configuration for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
 
   # Configuration for Maven
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "daily"
-      time: "20:05"
+      time: "06:00"
     ignore:
       # wro4j-maven-plugin related version conflict. Keep current version.
       - dependency-name: "org.webjars.npm:glob"
