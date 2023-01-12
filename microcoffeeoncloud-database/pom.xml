@@ -18,7 +18,7 @@
 
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <gmavenplus-plugin.version>2.1.0</gmavenplus-plugin.version>
-        <maven-dependency-plugin.version>3.4.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
