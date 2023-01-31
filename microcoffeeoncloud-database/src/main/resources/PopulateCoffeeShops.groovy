@@ -1,5 +1,6 @@
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import groovy.xml.XmlSlurper;
 
 if (!dbhost) {
     println "Missing dbhost property"
