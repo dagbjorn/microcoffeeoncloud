@@ -14,7 +14,7 @@
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <maven-dependency-plugin.version>3.4.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
