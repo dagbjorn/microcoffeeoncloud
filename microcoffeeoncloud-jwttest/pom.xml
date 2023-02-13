@@ -32,7 +32,7 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <java-jwt.version>4.2.2</java-jwt.version>
+        <java-jwt.version>4.3.0</java-jwt.version>
 
         <!-- Plugin versions -->
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
