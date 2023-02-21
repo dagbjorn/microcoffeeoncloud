@@ -16,7 +16,7 @@
         <groovy.version>4.0.8</groovy.version>
         <mongo-java-driver.version>3.12.11</mongo-java-driver.version>
 
-        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
         <gmavenplus-plugin.version>2.1.0</gmavenplus-plugin.version>
         <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
 
@@ -42,9 +42,28 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${dockerfile-maven-plugin.version}</version>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <images>
+                            <image>
+                                <name>${docker.image.prefix}/${project.artifactId}</name>
+                                <alias>dockerfile</alias>
+                                <build>
+                                    <contextDir>${project.basedir}</contextDir>
+                                    <tags>
+                                        <tag>${project.version}</tag>
+                                        <tag>latest</tag>
+                                    </tags>
+                                    <args>
+                                        <JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
+                                    </args>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -132,12 +151,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <configuration>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                            <tag>${project.version}</tag>
-                        </configuration>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>build-image</id>
@@ -145,16 +160,6 @@
                                 <goals>
                                     <goal>build</goal>
                                 </goals>
-                            </execution>
-                            <execution>
-                                <id>tag-image-latest</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>tag</goal>
-                                </goals>
-                                <configuration>
-                                    <tag>latest</tag>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -167,12 +172,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <configuration>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                            <tag>${project.version}</tag>
-                        </configuration>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>push-image</id>
