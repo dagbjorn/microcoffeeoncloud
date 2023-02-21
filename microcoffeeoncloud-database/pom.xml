@@ -57,9 +57,6 @@
                                         <tag>${project.version}</tag>
                                         <tag>latest</tag>
                                     </tags>
-                                    <args>
-                                        <JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
-                                    </args>
                                 </build>
                             </image>
                         </images>
