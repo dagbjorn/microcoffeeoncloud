@@ -23,15 +23,6 @@
         <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
 
-    <dependencies>
-         <!-- Internal projects -->
-        <dependency>
-            <groupId>study.microcoffeeoncloud</groupId>
-            <artifactId>microcoffeeoncloud-certificates</artifactId>
-            <version>${microcoffeeoncloud-certificates.version}</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -125,14 +116,19 @@
                         <id>unpack-keystore</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>unpack-dependencies</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>microcoffeeoncloud-certificates</includeArtifactIds>
-                            <includes>**/microcoffee.study.p12,**/wildcard.default.p12</includes>
-                            <outputDirectory>${project.build.directory}/keystore</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>study.microcoffeeoncloud</groupId>
+                                    <artifactId>microcoffeeoncloud-certificates</artifactId>
+                                    <version>${microcoffeeoncloud-certificates.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/keystore</outputDirectory>
+                                    <includes>**/microcoffee.study.p12,**/wildcard.default.p12</includes>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
