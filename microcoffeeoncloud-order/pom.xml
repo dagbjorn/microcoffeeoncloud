@@ -40,7 +40,7 @@
         <springdoc-openapi.version>1.6.14</springdoc-openapi.version>
 
         <!-- Plugin versions -->
-        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     </properties>
@@ -283,15 +283,28 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${dockerfile-maven-plugin.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco-maven-plugin.version}</version>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <images>
+                            <image>
+                                <name>${docker.image.prefix}/${project.artifactId}</name>
+                                <alias>dockerfile</alias>
+                                <build>
+                                    <contextDir>${project.basedir}</contextDir>
+                                    <tags>
+                                        <tag>${project.version}</tag>
+                                        <tag>latest</tag>
+                                    </tags>
+                                    <args>
+                                        <JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
+                                    </args>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -339,20 +352,13 @@
     <profiles>
         <!-- To build image: mvn clean package -Pbuild -->
         <!-- To build image + push image to Docker Hub: mvn clean package -Pbuild,push -->
-        <profile>
+         <profile>
             <id>build</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <configuration>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                            <tag>${project.version}</tag>
-                            <buildArgs>
-                                <JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
-                            </buildArgs>
-                        </configuration>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>build-image</id>
@@ -360,16 +366,6 @@
                                 <goals>
                                     <goal>build</goal>
                                 </goals>
-                            </execution>
-                            <execution>
-                                <id>tag-image-latest</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>tag</goal>
-                                </goals>
-                                <configuration>
-                                    <tag>latest</tag>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -382,12 +378,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <configuration>
-                            <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                            <tag>${project.version}</tag>
-                        </configuration>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>push-image</id>

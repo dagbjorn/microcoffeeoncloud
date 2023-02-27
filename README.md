@@ -1921,7 +1921,7 @@ Verify the installation.
 
 ##### Add DOCKER_HOST on Windows
 
-To make the docker daemon available for tools like `dockerfile-maven-plugin` on Windows, add the environment variable:
+To make the docker daemon available for tools like Fabric8 `docker-maven-plugin` on Windows, add the environment variable:
 
     DOCKER_HOST=tcp://localhost:2375
 
