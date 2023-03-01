@@ -16,7 +16,7 @@
         <groovy.version>4.0.9</groovy.version>
         <mongo-java-driver.version>3.12.12</mongo-java-driver.version>
 
-        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
         <gmavenplus-plugin.version>2.1.0</gmavenplus-plugin.version>
         <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
 
