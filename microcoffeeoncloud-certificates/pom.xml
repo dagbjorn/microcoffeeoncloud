@@ -131,6 +131,20 @@
                                 </configuration>
                             </execution>
 
+                            <!-- List openssl version -->
+                            <execution>
+                                <id>list-openssl-version</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>
+                                        <argument>version</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
                             <!-- Generate private keys and certificates -->
                             <execution>
                                 <id>generate-key-and-cert-microcoffee-study</id>
