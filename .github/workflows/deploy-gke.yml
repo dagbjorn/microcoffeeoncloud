@@ -39,7 +39,6 @@ jobs:
       - name: Display current gcloud environment
         run: |-
           gcloud info
-          netstat -an
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
@@ -101,6 +100,8 @@ jobs:
           kubectl delete deployment order --ignore-not-found
           kubectl wait --for=delete pod -l app=order --timeout=60s
 
+          netstat -an
+          kubectl get pods
           kubectl apply -f microcoffeeoncloud-gateway/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-location/k8s-service-gke.yml
           kubectl apply -f microcoffeeoncloud-order/k8s-service-gke.yml
