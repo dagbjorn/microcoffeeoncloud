@@ -19,6 +19,7 @@
         <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 
         <!-- VM host IP -->
         <vmHostIp>192.168.99.100</vmHostIp>
@@ -49,6 +50,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${maven-install-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
