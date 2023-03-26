@@ -10,6 +10,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
     </properties>
 
     <modules>
@@ -23,4 +26,22 @@
         <module>microcoffeeoncloud-location</module>
         <module>microcoffeeoncloud-order</module>
     </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

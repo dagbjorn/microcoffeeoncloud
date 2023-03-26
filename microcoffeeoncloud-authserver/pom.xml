@@ -13,8 +13,10 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
+        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
+        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
@@ -31,12 +33,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${maven-dependency-plugin.version}</version>
-                </plugin>
-
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
@@ -58,6 +54,24 @@
                         </images>
                         <retries>10</retries>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

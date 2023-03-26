@@ -39,7 +39,6 @@ jobs:
       - name: Display current gcloud environment
         run: |-
           gcloud info
-          netstat -an
 
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file

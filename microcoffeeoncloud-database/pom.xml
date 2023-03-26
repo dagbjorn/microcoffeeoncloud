@@ -13,12 +13,14 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <groovy.version>4.0.9</groovy.version>
+        <groovy.version>4.0.10</groovy.version>
         <mongo-java-driver.version>3.12.12</mongo-java-driver.version>
 
-        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
         <gmavenplus-plugin.version>2.1.0</gmavenplus-plugin.version>
+        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
+        <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 
         <docker.image.prefix>dagbjorn</docker.image.prefix>
     </properties>
@@ -26,12 +28,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${maven-dependency-plugin.version}</version>
-                </plugin>
-
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
@@ -52,6 +48,24 @@
                             </image>
                         </images>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
