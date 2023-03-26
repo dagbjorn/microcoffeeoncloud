@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.5</version>
         <relativePath/>
     </parent>
 
@@ -37,7 +37,7 @@
         <spring-cloud.version>2022.0.1</spring-cloud.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.41.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     </properties>
