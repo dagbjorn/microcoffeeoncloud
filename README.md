@@ -33,6 +33,7 @@ Date | Change
 18.11.2022 | Replaced Docker Toolbox with Docker Desktop for local building and testing. Updated Minikube doc. General brush-up of outdated info.
 28.11.2022 | Updated section on API testing with Gatling. Migrated from Scala IDE to IntelliJ.
 28.12.2022 | Upgraded to Spring Boot 3.0.1 and Spring Cloud 2022.0.0.
+26.03.2023 | Upgraded to Spring Boot 3.0.5. Microcoffee now requires OpenSSL 3.x to generate the self-signed certificates.
 
 ## Contents
 
@@ -171,7 +172,7 @@ For building and testing the application on Windows, Docker Desktop with the WSL
 
 In addition, you'll need the basic Java development tools (IDE w/ Java 17 and Maven) installed on your development machine.
 
-You will also need OpenSSL to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
+You will also need OpenSSL 3.x to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
 
 :warning: Java keytool won't work because it doesn't support wildcard host names as SAN (Subject Alternative Name) values.
 
