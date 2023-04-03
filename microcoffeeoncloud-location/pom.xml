@@ -38,7 +38,7 @@
 
         <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
         <flapdoodle-embed-mongo.version>4.6.2</flapdoodle-embed-mongo.version>
-        <springdoc-openapi.version>2.0.4</springdoc-openapi.version>
+        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
