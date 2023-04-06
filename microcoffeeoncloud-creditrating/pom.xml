@@ -34,9 +34,9 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <spring-cloud.version>2022.0.2</spring-cloud.version>
 
-        <springdoc-openapi.version>2.0.4</springdoc-openapi.version>
+        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
