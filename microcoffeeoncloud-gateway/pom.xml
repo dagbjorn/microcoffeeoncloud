@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
+        <version>3.0.6</version>
         <relativePath/>
     </parent>
 
@@ -36,14 +36,21 @@
 
         <spring-cloud.version>2022.0.2</spring-cloud.version>
 
+        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+
+        <!-- Angular -->
         <angularjs.version>1.8.2</angularjs.version>
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
         <bootstrap.version>5.2.3</bootstrap.version>
-        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+
+        <!-- React tool versions (see https://nodejs.org/en/download) -->
+        <node.version>v18.16.0</node.version>
+        <npm.version>9.5.1</npm.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.42.0</docker-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <docker-maven-plugin.version>0.42.1</docker-maven-plugin.version>
+        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <wro4j-maven-plugin.version>1.10.1</wro4j-maven-plugin.version>
 
@@ -247,11 +254,11 @@
                 </executions>
             </plugin>
 
-            <!-- Filters version numbers in wro.xml -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
+                    <!-- Angular: Filters version numbers in wro.xml -->
                     <execution>
                         <id>filter-resources</id>
                         <phase>process-sources</phase>
@@ -259,11 +266,30 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/wro</outputDirectory>
+                            <outputDirectory>
+                                ${project.build.directory}/wro</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/wro</directory>
+                                    <directory>
+                                        src/main/wro</directory>
                                     <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <!-- React: Copy frontend resources from app to targat/classes -->
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>app/build</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -271,7 +297,7 @@
                 </executions>
             </plugin>
 
-            <!-- Creates single js and css files of Angular and Bootstrap pulled down by org.webjars dependencies. -->
+            <!-- Angular: Creates single js and css files of Angular and Bootstrap pulled down by org.webjars dependencies. -->
             <plugin>
                 <groupId>ro.isdc.wro4j</groupId>
                 <artifactId>wro4j-maven-plugin</artifactId>
@@ -327,6 +353,49 @@
                         <version>${glob.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <!-- React:
+                    1. Installs node and npm.
+                    2. Installs packages.
+                    3. Builds the frontend application.
+            -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <configuration>
+                    <workingDirectory>app</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -31,7 +31,7 @@ import study.microcoffee.order.repository.OrderRepository;
 /**
  * Controller class of the Order REST API for handling coffee orders.
  */
-@CrossOrigin // Needed for Swagger/SpringDoc to work from gateway.
+@CrossOrigin(exposedHeaders = "Location") // Needed for Swagger/SpringDoc to work from gateway + React dev on port 3000.
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = SwaggerConfig.ORDER_TAG, description = SwaggerConfig.ORDER_DESCRIPTION)
