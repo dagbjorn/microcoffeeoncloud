@@ -34,6 +34,7 @@ Date | Change
 28.11.2022 | Updated section on API testing with Gatling. Migrated from Scala IDE to IntelliJ.
 28.12.2022 | Upgraded to Spring Boot 3.0.1 and Spring Cloud 2022.0.0.
 26.03.2023 | Upgraded to Spring Boot 3.0.5. Microcoffee now requires OpenSSL 3.x to generate the self-signed certificates.
+11.05.2023 | Developed new frontend in ReactJS. (Old AngularJS frontend is still available.)
 
 ## Contents
 
@@ -64,15 +65,15 @@ Date | Change
     - [Installing Docker on WSL](#installing-docker-on-wsl)
 
 ## <a name="acknowledgements"></a>Acknowledgements
-The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee in her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
+The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee in her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; Microcoffee uses a microservice architecture, runs on Docker and is developed in Spring Boot instead of Dropwizard as in Trisha's version. Also, the frontend is rewritten in ReactJS.
 
 ## <a name="application"></a>The application
-The application has a simple user interface written in AngularJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
+The application has a simple user interface written in ReactJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### The microservices
-The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the key technologies in the backend. AngularJS and Bootstrap in the frontend. Spring Security OAuth and Keycloak are used for securing one of the backend APIs.
+The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the key technologies in the backend. ReactJS and Bootstrap in the frontend. Spring Security OAuth and Keycloak are used for securing one of the backend APIs.
 
-![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202105.png "Microcoffee architecture")
+![Microcoffee architecture](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-architecture-202305.png "Microcoffee architecture")
 
 The application is made up by the following microservices, each running in its own Docker container:
 
@@ -398,13 +399,15 @@ For testing individual projects outside Docker, run:
 ## <a name="give-a-spin"></a>Give Microcoffee a spin
 After Microcoffee has started, navigate to the coffee shop to place your first coffee order:
 
-    https://localhost:8443/coffee.html
+    https://localhost:8443
 
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
 * Firefox: Click Advanced and then "Accept the Risk and Continue".
 * Chrome: Click Advanced and hit the "Proceed to localhost (unsafe)" link.
 * Opera: Click "Help me understand" and hit the "Proceed to localhost (unsafe)" link.
 * Edge: Click Advanced and hit the "Continue to localhost (unsafe)" link.
+
+:bulb: Old AngularJS frontend is available on `https://localhost:8443/coffee.html`.
 
 ## <a name="rest-api"></a>REST API
 
@@ -890,9 +893,11 @@ To verify the database loading, start the MongoDB client in the database pod. (U
 
 Navigate to:
 
-    https://EXTERNAL_IP:30443/coffee.html
+    https://EXTERNAL_IP:30443
 
 As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the created VM instances.
+
+:bulb: Old AngularJS frontend is available on `https://EXTERNAL_IP:30443/coffee.html`.
 
 #### Summary of external port numbers
 
@@ -1081,16 +1086,18 @@ To verify the database loading, start the MongoDB client in the database pod. (R
 
 Navigate to:
 
-    https://EXTERNAL-IP/coffee.html
+    https://EXTERNAL-IP
 
 Run `kubectl get services gateway-lb` to get the *EXTERNAL-IP* (hostname) of the gateway load balancer service.
 Example value for region eu-west-1: `aa6937282f5b811e9ae9e02466ed2eca-133344008.eu-west-1.elb.amazonaws.com`
 
 Alternatively, use the static node port:
 
-    https://EXTERNAL-IP:30443/coffee.html
+    https://EXTERNAL-IP:30443
 
 However, this time run `kubectl get nodes -o wide` to find an *EXTERNAL-IP* (IP address). You can pick any node.
+
+:bulb: Old AngularJS frontend is available on `https://EXTERNAL_IP/coffee.html`.
 
 #### <a name="eks-cleanup"></a>Clean-up of resources
 
@@ -1362,9 +1369,11 @@ To verify the database loading, start the MongoDB client in the database pod. (R
 
 Navigate to:
 
-    https://EXTERNAL-IP:8443/coffee.html
+    https://EXTERNAL-IP:8443
 
 Run `gcloud compute instances list` to get the *EXTERNAL-IP* of one of the cluster nodes.
+
+:bulb: Old AngularJS frontend is available on `https://EXTERNAL-IP:8443/coffee.html`.
 
 #### Clean-up of resources
 
@@ -1507,9 +1516,11 @@ To verify the database loading, start the MongoDB client in the database pod. (U
 
 Navigate to:
 
-    https://NODE_IP:30443/coffee.html
+    https://NODE_IP:30443
 
 As usual, run `gsudo minikube ip` to get the NODE_IP of the Minikube cluster.
+
+:bulb: Old AngularJS frontend is available on `https://NODE_IP:30443/coffee.html`.
 
 #### Summary of port numbers
 
@@ -2049,9 +2060,11 @@ Finally, in `microcoffeeoncloud-appconfig`, update `eureka.instance.hostname` of
 
     eureka.instance.hostname=HOST_IP
 
-To run Microcoffee, see the main documentation above. To test Microcoffee, open the URL https://localhost:8443/coffee.html.
+To run Microcoffee, see the main documentation above. To test Microcoffee, open the URL `https://localhost:8443`.
 
 :point_right: Remember to use `run-docker.ps1` when starting the services from PowerShell windows.
+
+:bulb: Old AngularJS frontend is available on `https://localhost:8443/coffee.html`.
 
 ##### Running on Minikube
 
@@ -2070,4 +2083,4 @@ See [Microcoffee on Minikube](#microcoffee-on-minikube) for how to run Microcoff
 
     mvn -f microcoffeeoncloud-database\pom.xml gplus:execute -Ddbhost=localhost -Ddbport=27017 -Ddbname=microcoffee -Dshopfile="microcoffeeoncloud-database\oslo-coffee-shops.xml"
 
-Finally, with everything is up and running, navigate to https://localhost:8443/coffee.html.
+Finally, with everything is up and running, navigate to `https://localhost:8443`.
