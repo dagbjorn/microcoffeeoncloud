@@ -35,6 +35,7 @@ Date | Change
 28.12.2022 | Upgraded to Spring Boot 3.0.1 and Spring Cloud 2022.0.0.
 26.03.2023 | Upgraded to Spring Boot 3.0.5. Microcoffee now requires OpenSSL 3.x to generate the self-signed certificates.
 11.05.2023 | Developed new frontend in ReactJS. (Old AngularJS frontend is still available.)
+18.05.2023 | Added screendumps of Microcoffee GUI in doc page.
 
 ## Contents
 
