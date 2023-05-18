@@ -70,6 +70,12 @@ The &micro;Coffee Shop application is based on the coffee shop application coded
 ## <a name="application"></a>The application
 The application has a simple user interface written in ReactJS and uses REST calls to access the backend services. After loading the coffee shop menu from the backend, your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
+Screenshots from the Microcoffee GUI:
+
+![Microcoffee GUI 1(4)](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-frontend-1.png  "Microcoffee GUI 1(4)") | ![Microcoffee GUI 2(4)](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-frontend-2.png "Microcoffee GUI 2(4)")
+--- | ---
+![Microcoffee GUI 3(4)](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-frontend-3.png  "Microcoffee GUI 3(4)") | ![Coffee shop location on Google Maps 4(4)](https://raw.githubusercontent.com/dagbjorn/microcoffeeoncloud/master/docs/images/microcoffee-frontend-4.png "Coffee shop location on Google Maps 4(4)")
+
 ### The microservices
 The figure shows the microservice architecture of the application. Spring Boot, Spring Cloud and MongoDB are the key technologies in the backend. ReactJS and Bootstrap in the frontend. Spring Security OAuth and Keycloak are used for securing one of the backend APIs.
 
