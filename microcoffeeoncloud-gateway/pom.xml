@@ -48,7 +48,7 @@
         <npm.version>9.5.1</npm.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.42.1</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
         <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>

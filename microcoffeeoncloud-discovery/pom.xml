@@ -37,7 +37,7 @@
         <spring-cloud.version>2022.0.2</spring-cloud.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.42.1</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     </properties>
