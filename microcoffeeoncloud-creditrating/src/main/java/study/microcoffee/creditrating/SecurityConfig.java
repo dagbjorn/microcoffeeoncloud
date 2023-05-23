@@ -1,5 +1,7 @@
 package study.microcoffee.creditrating;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,14 +16,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity //
-            .cors() // Bypasses the authorization checks for OPTIONS requests
-            .and() //
+            .cors(withDefaults()) // Bypasses the authorization checks for OPTIONS requests
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/api/**").hasAuthority("SCOPE_creditrating");
                 auth.anyRequest().permitAll();
             }) //
-            .oauth2ResourceServer() //
-            .jwt();
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
         return httpSecurity.build();
     }
 }

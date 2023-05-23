@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.1.0</version>
         <relativePath/>
     </parent>
 
@@ -37,7 +37,7 @@
         <spring-cloud.version>2022.0.2</spring-cloud.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.42.1</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
     </properties>
@@ -205,6 +205,36 @@
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${sonar-maven-plugin.version}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <!--
+                                    Fixes an m2eclipse issue starting with maven-dependency-plugin 3.4.0.
+                                    "Artifact has not been packaged yet. When used on reactor artifact,
+                                    unpack should be executed after packaging: see MDEP-98."
+                                -->
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>${maven-dependency-plugin.version}</versionRange>
+                                        <goals>
+                                            <goal>unpack-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -225,7 +255,7 @@
                 <executions>
                     <execution>
                         <id>unpack-keystore</id>
-                        <phase>package</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
