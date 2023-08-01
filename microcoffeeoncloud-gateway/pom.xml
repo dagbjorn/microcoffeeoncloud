@@ -41,7 +41,7 @@
         <!-- Angular -->
         <angularjs.version>1.8.2</angularjs.version>
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
-        <bootstrap.version>5.2.3</bootstrap.version>
+        <bootstrap.version>5.3.1</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
         <node.version>v18.16.0</node.version>
