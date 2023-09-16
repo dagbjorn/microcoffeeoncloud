@@ -13,8 +13,8 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
-        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+        <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
+        <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
         <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
 
