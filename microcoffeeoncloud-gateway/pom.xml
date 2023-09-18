@@ -349,6 +349,7 @@
                     <wroFile>${project.build.directory}/wro/wro.xml</wroFile>
                     <extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
                     <ignoreMissingResources>false</ignoreMissingResources>
+                    <contextFolder>${basedir}/src/main/webapp/</contextFolder>
                 </configuration>
                 <dependencies>
                     <dependency>
