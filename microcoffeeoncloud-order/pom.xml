@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.12</version>
+        <version>2.7.15</version>
         <relativePath/>
     </parent>
 
@@ -34,15 +34,15 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2021.0.7</spring-cloud.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
 
         <modelmapper.version>3.1.1</modelmapper.version>
         <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
     </properties>
 
     <repositories>

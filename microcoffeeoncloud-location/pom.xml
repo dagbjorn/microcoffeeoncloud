@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.3</version>
         <relativePath/>
     </parent>
 
@@ -34,16 +34,16 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2022.0.3</spring-cloud.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
 
         <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
-        <flapdoodle-embed-mongo.version>4.6.2</flapdoodle-embed-mongo.version>
-        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+        <flapdoodle-embed-mongo.version>4.9.3</flapdoodle-embed-mongo.version>
+        <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.43.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
     </properties>
 
     <repositories>
