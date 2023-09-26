@@ -1,10 +1,17 @@
 package study.microcoffee.order.consumer.common.http;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.DefaultHostnameVerifier;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import javax.net.ssl.HostnameVerifier;
+
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.DefaultHostnameVerifier;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.util.Timeout;
 
 /**
  * Factory class for creating HTTP clients.
@@ -20,8 +27,8 @@ public class HttpClientFactory {
      * The following timeout values are set using the value of the timeout parameter:
      * <ul>
      * <li>ConnectTimeout: The time to establish the connection with the remote host.</li>
-     * <li>SocketTimeout: The time waiting for data - after the connection was established; maximum time of inactivity between two
-     * data packets.</li>
+     * <li>SoTimeout: The time waiting for data - after the connection was established; maximum time of inactivity between two data
+     * packets.</li>
      * <li>ConnectionRequestTimeout: The time to wait for a connection from the connection manager/pool.</li>
      * </ul>
      *
@@ -30,10 +37,7 @@ public class HttpClientFactory {
      * @return The HTTP client.
      */
     public static CloseableHttpClient createDefaultClient(int timeout) {
-        return HttpClients.custom() //
-            .setDefaultRequestConfig(createRequestConfig(timeout)) //
-            .setSSLHostnameVerifier(new DefaultHostnameVerifier()) //
-            .build();
+        return createHttpClient(timeout, new DefaultHostnameVerifier());
     }
 
     /**
@@ -44,17 +48,25 @@ public class HttpClientFactory {
      * @return The HTTP client.
      */
     public static CloseableHttpClient createTrustAnyHostnameClient(int timeout) {
-        return HttpClients.custom() //
-            .setDefaultRequestConfig(createRequestConfig(timeout)) //
-            .setSSLHostnameVerifier(new NoopHostnameVerifier()) //
-            .build();
+        return createHttpClient(timeout, new NoopHostnameVerifier());
     }
 
-    private static RequestConfig createRequestConfig(int timeout) {
-        return RequestConfig.custom() //
-            .setConnectTimeout(timeout * 1000) //
-            .setSocketTimeout(timeout * 1000) //
-            .setConnectionRequestTimeout(timeout * 1000) //
+    private static CloseableHttpClient createHttpClient(int timeout, HostnameVerifier hostnameVerifier) {
+        return HttpClients.custom() //
+            .setDefaultRequestConfig(RequestConfig.custom() //
+                .setConnectionRequestTimeout(Timeout.ofSeconds(timeout)) //
+                .build()) //
+            .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create() //
+                .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create() //
+                    .setHostnameVerifier(hostnameVerifier) //
+                    .build()) //
+                .setDefaultSocketConfig(SocketConfig.custom() //
+                    .setSoTimeout(Timeout.ofSeconds(timeout)) //
+                    .build()) //
+                .setDefaultConnectionConfig(ConnectionConfig.custom() //
+                    .setConnectTimeout(Timeout.ofSeconds(timeout)) //
+                    .build()) //
+                .build()) //
             .build();
     }
 }

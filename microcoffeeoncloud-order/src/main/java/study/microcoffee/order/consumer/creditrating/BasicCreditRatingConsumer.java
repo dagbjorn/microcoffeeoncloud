@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -50,10 +51,18 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return response.getBody().getRating(); // NOSONAR Allow NPE
             } else {
-                throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
+                throw new ServiceCallFailedException(response.getStatusCode() + " " + getReasonPhrase(response.getStatusCode()));
             }
         } catch (RestClientException e) {
             throw new ServiceCallFailedException(e);
+        }
+    }
+
+    private String getReasonPhrase(HttpStatusCode statusCode) {
+        try {
+            return HttpStatus.valueOf(statusCode.value()).getReasonPhrase();
+        } catch (Exception e) {
+            return "";
         }
     }
 }

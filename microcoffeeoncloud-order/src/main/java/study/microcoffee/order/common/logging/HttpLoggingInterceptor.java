@@ -88,7 +88,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
      */
     private String formatResponse(ClientHttpResponse response) throws IOException {
         StringBuilder builder = new StringBuilder();
-        builder.append("HTTP " + response.getRawStatusCode() + " " + response.getStatusText() + lineTerminator);
+        builder.append("HTTP " + response.getStatusCode() + " " + response.getStatusText() + lineTerminator);
 
         HttpHeaders headers = response.getHeaders();
         formatHeaders(builder, headers);
