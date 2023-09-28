@@ -3,6 +3,7 @@ package study.microcoffee.order.api.order;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -83,6 +84,7 @@ class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(70);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .with(csrf()) // Needed with Spring Security 6.2
             .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON) //
             .header("Host", "somehost.no")) //
@@ -105,6 +107,7 @@ class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(20);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .with(csrf()) //
             .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isPaymentRequired()) //
