@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import io.github.resilience4j.retry.annotation.Retry;
+import study.microcoffee.order.consumer.common.ConsumerBase;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
@@ -19,7 +19,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  */
 @Component
 @Qualifier("Resilience4JWebClient")
-public class Resilience4JWebClientCreditRatingConsumer implements CreditRatingConsumer {
+public class Resilience4JWebClientCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
     public static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
@@ -60,14 +60,6 @@ public class Resilience4JWebClientCreditRatingConsumer implements CreditRatingCo
             return response.getBody().getRating(); // NOSONAR Allow NPE
         } else {
             throw new ServiceCallFailedException(response.getStatusCode() + " " + getReasonPhrase(response.getStatusCode()));
-        }
-    }
-
-    private String getReasonPhrase(HttpStatusCode statusCode) {
-        try {
-            return HttpStatus.valueOf(statusCode.value()).getReasonPhrase();
-        } catch (Exception e) {
-            return "";
         }
     }
 

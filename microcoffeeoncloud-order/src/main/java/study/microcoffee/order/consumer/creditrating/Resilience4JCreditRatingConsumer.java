@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import io.github.resilience4j.retry.annotation.Retry;
+import study.microcoffee.order.consumer.common.ConsumerBase;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
@@ -19,7 +19,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  */
 @Component
 @Qualifier("Resilience4J")
-public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
+public class Resilience4JCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
@@ -57,14 +57,6 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
             }
         } catch (RestClientException e) {
             throw new ServiceCallFailedException(e);
-        }
-    }
-
-    private String getReasonPhrase(HttpStatusCode statusCode) {
-        try {
-            return HttpStatus.valueOf(statusCode.value()).getReasonPhrase();
-        } catch (Exception e) {
-            return "";
         }
     }
 
