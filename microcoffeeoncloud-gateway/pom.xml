@@ -52,10 +52,7 @@
         <frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-        <wro4j-maven-plugin.version>1.10.1</wro4j-maven-plugin.version>
-
-        <!-- wro4j-maven-plugin version conflict fix. Use glob 7.2.0 instead of 7.2.3. See details below. -->
-        <glob.version>7.2.0</glob.version>
+        <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
     </properties>
 
     <repositories>
@@ -366,22 +363,6 @@
                         <groupId>org.webjars.npm</groupId>
                         <artifactId>angular-ui-bootstrap</artifactId>
                         <version>${angular-ui-bootstrap.version}</version>
-                    </dependency>
-                    <!-- Java 11 migration - requires version 2.18.0 or above -->
-                    <dependency>
-                        <groupId>org.mockito</groupId>
-                        <artifactId>mockito-core</artifactId>
-                        <version>${mockito.version}</version>
-                    </dependency>
-                    <!--
-                        Fixes the following minimatch version conflict in plugin dependencies:
-                            1. org.webjars.npm:jshint:jar:2.11.0 -> org.webjars.npm:minimatch:jar:[3.0.2,3.1)
-                            2. org.webjars.npm:jshint:jar:2.11.0 -> org.webjars.npm:cli:jar:[1.0.0,1.1) -> org.webjars.npm:glob:jar:[7.1.1,8) -> org.webjars.npm:minimatch:jar:[3.1.1,4)
-                    -->
-                    <dependency>
-                        <groupId>org.webjars.npm</groupId>
-                        <artifactId>glob</artifactId>
-                        <version>${glob.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
