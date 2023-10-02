@@ -52,7 +52,7 @@
         <frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-        <wro4j-maven-plugin.version>1.10.1</wro4j-maven-plugin.version>
+        <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
 
         <!-- wro4j-maven-plugin version conflict fix. Use glob 7.2.0 instead of 7.2.3. See details below. -->
         <glob.version>7.2.0</glob.version>
