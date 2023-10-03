@@ -11,11 +11,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity //
-            .csrf().disable() //
-            .authorizeHttpRequests(auth -> auth.antMatchers("/**").permitAll()) //
-        // .and() //
-        // .oauth2Client() // Only needed for the authorization code grant flow which we don't use.
-        ;
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
         return httpSecurity.build();
     }
 }

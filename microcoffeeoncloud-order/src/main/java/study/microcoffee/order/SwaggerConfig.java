@@ -2,7 +2,7 @@ package study.microcoffee.order;
 
 import java.util.UUID;
 
-import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +29,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder() //
             .group("menu") //
             .packagesToScan("study.microcoffee.order.api.menu") //
-            .addOpenApiCustomiser(openApi -> {
+            .addOpenApiCustomizer(openApi -> {
                 openApi.getInfo() //
                     .title("Menu API") //
                     .description("API for use by customers to get the coffee menu.") //
@@ -45,7 +45,7 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder() //
             .group("order") //
             .packagesToScan("study.microcoffee.order.api.order") //
-            .addOpenApiCustomiser(openApi -> {
+            .addOpenApiCustomizer(openApi -> {
                 openApi.getInfo() //
                     .title("Order API") //
                     .description("API for use by customers to order drinks.") //

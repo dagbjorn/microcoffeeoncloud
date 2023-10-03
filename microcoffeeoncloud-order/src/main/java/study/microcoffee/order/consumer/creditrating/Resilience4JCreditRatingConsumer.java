@@ -11,6 +11,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import io.github.resilience4j.retry.annotation.Retry;
+import study.microcoffee.order.consumer.common.ConsumerBase;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
@@ -18,7 +19,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  */
 @Component
 @Qualifier("Resilience4J")
-public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
+public class Resilience4JCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
@@ -52,7 +53,7 @@ public class Resilience4JCreditRatingConsumer implements CreditRatingConsumer {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return response.getBody().getRating(); // NOSONAR Allow NPE
             } else {
-                throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
+                throw new ServiceCallFailedException(response.getStatusCode() + " " + getReasonPhrase(response.getStatusCode()));
             }
         } catch (RestClientException e) {
             throw new ServiceCallFailedException(e);

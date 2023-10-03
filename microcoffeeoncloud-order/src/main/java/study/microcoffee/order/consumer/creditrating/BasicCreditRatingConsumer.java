@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import study.microcoffee.order.consumer.common.ConsumerBase;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
@@ -17,7 +18,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  */
 @Component
 @Qualifier("Basic")
-public class BasicCreditRatingConsumer implements CreditRatingConsumer {
+public class BasicCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
@@ -50,7 +51,7 @@ public class BasicCreditRatingConsumer implements CreditRatingConsumer {
             if (response.getStatusCode().equals(HttpStatus.OK)) {
                 return response.getBody().getRating(); // NOSONAR Allow NPE
             } else {
-                throw new ServiceCallFailedException(response.getStatusCode() + " " + response.getStatusCode().getReasonPhrase());
+                throw new ServiceCallFailedException(response.getStatusCode() + " " + getReasonPhrase(response.getStatusCode()));
             }
         } catch (RestClientException e) {
             throw new ServiceCallFailedException(e);

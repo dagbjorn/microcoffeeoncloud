@@ -3,7 +3,9 @@ package study.microcoffee.order.consumer.common.http;
 import java.net.URI;
 
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.Request;
+import org.eclipse.jetty.client.transport.HttpClientTransportDynamic;
+import org.eclipse.jetty.io.ClientConnector;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 import study.microcoffee.order.common.logging.JettyHttpClientLogEnhancer;
@@ -35,7 +37,10 @@ public class JettyHttpClientFactory {
     public static HttpClient createDefaultClient(int timeout, JettyHttpClientLogEnhancer logEnhancer) {
         SslContextFactory.Client sslContextFactory = new SslContextFactory.Client();
 
-        HttpClient httpClient = new HttpClient(sslContextFactory) {
+        ClientConnector clientConnector = new ClientConnector();
+        clientConnector.setSslContextFactory(sslContextFactory);
+
+        HttpClient httpClient = new HttpClient(new HttpClientTransportDynamic(clientConnector)) {
 
             @Override
             public Request newRequest(URI uri) {

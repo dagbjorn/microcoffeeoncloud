@@ -2,7 +2,7 @@ package study.microcoffee.order.consumer.common.http;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,7 +12,7 @@ class HttpClientFactoryTest {
 
     @Test
     void createDefaultClientShouldCreateHttpClient() {
-        CloseableHttpClient httpClient = HttpClientFactory.createDefaultClient(-1);
+        CloseableHttpClient httpClient = HttpClientFactory.createDefaultClient(0);
 
         assertThat(httpClient).isNotNull();
     }

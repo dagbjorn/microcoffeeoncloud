@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.ExpectedCount.once;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withNoContent;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
@@ -62,14 +63,27 @@ class BasicCreditRatingConsumerTest {
     }
 
     @Test
+    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() throws Exception {
+        final String customerId = "john@company.com";
+
+        server.expect(once(), requestTo(buildServiceUrl(customerId))) //
+            .andExpect(method(HttpMethod.GET)) //
+            .andRespond(withNoContent());
+
+        Assertions.assertThrows(ServiceCallFailedException.class, () -> {
+            creditRatingConsumer.getCreditRating(customerId);
+        });
+    }
+
+    @Test
     void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
-            final String customerId = "john@company.com";
+        final String customerId = "john@company.com";
 
-            server.expect(once(), requestTo(buildServiceUrl(customerId))) //
-                .andExpect(method(HttpMethod.GET)) //
-                .andRespond(withServerError());
+        server.expect(once(), requestTo(buildServiceUrl(customerId))) //
+            .andExpect(method(HttpMethod.GET)) //
+            .andRespond(withServerError());
 
-            Assertions.assertThrows(ServiceCallFailedException.class, () -> {
+        Assertions.assertThrows(ServiceCallFailedException.class, () -> {
             creditRatingConsumer.getCreditRating(customerId);
         });
     }
