@@ -10,6 +10,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,6 +51,20 @@ import study.microcoffee.order.domain.DrinkType;
 
 /**
  * Integration tests of {@link OrderController} based on {@link WebTestClient}.
+ * <p>
+ * The integration tests mimics the behaviour of CSRF protection with Spring CookieCsrfTokenRepository which works as follows:
+ * <ol>
+ * <li>Client makes a GET request to server (Spring backend), e.g. request for the main page.</li>
+ * <li>Spring sends the response for GET request along with Set-cookie header which contains securely generated XSRF Token.</li>
+ * <li>Browser sets the cookie with XSRF Token.</li>
+ * <li>While sending state changing request (e.g. POST), the client copies the cookie value to the HTTP request header.</li>
+ * <li>The request is sent with both header and cookie (browser attaches the cookie automatically).</li>
+ * <li>Spring compares the header and the cookie values, if they are the same the request is accepted, otherwise 403 is returned to
+ * the client.</li>
+ * </ol>
+ * Source: <a href=
+ * "https://stackoverflow.com/questions/40034430/will-spring-security-csrf-token-repository-cookies-work-for-all-ajax-requests-au">Answer
+ * by user frenchu to this post on stackoverflow</a>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureObservability
@@ -120,11 +136,14 @@ class OrderControllerWebClientIT {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //
                 .withBody(creditRatingResponse)));
 
+        String csrfToken = getCurrentCsrfTokenFromApi();
         OrderModel newOrder = createOrder();
 
         EntityExchangeResult<OrderModel> response = webTestClient.post() //
             .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .header("X-Forwarded-Host", "forwardedhost.no") //
+            .header("X-XSRF-TOKEN", csrfToken) //
+            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
             .contentType(MediaType.APPLICATION_JSON) //
             .bodyValue(newOrder) //
             .exchange() //
@@ -159,8 +178,12 @@ class OrderControllerWebClientIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
+        String csrfToken = getCurrentCsrfTokenFromApi();
+
         webTestClient.post() //
             .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .header("X-XSRF-TOKEN", csrfToken) //
+            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
             .contentType(MediaType.APPLICATION_JSON) //
             .bodyValue(createOrder()) //
             .exchange() //
@@ -178,8 +201,12 @@ class OrderControllerWebClientIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
+        String csrfToken = getCurrentCsrfTokenFromApi();
+
         webTestClient.post() //
             .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .header("X-XSRF-TOKEN", csrfToken) //
+            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
             .contentType(MediaType.APPLICATION_JSON) //
             .bodyValue(createOrder()) //
             .exchange() //
@@ -199,6 +226,10 @@ class OrderControllerWebClientIT {
             .expectStatus().isNoContent();
     }
 
+    //
+    // Helper methods
+    //
+
     private OrderModel createOrder() {
         return OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
@@ -206,6 +237,24 @@ class OrderControllerWebClientIT {
             .drinker("Dagbjørn") //
             .selectedOptions(new String[] { "skimmed milk" }) //
             .build();
+    }
+
+    /**
+     * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
+     */
+    private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
+        EntityExchangeResult<OrderModel> response = webTestClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
+            .accept(MediaType.APPLICATION_JSON) //
+            .exchange() //
+            .expectStatus().isNoContent() //
+            .expectBody(OrderModel.class) //
+            .returnResult();
+
+        List<String> csrfTokenList = response.getResponseHeaders().getValuesAsList("X-XSRF-TOKEN");
+        assertThat(csrfTokenList).isNotEmpty();
+
+        return csrfTokenList.get(0);
     }
 
     /**
@@ -245,6 +294,10 @@ class OrderControllerWebClientIT {
         return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
             || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
     }
+
+    //
+    // WireMock stubbing
+    //
 
     /**
      * Static stubbing of WellKnown API response from WireMock.

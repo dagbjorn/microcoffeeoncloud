@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
-import study.microcoffee.order.common.security.CookieCsrfFilter;
+import study.microcoffee.order.security.csrf.CsrfHeaderFilter;
 
 /**
  * Configuration class for Spring Security.
@@ -23,7 +23,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf //
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Allow XSRF-TOKEN cookie to be read
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())) // Use Spring Security 5 default (non-BREACH)
-            .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class);
+            .addFilterAfter(new CsrfHeaderFilter(), BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
