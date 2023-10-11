@@ -22,6 +22,7 @@ import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -67,6 +68,7 @@ import study.microcoffee.order.domain.DrinkType;
  * by user frenchu to this post on stackoverflow</a>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient(timeout = "60000") // Millisecs
 @AutoConfigureObservability
 @TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
 @ActiveProfiles("itest")
