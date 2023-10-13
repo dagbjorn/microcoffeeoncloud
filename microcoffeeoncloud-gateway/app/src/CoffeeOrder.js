@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import { OrderLine } from './OrderConfirmation';
 import { config } from './EnvConfig';
+import { useCookies} from 'react-cookie';
 
 const PrintJson = ({ data }) => (<div><pre>{JSON.stringify(data, null, 2)}</pre></div>);
 
@@ -24,6 +25,7 @@ const CoffeeOrder = () => {
     const [availableOptions, setAvailableOptions] = useState([]);
     const [displayedOption, setDisplayedOption] = useState('');
     const [orderList, setOrderList] = useState([]);
+    const [cookies] = useCookies(['XSRF-TOKEN']);
 
     useEffect(() => {
         console.log('NODE_ENV=' + process.env.NODE_ENV);
@@ -51,9 +53,11 @@ const CoffeeOrder = () => {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': cookies['XSRF-TOKEN']
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(order),
+            credentials: 'include'
         })
             .then(response => response.json().then(json => ({
                 ok: response.ok,
