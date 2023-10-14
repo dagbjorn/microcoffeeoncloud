@@ -1,14 +1,17 @@
 package study.microcoffee.order;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.servers.Server;
 
 /**
  * Configuration class of Swagger.
@@ -24,6 +27,9 @@ public class SwaggerConfig {
 
     public static final String CORRELATION_ID_HEADER = "Correlation-Id";
 
+    @Value("${app.springdoc.serverListOverrideUrl:#{null}}")
+    private String serverOverrideUrl;
+
     @Bean
     public GroupedOpenApi menuApiGroup() {
         return GroupedOpenApi.builder() //
@@ -37,6 +43,10 @@ public class SwaggerConfig {
                     .contact(apiContact());
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
+
+                if (serverOverrideUrl != null) {
+                    openApi.servers(List.of(new Server().url(serverOverrideUrl)));
+                }
             }).build();
     }
 
@@ -53,6 +63,10 @@ public class SwaggerConfig {
                     .contact(apiContact());
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
+
+                if (serverOverrideUrl != null) {
+                    openApi.servers(List.of(new Server().url(serverOverrideUrl)));
+                }
             }).build();
     }
 

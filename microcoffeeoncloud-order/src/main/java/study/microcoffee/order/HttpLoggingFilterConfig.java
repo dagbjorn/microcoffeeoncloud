@@ -20,7 +20,7 @@ import study.microcoffee.order.common.logging.HttpLoggingFilter;
 @Configuration
 public class HttpLoggingFilterConfig {
 
-    @Value("${formatted.logging:false}")
+    @Value("${formatted.logging:true}")
     private boolean formattedLogging;
 
     @Bean
