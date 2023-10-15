@@ -28,7 +28,7 @@ public class SwaggerConfig {
     public static final String CORRELATION_ID_HEADER = "Correlation-Id";
 
     @Value("${app.springdoc.serverListOverrideUrl:#{null}}")
-    private String serverOverrideUrl;
+    private String serverListOverrideUrl;
 
     @Bean
     public GroupedOpenApi menuApiGroup() {
@@ -44,8 +44,8 @@ public class SwaggerConfig {
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
 
-                if (serverOverrideUrl != null) {
-                    openApi.servers(List.of(new Server().url(serverOverrideUrl)));
+                if (serverListOverrideUrl != null) {
+                    openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
                 }
             }).build();
     }
@@ -64,8 +64,8 @@ public class SwaggerConfig {
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
 
-                if (serverOverrideUrl != null) {
-                    openApi.servers(List.of(new Server().url(serverOverrideUrl)));
+                if (serverListOverrideUrl != null) {
+                    openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
                 }
             }).build();
     }

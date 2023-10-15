@@ -31,7 +31,7 @@ public class SwaggerConfig {
     public static final String BEARER_TOKEN_AUTH = "BearerToken";
 
     @Value("${app.springdoc.serverListOverrideUrl:#{null}}")
-    private String serverOverrideUrl;
+    private String serverListOverrideUrl;
 
     @Bean
     public OpenAPI apiInfo() {
@@ -60,8 +60,8 @@ public class SwaggerConfig {
                 .name(CREDIT_RATING_TAG) //
                 .description("API to get the credit rating of a customer.")));
 
-        if (serverOverrideUrl != null) {
-            openApi.servers(List.of(new Server().url(serverOverrideUrl)));
+        if (serverListOverrideUrl != null) {
+            openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
         }
 
         return openApi;
