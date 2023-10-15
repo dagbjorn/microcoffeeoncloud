@@ -19,7 +19,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity //
-            .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()) //
+            .authorizeHttpRequests(authorize -> authorize //
+                .anyRequest().permitAll()) //
             .csrf(csrf -> csrf //
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Allow XSRF-TOKEN cookie to be read
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())) // Use Spring Security 5 default (non-BREACH)
