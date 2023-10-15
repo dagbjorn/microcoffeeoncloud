@@ -84,7 +84,7 @@ class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(70);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .with(csrf()) //
+            .with(csrf().asHeader()) //
             .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON) //
             .header("Host", "somehost.no")) //
@@ -107,11 +107,27 @@ class OrderControllerTest {
         given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(20);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .with(csrf()) //
+            .with(csrf().asHeader()) //
             .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isPaymentRequired()) //
             .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN));
+    }
+
+    @Test
+    void createOrderWhenCsrfTokenIsInvalidShouldReturn403Forbidden() throws Exception {
+        OrderModel orderModel = OrderModel.builder() //
+            .type(new DrinkType("Latte", "Coffee")) //
+            .size("Small") //
+            .drinker("Dagbjørn") //
+            .selectedOptions(new String[] { "skimmed milk" }) //
+            .build();
+
+        mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .with(csrf().asHeader().useInvalidToken()) //
+            .content(toJson(orderModel)) //
+            .contentType(MediaType.APPLICATION_JSON)) //
+            .andExpect(status().isForbidden());
     }
 
     @Test
