@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,6 @@ import study.microcoffee.creditrating.domain.CreditRating;
  * <p>
  * <b>TODO:</b> Currently a hardcoded credit rating of 70 is always returned. Needs to make it dependent on the actual customer.
  */
-@CrossOrigin // Needed for Swagger/SpringDoc to work from gateway.
 @RefreshScope
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = { MediaType.APPLICATION_JSON_VALUE })
