@@ -431,11 +431,9 @@ After Microcoffee has started, navigate to the coffee shop to place your first c
 
 Centralized browsing of API documentation is available at the following URL:
 
-    https://host.docker.internal:8443/swagger-ui.html
+    https://localhost:8443/swagger-ui.html
 
 Select the spec of interest in the upper right corner.
-
-:point_right: To avoid a CORS issue, use `host.docker.internal` in stead of `localhost` in the Swagger URL.
 
 ### <a name="location-api"></a>Location API
 
@@ -614,13 +612,11 @@ Response:
 
 :white_check_mark: Must be run from `microcoffee-order` to find the JSON file `src\test\curl\order.json`.
 
-Due to the CSRF protection implemented by the Order API, the POST operation must provide a valid CSRF token in a cookie as well as in a header. To get a valid token, we first make a dummy call to the GET operation of the Order API. The CSRF token is extracted from the returned X-XSRF-TOKEN header.
+Due to the CSRF protection implemented by the Order API, the POST operation must provide a valid CSRF token in an `XSRF-TOKEN` cookie as well as in an `X-XSRF-TOKEN` header. To get a valid token, we first make a dummy call to the GET operation of the Order API. The CSRF token is then extracted from the returned `X-XSRF-TOKEN` header.
 
     :: Calls the GET operation and sets the environment variable CSRF-TOKEN with the current CSRF token.
-
     for /f "delims=" %I in ('curl -s -i http://localhost:8082/api/coffeeshop/1/order/123 ^| grep X-XSRF-TOKEN ^| sed -nr "s/X-XSRF-TOKEN: (.*)/\1/p"') do set CSRF-TOKEN=%I
     :: Test the Order API. Both with http and https.
-
     curl -i -H "Cookie: XSRF-TOKEN=%CSRF-TOKEN%" -H "X-XSRF-TOKEN: %CSRF-TOKEN%" -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://localhost:8082/api/coffeeshop/1/order
 
      curl -i --insecure -H "Cookie: XSRF-TOKEN=%CSRF-TOKEN%" -H "X-XSRF-TOKEN: %CSRF-TOKEN%" -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://localhost:8445/api/coffeeshop/1/order
