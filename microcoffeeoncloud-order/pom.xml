@@ -38,7 +38,7 @@
         <flapdoodle-embed-mongo.version>4.9.3</flapdoodle-embed-mongo.version>
         <spring-cloud.version>2023.0.0-M2</spring-cloud.version>
 
-        <modelmapper.version>3.1.1</modelmapper.version>
+        <modelmapper.version>3.2.0</modelmapper.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
