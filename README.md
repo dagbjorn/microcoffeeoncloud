@@ -621,7 +621,6 @@ Due to the CSRF protection implemented by the Order API, the POST operation must
 
      curl -i --insecure -H "Cookie: XSRF-TOKEN=%CSRF-TOKEN%" -H "X-XSRF-TOKEN: %CSRF-TOKEN%" -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json https://localhost:8445/api/coffeeshop/1/order
 
-
 #### Get order details
 
 **Syntax**
