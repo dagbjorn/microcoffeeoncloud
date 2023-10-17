@@ -10,6 +10,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,6 +54,20 @@ import study.microcoffee.order.domain.DrinkType;
 
 /**
  * Integration tests of {@link OrderController}.
+ * <p>
+ * The integration tests mimics the behaviour of CSRF protection with Spring CookieCsrfTokenRepository which works as follows:
+ * <ol>
+ * <li>Client makes a GET request to server (Spring backend), e.g. request for the main page.</li>
+ * <li>Spring sends the response for GET request along with Set-cookie header which contains securely generated XSRF Token.</li>
+ * <li>Browser sets the cookie with XSRF Token.</li>
+ * <li>While sending state changing request (e.g. POST), the client copies the cookie value to the HTTP request header.</li>
+ * <li>The request is sent with both header and cookie (browser attaches the cookie automatically).</li>
+ * <li>Spring compares the header and the cookie values, if they are the same the request is accepted, otherwise 403 is returned to
+ * the client.</li>
+ * </ol>
+ * Source: <a href=
+ * "https://stackoverflow.com/questions/40034430/will-spring-security-csrf-token-repository-cookies-work-for-all-ajax-requests-au">Answer
+ * by user frenchu to this post on stackoverflow</a>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureObservability
@@ -128,12 +144,8 @@ class OrderControllerIT {
 
         OrderModel newOrder = createOrder();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Forwarded-Host", "forwardedhost.no");
-        HttpEntity<OrderModel> requestEntity = new HttpEntity<>(newOrder, headers);
-
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST, requestEntity,
-            OrderModel.class, COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(newOrder), OrderModel.class, COFFEE_SHOP_ID);
 
         OrderModel savedOrder = response.getBody();
 
@@ -159,8 +171,8 @@ class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
-            COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -169,16 +181,16 @@ class OrderControllerIT {
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
-        float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
+        float currentFailedWithRetryCount = getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.postForEntity(POST_SERVICE_PATH, createOrder(), OrderModel.class,
-            COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
-        assertThat(getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
+        assertThat(getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
     }
 
     @Test
@@ -191,6 +203,20 @@ class OrderControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
+    //
+    // Helper methods
+    //
+
+    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) throws JsonProcessingException {
+        String csrfToken = getCurrentCsrfTokenFromApi();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Forwarded-Host", "forwardedhost.no");
+        headers.add("X-XSRF-TOKEN", csrfToken);
+        headers.add(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken);
+        return new HttpEntity<>(order, headers);
+    }
+
     private OrderModel createOrder() {
         return OrderModel.builder() //
             .type(new DrinkType("Latte", "Coffee")) //
@@ -200,11 +226,23 @@ class OrderControllerIT {
             .build();
     }
 
+    /**
+     * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
+     */
+    private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
+        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, "123");
+
+        List<String> csrfTokenList = response.getHeaders().getValuesAsList("X-XSRF-TOKEN");
+        assertThat(csrfTokenList).isNotEmpty();
+
+        return csrfTokenList.get(0);
+    }
+
     private static String getMetricName(String metric, String application, String kind, String backend) {
         return metric + "{application=\"" + application + "\",kind=\"" + kind + "\",name=\"" + backend + "\",} ";
     }
 
-    private float getMetricValue(String key) {
+    private float getMetricValueFromPrometheus(String key) {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class);
 
         String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
@@ -226,6 +264,10 @@ class OrderControllerIT {
         return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
             || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
     }
+
+    //
+    // WireMock stubbing
+    //
 
     /**
      * Static stubbing of WellKnown API response from WireMock.

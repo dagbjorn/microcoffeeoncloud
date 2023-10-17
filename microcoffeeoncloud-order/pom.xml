@@ -38,12 +38,12 @@
         <flapdoodle-embed-mongo.version>4.9.3</flapdoodle-embed-mongo.version>
         <spring-cloud.version>2023.0.0-M2</spring-cloud.version>
 
-        <modelmapper.version>3.1.1</modelmapper.version>
+        <modelmapper.version>3.2.0</modelmapper.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
     </properties>
 
@@ -233,6 +233,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
 

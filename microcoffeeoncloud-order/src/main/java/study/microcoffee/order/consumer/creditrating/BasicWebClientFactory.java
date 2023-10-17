@@ -33,7 +33,7 @@ public class BasicWebClientFactory {
             authorizedClientManager);
         oauth2Client.setDefaultClientRegistrationId("order-service");
 
-        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout, new JettyHttpClientLogEnhancer(true));
+        HttpClient httpClient = JettyHttpClientFactory.createDefaultClient(timeout, new JettyHttpClientLogEnhancer(false));
 
         return WebClient.builder() //
             .apply(oauth2Client.oauth2Configuration()) //
