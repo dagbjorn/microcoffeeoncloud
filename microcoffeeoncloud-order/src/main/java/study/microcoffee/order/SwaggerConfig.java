@@ -44,6 +44,7 @@ public class SwaggerConfig {
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
 
+                // If property is defined, override the content of the Servers drop-down list in the Swagger UI.
                 if (serverListOverrideUrl != null) {
                     openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
                 }
@@ -64,6 +65,7 @@ public class SwaggerConfig {
                 openApi.getComponents() //
                     .addParameters(CORRELATION_ID_HEADER, correlationIdHeader()); //
 
+                // If property is defined, override the content of the Servers drop-down list in the Swagger UI.
                 if (serverListOverrideUrl != null) {
                     openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
                 }

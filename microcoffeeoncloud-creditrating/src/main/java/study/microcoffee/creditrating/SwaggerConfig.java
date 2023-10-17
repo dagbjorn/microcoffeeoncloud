@@ -60,6 +60,7 @@ public class SwaggerConfig {
                 .name(CREDIT_RATING_TAG) //
                 .description("API to get the credit rating of a customer.")));
 
+        // If property is defined, override the content of the Servers drop-down list in the Swagger UI.
         if (serverListOverrideUrl != null) {
             openApi.servers(List.of(new Server().url(serverListOverrideUrl)));
         }
