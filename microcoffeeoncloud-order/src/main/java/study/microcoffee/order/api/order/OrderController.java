@@ -32,7 +32,10 @@ import study.microcoffee.order.repository.OrderRepository;
  * Controller class of the Order REST API for handling coffee orders.
  */
 @CrossOrigin( //
-    origins = { "http://localhost:3000" }, // Needed for React dev on port 3000.
+    origins = { //
+        "http://localhost:3000", // Needed for local React dev on port 3000.
+        "https://localhost:8443" // Needed for Swagger from gateway.
+    }, //
     exposedHeaders = { "Location" }, //
     allowCredentials = "true" //
 )

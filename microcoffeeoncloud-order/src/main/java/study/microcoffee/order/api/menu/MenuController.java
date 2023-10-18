@@ -17,8 +17,10 @@ import study.microcoffee.order.repository.MenuRepository;
  * Controller class of the Menu REST API for returning the coffee shop menu.
  */
 @CrossOrigin( //
-    origins = { "http://localhost:3000" } // Needed for React dev on port 3000.
-)
+    origins = { //
+        "http://localhost:3000", // Needed for local React dev on port 3000.
+        "https://localhost:8443" // Needed for Swagger from gateway.
+    })
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = SwaggerConfig.MENU_TAG, description = SwaggerConfig.MENU_DESCRIPTION)
