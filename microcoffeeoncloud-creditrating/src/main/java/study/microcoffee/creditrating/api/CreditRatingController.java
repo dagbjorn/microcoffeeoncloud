@@ -25,7 +25,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
  */
 @CrossOrigin( //
     origins = { //
-        "https://localhost:8443" // Needed for Swagger from gateway.
+        "https://localhost:8443" // Needed for Swagger from gateway (devlocal).
     })
 @RefreshScope
 @RestController

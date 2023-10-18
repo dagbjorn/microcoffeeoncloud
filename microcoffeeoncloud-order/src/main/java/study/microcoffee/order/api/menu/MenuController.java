@@ -19,7 +19,7 @@ import study.microcoffee.order.repository.MenuRepository;
 @CrossOrigin( //
     origins = { //
         "http://localhost:3000", // Needed for local React dev on port 3000.
-        "https://localhost:8443" // Needed for Swagger from gateway.
+        "https://localhost:8443" // Needed for Swagger from gateway (devlocal).
     })
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)

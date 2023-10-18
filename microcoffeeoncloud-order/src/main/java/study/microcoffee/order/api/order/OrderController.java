@@ -34,7 +34,7 @@ import study.microcoffee.order.repository.OrderRepository;
 @CrossOrigin( //
     origins = { //
         "http://localhost:3000", // Needed for local React dev on port 3000.
-        "https://localhost:8443" // Needed for Swagger from gateway.
+        "https://localhost:8443" // Needed for Swagger from gateway (devlocal).
     }, //
     exposedHeaders = { "Location" }, //
     allowCredentials = "true" //
