@@ -21,7 +21,11 @@ import study.microcoffee.location.repository.LocationRepository;
 /**
  * Controller class of the Location REST API for finding the geographical location of objects.
  */
-@CrossOrigin // Needed for React dev on port 3000
+@CrossOrigin( //
+    origins = { //
+        "http://localhost:3000", // Needed for local React dev on port 3000.
+        "https://localhost:8443" // Needed for Swagger from gateway (devlocal).
+    })
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LocationController {
