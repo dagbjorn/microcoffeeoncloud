@@ -16,7 +16,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +88,7 @@ class OrderControllerWebClientIT {
 
     private static final int COFFEE_SHOP_ID = 10;
 
-    private static final String PROMETHEUS_METRIC_FAILED_WITH_RETRY = getMetricName("resilience4j_retry_calls_total", "order",
+    private static final String PROMETHEUS_METRIC_FAILED_WITH_RETRY = getMetricName("resilience4j_retry_calls_total",
         "failed_with_retry", "creditRating");
 
     private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
@@ -192,7 +191,6 @@ class OrderControllerWebClientIT {
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Disabled("Missing resilience4j_retry_calls_total metric. Probably a Resilience4J vs Spring Boot 3.2 issue.")
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
@@ -262,8 +260,8 @@ class OrderControllerWebClientIT {
     /**
      * Returns a properly formatted Prometheus metric.
      */
-    private static String getMetricName(String metric, String application, String kind, String backend) {
-        return metric + "{application=\"" + application + "\",kind=\"" + kind + "\",name=\"" + backend + "\",} ";
+    private static String getMetricName(String metric, String kind, String backend) {
+        return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\",} ";
     }
 
     /**
