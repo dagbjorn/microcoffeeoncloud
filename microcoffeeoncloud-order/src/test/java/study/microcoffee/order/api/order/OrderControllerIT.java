@@ -48,7 +48,11 @@ import study.microcoffee.jwttest.TestTokens;
 import study.microcoffee.jwttest.oidcprovider.model.BearerToken;
 import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
 import study.microcoffee.order.api.order.model.OrderModel;
+import study.microcoffee.order.consumer.creditrating.BasicCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.BasicWebClientCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
+import study.microcoffee.order.consumer.creditrating.Resilience4JCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 
 /**
@@ -253,14 +257,14 @@ class OrderControllerIT {
 
     @SuppressWarnings("unused")
     private boolean isBasicConsumer() {
-        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.BASIC_CONSUMER)
-            || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.BASIC_WEB_CLIENT_CONSUMER);
+        return OrderController.CREDIT_RATING_CONSUMER.equals(BasicCreditRatingConsumer.CONSUMER_TYPE)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(BasicWebClientCreditRatingConsumer.CONSUMER_TYPE);
     }
 
     @SuppressWarnings("unused")
     private boolean isResilience4jConsumer() {
-        return OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_CONSUMER)
-            || OrderController.CREDIT_RATING_CONSUMER.equals(OrderController.RESILIENCE4J_WEB_CLIENT_CONSUMER);
+        return OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JCreditRatingConsumer.CONSUMER_TYPE)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE);
     }
 
     //

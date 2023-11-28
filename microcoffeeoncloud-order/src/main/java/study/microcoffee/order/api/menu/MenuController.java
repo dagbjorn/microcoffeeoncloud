@@ -2,7 +2,6 @@ package study.microcoffee.order.api.menu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +27,11 @@ public class MenuController {
 
     private Logger logger = LoggerFactory.getLogger(MenuController.class);
 
-    @Autowired
     private MenuRepository menuRepository;
+
+    public MenuController(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
+    }
 
     /**
      * Returns the menu of the coffee shop.

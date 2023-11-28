@@ -18,8 +18,10 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  * Resilience4J implementation of REST-based CreditRatingConsumer.
  */
 @Component
-@Qualifier("Resilience4J")
+@Qualifier(Resilience4JCreditRatingConsumer.CONSUMER_TYPE)
 public class Resilience4JCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
+
+    public static final String CONSUMER_TYPE = "resilience4J";
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
