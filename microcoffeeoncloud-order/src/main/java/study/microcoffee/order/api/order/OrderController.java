@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import study.microcoffee.order.SwaggerConfig;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.exception.OrderNotFoundException;
 import study.microcoffee.order.repository.OrderRepository;
@@ -44,24 +44,23 @@ import study.microcoffee.order.repository.OrderRepository;
 @Tag(name = SwaggerConfig.ORDER_TAG, description = SwaggerConfig.ORDER_DESCRIPTION)
 public class OrderController {
 
-    public static final String BASIC_CONSUMER = "Basic";
-    public static final String BASIC_WEB_CLIENT_CONSUMER = "BasicWebClient";
-    public static final String RESILIENCE4J_CONSUMER = "Resilience4J";
-    public static final String RESILIENCE4J_WEB_CLIENT_CONSUMER = "Resilience4JWebClient";
-    public static final String CREDIT_RATING_CONSUMER = RESILIENCE4J_WEB_CLIENT_CONSUMER;
+    public static final String CREDIT_RATING_CONSUMER = Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE;
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    @Qualifier(CREDIT_RATING_CONSUMER)
     private CreditRatingConsumer creditRatingConsumer;
 
     private ModelMapper modelMapper = new ModelMapper();
+
+    public OrderController(OrderRepository orderRepository,
+        @Qualifier(CREDIT_RATING_CONSUMER) CreditRatingConsumer creditRatingConsumer) {
+        this.orderRepository = orderRepository;
+        this.creditRatingConsumer = creditRatingConsumer;
+    }
 
     /**
      * Creates a new order and saves it in the database.

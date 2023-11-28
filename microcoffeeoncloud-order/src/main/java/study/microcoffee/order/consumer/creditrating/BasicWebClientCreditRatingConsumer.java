@@ -17,8 +17,10 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  * Basic implementation of WebClient-based REST CreditRatingConsumer.
  */
 @Component
-@Qualifier("BasicWebClient")
+@Qualifier(BasicWebClientCreditRatingConsumer.CONSUMER_TYPE)
 public class BasicWebClientCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
+
+    public static final String CONSUMER_TYPE = "basicWebClient";
 
     public static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 

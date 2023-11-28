@@ -71,7 +71,7 @@ public class TestTokens {
          */
         public static String invalidKeyType() {
             return defaultToken() //
-                .sign(Algorithm.HMAC256("secretkey"));
+                .sign(Algorithm.HMAC256("secretkey")); // NOSONAR Allow for tests
         }
 
         /**

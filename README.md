@@ -38,6 +38,7 @@ Date | Change
 18.05.2023 | Added screendumps of Microcoffee GUI in doc page.
 23.05.2023 | Upgraded to Spring Boot 3.1.0.
 16.10.2023 | Implemented CSRF protection in the Order API (POST operation).
+26.11.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
 
 ## Contents
 
@@ -615,7 +616,8 @@ Response:
 Due to the CSRF protection implemented by the Order API, the POST operation must provide a valid CSRF token in an `XSRF-TOKEN` cookie as well as in an `X-XSRF-TOKEN` header. To get a valid token, we first make a dummy call to the GET operation of the Order API. The CSRF token is then extracted from the returned `X-XSRF-TOKEN` header.
 
     :: Calls the GET operation and sets the environment variable CSRF-TOKEN with the current CSRF token.
-    for /f "delims=" %I in ('curl -s -i http://localhost:8082/api/coffeeshop/1/order/123 ^| grep X-XSRF-TOKEN ^| sed -nr "s/X-XSRF-TOKEN: (.*)/\1/p"') do set CSRF-TOKEN=%I
+    for /f "delims=" %I in ('curl -s -i http://localhost:8082/api/coffeeshop/1/order/123 ^| grep X-XSRF-TOKEN ^| sed -nr "s/X-XSRF-TOKEN: (.*)/\1/p"') do set CSRF-TOKEN=%I
+
     :: Test the Order API. Both with http and https.
     curl -i -H "Cookie: XSRF-TOKEN=%CSRF-TOKEN%" -H "X-XSRF-TOKEN: %CSRF-TOKEN%" -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d @src\test\curl\order.json http://localhost:8082/api/coffeeshop/1/order
 
