@@ -49,7 +49,7 @@
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
-        <frontend-maven-plugin.version>1.14.2</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
         <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
