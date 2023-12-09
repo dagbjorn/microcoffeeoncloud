@@ -38,7 +38,7 @@ Date | Change
 18.05.2023 | Added screendumps of Microcoffee GUI in doc page.
 23.05.2023 | Upgraded to Spring Boot 3.1.0.
 16.10.2023 | Implemented CSRF protection in the Order API (POST operation).
-26.11.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
+09.12.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
 
 ## Contents
 
