@@ -39,6 +39,7 @@ Date | Change
 23.05.2023 | Upgraded to Spring Boot 3.1.0.
 16.10.2023 | Implemented CSRF protection in the Order API (POST operation).
 09.12.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
+10.12.2023 | Upgraded to Java 21.
 
 ## Contents
 
@@ -169,7 +170,7 @@ provided.
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee was originally developed on Windows 10 and tested on Docker running on Oracle VirtualBox. Late 2022, the development environment was modernized and consists now of Windows 11 Pro with Docker Desktop running with WSL2 based engine.
 
-The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee moved on to Java 17.
+The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee moved on to Java 17. Then in december 2023, Microcoffee moved to Java 21.
 
 For building and testing the application on Windows, Docker Desktop with the WSL 2 engine is recommended. See [Install on Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows) for installation guidelines.
 
@@ -2017,6 +2018,8 @@ Set-Alias -Name kubectl -Value Start-WslKubectl
 #### Building Microcoffee
 
 ##### Create PowerShell shortcut for Java 17
+
+:point_right: Needs an update to Java 21.
 
 Microcoffee is built on Java 17. If Java 17 is not the default JDK, a PowerShell window can be configured to use Java 17 as follows.
 
