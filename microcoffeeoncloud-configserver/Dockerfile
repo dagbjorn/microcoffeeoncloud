@@ -1,11 +1,12 @@
-FROM eclipse-temurin:17.0.9_9-jre-alpine
+FROM amazoncorretto:21.0.1-alpine
 VOLUME /tmp
 WORKDIR /
 ARG JAR_FILE
+ENV JVM_TRUSTSTORE=/usr/lib/jvm/default-jvm/lib/security/cacerts
 COPY target/$JAR_FILE app.jar
 COPY target/keystore/microcoffee-keystore.jks .
 RUN touch app.jar \
     && find / -iname "cacerts" \
-    && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore /opt/java/openjdk/lib/security/cacerts -deststorepass changeit \
+    && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore $JVM_TRUSTSTORE -deststorepass changeit \
     && rm microcoffee-keystore.jks
 ENTRYPOINT ["java","-jar","/app.jar"]
