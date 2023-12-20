@@ -1,8 +1,8 @@
-FROM amazoncorretto:21.0.1-alpine
+FROM eclipse-temurin:21.0.1_12-jre-alpine
 VOLUME /tmp
 WORKDIR /
 ARG JAR_FILE
-ENV JVM_TRUSTSTORE=/usr/lib/jvm/default-jvm/lib/security/cacerts
+ENV JVM_TRUSTSTORE=/opt/java/openjdk/lib/security/cacerts
 COPY target/$JAR_FILE app.jar
 COPY target/keystore/microcoffee-keystore.jks .
 RUN touch app.jar \
