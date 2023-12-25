@@ -44,6 +44,15 @@ import study.microcoffee.order.repository.OrderRepository;
 @Tag(name = SwaggerConfig.ORDER_TAG, description = SwaggerConfig.ORDER_DESCRIPTION)
 public class OrderController {
 
+    /**
+     * Defines which {@link CreditRatingConsumer} implementation to use.
+     * <ul>
+     * <li>BasicCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>BasicWebClientCreditRatingConsumer</li>
+     * <li>Resilience4JCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>Resilience4JWebClientCreditRatingConsumer</li>
+     * </ul>
+     */
     public static final String CREDIT_RATING_CONSUMER = Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE;
 
     private static final int MINIMUM_CREDIT_RATING = 50;

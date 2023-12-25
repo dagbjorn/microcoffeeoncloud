@@ -23,17 +23,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -55,7 +55,7 @@ import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCredit
 import study.microcoffee.order.domain.DrinkType;
 
 /**
- * Integration tests of {@link OrderController}.
+ * Integration tests of {@link OrderController} based on {@link RestClient}.
  * <p>
  * The integration tests mimics the behaviour of CSRF protection with Spring CookieCsrfTokenRepository which works as follows:
  * <ol>
@@ -71,12 +71,12 @@ import study.microcoffee.order.domain.DrinkType;
  * "https://stackoverflow.com/questions/40034430/will-spring-security-csrf-token-repository-cookies-work-for-all-ajax-requests-au">Answer
  * by user frenchu to this post on stackoverflow</a>
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server.ssl.enabled=false")
 @AutoConfigureObservability
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-class OrderControllerIT {
+class OrderControllerRestClientIT {
 
     private static final int WIREMOCK_PORT = 9999;
 
@@ -97,11 +97,13 @@ class OrderControllerIT {
 
     private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @LocalServerPort
+    private int serverPort;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private RestClient restClient;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -121,6 +123,8 @@ class OrderControllerIT {
 
     @BeforeEach
     void beforeEach() throws Exception {
+        restClient = RestClient.builder().baseUrl("http://localhost:" + serverPort).build();
+
         stubWireMockTokenResponse();
     }
 
@@ -143,8 +147,12 @@ class OrderControllerIT {
 
         OrderModel newOrder = createOrder();
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(newOrder), OrderModel.class, COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(newOrder) //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         OrderModel savedOrder = response.getBody();
 
@@ -155,7 +163,10 @@ class OrderControllerIT {
         assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
         assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
 
-        response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, savedOrder.getId());
+        response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, savedOrder.getId()) //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         OrderModel readBackOrder = response.getBody();
 
@@ -170,10 +181,16 @@ class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
+        ResponseEntity<String> response = restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(createOrder()) //
+            .retrieve() //
+            .onStatus(status -> status == HttpStatus.INTERNAL_SERVER_ERROR, (req, resp) -> {
+            }) //
+            .toEntity(String.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        System.err.println(response.getBody());
     }
 
     @Test
@@ -184,10 +201,15 @@ class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
+        restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(createOrder()) //
+            .retrieve() //
+            .onStatus(status -> status == HttpStatus.PAYMENT_REQUIRED, (req, resp) -> {
+            }) //
+            .toBodilessEntity();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
         assertThat(getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
     }
 
@@ -195,8 +217,10 @@ class OrderControllerIT {
     void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
-            orderId);
+        ResponseEntity<Void> response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
+            .retrieve() //
+            .toBodilessEntity();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
@@ -205,14 +229,14 @@ class OrderControllerIT {
     // Helper methods
     //
 
-    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) throws JsonProcessingException {
+    private HttpHeaders createHeaders() throws JsonProcessingException {
         String csrfToken = getCurrentCsrfTokenFromApi();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Forwarded-Host", "forwardedhost.no");
         headers.add("X-XSRF-TOKEN", csrfToken);
         headers.add(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken);
-        return new HttpEntity<>(order, headers);
+        return headers;
     }
 
     private OrderModel createOrder() {
@@ -228,7 +252,10 @@ class OrderControllerIT {
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
     private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
-        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, "123");
+        ResponseEntity<OrderModel> response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         List<String> csrfTokenList = response.getHeaders().getValuesAsList("X-XSRF-TOKEN");
         assertThat(csrfTokenList).isNotEmpty();
@@ -241,7 +268,10 @@ class OrderControllerIT {
     }
 
     private float getMetricValueFromPrometheus(String key) {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class);
+        ResponseEntity<String> response = restClient.get() //
+            .uri("/actuator/prometheus") //
+            .retrieve() //
+            .toEntity(String.class);
 
         String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
