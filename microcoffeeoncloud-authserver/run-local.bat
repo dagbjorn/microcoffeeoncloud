@@ -2,7 +2,7 @@
 
 setlocal
 
-set KEYCLOAK_HOME=D:\bin\keycloak-21.1.1
+set KEYCLOAK_HOME=D:\bin\keycloak-23.0.3
 
 set KEYCLOAK_ADMIN=admin
 set KEYCLOAK_ADMIN_PASSWORD=admin

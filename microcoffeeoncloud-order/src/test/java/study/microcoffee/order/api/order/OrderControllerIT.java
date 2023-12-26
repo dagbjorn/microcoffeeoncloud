@@ -34,6 +34,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -316,6 +317,12 @@ class OrderControllerIT {
         @Bean
         public RestTemplate discoveryRestTemplate(@Qualifier("basicRestTemplate") RestTemplate restTemplate) {
             return restTemplate;
+        }
+
+        @Bean
+        public RestClient.Builder discoveryRestClientBuilder(
+            @Qualifier("basicRestClientBuilder") RestClient.Builder restclientBuilder) {
+            return restclientBuilder;
         }
 
         @Bean

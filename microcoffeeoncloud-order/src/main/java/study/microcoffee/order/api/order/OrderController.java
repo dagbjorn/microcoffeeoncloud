@@ -48,8 +48,10 @@ public class OrderController {
      * Defines which {@link CreditRatingConsumer} implementation to use.
      * <ul>
      * <li>BasicCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>BasicRestClientCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
      * <li>BasicWebClientCreditRatingConsumer</li>
      * <li>Resilience4JCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>Resilience4JRestClientCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
      * <li>Resilience4JWebClientCreditRatingConsumer</li>
      * </ul>
      */

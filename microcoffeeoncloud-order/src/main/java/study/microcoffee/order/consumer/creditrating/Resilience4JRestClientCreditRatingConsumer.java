@@ -1,0 +1,76 @@
+package study.microcoffee.order.consumer.creditrating;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+
+import io.github.resilience4j.retry.annotation.Retry;
+import study.microcoffee.order.consumer.common.ConsumerBase;
+import study.microcoffee.order.exception.ServiceCallFailedException;
+
+/**
+ * Resilience4J implementation of RestClient-based REST CreditRatingConsumer.
+ */
+@Component
+@Qualifier(Resilience4JRestClientCreditRatingConsumer.CONSUMER_TYPE)
+public class Resilience4JRestClientCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
+
+    public static final String CONSUMER_TYPE = "resilience4JRestClient";
+
+    public static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
+
+    private final Logger logger = LoggerFactory.getLogger(Resilience4JRestClientCreditRatingConsumer.class);
+
+    private RestClient restClient;
+
+    private String baseUrl;
+
+    public Resilience4JRestClientCreditRatingConsumer(@Qualifier("discoveryRestClientBuilder") RestClient.Builder restClientBuilder,
+        @Value("${app.creditrating.url}") String baseUrl) {
+
+        this.restClient = restClientBuilder.build();
+        this.baseUrl = baseUrl;
+
+        logger.info("app.creditrating.url={}", baseUrl);
+    }
+
+    @Override
+    @Retry(name = "creditRating", fallbackMethod = "getMinimumCreditRating")
+    public int getCreditRating(String customerId) {
+        String url = baseUrl + GET_CREDIT_RATING_RESOURCE;
+
+        logger.debug("GET request to {}, customerId={}", url, customerId);
+
+        ResponseEntity<CreditRating> response = restClient.get() //
+            .uri(url, customerId) //
+            .accept(MediaType.APPLICATION_JSON) //
+            .retrieve() //
+            .onStatus(status -> status != HttpStatus.OK, (req, resp) -> {
+                throw new ServiceCallFailedException(resp.getStatusCode() + " " + getReasonPhrase(resp.getStatusCode()));
+            }) //
+            .toEntity(CreditRating.class);
+
+        logger.debug("GET response from {}, response={}", url, response.getBody()); // NOSONAR Allow NPE
+
+        return response.getBody().getRating(); // NOSONAR Allow NPE
+    }
+
+    /**
+     * Fallback method that returns the minimum credit rating.
+     *
+     * @param customerId
+     *            the customer ID.
+     * @return The minimum credit rating.
+     */
+    public int getMinimumCreditRating(String customerId, Exception e) {
+        logger.debug("Fallback method getMinimumCreditRating called => credit rating 0", e);
+
+        return 0;
+    }
+}

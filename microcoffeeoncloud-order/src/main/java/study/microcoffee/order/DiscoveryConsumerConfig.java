@@ -12,6 +12,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -37,6 +38,16 @@ public class DiscoveryConsumerConfig {
         restTemplate.getInterceptors().add(new HttpLoggingInterceptor(false));
 
         return restTemplate;
+    }
+
+    @LoadBalanced
+    @Bean
+    public RestClient.Builder discoveryRestClientBuilder() {
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+
+        return RestClient.builder() //
+            .requestFactory(new BufferingClientHttpRequestFactory(requestFactory)) //
+            .requestInterceptor(new HttpLoggingInterceptor(false));
     }
 
     @Bean

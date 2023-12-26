@@ -349,6 +349,12 @@ class OrderControllerRestClientIT {
         }
 
         @Bean
+        public RestClient.Builder discoveryRestClientBuilder(
+            @Qualifier("basicRestClientBuilder") RestClient.Builder restclientBuilder) {
+            return restclientBuilder;
+        }
+
+        @Bean
         public WebClient discoveryWebClient(@Qualifier("basicWebClient") WebClient webClient) {
             return webClient;
         }

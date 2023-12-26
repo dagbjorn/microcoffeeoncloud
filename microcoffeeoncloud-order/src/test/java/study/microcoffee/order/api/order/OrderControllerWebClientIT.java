@@ -33,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -352,6 +353,12 @@ class OrderControllerWebClientIT {
         @Bean
         public RestTemplate discoveryRestTemplate(@Qualifier("basicRestTemplate") RestTemplate restTemplate) {
             return restTemplate;
+        }
+
+        @Bean
+        public RestClient.Builder discoveryRestClientBuilder(
+            @Qualifier("basicRestClientBuilder") RestClient.Builder restclientBuilder) {
+            return restclientBuilder;
         }
 
         @Bean

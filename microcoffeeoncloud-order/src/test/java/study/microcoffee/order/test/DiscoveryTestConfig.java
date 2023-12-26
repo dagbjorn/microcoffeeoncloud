@@ -2,6 +2,7 @@ package study.microcoffee.order.test;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -14,6 +15,11 @@ public class DiscoveryTestConfig {
     @Bean
     public RestTemplate discoveryRestTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public RestClient.Builder discoveryRestClientBuilder() {
+        return RestClient.builder();
     }
 
     @Bean
