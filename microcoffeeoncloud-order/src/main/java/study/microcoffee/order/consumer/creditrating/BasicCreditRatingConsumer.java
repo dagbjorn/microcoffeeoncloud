@@ -30,7 +30,7 @@ public class BasicCreditRatingConsumer extends ConsumerBase implements CreditRat
 
     private String creditRatingEndpointUrl;
 
-    public BasicCreditRatingConsumer(@Qualifier("basicRestTemplate") RestTemplate restTemplate,
+    public BasicCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
         @Value("${app.creditrating.url}") String endpointUrl) {
         this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;

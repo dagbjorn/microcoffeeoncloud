@@ -13,40 +13,42 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 import study.microcoffee.order.common.logging.HttpLoggingInterceptor;
 import study.microcoffee.order.consumer.common.http.HttpClientFactory;
 import study.microcoffee.order.consumer.common.oauth2.OAuth2TokenInterceptor;
 
 /**
- * Factory class to create Spring RestClient.Builder instances.
+ * Factory class to create Spring RestTemplate instances.
  * <p>
- * The reason of creating RestClient.Builder instances, and not RestClient instances, is because of the {@link LoadBalanced}
- * annotation that requires a Builder instance.
+ * Note! RestTemplate instances are supposed to be thread-safe.
  */
 @Component
-public class CreditRatingRestClientFactory {
+public class CreditRatingRestTemplateFactory {
 
-    private final Logger logger = LoggerFactory.getLogger(CreditRatingRestClientFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(CreditRatingRestTemplateFactory.class);
 
+    /**
+     * Creates a RestTemplate instance that uses a {@link BufferingClientHttpRequestFactory}.
+     */
     @Bean
-    public RestClient.Builder basicRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestTemplate basicRestTemplate(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestTemplate(authorizedClientManager, clientRegistrationRepository, timeout);
     }
 
     @LoadBalanced
     @Bean
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
-    public RestClient.Builder discoveryRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestTemplate discoveryRestTemplate(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestTemplate(authorizedClientManager, clientRegistrationRepository, timeout);
     }
 
-    private RestClient.Builder createRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    private RestTemplate createRestTemplate(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, int timeout) {
 
         logger.info("app.creditrating.timeout={}", timeout);
@@ -56,9 +58,9 @@ public class CreditRatingRestClientFactory {
 
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("order-service");
 
-        return RestClient.builder() //
-            .requestFactory(new BufferingClientHttpRequestFactory(requestFactory)) //
-            .requestInterceptor(new HttpLoggingInterceptor(true)) //
-            .requestInterceptor(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration));
+        RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
+        restTemplate.getInterceptors().add(new HttpLoggingInterceptor(true));
+        restTemplate.getInterceptors().add(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration));
+        return restTemplate;
     }
 }

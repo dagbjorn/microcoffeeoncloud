@@ -309,7 +309,8 @@ class OrderControllerIT {
     }
 
     /**
-     * Test configuration that uses basic RestTemplate/WebClient beans because Discovery-aware beans cannot be used without Eureka.
+     * Test configuration that uses basic RestTemplate/RestClient/WebClient beans because Discovery-aware beans cannot be used
+     * without Eureka.
      */
     @TestConfiguration
     static class TestConfig {
