@@ -22,8 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import study.microcoffee.order.SwaggerConfig;
 import study.microcoffee.order.api.order.model.OrderModel;
-import study.microcoffee.order.consumer.creditrating.BasicRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCreditRatingConsumer;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.exception.OrderNotFoundException;
 import study.microcoffee.order.repository.OrderRepository;
@@ -55,7 +55,7 @@ public class OrderController {
      * <li>Resilience4JWebClientCreditRatingConsumer</li>
      * </ul>
      */
-    public static final String CREDIT_RATING_CONSUMER = BasicRestTemplateCreditRatingConsumer.CONSUMER_TYPE;
+    public static final String CREDIT_RATING_CONSUMER = Resilience4JRestClientCreditRatingConsumer.CONSUMER_TYPE;
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
