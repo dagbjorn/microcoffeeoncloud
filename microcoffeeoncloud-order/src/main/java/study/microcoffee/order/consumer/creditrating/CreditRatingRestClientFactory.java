@@ -1,8 +1,6 @@
 package study.microcoffee.order.consumer.creditrating;
 
 import org.apache.hc.client5.http.classic.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -28,8 +26,6 @@ import study.microcoffee.order.consumer.common.oauth2.OAuth2TokenInterceptor;
 @Component
 public class CreditRatingRestClientFactory {
 
-    private final Logger logger = LoggerFactory.getLogger(CreditRatingRestClientFactory.class);
-
     @Bean
     public RestClient.Builder basicRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
@@ -48,8 +44,6 @@ public class CreditRatingRestClientFactory {
 
     private RestClient.Builder createRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, int timeout) {
-
-        logger.info("app.creditrating.timeout={}", timeout);
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);

@@ -1,8 +1,6 @@
 package study.microcoffee.order.consumer.creditrating;
 
 import org.eclipse.jetty.client.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
@@ -23,13 +21,9 @@ import study.microcoffee.order.consumer.common.http.JettyHttpClientFactory;
 @Component
 public class CreditRatingWebClientFactory {
 
-    private final Logger logger = LoggerFactory.getLogger(CreditRatingWebClientFactory.class);
-
     @Bean
     public WebClient basicWebClient(JettyResourceFactory resourceFactory, OAuth2AuthorizedClientManager authorizedClientManager,
         @Value("${app.creditrating.timeout}") int timeout) {
-
-        logger.info("app.creditrating.timeout={}", timeout);
 
         ServletOAuth2AuthorizedClientExchangeFilterFunction authorizedClientFilterFunction = createAuthorizedClientFilterFunction(
             authorizedClientManager);
@@ -44,8 +38,6 @@ public class CreditRatingWebClientFactory {
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
     public WebClient discoveryWebClient(ReactorLoadBalancerExchangeFilterFunction loadBalancerFunction,
         OAuth2AuthorizedClientManager authorizedClientManager, @Value("${app.creditrating.timeout}") int timeout) {
-
-        logger.info("app.creditrating.timeout={}", timeout);
 
         ServletOAuth2AuthorizedClientExchangeFilterFunction authorizedClientFilterFunction = createAuthorizedClientFilterFunction(
             authorizedClientManager);
