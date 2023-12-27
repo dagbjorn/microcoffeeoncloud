@@ -30,7 +30,7 @@ public class BasicWebClientCreditRatingConsumer extends ConsumerBase implements 
 
     private String baseUrl;
 
-    public BasicWebClientCreditRatingConsumer(@Qualifier("basicWebClient") WebClient webClient,
+    public BasicWebClientCreditRatingConsumer(@Qualifier("discoveryWebClient") WebClient webClient,
         @Value("${app.creditrating.url}") String baseUrl) {
 
         this.webClient = webClient;
