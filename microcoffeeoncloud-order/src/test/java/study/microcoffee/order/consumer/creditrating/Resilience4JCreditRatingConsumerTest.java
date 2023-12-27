@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * Unit tests of {@link Resilience4JCreditRatingConsumer}.
+ * Unit tests of {@link Resilience4JRestTemplateCreditRatingConsumer}.
  */
 class Resilience4JCreditRatingConsumerTest {
 
@@ -45,7 +45,7 @@ class Resilience4JCreditRatingConsumerTest {
     void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
-        creditRatingConsumer = new Resilience4JCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new Resilience4JRestTemplateCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
     }
 
     @Test

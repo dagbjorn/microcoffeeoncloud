@@ -18,20 +18,20 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  * Resilience4J implementation of REST-based CreditRatingConsumer.
  */
 @Component
-@Qualifier(Resilience4JCreditRatingConsumer.CONSUMER_TYPE)
-public class Resilience4JCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
+@Qualifier(Resilience4JRestTemplateCreditRatingConsumer.CONSUMER_TYPE)
+public class Resilience4JRestTemplateCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
-    public static final String CONSUMER_TYPE = "resilience4J";
+    public static final String CONSUMER_TYPE = "resilience4JRestTemplate";
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
-    private final Logger logger = LoggerFactory.getLogger(Resilience4JCreditRatingConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(Resilience4JRestTemplateCreditRatingConsumer.class);
 
     private RestTemplate restTemplate;
 
     private String creditRatingEndpointUrl;
 
-    public Resilience4JCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
+    public Resilience4JRestTemplateCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
         @Value("${app.creditrating.url}") String endpointUrl) {
         this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;

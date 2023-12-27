@@ -17,20 +17,20 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
  * Basic implementation of REST-based CreditRatingConsumer.
  */
 @Component
-@Qualifier(BasicCreditRatingConsumer.CONSUMER_TYPE)
-public class BasicCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
+@Qualifier(BasicRestTemplateCreditRatingConsumer.CONSUMER_TYPE)
+public class BasicRestTemplateCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
-    public static final String CONSUMER_TYPE = "basic";
+    public static final String CONSUMER_TYPE = "basicRestTemplate";
 
     private static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 
-    private final Logger logger = LoggerFactory.getLogger(BasicCreditRatingConsumer.class);
+    private final Logger logger = LoggerFactory.getLogger(BasicRestTemplateCreditRatingConsumer.class);
 
     private RestTemplate restTemplate;
 
     private String creditRatingEndpointUrl;
 
-    public BasicCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
+    public BasicRestTemplateCreditRatingConsumer(@Qualifier("discoveryRestTemplate") RestTemplate restTemplate,
         @Value("${app.creditrating.url}") String endpointUrl) {
         this.restTemplate = restTemplate;
         this.creditRatingEndpointUrl = endpointUrl;

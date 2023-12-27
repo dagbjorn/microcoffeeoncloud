@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * Unit tests of {@link BasicCreditRatingConsumer}.
+ * Unit tests of {@link BasicRestTemplateCreditRatingConsumer}.
  */
 class BasicCreditRatingConsumerTest {
 
@@ -45,7 +45,7 @@ class BasicCreditRatingConsumerTest {
     void setUp() {
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
-        creditRatingConsumer = new BasicCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new BasicRestTemplateCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
     }
 
     @Test
