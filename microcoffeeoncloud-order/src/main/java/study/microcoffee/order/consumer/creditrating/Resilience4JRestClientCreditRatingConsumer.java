@@ -3,24 +3,24 @@ package study.microcoffee.order.consumer.creditrating;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Resilience4J implementation of WebClient-based REST CreditRatingConsumer.
+ * Resilience4J implementation of RestClient-based REST CreditRatingConsumer.
  */
 @Slf4j
 @Component
-@Qualifier(Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE)
-public class Resilience4JWebClientCreditRatingConsumer extends BasicWebClientCreditRatingConsumer {
+@Qualifier(Resilience4JRestClientCreditRatingConsumer.CONSUMER_TYPE)
+public class Resilience4JRestClientCreditRatingConsumer extends BasicRestClientCreditRatingConsumer {
 
-    public static final String CONSUMER_TYPE = "resilience4JWebClient";
+    public static final String CONSUMER_TYPE = "resilience4JRestClient";
 
-    public Resilience4JWebClientCreditRatingConsumer(@Qualifier("discoveryWebClient") WebClient webClient,
+    public Resilience4JRestClientCreditRatingConsumer(@Qualifier("discoveryRestClientBuilder") RestClient.Builder restClientBuilder,
         @Value("${app.creditrating.url}") String baseUrl) {
-        super(webClient, baseUrl);
+        super(restClientBuilder, baseUrl);
     }
 
     @Override

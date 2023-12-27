@@ -1,6 +1,7 @@
 package study.microcoffee.order.api.order;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
@@ -8,7 +9,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 
 import java.util.List;
 
@@ -21,18 +21,19 @@ import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -57,7 +58,7 @@ import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCredit
 import study.microcoffee.order.domain.DrinkType;
 
 /**
- * Integration tests of {@link OrderController} based on {@link WebTestClient}.
+ * Integration tests of {@link OrderController}.
  * <p>
  * The integration tests mimics the behaviour of CSRF protection with Spring CookieCsrfTokenRepository which works as follows:
  * <ol>
@@ -74,12 +75,11 @@ import study.microcoffee.order.domain.DrinkType;
  * by user frenchu to this post on stackoverflow</a>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient(timeout = "60000") // Millisecs
 @AutoConfigureObservability
-@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
+@TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-class OrderControllerWebClientIT {
+class OrderControllerRestTemplateIT {
 
     private static final int WIREMOCK_PORT = 9999;
 
@@ -100,9 +100,8 @@ class OrderControllerWebClientIT {
 
     private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
 
-    // SSL must be disabled to get a correct URL injected. (Otherwise it will be a http URL with SSL port.)
     @Autowired
-    private WebTestClient webTestClient;
+    private TestRestTemplate restTemplate;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -139,45 +138,33 @@ class OrderControllerWebClientIT {
         final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
+            .withHeader(HttpHeaders.AUTHORIZATION, containing("Bearer")) //
             .willReturn(aResponse() //
                 .withStatus(HttpStatus.OK.value()) //
-                .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE) //
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
                 .withBody(creditRatingResponse)));
 
-        String csrfToken = getCurrentCsrfTokenFromApi();
         OrderModel newOrder = createOrder();
 
-        EntityExchangeResult<OrderModel> response = webTestClient.post() //
-            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .header("X-Forwarded-Host", "forwardedhost.no") //
-            .header("X-XSRF-TOKEN", csrfToken) //
-            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
-            .contentType(MediaType.APPLICATION_JSON) //
-            .bodyValue(newOrder) //
-            .exchange() //
-            .expectStatus().isCreated() //
-            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
-            .expectHeader().value(HttpHeaders.LOCATION, containsString("forwardedhost.no")) //
-            .expectBody(OrderModel.class) //
-            .consumeWith(result -> {
-                assertThat(result.getResponseHeaders().getLocation().toString()).endsWith(result.getResponseBody().getId());
-                assertThat(result.getResponseBody().getType()).isEqualTo(newOrder.getType());
-                assertThat(result.getResponseBody().getDrinker()).isEqualTo(newOrder.getDrinker());
-            }) //
-            .returnResult();
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(newOrder), OrderModel.class, COFFEE_SHOP_ID);
 
-        OrderModel savedOrder = response.getResponseBody();
+        OrderModel savedOrder = response.getBody();
 
-        webTestClient.get() //
-            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, savedOrder.getId()) //
-            .accept(MediaType.APPLICATION_JSON) //
-            .exchange() //
-            .expectStatus().isOk() //
-            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
-            .expectBody(OrderModel.class) //
-            .consumeWith(result -> {
-                assertThat(result.getResponseBody()).hasToString(savedOrder.toString());
-            });
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
+        assertThat(response.getHeaders().getLocation().toString()).contains("forwardedhost.no");
+        assertThat(response.getHeaders().getLocation().toString()).endsWith(savedOrder.getId());
+        assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
+        assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
+
+        response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, savedOrder.getId());
+
+        OrderModel readBackOrder = response.getBody();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getHeaders().getContentType()).asString().startsWith(MediaType.APPLICATION_JSON_VALUE);
+        assertThat(readBackOrder).hasToString(savedOrder.toString());
     }
 
     @Test
@@ -186,56 +173,50 @@ class OrderControllerWebClientIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        String csrfToken = getCurrentCsrfTokenFromApi();
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
 
-        webTestClient.post() //
-            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .header("X-XSRF-TOKEN", csrfToken) //
-            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
-            .contentType(MediaType.APPLICATION_JSON) //
-            .bodyValue(createOrder()) //
-            .exchange() //
-            .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
-        float currentFailedWithRetryCount = getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
-
-        stubWireMockTokenResponse();
+        float currentFailedWithRetryCount = getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        String csrfToken = getCurrentCsrfTokenFromApi();
+        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
+            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
 
-        webTestClient.post() //
-            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-            .header("X-XSRF-TOKEN", csrfToken) //
-            .header(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken) //
-            .contentType(MediaType.APPLICATION_JSON) //
-            .bodyValue(createOrder()) //
-            .exchange() //
-            .expectStatus().isEqualTo(HttpStatus.PAYMENT_REQUIRED);
-
-        assertThat(getMetricValue(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
+        assertThat(getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
     }
 
     @Test
     void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        webTestClient.get() //
-            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
-            .accept(MediaType.APPLICATION_JSON) //
-            .exchange() //
-            .expectStatus().isNoContent();
+        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
+            orderId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     //
     // Helper methods
     //
+
+    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) throws JsonProcessingException {
+        String csrfToken = getCurrentCsrfTokenFromApi();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Forwarded-Host", "forwardedhost.no");
+        headers.add("X-XSRF-TOKEN", csrfToken);
+        headers.add(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken);
+        return new HttpEntity<>(order, headers);
+    }
 
     private OrderModel createOrder() {
         return OrderModel.builder() //
@@ -250,39 +231,22 @@ class OrderControllerWebClientIT {
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
     private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
-        EntityExchangeResult<OrderModel> response = webTestClient.get() //
-            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
-            .accept(MediaType.APPLICATION_JSON) //
-            .exchange() //
-            .expectStatus().isNoContent() //
-            .expectBody(OrderModel.class) //
-            .returnResult();
+        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, "123");
 
-        List<String> csrfTokenList = response.getResponseHeaders().getValuesAsList("X-XSRF-TOKEN");
+        List<String> csrfTokenList = response.getHeaders().getValuesAsList("X-XSRF-TOKEN");
         assertThat(csrfTokenList).isNotEmpty();
 
         return csrfTokenList.get(0);
     }
 
-    /**
-     * Returns a properly formatted Prometheus metric.
-     */
     private static String getMetricName(String metric, String kind, String backend) {
         return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\",} ";
     }
 
-    /**
-     * Reads the current metric value from the Actuator Prometheus endpoint.
-     */
-    private float getMetricValue(String key) {
-        EntityExchangeResult<String> response = webTestClient.get() //
-            .uri("/actuator/prometheus") //
-            .exchange() //
-            .expectStatus().isOk() //
-            .expectBody(String.class) //
-            .returnResult();
+    private float getMetricValueFromPrometheus(String key) {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class);
 
-        String value = response.getResponseBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
+        String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
     }
 

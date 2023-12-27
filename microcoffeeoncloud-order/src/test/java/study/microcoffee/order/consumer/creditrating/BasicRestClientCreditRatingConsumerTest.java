@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
@@ -27,15 +27,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * Unit tests of {@link BasicRestTemplateCreditRatingConsumer}.
+ * Unit tests of {@link BasicRestClientCreditRatingConsumer}.
  */
-class BasicCreditRatingConsumerTest {
+class BasicRestClientCreditRatingConsumerTest {
 
     private static final String CREDITRATING_SERVICE_URL = "http://dummy";
 
     private MockRestServiceServer server;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private RestClient.Builder restClientBuilder = RestClient.builder();
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -43,9 +43,9 @@ class BasicCreditRatingConsumerTest {
 
     @BeforeEach
     void setUp() {
-        server = MockRestServiceServer.bindTo(restTemplate).build();
+        server = MockRestServiceServer.bindTo(restClientBuilder).build();
 
-        creditRatingConsumer = new BasicRestTemplateCreditRatingConsumer(restTemplate, CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new BasicRestClientCreditRatingConsumer(restClientBuilder, CREDITRATING_SERVICE_URL);
     }
 
     @Test
@@ -91,8 +91,9 @@ class BasicCreditRatingConsumerTest {
     private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
         UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
             .path("/api/coffeeshop/creditrating") //
-            .pathSegment(UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name())) //
+            .pathSegment(UriUtils.encode(customerId, StandardCharsets.UTF_8)) //
             .build();
+
         return serviceUrl.toUriString();
     }
 }

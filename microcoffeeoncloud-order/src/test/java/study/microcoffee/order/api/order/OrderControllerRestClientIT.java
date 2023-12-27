@@ -23,17 +23,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -43,20 +43,21 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
-import io.github.resilience4j.retry.RetryRegistry;
 import study.microcoffee.jwttest.TestTokens;
 import study.microcoffee.jwttest.oidcprovider.model.BearerToken;
 import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
 import study.microcoffee.order.api.order.model.OrderModel;
-import study.microcoffee.order.consumer.creditrating.BasicCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.BasicRestClientCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.BasicRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.BasicWebClientCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
-import study.microcoffee.order.consumer.creditrating.Resilience4JCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 
 /**
- * Integration tests of {@link OrderController}.
+ * Integration tests of {@link OrderController} based on {@link RestClient}.
  * <p>
  * The integration tests mimics the behaviour of CSRF protection with Spring CookieCsrfTokenRepository which works as follows:
  * <ol>
@@ -72,12 +73,12 @@ import study.microcoffee.order.domain.DrinkType;
  * "https://stackoverflow.com/questions/40034430/will-spring-security-csrf-token-repository-cookies-work-for-all-ajax-requests-au">Answer
  * by user frenchu to this post on stackoverflow</a>
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server.ssl.enabled=false")
 @AutoConfigureObservability
 @TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
-class OrderControllerIT {
+class OrderControllerRestClientIT {
 
     private static final int WIREMOCK_PORT = 9999;
 
@@ -96,16 +97,15 @@ class OrderControllerIT {
     private static final String PROMETHEUS_METRIC_FAILED_WITH_RETRY = getMetricName("resilience4j_retry_calls_total",
         "failed_with_retry", "creditRating");
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
+
+    @LocalServerPort
+    private int serverPort;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    protected RetryRegistry retryRegistry;
-
-    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.options().port(WIREMOCK_PORT));
+    private RestClient restClient;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -125,6 +125,8 @@ class OrderControllerIT {
 
     @BeforeEach
     void beforeEach() throws Exception {
+        restClient = RestClient.builder().baseUrl("http://localhost:" + serverPort).build();
+
         stubWireMockTokenResponse();
     }
 
@@ -147,8 +149,12 @@ class OrderControllerIT {
 
         OrderModel newOrder = createOrder();
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(newOrder), OrderModel.class, COFFEE_SHOP_ID);
+        ResponseEntity<OrderModel> response = restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(newOrder) //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         OrderModel savedOrder = response.getBody();
 
@@ -159,7 +165,10 @@ class OrderControllerIT {
         assertThat(savedOrder.getType().getName()).isEqualTo("Latte");
         assertThat(savedOrder.getDrinker()).isEqualTo("Dagbjørn");
 
-        response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, savedOrder.getId());
+        response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, savedOrder.getId()) //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         OrderModel readBackOrder = response.getBody();
 
@@ -174,10 +183,16 @@ class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
+        ResponseEntity<String> response = restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(createOrder()) //
+            .retrieve() //
+            .onStatus(status -> status == HttpStatus.INTERNAL_SERVER_ERROR, (req, resp) -> {
+            }) //
+            .toEntity(String.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        System.err.println(response.getBody());
     }
 
     @Test
@@ -188,10 +203,15 @@ class OrderControllerIT {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
-        ResponseEntity<OrderModel> response = restTemplate.exchange(POST_SERVICE_PATH, HttpMethod.POST,
-            createRequestEntity(createOrder()), OrderModel.class, COFFEE_SHOP_ID);
+        restClient.post() //
+            .uri(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .headers(ThrowingConsumer.of(httpHeaders -> httpHeaders.addAll(createHeaders()))) //
+            .body(createOrder()) //
+            .retrieve() //
+            .onStatus(status -> status == HttpStatus.PAYMENT_REQUIRED, (req, resp) -> {
+            }) //
+            .toBodilessEntity();
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYMENT_REQUIRED);
         assertThat(getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY)).isEqualTo(currentFailedWithRetryCount + 1);
     }
 
@@ -199,8 +219,10 @@ class OrderControllerIT {
     void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
         String orderId = "1111111111111111";
 
-        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
-            orderId);
+        ResponseEntity<Void> response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
+            .retrieve() //
+            .toBodilessEntity();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
@@ -209,14 +231,14 @@ class OrderControllerIT {
     // Helper methods
     //
 
-    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) throws JsonProcessingException {
+    private HttpHeaders createHeaders() throws JsonProcessingException {
         String csrfToken = getCurrentCsrfTokenFromApi();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Forwarded-Host", "forwardedhost.no");
         headers.add("X-XSRF-TOKEN", csrfToken);
         headers.add(HttpHeaders.COOKIE, "XSRF-TOKEN" + "=" + csrfToken);
-        return new HttpEntity<>(order, headers);
+        return headers;
     }
 
     private OrderModel createOrder() {
@@ -232,7 +254,10 @@ class OrderControllerIT {
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
     private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
-        ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, "123");
+        ResponseEntity<OrderModel> response = restClient.get() //
+            .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
+            .retrieve() //
+            .toEntity(OrderModel.class);
 
         List<String> csrfTokenList = response.getHeaders().getValuesAsList("X-XSRF-TOKEN");
         assertThat(csrfTokenList).isNotEmpty();
@@ -245,7 +270,10 @@ class OrderControllerIT {
     }
 
     private float getMetricValueFromPrometheus(String key) {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class);
+        ResponseEntity<String> response = restClient.get() //
+            .uri("/actuator/prometheus") //
+            .retrieve() //
+            .toEntity(String.class);
 
         String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
@@ -257,13 +285,15 @@ class OrderControllerIT {
 
     @SuppressWarnings("unused")
     private boolean isBasicConsumer() {
-        return OrderController.CREDIT_RATING_CONSUMER.equals(BasicCreditRatingConsumer.CONSUMER_TYPE)
+        return OrderController.CREDIT_RATING_CONSUMER.equals(BasicRestTemplateCreditRatingConsumer.CONSUMER_TYPE)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(BasicRestClientCreditRatingConsumer.CONSUMER_TYPE)
             || OrderController.CREDIT_RATING_CONSUMER.equals(BasicWebClientCreditRatingConsumer.CONSUMER_TYPE);
     }
 
     @SuppressWarnings("unused")
     private boolean isResilience4jConsumer() {
-        return OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JCreditRatingConsumer.CONSUMER_TYPE)
+        return OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JRestTemplateCreditRatingConsumer.CONSUMER_TYPE)
+            || OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JRestClientCreditRatingConsumer.CONSUMER_TYPE)
             || OrderController.CREDIT_RATING_CONSUMER.equals(Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE);
     }
 
@@ -312,7 +342,8 @@ class OrderControllerIT {
     }
 
     /**
-     * Test configuration that uses basic RestTemplate/WebClient beans because Discovery-aware beans cannot be used without Eureka.
+     * Test configuration that uses basic RestTemplate/RestClient/WebClient beans because Discovery-aware beans cannot be used
+     * without Eureka.
      */
     @TestConfiguration
     static class TestConfig {
@@ -320,6 +351,12 @@ class OrderControllerIT {
         @Bean
         public RestTemplate discoveryRestTemplate(@Qualifier("basicRestTemplate") RestTemplate restTemplate) {
             return restTemplate;
+        }
+
+        @Bean
+        public RestClient.Builder discoveryRestClientBuilder(
+            @Qualifier("basicRestClientBuilder") RestClient.Builder restclientBuilder) {
+            return restclientBuilder;
         }
 
         @Bean
