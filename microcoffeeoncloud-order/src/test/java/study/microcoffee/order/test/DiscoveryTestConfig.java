@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * Test configuration class for Discovery functionality.
+ * Test configuration class for stubbed Discovery functionality.
  */
 @TestConfiguration
 public class DiscoveryTestConfig {

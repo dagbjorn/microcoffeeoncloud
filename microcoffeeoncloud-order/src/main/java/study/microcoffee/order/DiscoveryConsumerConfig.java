@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import study.microcoffee.order.common.logging.HttpLoggingInterceptor;
@@ -27,15 +26,5 @@ public class DiscoveryConsumerConfig {
         restTemplate.getInterceptors().add(new HttpLoggingInterceptor(false));
 
         return restTemplate;
-    }
-
-    @LoadBalanced
-    @Bean
-    public RestClient.Builder discoveryRestClientBuilder() {
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-
-        return RestClient.builder() //
-            .requestFactory(new BufferingClientHttpRequestFactory(requestFactory)) //
-            .requestInterceptor(new HttpLoggingInterceptor(false));
     }
 }

@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import study.microcoffee.order.SwaggerConfig;
 import study.microcoffee.order.api.order.model.OrderModel;
 import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
-import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCreditRatingConsumer;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.exception.OrderNotFoundException;
 import study.microcoffee.order.repository.OrderRepository;
@@ -48,14 +48,14 @@ public class OrderController {
      * Defines which {@link CreditRatingConsumer} implementation to use.
      * <ul>
      * <li>BasicCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
-     * <li>BasicRestClientCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>BasicRestClientCreditRatingConsumer</li>
      * <li>BasicWebClientCreditRatingConsumer</li>
      * <li>Resilience4JCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
-     * <li>Resilience4JRestClientCreditRatingConsumer - NOT SUPPORTED FOR THE TIME BEING</li>
+     * <li>Resilience4JRestClientCreditRatingConsumer</li>
      * <li>Resilience4JWebClientCreditRatingConsumer</li>
      * </ul>
      */
-    public static final String CREDIT_RATING_CONSUMER = Resilience4JWebClientCreditRatingConsumer.CONSUMER_TYPE;
+    public static final String CREDIT_RATING_CONSUMER = Resilience4JRestClientCreditRatingConsumer.CONSUMER_TYPE;
 
     private static final int MINIMUM_CREDIT_RATING = 50;
 
