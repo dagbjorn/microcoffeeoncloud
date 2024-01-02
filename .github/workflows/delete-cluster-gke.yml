@@ -45,8 +45,3 @@ jobs:
         run: |-
           gcloud compute disks delete mongodb-disk --zone=${{ env.GKE_ZONE }} --quiet || true
           gcloud compute disks list
-
-      - name: Delete phantom resources
-        run: |-
-          gcloud service-directory namespaces delete goog-psc-default --location=${{ env.GKE_REGION }} --quiet || true
-          gcloud service-directory namespaces list --location=${{ env.GKE_REGION }}
