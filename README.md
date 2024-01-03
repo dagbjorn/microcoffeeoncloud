@@ -40,6 +40,7 @@ Date | Change
 16.10.2023 | Implemented CSRF protection in the Order API (POST operation).
 09.12.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
 10.12.2023 | Upgraded to Java 21.
+03.01.2024 | Added roles/servicedirectory.editor in Setup for GitHub Actions workflows.
 
 ## Contents
 
@@ -1791,11 +1792,12 @@ Create a service account in Google Cloud with the necessary roles to create and 
 
 Observe the email address `srvgha@microcoffeeoncloud.iam.gserviceaccount.com`. This is the address that will be used when configuring the service account.
 
-3: Add `compute.admin`, `container.admin` and `iam.serviceAccountUser` roles to the service account.
+3: Add `compute.admin`, `container.admin`, `iam.serviceAccountUser` and `roles/servicedirectory.editor` roles to the service account.
 
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/compute.admin
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/container.admin
     gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/iam.serviceAccountUser
+    gcloud projects add-iam-policy-binding microcoffeeoncloud --member=serviceAccount:srvgha@microcoffeeoncloud.iam.gserviceaccount.com --role=roles/servicedirectory.editor
 
 4: Verify the roles.
 
@@ -1804,6 +1806,7 @@ Observe the email address `srvgha@microcoffeeoncloud.iam.gserviceaccount.com`. T
     roles/compute.admin
     roles/container.admin
     roles/iam.serviceAccountUser
+    roles/servicedirectory.editor
 
 5: Create a private key for the service account and download it to a JSON key file.
 
