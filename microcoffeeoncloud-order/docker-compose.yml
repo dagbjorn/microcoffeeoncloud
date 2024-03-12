@@ -34,7 +34,7 @@ services:
             - discovery
     mongodb:
         image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
-        command: mongod --tlsMode preferTLS --tlsCertificateKeyFile /microcoffee.study-key.pem --bind_ip_all
+        command: mongod --bind_ip_all --tlsMode preferTLS --tlsCertificateKeyFile /microcoffee.study-key.pem --setParameter tlsUseSystemCA=true --tlsAllowConnectionsWithoutCertificates
         ports:
             - "27017:27017"
             - "28017:28017"
