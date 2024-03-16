@@ -8,6 +8,6 @@ COPY target/keystore/microcoffee-keystore.jks .
 RUN touch app.jar \
     && find / -iname "cacerts" \
     && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore $JVM_TRUSTSTORE -deststorepass changeit \
-    && keytool -list -keystore $JVM_TRUSTSTORE -storepass changeit -v \
+    && keytool -list -keystore $JVM_TRUSTSTORE -storepass changeit -alias wildcard.default -v \
     && rm microcoffee-keystore.jks
 ENTRYPOINT ["java","-jar","/app.jar"]
