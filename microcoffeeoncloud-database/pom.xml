@@ -13,10 +13,10 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <groovy.version>4.0.18</groovy.version>
+        <groovy.version>4.0.20</groovy.version>
         <mongo-java-driver.version>3.12.14</mongo-java-driver.version>
 
-        <docker-maven-plugin.version>0.43.4</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.44.0</docker-maven-plugin.version>
         <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
         <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>

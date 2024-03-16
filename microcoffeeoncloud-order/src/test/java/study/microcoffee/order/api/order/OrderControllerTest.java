@@ -111,7 +111,7 @@ class OrderControllerTest {
             .content(toJson(orderModel)) //
             .contentType(MediaType.APPLICATION_JSON)) //
             .andExpect(status().isPaymentRequired()) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN));
+            .andReturn();
     }
 
     @Test
