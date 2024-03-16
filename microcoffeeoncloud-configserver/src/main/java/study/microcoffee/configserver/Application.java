@@ -19,7 +19,7 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
-        System.setProperty("javax.net.debug", "all");
+        System.setProperty("javax.net.debug", "ssl:handshake");
 
         logHostInfo();
 

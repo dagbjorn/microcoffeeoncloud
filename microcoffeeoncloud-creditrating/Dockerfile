@@ -6,6 +6,8 @@ ENV JVM_TRUSTSTORE=/opt/java/openjdk/lib/security/cacerts
 COPY target/$JAR_FILE app.jar
 COPY target/keystore/microcoffee-keystore.jks .
 RUN touch app.jar \
+    && find / -iname "cacerts" \
     && keytool -importkeystore -noprompt -srckeystore microcoffee-keystore.jks -srcstorepass 12345678 -destkeystore $JVM_TRUSTSTORE -deststorepass changeit \
+    && keytool -list -keystore $JVM_TRUSTSTORE -storepass changeit -v \
     && rm microcoffee-keystore.jks
 ENTRYPOINT ["java","-jar","/app.jar"]
