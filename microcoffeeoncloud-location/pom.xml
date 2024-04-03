@@ -38,11 +38,11 @@
 
         <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
         <flapdoodle-embed-mongo.version>4.12.2</flapdoodle-embed-mongo.version>
-        <springdoc-openapi.version>2.4.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.44.0</docker-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.11.0.3922</sonar-maven-plugin.version>
     </properties>
 
