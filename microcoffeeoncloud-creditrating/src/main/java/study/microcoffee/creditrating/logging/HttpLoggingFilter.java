@@ -6,11 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +19,11 @@ import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Simple logging filter for HTTP server request and response logging.
@@ -140,7 +140,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             try {
                 payload = new String(buf, 0, buf.length, wrappedRequest.getCharacterEncoding());
 
-                if (isFormattedLogging() && wrappedRequest.getContentType().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
+                if (isFormattedLogging()
+                    && doesContentTypeStartWith(wrappedRequest.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
                     Object object = objectMapper.readValue(payload, Object.class);
                     payload = lineTerminator + objectMapper.writeValueAsString(object);
                 }
@@ -192,7 +193,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             try {
                 payload = new String(buf, 0, buf.length, wrappedResponse.getCharacterEncoding());
 
-                if (isFormattedLogging() && wrappedResponse.getContentType().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
+                if (isFormattedLogging()
+                    && doesContentTypeStartWith(wrappedResponse.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
                     Object object = objectMapper.readValue(payload, Object.class);
                     payload = lineTerminator + objectMapper.writeValueAsString(object);
                 }
@@ -210,6 +212,10 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     //
     // Common stuff
     //
+
+    private boolean doesContentTypeStartWith(String contentType, String other) {
+        return contentType != null && contentType.startsWith(other);
+    }
 
     private void formatHeaders(StringBuilder builder, HttpHeaders headers) {
         if (!formattedLogging) {

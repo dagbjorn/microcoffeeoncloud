@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.2.4</version>
         <relativePath/>
     </parent>
 
@@ -34,9 +34,9 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
 
-        <springdoc-openapi.version>2.4.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
 
         <!-- Angular -->
         <angularjs.version>1.8.2</angularjs.version> <!-- Keep 1.8.2 (1.8.3 jar is not found) -->
@@ -50,7 +50,7 @@
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.44.0</docker-maven-plugin.version>
         <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.11.0.3922</sonar-maven-plugin.version>
         <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
     </properties>
