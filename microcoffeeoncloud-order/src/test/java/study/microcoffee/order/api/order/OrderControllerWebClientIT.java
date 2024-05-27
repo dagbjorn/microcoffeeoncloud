@@ -51,8 +51,8 @@ import study.microcoffee.order.consumer.creditrating.BasicRestClientCreditRating
 import study.microcoffee.order.consumer.creditrating.BasicRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.BasicWebClientCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
-import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 
@@ -268,7 +268,7 @@ class OrderControllerWebClientIT {
      * Returns a properly formatted Prometheus metric.
      */
     private static String getMetricName(String metric, String kind, String backend) {
-        return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\",} ";
+        return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\"} ";
     }
 
     /**

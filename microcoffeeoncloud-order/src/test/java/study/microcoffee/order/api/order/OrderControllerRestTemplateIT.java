@@ -240,7 +240,7 @@ class OrderControllerRestTemplateIT {
     }
 
     private static String getMetricName(String metric, String kind, String backend) {
-        return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\",} ";
+        return metric + "{kind=\"" + kind + "\",name=\"" + backend + "\"} ";
     }
 
     private float getMetricValueFromPrometheus(String key) {
