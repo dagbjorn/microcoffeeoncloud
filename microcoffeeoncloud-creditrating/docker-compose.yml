@@ -1,4 +1,3 @@
-version: '3'
 services:
     creditrating:
         image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT

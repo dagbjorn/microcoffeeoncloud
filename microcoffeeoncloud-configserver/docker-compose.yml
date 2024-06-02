@@ -1,4 +1,3 @@
-version: '3'
 services:
     configserver:
         image: dagbjorn/microcoffeeoncloud-configserver:1.0.0-SNAPSHOT

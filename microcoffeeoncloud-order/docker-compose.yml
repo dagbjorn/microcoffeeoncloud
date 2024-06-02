@@ -1,4 +1,3 @@
-version: '3'
 services:
     order:
         image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
