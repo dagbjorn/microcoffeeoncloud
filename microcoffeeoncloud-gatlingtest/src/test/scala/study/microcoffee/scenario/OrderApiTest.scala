@@ -36,9 +36,16 @@ class OrderApiTest extends Simulation {
   private val scn = scenario("Order API")
     .feed(orderFeeder)
 
+    .exec(http("Get CSRF token")
+      .get("/api/coffeeshop/#{coffeeShopId}/order/9999999999")
+      .check(status.in(200, 204))
+      .check(header("X-XSRF-TOKEN").exists.saveAs("csrfToken")))
+
     .exec(http("Submit order")
       .post("/api/coffeeshop/#{coffeeShopId}/order")
       .header("Content-Type", "application/json")
+      .header("Cookie", "XSRF-TOKEN=#{csrfToken}")
+      .header("X-XSRF-TOKEN", "#{csrfToken}")
       .body(ElFileBody("OrderTemplate.json")).asJson
       .check(status.is(201))
       .check(header("Location").exists.saveAs("location")))

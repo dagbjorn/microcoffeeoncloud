@@ -11,15 +11,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 
-		<gatling.version>3.8.4</gatling.version>
-		<json4s-jackson.version>4.0.6</json4s-jackson.version>
+		<gatling.version>3.11.3</gatling.version>
+		<json4s-jackson.version>4.0.7</json4s-jackson.version>
 
-		<build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
-		<gatling-maven-plugin.version>4.2.7</gatling-maven-plugin.version>
-		<scala-maven-plugin.version>4.7.2</scala-maven-plugin.version>
+		<build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+		<gatling-maven-plugin.version>4.9.1</gatling-maven-plugin.version>
+		<scala-maven-plugin.version>4.9.1</scala-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -91,7 +91,7 @@
 								<jvmArg>-Xss100M</jvmArg>
 							</jvmArgs>
 							<args>
-								<arg>-target:jvm-17</arg>
+								<arg>-release:${maven.compiler.target}</arg>
 								<arg>-deprecation</arg>
 								<arg>-feature</arg>
 								<arg>-unchecked</arg>
