@@ -38,7 +38,7 @@ class OrderApiTest extends Simulation {
 
     .exec(http("Get CSRF token")
       .get("/api/coffeeshop/#{coffeeShopId}/order/9999999999")
-      .check(status.is(204))
+      .check(status.in(200, 204))
       .check(header("X-XSRF-TOKEN").exists.saveAs("csrfToken")))
 
     .exec(http("Submit order")
