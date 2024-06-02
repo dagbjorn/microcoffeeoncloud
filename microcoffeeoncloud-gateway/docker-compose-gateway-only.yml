@@ -1,4 +1,3 @@
-version: '3'
 services:
     gateway:
         image: dagbjorn/microcoffeeoncloud-gateway:1.0.0-SNAPSHOT

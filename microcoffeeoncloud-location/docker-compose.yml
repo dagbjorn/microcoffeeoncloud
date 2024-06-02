@@ -1,4 +1,3 @@
-version: '3'
 services:
     location:
         image: dagbjorn/microcoffeeoncloud-location:1.0.0-SNAPSHOT
