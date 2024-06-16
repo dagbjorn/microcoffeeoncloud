@@ -35,7 +35,7 @@
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
         <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
-        <flapdoodle-embed-mongo.version>4.13.0</flapdoodle-embed-mongo.version>
+        <flapdoodle-embed-mongo.version>4.14.0</flapdoodle-embed-mongo.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
 
         <modelmapper.version>3.2.0</modelmapper.version>
