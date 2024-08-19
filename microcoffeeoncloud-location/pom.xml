@@ -41,7 +41,7 @@
         <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.44.0</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.45.0</docker-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
     </properties>
