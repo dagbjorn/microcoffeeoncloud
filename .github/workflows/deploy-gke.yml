@@ -52,6 +52,9 @@ jobs:
           kubectl apply -f microcoffeeoncloud-authserver/k8s-service-gke.yml
           kubectl wait --for=condition=Ready pod -l app=authserver --timeout=300s
 
+          # Since we have disabled the probes of Keycloak because of unknown issue we need to sleep instead
+          sleep 30
+
       - name: Regenerate Keycloak secret of order-service client and create Kubernetes secret
         run: |-
           # Get EXTERNAL_IP of one of the cluster nodes
