@@ -41,7 +41,7 @@ Date | Change
 09.12.2023 | Upgraded to Spring Boot 3.2.0 and Spring Cloud 2023.0.0.
 10.12.2023 | Upgraded to Java 21.
 03.01.2024 | Added roles/servicedirectory.editor in Setup for GitHub Actions workflows.
-02.06.2024 1 Upgraded to Spring Boot 3.3.0.
+02.06.2024 | Upgraded to Spring Boot 3.3.0.
 
 ## Contents
 

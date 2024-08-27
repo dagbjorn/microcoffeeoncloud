@@ -18,21 +18,22 @@ spec:
         image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
         imagePullPolicy: Always
         command: ["/opt/keycloak/bin/kc.sh"]
-        args: ["start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/wildcard.default.p12", "--https-key-store-password=12345678", "--health-enabled=true"]
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8093
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: 8093
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 5
+        args: ["start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/wildcard.default.p12", "--https-key-store-password=12345678", "--health-enabled=true", "--metrics-enabled=true"]
+        # Disable probes because for some unkwown reason they have stopped working
+        readinessProbe: null
+#          httpGet:
+#            path: /health/ready
+#            port: 8093
+#          initialDelaySeconds: 60
+#          periodSeconds: 10
+#          timeoutSeconds: 5
+        livenessProbe: null
+#          httpGet:
+#            path: /health/live
+#            port: 8093
+#          initialDelaySeconds: 60
+#          periodSeconds: 10
+#          timeoutSeconds: 5
         ports:
         - containerPort: 8093
         - containerPort: 8456
