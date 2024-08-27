@@ -53,7 +53,8 @@ jobs:
           kubectl wait --for=condition=Ready pod -l app=authserver --timeout=300s
 
           # Since we have disabled the probes of Keycloak because of unknown issue we need to sleep instead
-          sleep 30
+          echo "Sleep for 45 seconds..."
+          sleep 45
 
       - name: Regenerate Keycloak secret of order-service client and create Kubernetes secret
         run: |-
