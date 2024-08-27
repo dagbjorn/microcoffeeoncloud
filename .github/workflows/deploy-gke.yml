@@ -40,6 +40,8 @@ jobs:
         run: |-
           gcloud info
 
+          curl --version
+
       # https://github.com/marketplace/actions/get-gke-credentials
       - name: Get GKE credentials and setup a kubeconfig file
         uses: google-github-actions/get-gke-credentials@v2
