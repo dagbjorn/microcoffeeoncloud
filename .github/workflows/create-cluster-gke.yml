@@ -31,7 +31,7 @@ jobs:
 
       - name: Create cluster
         run: |-
-          gcloud container clusters create ${{ env.GKE_CLUSTER }} --machine-type=e2-small --num-nodes=4 --disk-size=10GB --zone=${{ env.GKE_ZONE }}
+          gcloud container clusters create ${{ env.GKE_CLUSTER }} --machine-type=e2-small --num-nodes=5 --disk-size=10GB --zone=${{ env.GKE_ZONE }}
           gcloud compute instances list
 
       - name: Create firewall rules
