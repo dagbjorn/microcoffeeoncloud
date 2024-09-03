@@ -1551,7 +1551,7 @@ order | 30082 | 30445 |
 creditrating | 30083 | 30446 |
 configserver | 30091 | 30454 |
 discovery | 30092 | 30455 |
-authserver | 30093 | 30456 30457
+authserver | 30093 | 30456 | 30457
 database | 27017 | 27017 |
 
 ### <a name="api-load-testing-gatling"></a>API load testing with Gatling
@@ -2093,7 +2093,7 @@ To run Microcoffee, see the main documentation above. To test Microcoffee, open 
 
 When starting Minikube with the docker driver (will be auto-detected by default), we need to expose all ports used by Microcoffee by specifying a number of `--ports` flags on command-line as follows.
 
-    minikube start --ports=27017:27017 --ports=30080:30080 --ports=30081:30081 --ports=30082:30082 --ports=30083:30083 --ports=30091:30091 --ports=30092:30092 --ports=30093:30093 --ports=30443:30443 --ports=30444:30444 --ports=30445:30445 --ports=30446:30446 --ports=30454:30454 --ports=30455:30455 --ports=30456:30456
+    minikube start --ports=27017:27017 --ports=30080:30080 --ports=30081:30081 --ports=30082:30082 --ports=30083:30083 --ports=30091:30091 --ports=30092:30092 --ports=30093:30093 --ports=30443:30443 --ports=30444:30444 --ports=30445:30445 --ports=30446:30446 --ports=30454:30454 --ports=30455:30455 --ports=30456:30456 --ports=30457:30457
 
 :warning: Port mappings cannot be changed once the Minikube cluster is created. Any `--ports` flags specified are ignored when starting an existing cluster. To change the port mappings, delete the cluster first by running `minikube delete`.
 
