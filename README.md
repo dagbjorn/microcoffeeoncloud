@@ -42,6 +42,7 @@ Date | Change
 10.12.2023 | Upgraded to Java 21.
 03.01.2024 | Added roles/servicedirectory.editor in Setup for GitHub Actions workflows.
 02.06.2024 | Upgraded to Spring Boot 3.3.0.
+03.09.2024 | Added port 8457/30457 used by Keycloak management interface for Kubernetes readiness/liveness probes.
 
 ## Contents
 
@@ -919,16 +920,16 @@ As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the cr
 
 #### Summary of external port numbers
 
-Microservice | http port | https port
------------- | --------- | ----------
-gateway | - | 30443
-location | 30081 | 30444
-order | 30082 | 30445
-creditrating | 30083 | 30446
-configserver | 30091 | 30454
-discovery | 30092 | 30455
-authserver | 30093 | 30456
-database | 30017 | 30017
+Microservice | http port | https port | https mgmt port
+------------ | --------- | ---------- | ---------------
+gateway | - | 30443 |
+location | 30081 | 30444 |
+order | 30082 | 30445 |
+creditrating | 30083 | 30446 |
+configserver | 30091 | 30454 |
+discovery | 30092 | 30455 |
+authserver | 30093 | 30456 | 30457
+database | 30017 | 30017 |
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
 
@@ -1189,16 +1190,16 @@ In addition to the managed policies above, create the following inline policy to
 
 #### Summary of external port numbers
 
-Microservice | http port | https port | Comment
------------- | --------- | ---------- | -------
-gateway | - | 443/30443 | Load balancer: 443, Node port: 30443
-location | 30081 | 30444 |
-order | 30082 | 30445 |
-creditrating | 30083 | 30446 |
-configserver | 30091 | 30454 |
-discovery | 30092 | 30455 |
-authserver | 30093 | 30456 |
-database | 30017 | 30017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 443/30443 | | Load balancer: 443, Node port: 30443
+location | 30081 | 30444 | |
+order | 30082 | 30445 | |
+creditrating | 30083 | 30446 | |
+configserver | 30091 | 30454 | |
+discovery | 30092 | 30455 | |
+authserver | 30093 | 30456 | 30457
+database | 30017 | 30017 | |
 
 #### Overview of AWS dashboards
 
@@ -1410,16 +1411,16 @@ Verify that both the resource group and the node resource group of Microcoffee a
 
 #### Summary of external port numbers
 
-Microservice | http port | https port | Comment
------------- | --------- | ---------- | -------
-gateway | - | 8443 |
-location | 8081 | 8444 |
-order | 8082 | 8445 |
-creditrating | 8083 | 8446 |
-configserver | 8091 | 8454 |
-discovery | 8092 | 8455 | NodePort => No external IP.
-authserver | 8093 | 8456 |
-database | 27017 | 27017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 8443 | |
+location | 8081 | 8444 | |
+order | 8082 | 8445 | |
+creditrating | 8083 | 8446 | |
+configserver | 8091 | 8454 | |
+discovery | 8092 | 8455 | | NodePort => No external IP.
+authserver | 8093 | 8456 | 8457
+database | 27017 | 27017 | |
 
 Only LoadBalancer services are externally available.
 
@@ -1542,16 +1543,16 @@ As usual, run `gsudo minikube ip` to get the NODE_IP of the Minikube cluster.
 
 #### Summary of port numbers
 
-Microservice | http port | https port
------------- | --------- | ----------
-gateway | - | 30443
-location | 30081 | 30444
-order | 30082 | 30445
-creditrating | 30083 | 30446
-configserver | 30091 | 30454
-discovery | 30092 | 30455
-authserver | 30093 | 30456
-database | 27017 | 27017
+Microservice | http port | https port | https mgmt port
+------------ | --------- | ---------- | ---------------
+gateway | - | 30443 |
+location | 30081 | 30444 |
+order | 30082 | 30445 |
+creditrating | 30083 | 30446 |
+configserver | 30091 | 30454 |
+discovery | 30092 | 30455 |
+authserver | 30093 | 30456 30457
+database | 27017 | 27017 |
 
 ### <a name="api-load-testing-gatling"></a>API load testing with Gatling
 
