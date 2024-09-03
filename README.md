@@ -42,6 +42,7 @@ Date | Change
 10.12.2023 | Upgraded to Java 21.
 03.01.2024 | Added roles/servicedirectory.editor in Setup for GitHub Actions workflows.
 02.06.2024 | Upgraded to Spring Boot 3.3.0.
+03.09.2024 | Added port 8457/30457 used by Keycloak management interface for Kubernetes readiness/liveness probes.
 
 ## Contents
 
@@ -262,16 +263,16 @@ Configuration is served by the configuration server. The URL of the configuratio
 
 The port numbers are:
 
-Microservice | http port | https port | Note
------------- | --------- | ---------- | ----------
-gateway | - | 8443 | gateway is based on Spring Cloud Gateway running Netty under the hood. Netty only supports a single port in one and the same application, hence gateway has no port to spare for http.
-location | 8081 | 8444 |
-order | 8082 | 8445 |
-creditrating | 8083 | 8446 |
-configserver | 8091 | 8454 |
-discovery | 8092 | 8455 |
-authserver | 8092 | 8456 |
-database | 27017 | 27017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 8443 | | gateway is based on Spring Cloud Gateway running Netty under the hood. Netty only supports a single port in one and the same application, hence gateway has no port to spare for http.
+location | 8081 | 8444 | |
+order | 8082 | 8445 | |
+creditrating | 8083 | 8446 | |
+configserver | 8091 | 8454 | |
+discovery | 8092 | 8455 | |
+authserver | 8092 | 8456 | 8457 |
+database | 27017 | 27017 | |
 
 ## <a name="setting-up-database"></a>Setting up the database
 
@@ -919,16 +920,16 @@ As usual, run `gcloud compute disks list` to get an EXTERNAL_IP of one of the cr
 
 #### Summary of external port numbers
 
-Microservice | http port | https port
------------- | --------- | ----------
-gateway | - | 30443
-location | 30081 | 30444
-order | 30082 | 30445
-creditrating | 30083 | 30446
-configserver | 30091 | 30454
-discovery | 30092 | 30455
-authserver | 30093 | 30456
-database | 30017 | 30017
+Microservice | http port | https port | https mgmt port
+------------ | --------- | ---------- | ---------------
+gateway | - | 30443 |
+location | 30081 | 30444 |
+order | 30082 | 30445 |
+creditrating | 30083 | 30446 |
+configserver | 30091 | 30454 |
+discovery | 30092 | 30455 |
+authserver | 30093 | 30456 | 30457
+database | 30017 | 30017 |
 
 ### <a name="microcoffee-on-eks"></a>Microcoffee on Amazon Elastic Kubernetes Service (EKS)
 
@@ -1189,16 +1190,16 @@ In addition to the managed policies above, create the following inline policy to
 
 #### Summary of external port numbers
 
-Microservice | http port | https port | Comment
------------- | --------- | ---------- | -------
-gateway | - | 443/30443 | Load balancer: 443, Node port: 30443
-location | 30081 | 30444 |
-order | 30082 | 30445 |
-creditrating | 30083 | 30446 |
-configserver | 30091 | 30454 |
-discovery | 30092 | 30455 |
-authserver | 30093 | 30456 |
-database | 30017 | 30017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 443/30443 | | Load balancer: 443, Node port: 30443
+location | 30081 | 30444 | |
+order | 30082 | 30445 | |
+creditrating | 30083 | 30446 | |
+configserver | 30091 | 30454 | |
+discovery | 30092 | 30455 | |
+authserver | 30093 | 30456 | 30457
+database | 30017 | 30017 | |
 
 #### Overview of AWS dashboards
 
@@ -1410,16 +1411,16 @@ Verify that both the resource group and the node resource group of Microcoffee a
 
 #### Summary of external port numbers
 
-Microservice | http port | https port | Comment
------------- | --------- | ---------- | -------
-gateway | - | 8443 |
-location | 8081 | 8444 |
-order | 8082 | 8445 |
-creditrating | 8083 | 8446 |
-configserver | 8091 | 8454 |
-discovery | 8092 | 8455 | NodePort => No external IP.
-authserver | 8093 | 8456 |
-database | 27017 | 27017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 8443 | |
+location | 8081 | 8444 | |
+order | 8082 | 8445 | |
+creditrating | 8083 | 8446 | |
+configserver | 8091 | 8454 | |
+discovery | 8092 | 8455 | | NodePort => No external IP.
+authserver | 8093 | 8456 | 8457
+database | 27017 | 27017 | |
 
 Only LoadBalancer services are externally available.
 
@@ -1542,16 +1543,16 @@ As usual, run `gsudo minikube ip` to get the NODE_IP of the Minikube cluster.
 
 #### Summary of port numbers
 
-Microservice | http port | https port
------------- | --------- | ----------
-gateway | - | 30443
-location | 30081 | 30444
-order | 30082 | 30445
-creditrating | 30083 | 30446
-configserver | 30091 | 30454
-discovery | 30092 | 30455
-authserver | 30093 | 30456
-database | 27017 | 27017
+Microservice | http port | https port | https mgmt port
+------------ | --------- | ---------- | ---------------
+gateway | - | 30443 |
+location | 30081 | 30444 |
+order | 30082 | 30445 |
+creditrating | 30083 | 30446 |
+configserver | 30091 | 30454 |
+discovery | 30092 | 30455 |
+authserver | 30093 | 30456 | 30457
+database | 27017 | 27017 |
 
 ### <a name="api-load-testing-gatling"></a>API load testing with Gatling
 
@@ -2092,7 +2093,7 @@ To run Microcoffee, see the main documentation above. To test Microcoffee, open 
 
 When starting Minikube with the docker driver (will be auto-detected by default), we need to expose all ports used by Microcoffee by specifying a number of `--ports` flags on command-line as follows.
 
-    minikube start --ports=27017:27017 --ports=30080:30080 --ports=30081:30081 --ports=30082:30082 --ports=30083:30083 --ports=30091:30091 --ports=30092:30092 --ports=30093:30093 --ports=30443:30443 --ports=30444:30444 --ports=30445:30445 --ports=30446:30446 --ports=30454:30454 --ports=30455:30455 --ports=30456:30456
+    minikube start --ports=27017:27017 --ports=30080:30080 --ports=30081:30081 --ports=30082:30082 --ports=30083:30083 --ports=30091:30091 --ports=30092:30092 --ports=30093:30093 --ports=30443:30443 --ports=30444:30444 --ports=30445:30445 --ports=30446:30446 --ports=30454:30454 --ports=30455:30455 --ports=30456:30456 --ports=30457:30457
 
 :warning: Port mappings cannot be changed once the Minikube cluster is created. Any `--ports` flags specified are ignored when starting an existing cluster. To change the port mappings, delete the cluster first by running `minikube delete`.
 
