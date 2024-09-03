@@ -4,11 +4,17 @@ services:
         ports:
           - "8093:8093"
           - "8456:8456"
+          - "8457:8457"
         environment:
           - KEYCLOAK_ADMIN=admin
           - KEYCLOAK_ADMIN_PASSWORD=admin
         domainname: microcoffee.study
-        entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm", "--http-enabled=true", "--http-port=8093", "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/microcoffee.study.p12", "--https-key-store-password=12345678", "--health-enabled=true"]
+        entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev",
+                     "--import-realm",
+                     "--http-enabled=true", "--http-port=8093",
+                     "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/microcoffee.study.p12", "--https-key-store-password=12345678",
+                     "--http-management-port=8457",
+                     "--health-enabled=true", "--metrics-enabled=true"]
         networks:
             authserver:
                 aliases:

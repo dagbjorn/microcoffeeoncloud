@@ -262,16 +262,16 @@ Configuration is served by the configuration server. The URL of the configuratio
 
 The port numbers are:
 
-Microservice | http port | https port | Note
------------- | --------- | ---------- | ----------
-gateway | - | 8443 | gateway is based on Spring Cloud Gateway running Netty under the hood. Netty only supports a single port in one and the same application, hence gateway has no port to spare for http.
-location | 8081 | 8444 |
-order | 8082 | 8445 |
-creditrating | 8083 | 8446 |
-configserver | 8091 | 8454 |
-discovery | 8092 | 8455 |
-authserver | 8092 | 8456 |
-database | 27017 | 27017 |
+Microservice | http port | https port | https mgmt port | Note
+------------ | --------- | ---------- | --------------- | ----
+gateway | - | 8443 | | gateway is based on Spring Cloud Gateway running Netty under the hood. Netty only supports a single port in one and the same application, hence gateway has no port to spare for http.
+location | 8081 | 8444 | |
+order | 8082 | 8445 | |
+creditrating | 8083 | 8446 | |
+configserver | 8091 | 8454 | |
+discovery | 8092 | 8455 | |
+authserver | 8092 | 8456 | 8457 |
+database | 27017 | 27017 | |
 
 ## <a name="setting-up-database"></a>Setting up the database
 
