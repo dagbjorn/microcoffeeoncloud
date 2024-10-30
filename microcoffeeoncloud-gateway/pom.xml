@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
 
@@ -44,12 +44,12 @@
         <bootstrap.version>5.3.3</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
-        <node.version>v22.6.0</node.version>
-        <npm.version>10.8.1</npm.version>
+        <node.version>v23.1.0</node.version>
+        <npm.version>10.9.0</npm.version>
 
         <!-- Plugin versions -->
-        <docker-maven-plugin.version>0.45.0</docker-maven-plugin.version>
-        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
+        <docker-maven-plugin.version>0.45.1</docker-maven-plugin.version>
+        <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
         <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
