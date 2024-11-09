@@ -52,8 +52,8 @@ import study.microcoffee.order.consumer.creditrating.BasicRestClientCreditRating
 import study.microcoffee.order.consumer.creditrating.BasicRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.BasicWebClientCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.CreditRating;
-import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCreditRatingConsumer;
+import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 
@@ -169,7 +169,7 @@ class OrderControllerRestTemplateIT {
 
     @Test
     @EnabledIf("isBasicConsumer")
-    void createOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFail() {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -181,7 +181,7 @@ class OrderControllerRestTemplateIT {
 
     @Test
     @EnabledIf("isResilience4jConsumer")
-    void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() {
         float currentFailedWithRetryCount = getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
@@ -195,7 +195,7 @@ class OrderControllerRestTemplateIT {
     }
 
     @Test
-    void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
+    void getOrderWhenNoOrderShouldReturnNoContent() {
         String orderId = "1111111111111111";
 
         ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID,
@@ -208,7 +208,7 @@ class OrderControllerRestTemplateIT {
     // Helper methods
     //
 
-    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) throws JsonProcessingException {
+    private HttpEntity<OrderModel> createRequestEntity(OrderModel order) {
         String csrfToken = getCurrentCsrfTokenFromApi();
 
         HttpHeaders headers = new HttpHeaders();
@@ -230,7 +230,7 @@ class OrderControllerRestTemplateIT {
     /**
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
-    private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
+    private String getCurrentCsrfTokenFromApi() {
         ResponseEntity<OrderModel> response = restTemplate.getForEntity(GET_SERVICE_PATH, OrderModel.class, COFFEE_SHOP_ID, "123");
 
         List<String> csrfTokenList = response.getHeaders().getValuesAsList("X-XSRF-TOKEN");

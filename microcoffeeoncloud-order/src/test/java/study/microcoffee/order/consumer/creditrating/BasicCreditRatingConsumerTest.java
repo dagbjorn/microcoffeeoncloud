@@ -8,7 +8,6 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Assertions;
@@ -63,7 +62,7 @@ class BasicCreditRatingConsumerTest {
     }
 
     @Test
-    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() {
         final String customerId = "john@company.com";
 
         server.expect(once(), requestTo(buildServiceUrl(customerId))) //
@@ -76,7 +75,7 @@ class BasicCreditRatingConsumerTest {
     }
 
     @Test
-    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() {
         final String customerId = "john@company.com";
 
         server.expect(once(), requestTo(buildServiceUrl(customerId))) //
@@ -88,7 +87,7 @@ class BasicCreditRatingConsumerTest {
         });
     }
 
-    private String buildServiceUrl(String customerId) throws UnsupportedEncodingException {
+    private String buildServiceUrl(String customerId) {
         UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
             .path("/api/coffeeshop/creditrating") //
             .pathSegment(UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name())) //
