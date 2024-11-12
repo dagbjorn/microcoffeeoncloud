@@ -31,6 +31,7 @@ import study.microcoffee.creditrating.domain.CreditRating;
 @RestController
 @RequestMapping(path = "/api/coffeeshop", produces = { MediaType.APPLICATION_JSON_VALUE })
 @Tag(name = SwaggerConfig.CREDIT_RATING_TAG)
+@SuppressWarnings("squid:S1135") // Allow TODOs
 public class CreditRatingController {
 
     private Logger logger = LoggerFactory.getLogger(CreditRatingController.class);

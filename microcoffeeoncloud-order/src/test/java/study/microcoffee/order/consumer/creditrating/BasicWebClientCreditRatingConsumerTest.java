@@ -74,7 +74,7 @@ class BasicWebClientCreditRatingConsumerTest {
     }
 
     @Test
-    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus500ShouldThrowServiceCallFailed() {
         final String customerId = "john@company.com";
 
         server.enqueue(new MockResponse() //
@@ -86,7 +86,7 @@ class BasicWebClientCreditRatingConsumerTest {
     }
 
     @Test
-    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() throws Exception {
+    void getCreateRatingWhenHttpStatus204ShouldThrowServiceCallFailed() {
         final String customerId = "john@company.com";
 
         server.enqueue(new MockResponse() //

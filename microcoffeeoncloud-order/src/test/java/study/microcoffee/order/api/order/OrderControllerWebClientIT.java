@@ -182,7 +182,7 @@ class OrderControllerWebClientIT {
 
     @Test
     @EnabledIf("isBasicConsumer")
-    void createOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFail() {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -223,7 +223,7 @@ class OrderControllerWebClientIT {
     }
 
     @Test
-    void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
+    void getOrderWhenNoOrderShouldReturnNoContent() {
         String orderId = "1111111111111111";
 
         webTestClient.get() //
@@ -249,7 +249,7 @@ class OrderControllerWebClientIT {
     /**
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
-    private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
+    private String getCurrentCsrfTokenFromApi() {
         EntityExchangeResult<OrderModel> response = webTestClient.get() //
             .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
             .accept(MediaType.APPLICATION_JSON) //

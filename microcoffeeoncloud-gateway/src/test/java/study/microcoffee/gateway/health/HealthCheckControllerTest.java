@@ -12,7 +12,7 @@ class HealthCheckControllerTest {
     private WebTestClient client = WebTestClient.bindToController(new HealthCheckController()).build();
 
     @Test
-    void isReadyShouldSucceed() throws Exception {
+    void isReadyShouldSucceed() {
         client.get().uri("/internal/isready") //
             .accept(MediaType.ALL) //
             .exchange() //
@@ -20,7 +20,7 @@ class HealthCheckControllerTest {
     }
 
     @Test
-    void isAliveShouldSucceed() throws Exception {
+    void isAliveShouldSucceed() {
         client.get().uri("/internal/isalive") //
             .accept(MediaType.ALL) //
             .exchange() //

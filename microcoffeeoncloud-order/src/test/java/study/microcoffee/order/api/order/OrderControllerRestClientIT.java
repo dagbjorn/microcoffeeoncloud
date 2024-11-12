@@ -179,7 +179,7 @@ class OrderControllerRestClientIT {
 
     @Test
     @EnabledIf("isBasicConsumer")
-    void createOrderWhenCreditRatingNotAvailableShouldFail() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFail() {
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(status(HttpStatus.SERVICE_UNAVAILABLE.value())));
 
@@ -197,7 +197,7 @@ class OrderControllerRestClientIT {
 
     @Test
     @EnabledIf("isResilience4jConsumer")
-    void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
+    void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() {
         float currentFailedWithRetryCount = getMetricValueFromPrometheus(PROMETHEUS_METRIC_FAILED_WITH_RETRY);
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
@@ -216,7 +216,7 @@ class OrderControllerRestClientIT {
     }
 
     @Test
-    void getOrderWhenNoOrderShouldReturnNoContent() throws Exception {
+    void getOrderWhenNoOrderShouldReturnNoContent() {
         String orderId = "1111111111111111";
 
         ResponseEntity<Void> response = restClient.get() //
@@ -231,7 +231,7 @@ class OrderControllerRestClientIT {
     // Helper methods
     //
 
-    private HttpHeaders createHeaders() throws JsonProcessingException {
+    private HttpHeaders createHeaders() {
         String csrfToken = getCurrentCsrfTokenFromApi();
 
         HttpHeaders headers = new HttpHeaders();
@@ -253,7 +253,7 @@ class OrderControllerRestClientIT {
     /**
      * Gets the current CSRF token by doing a GET operation to the API. The CSRF token is returned in a X-XSRF-TOKEN header.
      */
-    private String getCurrentCsrfTokenFromApi() throws JsonProcessingException {
+    private String getCurrentCsrfTokenFromApi() {
         ResponseEntity<OrderModel> response = restClient.get() //
             .uri(GET_SERVICE_PATH, COFFEE_SHOP_ID, "123") //
             .retrieve() //

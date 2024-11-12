@@ -130,7 +130,7 @@ class CreditRatingControllerIT {
     }
 
     @Test
-    void getCreditRatingWhenExpiredTokenShouldReturn401() throws Exception {
+    void getCreditRatingWhenExpiredTokenShouldReturn401() {
         HttpEntity<Void> entity = createHttpEntity(TestTokens.Access.expired());
 
         ResponseEntity<CreditRating> response = restTemplate.exchange(SERVICE_PATH, HttpMethod.GET, entity, CreditRating.class,

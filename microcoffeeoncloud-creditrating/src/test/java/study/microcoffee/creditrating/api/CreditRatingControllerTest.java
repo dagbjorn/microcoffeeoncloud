@@ -48,7 +48,7 @@ class CreditRatingControllerTest {
 
         mockMvc.perform(get(SERVICE_PATH, 123) //
             .accept(MediaType.APPLICATION_JSON_VALUE) //
-            .with(jwt().jwt((jwt) -> jwt.claim("scope", "creditrating")))) //
+            .with(jwt().jwt(jwt -> jwt.claim("scope", "creditrating")))) //
             // OR .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_creditrating")))) //
             .andExpect(status().isOk()) //
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)) //
