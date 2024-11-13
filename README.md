@@ -1611,7 +1611,9 @@ Run > Edit Configurations... > + (Add New Configuration) > Application
 * Name: OrderApiTest
 * Main class: study.microcoffee.scenario.OrderApiTestRunner
 * Modify options > Add VM options
-    * VM options: -Dapp.baseUrl=https\://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10
+  - VM options: `--add-opens=java.base/java.lang=ALL-UNNAMED -Dapp.baseUrl=https\://localhost:8443 -Dtest.numberOfUsers=1 -Dtest.durationMinutes=0 -Dtest.durationSeconds=10`
+
+:point_right: The VM option `--add-opens=java.base/java.lang=ALL-UNNAMED` is required starting from Gatling 3.13.
 
 #### Test report
 
