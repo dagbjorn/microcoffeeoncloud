@@ -9,7 +9,6 @@ class LocationApiTest extends Simulation {
 
   private val baseUrl: String = readProperty("app.baseUrl")
   private val numberOfUsers: Int = readProperty("test.numberOfUsers", "1").toInt
-  private val durationMinutes: Int = readProperty("test.durationMinutes", "1").toInt
   private val durationSeconds: Int = readDurationAsSeconds("test.durationMinutes", "test.durationSeconds", "1")
 
   println(s"baseUrl: $baseUrl")

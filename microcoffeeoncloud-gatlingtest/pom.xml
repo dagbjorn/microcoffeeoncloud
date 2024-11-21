@@ -14,12 +14,12 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 
-		<gatling.version>3.11.3</gatling.version>
+		<gatling.version>3.13.1</gatling.version>
 		<json4s-jackson.version>4.0.7</json4s-jackson.version>
 
 		<build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
-		<gatling-maven-plugin.version>4.9.1</gatling-maven-plugin.version>
-		<scala-maven-plugin.version>4.9.1</scala-maven-plugin.version>
+		<gatling-maven-plugin.version>4.10.2</gatling-maven-plugin.version>
+		<scala-maven-plugin.version>4.9.2</scala-maven-plugin.version>
 	</properties>
 
 	<dependencies>
