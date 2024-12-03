@@ -43,6 +43,7 @@ Date | Change
 03.01.2024 | Added roles/servicedirectory.editor in Setup for GitHub Actions workflows.
 02.06.2024 | Upgraded to Spring Boot 3.3.0.
 03.09.2024 | Added port 8457/30457 used by Keycloak management interface for Kubernetes readiness/liveness probes.
+03.12.2024 | Upgraded to Spring Boot 3.4.0 and Spring Cloud 2024.0.0.
 
 ## Contents
 
