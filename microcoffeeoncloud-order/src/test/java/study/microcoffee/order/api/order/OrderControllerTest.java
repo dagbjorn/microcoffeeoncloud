@@ -18,11 +18,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,10 +52,10 @@ class OrderControllerTest {
 
     private static final int COFFEE_SHOP_ID = 10;
 
-    @MockBean
+    @MockitoBean
     private OrderRepository orderRepositoryMock;
 
-    @MockBean()
+    @MockitoBean()
     @Qualifier(OrderController.CREDIT_RATING_CONSUMER)
     private CreditRatingConsumer creditRatingCustomerMock;
 

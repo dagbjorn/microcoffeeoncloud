@@ -7,10 +7,11 @@ import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
 import org.apache.hc.client5.http.ssl.DefaultHostnameVerifier;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.Timeout;
 
 /**
@@ -57,9 +58,7 @@ public class HttpClientFactory {
                 .setConnectionRequestTimeout(Timeout.ofSeconds(timeout)) //
                 .build()) //
             .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create() //
-                .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create() //
-                    .setHostnameVerifier(hostnameVerifier) //
-                    .build()) //
+                .setTlsSocketStrategy(new DefaultClientTlsStrategy(SSLContexts.createSystemDefault(), hostnameVerifier)) //
                 .setDefaultSocketConfig(SocketConfig.custom() //
                     .setSoTimeout(Timeout.ofSeconds(timeout)) //
                     .build()) //

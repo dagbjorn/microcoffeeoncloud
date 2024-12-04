@@ -88,7 +88,7 @@ class Resilience4JCreditRatingConsumerTest {
     }
 
     private String buildServiceUrl(String customerId) {
-        UriComponents serviceUrl = UriComponentsBuilder.fromHttpUrl(CREDITRATING_SERVICE_URL) //
+        UriComponents serviceUrl = UriComponentsBuilder.fromUriString(CREDITRATING_SERVICE_URL) //
             .path("/api/coffeeshop/creditrating") //
             .pathSegment(UriUtils.encodePathSegment(customerId, StandardCharsets.UTF_8.name())) //
             .build();
