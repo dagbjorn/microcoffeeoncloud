@@ -123,7 +123,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
     }
 
     private void formatBody(StringBuilder builder, String body) {
-        if (body.length() > 0) {
+        if (!body.isEmpty()) {
             builder.append(body);
             builder.append(lineTerminator);
         }
