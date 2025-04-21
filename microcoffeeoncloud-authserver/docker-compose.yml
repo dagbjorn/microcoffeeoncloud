@@ -6,8 +6,8 @@ services:
           - "8456:8456"
           - "8457:8457"
         environment:
-          - KEYCLOAK_ADMIN=admin
-          - KEYCLOAK_ADMIN_PASSWORD=admin
+          - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+          - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
         domainname: microcoffee.study
         entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev",
                      "--import-realm",
