@@ -2,10 +2,10 @@
 
 setlocal
 
-set KEYCLOAK_HOME=D:\bin\keycloak-25.0.4
+set KEYCLOAK_HOME=D:\bin\keycloak-26.2.0
 
-set KEYCLOAK_ADMIN=admin
-set KEYCLOAK_ADMIN_PASSWORD=admin
+set KC_BOOTSTRAP_ADMIN_USERNAME=admin
+set KC_BOOTSTRAP_ADMIN_PASSWORD=admin
 
 copy target\keystore\localhost.p12 %KEYCLOAK_HOME%\.
 
