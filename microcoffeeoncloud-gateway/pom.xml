@@ -44,8 +44,8 @@
         <bootstrap.version>5.3.5</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
-        <node.version>v23.11.0</node.version>
-        <npm.version>10.9.2</npm.version>
+        <node.version>v24.1.0</node.version>
+        <npm.version>11.3.0</npm.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.46.0</docker-maven-plugin.version>
