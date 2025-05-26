@@ -12,7 +12,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.6.1",
     "reactstrap": "^9.2.3",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^5.0.1"
   },
   "devDependencies": {
     "react-scripts": "5.0.1"
