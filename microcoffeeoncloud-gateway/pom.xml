@@ -41,7 +41,7 @@
         <!-- Angular -->
         <angularjs.version>1.8.2</angularjs.version> <!-- Keep 1.8.2 (1.8.3 jar is not found) -->
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
-        <bootstrap.version>5.3.5</bootstrap.version>
+        <bootstrap.version>5.3.7</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
         <node.version>v24.1.0</node.version>
