@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.4</version>
         <relativePath/>
     </parent>
 
@@ -36,16 +36,16 @@
 
         <spring-cloud.version>2025.0.0</spring-cloud.version>
 
-        <springdoc-openapi.version>2.8.8</springdoc-openapi.version>
+        <springdoc-openapi.version>2.8.9</springdoc-openapi.version>
 
         <!-- Angular -->
         <angularjs.version>1.8.2</angularjs.version> <!-- Keep 1.8.2 (1.8.3 jar is not found) -->
         <angular-ui-bootstrap.version>2.5.6</angular-ui-bootstrap.version>
-        <bootstrap.version>5.3.5</bootstrap.version>
+        <bootstrap.version>5.3.7</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
-        <node.version>v24.1.0</node.version>
-        <npm.version>11.3.0</npm.version>
+        <node.version>v24.5.0</node.version>
+        <npm.version>11.5.1</npm.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.46.0</docker-maven-plugin.version>
