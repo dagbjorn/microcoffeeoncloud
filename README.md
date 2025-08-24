@@ -187,7 +187,8 @@ For building and testing the application on Windows, Docker Desktop with the WSL
         wsl --unregister docker-desktop
         wsl --unregister docker-desktop-data
 
-In addition, you'll need the basic Java development tools (IDE w/ Java 17 and Maven) installed on your development machine.
+In addition, you'll need the basic Java development tools (IDE w/ Java 21 and Maven) as well as Groovy 5 installed on your
+development machine.
 
 You will also need OpenSSL 3.x to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
 
