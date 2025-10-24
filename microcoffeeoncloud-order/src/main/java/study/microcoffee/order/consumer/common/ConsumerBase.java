@@ -18,7 +18,7 @@ public class ConsumerBase {
     public String getReasonPhrase(HttpStatusCode statusCode) {
         try {
             return HttpStatus.valueOf(statusCode.value()).getReasonPhrase();
-        } catch (Exception e) {
+        } catch (Exception _) {
             return "";
         }
     }
