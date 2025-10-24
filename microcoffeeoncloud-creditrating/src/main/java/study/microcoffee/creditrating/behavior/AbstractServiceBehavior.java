@@ -17,7 +17,7 @@ public abstract class AbstractServiceBehavior implements ServiceBehavior {
     protected void sleep(int delayMillisecs) {
         try {
             Thread.sleep(delayMillisecs);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
             Thread.currentThread().interrupt();
         }
     }

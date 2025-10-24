@@ -122,7 +122,7 @@ public class JettyHttpClientLogEnhancer {
             String headerName = header.getName();
             String[] values = header.getValues();
 
-            builder.append(headerName + ": ");
+            builder.append(headerName).append(": ");
 
             for (int i = 0; i < values.length; i++) {
                 if (i > 0) {
@@ -187,7 +187,7 @@ public class JettyHttpClientLogEnhancer {
     }
 
     private void logFailure(StringBuilder builder, int logSequence, Throwable e) {
-        if (builder.length() > 0) {
+        if (!builder.isEmpty()) {
             log.debug("[{}]{}{}", logSequence, lineTerminator, builder.toString());
         }
         log.error("[" + logSequence + "]", e);

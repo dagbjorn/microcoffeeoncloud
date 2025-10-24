@@ -145,7 +145,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
                     Object object = objectMapper.readValue(payload, Object.class);
                     payload = lineTerminator + objectMapper.writeValueAsString(object);
                 }
-            } catch (IOException ex) {
+            } catch (IOException _) {
                 payload = "[unknown]";
             }
 
@@ -201,7 +201,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
                 // Don't forget this; otherwise there will be no response data to return to the consumer.
                 wrappedResponse.copyBodyToResponse();
-            } catch (IOException ex) {
+            } catch (IOException _) {
                 payload = "[unknown]";
             }
 
