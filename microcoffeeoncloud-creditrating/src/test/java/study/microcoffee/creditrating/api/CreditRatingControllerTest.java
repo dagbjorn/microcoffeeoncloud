@@ -8,12 +8,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,6 +30,7 @@ import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
  * Unit tests of {@link CreditRatingController}.
  */
 @WebMvcTest(CreditRatingController.class)
+@EnableWebSecurity
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, SecurityTestConfig.class, SecurityConfig.class })

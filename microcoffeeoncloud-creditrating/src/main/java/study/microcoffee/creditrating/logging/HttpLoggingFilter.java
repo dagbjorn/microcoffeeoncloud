@@ -68,7 +68,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
         HttpServletRequest requestToUse = request;
         if (!(request instanceof ContentCachingRequestWrapper)) {
-            requestToUse = new ContentCachingRequestWrapper(request);
+            requestToUse = new ContentCachingRequestWrapper(request, 0);
         }
 
         HttpServletResponse responseToUse = response;
@@ -223,7 +223,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             return;
         }
 
-        for (Entry<String, List<String>> header : headers.entrySet()) {
+        for (Entry<String, List<String>> header : headers.asMultiValueMap().entrySet()) {
             String headerName = header.getKey();
             List<String> values = header.getValue();
 
