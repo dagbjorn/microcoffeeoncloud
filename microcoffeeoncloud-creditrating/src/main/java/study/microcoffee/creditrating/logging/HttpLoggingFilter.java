@@ -223,7 +223,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             return;
         }
 
-        for (Entry<String, List<String>> header : headers.asMultiValueMap().entrySet()) {
+        for (Entry<String, List<String>> header : headers.headerSet()) {
             String headerName = header.getKey();
             List<String> values = header.getValue();
 
