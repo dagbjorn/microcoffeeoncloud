@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 /**
  * Integration tests of {@link MenuController} based on {@link RestClient}.
  */
+@Disabled("Flapdoodle Embedded MongoDB still doesn't support Spring Boot 4")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server.ssl.enabled=false")
 @TestPropertySource("/application-test.properties")
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })

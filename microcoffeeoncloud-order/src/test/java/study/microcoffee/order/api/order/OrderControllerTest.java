@@ -17,10 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,6 +43,7 @@ import study.microcoffee.order.repository.OrderRepository;
  * Unit tests of {@link OrderController}.
  */
 @WebMvcTest(OrderController.class)
+@EnableWebSecurity
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class,
     SecurityConfig.class })
