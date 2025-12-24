@@ -17,13 +17,12 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Simple logging filter for HTTP server request and response logging.
@@ -54,7 +53,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
     private final Logger log = LoggerFactory.getLogger(HttpLoggingFilter.class);
 
-    private ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    private JsonMapper jsonMapper = JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
 
     private boolean formattedLogging;
 
@@ -142,8 +141,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
                 if (isFormattedLogging()
                     && doesContentTypeStartWith(wrappedRequest.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
-                    Object object = objectMapper.readValue(payload, Object.class);
-                    payload = lineTerminator + objectMapper.writeValueAsString(object);
+                    Object object = jsonMapper.readValue(payload, Object.class);
+                    payload = lineTerminator + jsonMapper.writeValueAsString(object);
                 }
             } catch (IOException _) {
                 payload = "[unknown]";
@@ -195,8 +194,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
                 if (isFormattedLogging()
                     && doesContentTypeStartWith(wrappedResponse.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
-                    Object object = objectMapper.readValue(payload, Object.class);
-                    payload = lineTerminator + objectMapper.writeValueAsString(object);
+                    Object object = jsonMapper.readValue(payload, Object.class);
+                    payload = lineTerminator + jsonMapper.writeValueAsString(object);
                 }
 
                 // Don't forget this; otherwise there will be no response data to return to the consumer.

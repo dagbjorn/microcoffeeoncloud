@@ -18,13 +18,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import study.microcoffee.creditrating.SecurityConfig;
 import study.microcoffee.creditrating.SecurityTestConfig;
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
 import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests of {@link CreditRatingController}.
@@ -41,12 +40,9 @@ class CreditRatingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
     void getCreditRatingShouldReturnRating() throws Exception {
-        final String expectedContent = objectMapper.writeValueAsString(new CreditRating(70));
+        final String expectedContent = JsonMapper.shared().writeValueAsString(new CreditRating(70));
 
         mockMvc.perform(get(SERVICE_PATH, 123) //
             .accept(MediaType.APPLICATION_JSON_VALUE) //

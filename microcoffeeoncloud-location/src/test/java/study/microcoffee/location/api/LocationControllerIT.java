@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
@@ -24,9 +23,8 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 /**
  * Integration tests of {@link LocationController}.
  */
-@Disabled("Flapdoodle Embedded MongoDB still doesn't support Spring Boot 4")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
+@TestPropertySource(locations = "/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
 @DirtiesContext // Fixes "Address already in use: bind" for port 8081
