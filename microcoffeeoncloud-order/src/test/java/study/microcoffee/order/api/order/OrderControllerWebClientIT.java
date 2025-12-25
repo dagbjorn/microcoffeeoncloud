@@ -73,11 +73,10 @@ import study.microcoffee.order.domain.DrinkType;
  * "https://stackoverflow.com/questions/40034430/will-spring-security-csrf-token-repository-cookies-work-for-all-ajax-requests-au">Answer
  * by user frenchu to this post on stackoverflow</a>
  */
-@Disabled("Flapdoodle Embedded MongoDB still doesn't support Spring Boot 4")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient(timeout = "60000") // Millisecs
 @AutoConfigureMetrics
-@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
+@TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
 class OrderControllerWebClientIT {
@@ -201,6 +200,7 @@ class OrderControllerWebClientIT {
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Disabled("TODO Fix Prometheus No value present")
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {

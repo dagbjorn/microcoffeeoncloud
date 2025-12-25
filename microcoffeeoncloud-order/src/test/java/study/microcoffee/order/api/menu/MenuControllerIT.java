@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -28,8 +28,8 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 /**
  * Integration tests of {@link MenuController}.
  */
-@Disabled("Flapdoodle Embedded MongoDB still doesn't support Spring Boot 4")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 @TestPropertySource("/application-test.properties")
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")

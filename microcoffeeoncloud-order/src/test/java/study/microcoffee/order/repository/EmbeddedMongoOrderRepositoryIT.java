@@ -21,7 +21,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  * <p>
  * The @DataMongoTest annotation will scan for @Document classes and Spring {@link Repository} classes.
  */
-@Disabled("Flapdoodle Embedded MongoDB still doesn't support Spring Boot 4")
+@Disabled("Doesn't autoconfigure and start Embedded MongoDB with Spring Boot 4 and de.flapdoodle.embed.mongo.spring4x")
 @DataMongoTest
 @TestPropertySource("/application-test.properties")
 @Import(DiscoveryTestConfig.class)

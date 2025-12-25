@@ -4,7 +4,7 @@ setlocal
 
 set ACTIVE_SPRING_PROFILES=devlocal
 set SPRING_CLOUD_CONFIG_URI=https://localhost:8454
-set ORDER_CLIENT_SECRET=C4hDSopivf8XoZluQcAcHx1kldtKGoQ8
+set ORDER_CLIENT_SECRET=XdXha0JVCrnXhn7is879g81tbZn3oDAG
 
 mvn spring-boot:run -Dspring-boot.run.profiles=%ACTIVE_SPRING_PROFILES%
 
