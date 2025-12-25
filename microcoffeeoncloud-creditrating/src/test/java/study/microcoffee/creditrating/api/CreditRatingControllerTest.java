@@ -8,27 +8,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import study.microcoffee.creditrating.SecurityConfig;
 import study.microcoffee.creditrating.SecurityTestConfig;
 import study.microcoffee.creditrating.behavior.ServiceBehaviorFactory;
 import study.microcoffee.creditrating.domain.CreditRating;
 import study.microcoffee.creditrating.logging.HttpLoggingFilterTestConfig;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests of {@link CreditRatingController}.
  */
 @WebMvcTest(CreditRatingController.class)
+@EnableWebSecurity
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, SecurityTestConfig.class, SecurityConfig.class })
@@ -39,12 +40,9 @@ class CreditRatingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
     void getCreditRatingShouldReturnRating() throws Exception {
-        final String expectedContent = objectMapper.writeValueAsString(new CreditRating(70));
+        final String expectedContent = JsonMapper.shared().writeValueAsString(new CreditRating(70));
 
         mockMvc.perform(get(SERVICE_PATH, 123) //
             .accept(MediaType.APPLICATION_JSON_VALUE) //
