@@ -18,9 +18,9 @@ public class Resilience4JRestClientCreditRatingConsumer extends BasicRestClientC
 
     public static final String CONSUMER_TYPE = "resilience4JRestClient";
 
-    public Resilience4JRestClientCreditRatingConsumer(@Qualifier("discoveryRestClientBuilder") RestClient.Builder restClientBuilder,
+    public Resilience4JRestClientCreditRatingConsumer(@Qualifier("discoveryRestClient") RestClient restClient,
         @Value("${app.creditrating.url}") String baseUrl) {
-        super(restClientBuilder, baseUrl);
+        super(restClient, baseUrl);
     }
 
     @Override

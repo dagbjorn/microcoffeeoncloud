@@ -18,8 +18,8 @@ public class DiscoveryTestConfig {
     }
 
     @Bean
-    public RestClient.Builder discoveryRestClientBuilder() {
-        return RestClient.builder();
+    public RestClient discoveryRestClient() {
+        return RestClient.builder().build();
     }
 
     @Bean

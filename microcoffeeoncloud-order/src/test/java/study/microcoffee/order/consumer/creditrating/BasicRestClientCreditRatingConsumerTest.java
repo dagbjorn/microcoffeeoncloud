@@ -44,7 +44,7 @@ class BasicRestClientCreditRatingConsumerTest {
     void setUp() {
         server = MockRestServiceServer.bindTo(restClientBuilder).build();
 
-        creditRatingConsumer = new BasicRestClientCreditRatingConsumer(restClientBuilder, CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new BasicRestClientCreditRatingConsumer(restClientBuilder.build(), CREDITRATING_SERVICE_URL);
     }
 
     @Test

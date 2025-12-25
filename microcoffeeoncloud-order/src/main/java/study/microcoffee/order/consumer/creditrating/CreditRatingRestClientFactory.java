@@ -27,22 +27,22 @@ import study.microcoffee.order.consumer.common.oauth2.OAuth2TokenInterceptor;
 public class CreditRatingRestClientFactory {
 
     @Bean
-    public RestClient.Builder basicRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient basicRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout);
     }
 
     @LoadBalanced
     @Bean
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
-    public RestClient.Builder discoveryRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient discoveryRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout);
     }
 
-    private RestClient.Builder createRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
+    private RestClient createRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, int timeout) {
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
@@ -53,6 +53,7 @@ public class CreditRatingRestClientFactory {
         return RestClient.builder() //
             .requestFactory(new BufferingClientHttpRequestFactory(requestFactory)) //
             .requestInterceptor(new HttpLoggingInterceptor(true)) //
-            .requestInterceptor(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration));
+            .requestInterceptor(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration)) //
+            .build();
     }
 }
