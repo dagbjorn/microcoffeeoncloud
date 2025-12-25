@@ -23,8 +23,8 @@ import study.microcoffee.location.test.utils.MongoDBUtils;
 /**
  * Integration tests of {@link LocationController} based on {@link RestClient}.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server.ssl.enabled=false")
-@TestPropertySource("/application-test.properties")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = "/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
 @DirtiesContext // Fixes "Address already in use: bind" for port 8081

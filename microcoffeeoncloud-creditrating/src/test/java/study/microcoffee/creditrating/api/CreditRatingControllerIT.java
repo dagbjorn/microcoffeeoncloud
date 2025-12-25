@@ -13,8 +13,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,8 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -35,6 +34,7 @@ import study.microcoffee.jwttest.TestTokens;
 import study.microcoffee.jwttest.oidcprovider.model.Jwk;
 import study.microcoffee.jwttest.oidcprovider.model.JwkSet;
 import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Integration tests of {@link CreditRatingController}.
@@ -45,6 +45,7 @@ import study.microcoffee.jwttest.oidcprovider.model.ProviderMetadata;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @DirtiesContext
+@AutoConfigureTestRestTemplate
 class CreditRatingControllerIT {
 
     private static final int WIREMOCK_PORT = 9999;
@@ -64,7 +65,7 @@ class CreditRatingControllerIT {
     private TestRestTemplate restTemplate;
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         wireMockServer.start();
 
         // Client-side configuration (default port is 8080)
@@ -151,13 +152,13 @@ class CreditRatingControllerIT {
     /**
      * Static stubbing of WellKnown API response from WireMock.
      */
-    private static void stubWireMockWellKnownResponse() throws JsonProcessingException {
+    private static void stubWireMockWellKnownResponse() {
         ProviderMetadata expectedMetadata = ProviderMetadata.builder() //
             .issuer(ISSUER) //
             .jwksUri(ISSUER + JWKS_PATH) //
             .build();
 
-        String expectedMetadataBody = new ObjectMapper().writeValueAsString(expectedMetadata);
+        String expectedMetadataBody = JsonMapper.shared().writeValueAsString(expectedMetadata);
 
         stubFor(get(urlEqualTo(WELLKNOWN_PATH)) //
             .willReturn(aResponse() //
@@ -169,7 +170,7 @@ class CreditRatingControllerIT {
     /**
      * Static stubbing of JWKS API response from WireMock.
      */
-    private static void stubWireMockJwksResponse() throws JsonProcessingException {
+    private static void stubWireMockJwksResponse() {
         JwkSet expectedJwkSet = JwkSet.builder() //
             .keys(Arrays.asList(Jwk.builder() //
                 .kty(TestTokens.KEY_TYPE) //
@@ -179,7 +180,7 @@ class CreditRatingControllerIT {
                 .build()))
             .build();
 
-        String expectedJwkSetBody = new ObjectMapper().writeValueAsString(expectedJwkSet);
+        String expectedJwkSetBody = JsonMapper.shared().writeValueAsString(expectedJwkSet);
 
         stubFor(get(urlEqualTo(JWKS_PATH)) //
             .willReturn(aResponse() //
