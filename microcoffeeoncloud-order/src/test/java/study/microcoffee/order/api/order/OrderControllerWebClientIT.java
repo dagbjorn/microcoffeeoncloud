@@ -37,8 +37,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -55,6 +53,7 @@ import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCredi
 import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Integration tests of {@link OrderController} based on {@link WebTestClient}.
@@ -105,7 +104,7 @@ class OrderControllerWebClientIT {
     private WebTestClient webTestClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -136,7 +135,7 @@ class OrderControllerWebClientIT {
     @Test
     void createOrderAndReadBackShouldReturnSavedOrder() throws Exception {
         // WireMock stubbing of CreditRating API
-        final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
+        final String creditRatingResponse = jsonMapper.writeValueAsString(new CreditRating(50));
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(aResponse() //
@@ -314,7 +313,7 @@ class OrderControllerWebClientIT {
     /**
      * Static stubbing of WellKnown API response from WireMock.
      */
-    private static void stubWireMockWellKnownResponse() throws JsonProcessingException {
+    private static void stubWireMockWellKnownResponse() {
         ProviderMetadata expectedMetadata = ProviderMetadata.builder() //
             .issuer(ISSUER) //
             .authorizationEndpoint(ISSUER + AUTHORIZATION_PATH) //
@@ -323,7 +322,7 @@ class OrderControllerWebClientIT {
             .subjectTypesSupported(new String[] { "public" }) //
             .build();
 
-        String expectedMetadataBody = new ObjectMapper().writeValueAsString(expectedMetadata);
+        String expectedMetadataBody = JsonMapper.builder().build().writeValueAsString(expectedMetadata);
 
         stubFor(get(urlEqualTo(WELLKNOWN_PATH)) //
             .willReturn(aResponse() //
@@ -335,14 +334,14 @@ class OrderControllerWebClientIT {
     /**
      * Stubbing of Token API response from WireMock.
      */
-    private void stubWireMockTokenResponse() throws JsonProcessingException {
+    private void stubWireMockTokenResponse() {
         BearerToken bearerToken = BearerToken.builder() //
             .accessToken(TestTokens.Access.valid()) //
             .tokenType("Bearer") //
             .expiresIn(60) //
             .build();
 
-        String expectedTokenBody = objectMapper.writeValueAsString(bearerToken);
+        String expectedTokenBody = jsonMapper.writeValueAsString(bearerToken);
 
         stubFor(post(urlEqualTo(TOKEN_PATH)) //
             .willReturn(aResponse() //
