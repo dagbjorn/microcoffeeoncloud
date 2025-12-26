@@ -181,7 +181,7 @@ class OrderControllerRestTemplateIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @Disabled("TODO Fix Prometheus No value present")
+    @Disabled("Fails with 'No value present' because no Resilience4J metrics are available. Spring Boot 4 not supported yet (ref. https://github.com/resilience4j/resilience4j/issues/2351).")
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() {

@@ -195,7 +195,7 @@ class OrderControllerRestClientIT {
         System.err.println(response.getBody());
     }
 
-    @Disabled("TODO Fix Prometheus No value present")
+    @Disabled("Fails with 'No value present' because no Resilience4J metrics are available. Spring Boot 4 not supported yet (ref. https://github.com/resilience4j/resilience4j/issues/2351).")
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() {
@@ -272,9 +272,11 @@ class OrderControllerRestClientIT {
 
     private float getMetricValueFromPrometheus(String key) {
         ResponseEntity<String> response = restClient.get() //
-            .uri("/actuator/prometheus") //
+            .uri("/actuator/prometheus") // Alt: /actuator/metrics (JSON formatted)
             .retrieve() //
             .toEntity(String.class);
+
+        response.getBody().lines().forEach(System.err::println);
 
         String value = response.getBody().lines().filter(line -> line.startsWith(key)).findFirst().get().split("\\s")[1];
         return Float.valueOf(value);
