@@ -28,10 +28,10 @@ public class BasicRestClientCreditRatingConsumer extends ConsumerBase implements
 
     private String baseUrl;
 
-    public BasicRestClientCreditRatingConsumer(@Qualifier("discoveryRestClient") RestClient restClient,
+    public BasicRestClientCreditRatingConsumer(@Qualifier("discoveryRestClient") RestClient.Builder restClientBuilder,
         @Value("${app.creditrating.url}") String baseUrl) {
 
-        this.restClient = restClient;
+        this.restClient = restClientBuilder.build();
         this.baseUrl = baseUrl;
 
         log.info("app.creditrating.url={}", baseUrl);

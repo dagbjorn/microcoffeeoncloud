@@ -53,7 +53,7 @@ public class CreditRatingRestTemplateFactory {
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("order-service");
 
         RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
-        restTemplate.getInterceptors().add(new HttpLoggingInterceptor(true));
+        restTemplate.getInterceptors().add(new HttpLoggingInterceptor(true, true));
         restTemplate.getInterceptors().add(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration));
         return restTemplate;
     }

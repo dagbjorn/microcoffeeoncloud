@@ -43,7 +43,7 @@ class Resilience4JRestClientCreditRatingConsumerTest {
     void setUp() {
         server = MockRestServiceServer.bindTo(restClientBuilder).build();
 
-        creditRatingConsumer = new Resilience4JRestClientCreditRatingConsumer(restClientBuilder.build(), CREDITRATING_SERVICE_URL);
+        creditRatingConsumer = new Resilience4JRestClientCreditRatingConsumer(restClientBuilder, CREDITRATING_SERVICE_URL);
     }
 
     @Test

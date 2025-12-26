@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -26,24 +26,27 @@ import study.microcoffee.order.consumer.common.oauth2.OAuth2TokenInterceptor;
 @Configuration
 public class CreditRatingRestClientFactory {
 
+    // Defining this bean as @Primary fixes a Spring autowiring issue (two beans found). Ref:
+    // https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/common-abstractions.html#multiple-restclient-objects
+    @Primary
     @Bean
-    public RestClient basicRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient.Builder basicRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
     }
 
     @LoadBalanced
     @Bean
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
-    public RestClient discoveryRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient.Builder discoveryRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout);
+        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
     }
 
-    private RestClient createRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
-        ClientRegistrationRepository clientRegistrationRepository, int timeout) {
+    private RestClient.Builder createRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+        ClientRegistrationRepository clientRegistrationRepository, int timeout, boolean bodyLogging) {
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
@@ -51,9 +54,9 @@ public class CreditRatingRestClientFactory {
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("order-service");
 
         return RestClient.builder() //
-            .requestFactory(new BufferingClientHttpRequestFactory(requestFactory)) //
-            .requestInterceptor(new HttpLoggingInterceptor(true)) //
-            .requestInterceptor(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration)) //
-            .build();
+            .bufferContent((_, _) -> true) //
+            .requestFactory(requestFactory) //
+            .requestInterceptor(new HttpLoggingInterceptor(true, bodyLogging)) //
+            .requestInterceptor(new OAuth2TokenInterceptor(authorizedClientManager, clientRegistration));
     }
 }
