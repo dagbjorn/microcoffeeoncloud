@@ -30,7 +30,7 @@ public class CreditRatingRestClientFactory {
     // https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/common-abstractions.html#multiple-restclient-objects
     @Primary
     @Bean
-    public RestClient.Builder basicRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient.Builder basicRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
         return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
@@ -39,7 +39,7 @@ public class CreditRatingRestClientFactory {
     @LoadBalanced
     @Bean
     @ConditionalOnProperty(value = "eureka.client.enabled", matchIfMissing = true)
-    public RestClient.Builder discoveryRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+    public RestClient.Builder discoveryRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
         return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
