@@ -28,7 +28,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 /**
  * Integration tests of {@link MenuController} based on {@link RestClient}.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server.ssl.enabled=false")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")

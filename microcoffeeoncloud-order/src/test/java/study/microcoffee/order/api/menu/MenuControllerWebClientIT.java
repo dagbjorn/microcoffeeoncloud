@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -27,7 +28,8 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
  * Integration tests of {@link MenuController} based on {@link WebTestClient}.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
+@AutoConfigureWebTestClient
+@TestPropertySource(locations = "/application-test.properties")
 @Import({ DiscoveryTestConfig.class, SecurityTestConfig.class })
 @ActiveProfiles("itest")
 @Profile("itest")

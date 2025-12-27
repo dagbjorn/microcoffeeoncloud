@@ -20,7 +20,7 @@ import study.microcoffee.order.exception.ServiceCallFailedException;
 @Qualifier(BasicRestClientCreditRatingConsumer.CONSUMER_TYPE)
 public class BasicRestClientCreditRatingConsumer extends ConsumerBase implements CreditRatingConsumer {
 
-    public static final String CONSUMER_TYPE = "basicRestClient";
+    public static final String CONSUMER_TYPE = "basicRestClientClient";
 
     public static final String GET_CREDIT_RATING_RESOURCE = "/api/coffeeshop/creditrating/{customerId}";
 

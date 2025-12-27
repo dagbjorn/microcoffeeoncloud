@@ -17,12 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import study.microcoffee.order.exception.ServiceCallFailedException;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests of {@link Resilience4JWebClientCreditRatingConsumer}.
@@ -33,7 +32,7 @@ class Resilience4JWebClientCreditRatingConsumerTest {
 
     private WebClient webClient;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonMapper jsonMapper = JsonMapper.builder().build();
 
     private CreditRatingConsumer creditRatingConsumer;
 
@@ -56,7 +55,7 @@ class Resilience4JWebClientCreditRatingConsumerTest {
     @Test
     void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
         final String customerId = "john@company.com";
-        final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
+        final String expectedContent = jsonMapper.writeValueAsString(new CreditRating(50));
 
         server.enqueue(new MockResponse() //
             .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) //
