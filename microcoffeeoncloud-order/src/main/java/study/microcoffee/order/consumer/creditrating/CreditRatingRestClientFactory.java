@@ -33,7 +33,7 @@ public class CreditRatingRestClientFactory {
     public RestClient.Builder basicRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
+        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout, true);
     }
 
     @LoadBalanced
@@ -42,10 +42,10 @@ public class CreditRatingRestClientFactory {
     public RestClient.Builder discoveryRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, @Value("${app.creditrating.timeout}") int timeout) {
 
-        return createRestClient(authorizedClientManager, clientRegistrationRepository, timeout, true);
+        return createRestClientBuilder(authorizedClientManager, clientRegistrationRepository, timeout, true);
     }
 
-    private RestClient.Builder createRestClient(OAuth2AuthorizedClientManager authorizedClientManager,
+    private RestClient.Builder createRestClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
         ClientRegistrationRepository clientRegistrationRepository, int timeout, boolean bodyLogging) {
 
         HttpClient httpClient = HttpClientFactory.createDefaultClient(timeout);
