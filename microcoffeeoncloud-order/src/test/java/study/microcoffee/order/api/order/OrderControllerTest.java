@@ -17,16 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import study.microcoffee.order.CharacterEncodingFilterTestConfig;
 import study.microcoffee.order.SecurityConfig;
@@ -37,11 +35,13 @@ import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.repository.OrderRepository;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests of {@link OrderController}.
  */
 @WebMvcTest(OrderController.class)
+@EnableWebSecurity
 @TestPropertySource("/application-test.properties")
 @Import({ HttpLoggingFilterTestConfig.class, CharacterEncodingFilterTestConfig.class, SecurityTestConfig.class,
     SecurityConfig.class })
@@ -63,7 +63,7 @@ class OrderControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -160,8 +160,8 @@ class OrderControllerTest {
             .andExpect(status().isNoContent());
     }
 
-    private String toJson(Object value) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(value);
+    private String toJson(Object value) {
+        return jsonMapper.writeValueAsString(value);
     }
 
     private Order toOrder(OrderModel orderModel) {

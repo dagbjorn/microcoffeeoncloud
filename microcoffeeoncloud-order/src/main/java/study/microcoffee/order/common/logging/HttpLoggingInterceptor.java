@@ -39,10 +39,13 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
 
     private boolean formattedLogging;
 
+    private boolean bodyLogging;
+
     private String lineTerminator;
 
-    public HttpLoggingInterceptor(boolean formattedLogging) {
+    public HttpLoggingInterceptor(boolean formattedLogging, boolean bodyLogging) {
         this.formattedLogging = formattedLogging;
+        this.bodyLogging = bodyLogging;
 
         lineTerminator = (formattedLogging) ? "\n" : " ";
     }
@@ -75,7 +78,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
         HttpHeaders headers = request.getHeaders();
         formatHeaders(builder, headers);
 
-        if (body != null) {
+        if (bodyLogging && body != null) {
             String bodyAsString = new String(body, StandardCharsets.UTF_8);
             formatBody(builder, bodyAsString);
         }
@@ -93,8 +96,10 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
         HttpHeaders headers = response.getHeaders();
         formatHeaders(builder, headers);
 
-        String bodyAsString = readInputStreamAsString(response.getBody());
-        formatBody(builder, bodyAsString);
+        if (bodyLogging) {
+            String bodyAsString = readInputStreamAsString(response.getBody());
+            formatBody(builder, bodyAsString);
+        }
 
         return builder.toString();
     }
@@ -106,7 +111,7 @@ public class HttpLoggingInterceptor implements ClientHttpRequestInterceptor {
             return;
         }
 
-        for (Entry<String, List<String>> header : headers.entrySet()) {
+        for (Entry<String, List<String>> header : headers.headerSet()) {
             String headerName = header.getKey();
             List<String> values = header.getValue();
 

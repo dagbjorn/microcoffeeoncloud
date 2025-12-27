@@ -21,9 +21,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import study.microcoffee.order.exception.ServiceCallFailedException;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests of {@link BasicRestTemplateCreditRatingConsumer}.
@@ -36,7 +35,7 @@ class BasicCreditRatingConsumerTest {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonMapper jsonMapper = JsonMapper.builder().build();
 
     private CreditRatingConsumer creditRatingConsumer;
 
@@ -48,9 +47,9 @@ class BasicCreditRatingConsumerTest {
     }
 
     @Test
-    void getCreateRatingWhenHttpStatus200ShouldReturnRating() throws Exception {
+    void getCreateRatingWhenHttpStatus200ShouldReturnRating() {
         final String customerId = "john@company.com";
-        final String expectedContent = objectMapper.writeValueAsString(new CreditRating(50));
+        final String expectedContent = jsonMapper.writeValueAsString(new CreditRating(50));
 
         server.expect(once(), requestTo(buildServiceUrl(customerId))) //
             .andExpect(method(HttpMethod.GET)) //

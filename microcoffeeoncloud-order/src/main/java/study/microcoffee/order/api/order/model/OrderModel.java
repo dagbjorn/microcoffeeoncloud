@@ -21,7 +21,7 @@ public class OrderModel {
 
     private String id;
 
-    private long coffeeShopId;
+    private Long coffeeShopId;
 
     private String drinker;
 

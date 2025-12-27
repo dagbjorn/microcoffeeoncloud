@@ -7,10 +7,6 @@ public class CreditRating {
 
     private int rating;
 
-    // Needed by Jackson ObjectMapper.
-    public CreditRating() {
-    }
-
     public CreditRating(int rating) {
         this.rating = rating;
     }

@@ -8,7 +8,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsString;
 
 import java.util.List;
 
@@ -16,14 +15,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.micrometer.metrics.test.autoconfigure.AutoConfigureMetrics;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +37,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -55,6 +53,7 @@ import study.microcoffee.order.consumer.creditrating.Resilience4JRestClientCredi
 import study.microcoffee.order.consumer.creditrating.Resilience4JRestTemplateCreditRatingConsumer;
 import study.microcoffee.order.consumer.creditrating.Resilience4JWebClientCreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Integration tests of {@link OrderController} based on {@link WebTestClient}.
@@ -75,8 +74,8 @@ import study.microcoffee.order.domain.DrinkType;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient(timeout = "60000") // Millisecs
-@AutoConfigureObservability
-@TestPropertySource(locations = "/application-test.properties", properties = "server.ssl.enabled=false")
+@AutoConfigureMetrics
+@TestPropertySource("/application-test.properties")
 @ActiveProfiles("itest")
 @Profile("itest")
 class OrderControllerWebClientIT {
@@ -105,7 +104,7 @@ class OrderControllerWebClientIT {
     private WebTestClient webTestClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -136,7 +135,7 @@ class OrderControllerWebClientIT {
     @Test
     void createOrderAndReadBackShouldReturnSavedOrder() throws Exception {
         // WireMock stubbing of CreditRating API
-        final String creditRatingResponse = objectMapper.writeValueAsString(new CreditRating(50));
+        final String creditRatingResponse = jsonMapper.writeValueAsString(new CreditRating(50));
 
         stubFor(get(urlPathMatching("/api/coffeeshop/creditrating/(.+)")) //
             .willReturn(aResponse() //
@@ -157,7 +156,9 @@ class OrderControllerWebClientIT {
             .exchange() //
             .expectStatus().isCreated() //
             .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE) //
-            .expectHeader().value(HttpHeaders.LOCATION, containsString("forwardedhost.no")) //
+            .expectHeader().value(HttpHeaders.LOCATION, headerValue -> {
+                assertThat(headerValue).contains("forwardedhost.no");
+            }) //
             .expectBody(OrderModel.class) //
             .consumeWith(result -> {
                 assertThat(result.getResponseHeaders().getLocation().toString()).endsWith(result.getResponseBody().getId());
@@ -198,6 +199,7 @@ class OrderControllerWebClientIT {
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Disabled("Fails with 'No value present' because no Resilience4J metrics are available. Spring Boot 4 not supported yet (ref. https://github.com/resilience4j/resilience4j/issues/2351).")
     @Test
     @EnabledIf("isResilience4jConsumer")
     void createOrderWhenCreditRatingNotAvailableShouldFailAfterRetry() throws Exception {
@@ -311,7 +313,7 @@ class OrderControllerWebClientIT {
     /**
      * Static stubbing of WellKnown API response from WireMock.
      */
-    private static void stubWireMockWellKnownResponse() throws JsonProcessingException {
+    private static void stubWireMockWellKnownResponse() {
         ProviderMetadata expectedMetadata = ProviderMetadata.builder() //
             .issuer(ISSUER) //
             .authorizationEndpoint(ISSUER + AUTHORIZATION_PATH) //
@@ -320,7 +322,7 @@ class OrderControllerWebClientIT {
             .subjectTypesSupported(new String[] { "public" }) //
             .build();
 
-        String expectedMetadataBody = new ObjectMapper().writeValueAsString(expectedMetadata);
+        String expectedMetadataBody = JsonMapper.builder().build().writeValueAsString(expectedMetadata);
 
         stubFor(get(urlEqualTo(WELLKNOWN_PATH)) //
             .willReturn(aResponse() //
@@ -332,14 +334,14 @@ class OrderControllerWebClientIT {
     /**
      * Stubbing of Token API response from WireMock.
      */
-    private void stubWireMockTokenResponse() throws JsonProcessingException {
+    private void stubWireMockTokenResponse() {
         BearerToken bearerToken = BearerToken.builder() //
             .accessToken(TestTokens.Access.valid()) //
             .tokenType("Bearer") //
             .expiresIn(60) //
             .build();
 
-        String expectedTokenBody = objectMapper.writeValueAsString(bearerToken);
+        String expectedTokenBody = jsonMapper.writeValueAsString(bearerToken);
 
         stubFor(post(urlEqualTo(TOKEN_PATH)) //
             .willReturn(aResponse() //
@@ -362,8 +364,8 @@ class OrderControllerWebClientIT {
 
         @Bean
         public RestClient.Builder discoveryRestClientBuilder(
-            @Qualifier("basicRestClientBuilder") RestClient.Builder restclientBuilder) {
-            return restclientBuilder;
+            @Qualifier("basicRestClientBuilder") RestClient.Builder restClientBuilder) {
+            return restClientBuilder;
         }
 
         @Bean
