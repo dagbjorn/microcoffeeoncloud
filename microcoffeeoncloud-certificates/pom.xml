@@ -20,7 +20,11 @@
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
-        <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+        <!--
+            Keep 3.4.2 - version 3.5.0 gives error "Cannot access session scope outside of a scoping block" in Eclipse.
+            Seems to work though, just annoying.
+         -->
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
         <!-- VM host IP -->
@@ -80,7 +84,7 @@
             Profile that generates certificates with openssl. We must use openssl instead of keytool since openssl
             allow SAN with wildcard hostnames which is something we need.
 
-            Note: openssl must be installed on the developer machine. (Version: OpenSSL 1.1.0g  2 Nov 2017)
+            Note: openssl must be installed on the developer machine.
         -->
         <profile>
             <id>gen-certs</id>
