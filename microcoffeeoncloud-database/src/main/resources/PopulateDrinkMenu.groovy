@@ -1,5 +1,5 @@
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClients;
+import org.bson.Document;
 
 if (!dbhost) {
     println "Missing dbhost property"
@@ -24,48 +24,48 @@ println "mongoDatabaseHost = " + mongoDatabaseHost
 println "mongoDatabasePort = " + mongoDatabasePort
 println "mongoDatabaseName = " + mongoDatabaseName
 
-def mongoClient = new MongoClient(mongoDatabaseHost, mongoDatabasePort)
-def collection = mongoClient.getDB(mongoDatabaseName).getCollection('drinktypes')
+def mongoClient = MongoClients.create("mongodb://" + mongoDatabaseHost + ":" + mongoDatabasePort)
+def collection = mongoClient.getDatabase(mongoDatabaseName).getCollection('drinktypes')
 collection.drop()
 
-collection.insert([name: 'Americano', family: 'Coffee'] as BasicDBObject)
-collection.insert([name: 'Latte', family: 'Coffee'] as BasicDBObject)
-collection.insert([name: 'Tea', family: 'That other drink'] as BasicDBObject)
-collection.insert([name: 'Cappuccino', family: 'Coffee'] as BasicDBObject)
+collection.insertOne([name: 'Americano', family: 'Coffee'] as Document)
+collection.insertOne([name: 'Latte', family: 'Coffee'] as Document)
+collection.insertOne([name: 'Tea', family: 'That other drink'] as Document)
+collection.insertOne([name: 'Cappuccino', family: 'Coffee'] as Document)
 
-println "Total drink types imported: $collection.count"
+println "Total drink types imported: ${collection.countDocuments()}"
 
-collection = mongoClient.getDB(mongoDatabaseName).getCollection('drinksizes')
+collection = mongoClient.getDatabase(mongoDatabaseName).getCollection('drinksizes')
 collection.drop()
 
-collection.insert([name: 'Small'] as BasicDBObject)
-collection.insert([name: 'Medium'] as BasicDBObject)
-collection.insert([name: 'Large'] as BasicDBObject)
-collection.insert([name: 'X-Large'] as BasicDBObject)
-collection.insert([name: 'Supersized'] as BasicDBObject)
+collection.insertOne([name: 'Small'] as Document)
+collection.insertOne([name: 'Medium'] as Document)
+collection.insertOne([name: 'Large'] as Document)
+collection.insertOne([name: 'X-Large'] as Document)
+collection.insertOne([name: 'Supersized'] as Document)
 
-println "Total drink sizes imported: $collection.count"
+println "Total drink sizes imported: ${collection.countDocuments()}"
 
-collection = mongoClient.getDB(mongoDatabaseName).getCollection('drinkoptions')
+collection = mongoClient.getDatabase(mongoDatabaseName).getCollection('drinkoptions')
 collection.drop()
 
-collection.insert([name: 'soy', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'skimmed', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'caramel', appliesTo: 'syrup'] as BasicDBObject)
-collection.insert([name: 'decaf', appliesTo: 'caffeine'] as BasicDBObject)
-collection.insert([name: 'whipped cream', appliesTo: 'extras'] as BasicDBObject)
-collection.insert([name: 'vanilla', appliesTo: 'syrup'] as BasicDBObject)
-collection.insert([name: 'hazelnut', appliesTo: 'syrup'] as BasicDBObject)
-collection.insert([name: 'sugar free', appliesTo: 'syrup'] as BasicDBObject)
-collection.insert([name: 'non fat', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'half fat', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'half and half', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'half caf', appliesTo: 'caffeine'] as BasicDBObject)
-collection.insert([name: 'chocolate powder', appliesTo: 'extras'] as BasicDBObject)
-collection.insert([name: 'double shot', appliesTo: 'preparation'] as BasicDBObject)
-collection.insert([name: 'wet', appliesTo: 'preparation'] as BasicDBObject)
-collection.insert([name: 'dry', appliesTo: 'preparation'] as BasicDBObject)
-collection.insert([name: 'organic', appliesTo: 'milk'] as BasicDBObject)
-collection.insert([name: 'extra hot', appliesTo: 'preparation'] as BasicDBObject)
+collection.insertOne([name: 'soy', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'skimmed', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'caramel', appliesTo: 'syrup'] as Document)
+collection.insertOne([name: 'decaf', appliesTo: 'caffeine'] as Document)
+collection.insertOne([name: 'whipped cream', appliesTo: 'extras'] as Document)
+collection.insertOne([name: 'vanilla', appliesTo: 'syrup'] as Document)
+collection.insertOne([name: 'hazelnut', appliesTo: 'syrup'] as Document)
+collection.insertOne([name: 'sugar free', appliesTo: 'syrup'] as Document)
+collection.insertOne([name: 'non fat', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'half fat', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'half and half', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'half caf', appliesTo: 'caffeine'] as Document)
+collection.insertOne([name: 'chocolate powder', appliesTo: 'extras'] as Document)
+collection.insertOne([name: 'double shot', appliesTo: 'preparation'] as Document)
+collection.insertOne([name: 'wet', appliesTo: 'preparation'] as Document)
+collection.insertOne([name: 'dry', appliesTo: 'preparation'] as Document)
+collection.insertOne([name: 'organic', appliesTo: 'milk'] as Document)
+collection.insertOne([name: 'extra hot', appliesTo: 'preparation'] as Document)
 
-println "Total drink options imported: $collection.count"
+println "Total drink options imported: ${collection.countDocuments()}"
