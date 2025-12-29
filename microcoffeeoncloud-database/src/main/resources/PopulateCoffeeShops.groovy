@@ -1,6 +1,6 @@
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClients;
 import groovy.xml.XmlSlurper;
+import org.bson.Document;
 
 if (!dbhost) {
     println "Missing dbhost property"
@@ -32,8 +32,8 @@ println "mongoDatabasePort = " + mongoDatabasePort
 println "mongoDatabaseName = " + mongoDatabaseName
 println "coffeeShopFile = " + coffeeShopFile
 
-def mongoClient = new MongoClient(mongoDatabaseHost, mongoDatabasePort)
-def collection = mongoClient.getDB(mongoDatabaseName).getCollection('coffeeshop')
+def mongoClient = MongoClients.create("mongodb://" + mongoDatabaseHost + ":" + mongoDatabasePort)
+def collection = mongoClient.getDatabase(mongoDatabaseName).getCollection('coffeeshop')
 collection.drop()
 
 def xmlSlurper = new XmlSlurper().parse(new File(coffeeShopFile))
@@ -43,24 +43,16 @@ xmlSlurper.node.each { child ->
         'openStreetMapId': child.@id.text(),
         'location': ['coordinates': [Double.valueOf(child.@lon.text()), Double.valueOf(child.@lat.text())], 'type': 'Point']]
 
-    child.tag.each { theNode ->
-        coffeeShop.put(theNode.@k.text(), theNode.@v.text())
+    child.tag.each { node ->
+        coffeeShop.put(node.@k.text(), node.@v.text())
     }
 
     if (coffeeShop.name != null) {
         println coffeeShop
-        collection.insert(new BasicDBObject(coffeeShop))
+        collection.insertOne(new Document(coffeeShop))
     }
 }
 
-println "\nTotal coffee shops imported: $collection.count"
+println "\nTotal coffee shops imported: ${collection.countDocuments()}"
 
-collection.createIndex(new BasicDBObject('location', '2dsphere'))
-
-/*
- mongo CoffeeShop --host 192.168.99.100
- MongoDB shell version: 2.6.1
- connecting to: 192.168.99.100:27017/CoffeeShop
- > db.coffeeshop.count()
- 93
- */
+collection.createIndex(new Document('location', '2dsphere'))
