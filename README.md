@@ -45,6 +45,7 @@ Date | Change
 03.09.2024 | Added port 8457/30457 used by Keycloak management interface for Kubernetes readiness/liveness probes.
 03.12.2024 | Upgraded to Spring Boot 3.4.0 and Spring Cloud 2024.0.0.
 01.06.2025 | Upgraded to Spring Boot 3.5.0 and Spring Cloud 2025.0.0.
+23.10.2025 | Upgraded to Java 25.
 27.12.2025 | Upgraded to Spring Boot 4.0.1 and Spring Cloud 2025.1.0.
 
 ## Contents
@@ -176,7 +177,8 @@ provided.
 ## <a name="prerequisite"></a>Prerequisite
 Microcoffee was originally developed on Windows 10 and tested on Docker running on Oracle VirtualBox. Late 2022, the development environment was modernized and consists now of Windows 11 Pro with Docker Desktop running with WSL2 based engine.
 
-The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee moved on to Java 17. Then in december 2023, Microcoffee moved to Java 21.
+The code was originally written in Java 8, but was later migrated to Java 11. In early 2022, Microcoffee moved on to Java 17. Then in December 2023, Microcoffee moved to Java 21. Moving forward to the latest LTS release, in October 2025 Microcoffee migrated
+to Java 25.
 
 For building and testing the application on Windows, Docker Desktop with the WSL 2 engine is recommended. See [Install on Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows) for installation guidelines.
 
@@ -188,7 +190,7 @@ For building and testing the application on Windows, Docker Desktop with the WSL
         wsl --unregister docker-desktop
         wsl --unregister docker-desktop-data
 
-In addition, you'll need the basic Java development tools (IDE w/ Java 21 and Maven) as well as Groovy 5 installed on your
+In addition, you'll need the basic Java development tools (IDE w/ Java 25 and Maven) as well as Groovy 5 installed on your
 development machine.
 
 You will also need OpenSSL 3.x to create a self-signed wildcard certificate. Finally, [curl](https://curl.se/) and [jq](https://stedolan.github.io/jq/) are needed.
@@ -2030,7 +2032,7 @@ Set-Alias -Name kubectl -Value Start-WslKubectl
 
 ##### Create PowerShell shortcut for Java 17
 
-:point_right: Needs an update to Java 21.
+:point_right: Needs an update to Java 25.
 
 Microcoffee is built on Java 17. If Java 17 is not the default JDK, a PowerShell window can be configured to use Java 17 as follows.
 
