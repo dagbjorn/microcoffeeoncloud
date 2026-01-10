@@ -17,7 +17,7 @@ import study.microcoffee.order.security.csrf.CsrfHeaderFilter;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity //
             .authorizeHttpRequests(authorize -> authorize //
                 .anyRequest().permitAll()) //
