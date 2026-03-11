@@ -15,7 +15,15 @@
         <maven.compiler.target>25</maven.compiler.target>
 
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
-        <keytool-maven-plugin.version>2.0.2</keytool-maven-plugin.version>
+        <!--
+            Keep keytool-maven-plugin 1.7. Version 2.0.2 has an issue with import of keystore
+            from PKCS to JKS.
+
+            [ERROR] Failed to execute goal org.codehaus.mojo:keytool-maven-plugin:2.0.2:importKeystore (import-to-jks-microcoffee-study)
+             on project microcoffeeoncloud-certificates: Failed to import keystore:
+             Get Key failed: Cannot read the array length because "password" is null
+        -->
+        <keytool-maven-plugin.version>1.7</keytool-maven-plugin.version>
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
