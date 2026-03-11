@@ -17,7 +17,7 @@
         <mongodb-driver.version>5.6.2</mongodb-driver.version>
 
         <docker-maven-plugin.version>0.48.0</docker-maven-plugin.version>
-        <gmavenplus-plugin.version>4.2.1</gmavenplus-plugin.version>
+        <gmavenplus-plugin.version>4.3.1</gmavenplus-plugin.version>
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
