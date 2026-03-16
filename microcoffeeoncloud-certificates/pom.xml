@@ -15,17 +15,25 @@
         <maven.compiler.target>25</maven.compiler.target>
 
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+        <!--
+            Keep keytool-maven-plugin 1.7. Version 2.0.2 has an issue with import of keystore
+            from PKCS to JKS.
+
+            [ERROR] Failed to execute goal org.codehaus.mojo:keytool-maven-plugin:2.0.2:importKeystore (import-to-jks-microcoffee-study)
+             on project microcoffeeoncloud-certificates: Failed to import keystore:
+             Get Key failed: Cannot read the array length because "password" is null
+        -->
         <keytool-maven-plugin.version>1.7</keytool-maven-plugin.version>
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
         <!--
             Keep 3.4.2 - version 3.5.0 gives error "Cannot access session scope outside of a scoping block" in Eclipse.
             Seems to work though, just annoying.
          -->
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
 
         <!-- VM host IP -->
         <vmHostIp>192.168.99.100</vmHostIp>
