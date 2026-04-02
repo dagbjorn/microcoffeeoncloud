@@ -15,13 +15,16 @@
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
-    "react-scripts": "5.0.1"
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.0.1",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite --port 3000",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "vite vitest"
   },
   "eslintConfig": {
     "extends": [
