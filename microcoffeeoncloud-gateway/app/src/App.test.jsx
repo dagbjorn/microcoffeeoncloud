@@ -8,7 +8,7 @@ test('renders App', () => {
     <CookiesProvider>
       <App />
     </CookiesProvider>
-);
+  );
   const linkElement = screen.getByText(/Microcoffee/i);
   expect(linkElement).toBeInTheDocument();
 });

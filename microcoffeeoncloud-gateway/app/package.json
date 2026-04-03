@@ -3,25 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "bootstrap": "^5.3.8",
     "react": "^19.2.4",
     "react-cookie": "^8.0.1",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",
-    "reactstrap": "^9.2.3",
-    "web-vitals": "^5.1.0"
+    "reactstrap": "^9.2.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^29.0.1",
     "vite": "^8.0.3",
     "vitest": "^4.1.2"
   },
   "scripts": {
-    "start": "vite --port 3000",
+    "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
     "test": "vite vitest"
