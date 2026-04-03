@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.4</version>
+        <version>4.0.5</version>
         <relativePath/>
     </parent>
 
@@ -44,8 +44,8 @@
         <bootstrap.version>5.3.8</bootstrap.version>
 
         <!-- React tool versions (see https://nodejs.org/en/download) -->
-        <node.version>v25.8.0</node.version>
-        <npm.version>11.11.0</npm.version>
+        <node.version>v25.9.0</node.version>
+        <npm.version>11.12.1</npm.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.48.1</docker-maven-plugin.version>
