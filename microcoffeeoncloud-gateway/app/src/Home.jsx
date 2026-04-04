@@ -1,7 +1,6 @@
-import React from 'react';
 import './App.css';
 import AppNavbar from './AppNavbar';
-import { Container } from 'reactstrap';
+import { Container } from 'react-bootstrap';
 import CoffeeShopFinder from './CoffeeShopFinder';
 import CoffeeOrder from './CoffeeOrder';
 
