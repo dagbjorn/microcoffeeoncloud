@@ -1,11 +1,10 @@
-import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const AppNavbar = () => {
     return (
         <Navbar bg="dark" variant="dark" expand="md">
-            <Container fluid className="px-4">
+            <Container fluid="fluid" className="px-4">
                 <Navbar.Brand as={Link} to="/">Microcoffee</Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { OrderLine } from './OrderConfirmation';
 import { config } from './EnvConfig';
@@ -135,7 +135,7 @@ const CoffeeOrder = () => {
                         <Form.Label htmlFor="type">Drink</Form.Label>
                         <Form.Select name="type" id="type" value={order.type.name}
                             onChange={handleChangeInDrink} autoComplete="type">
-                            <option key="none" value="none" hidden></option>
+                            <option key="none" value="none" hidden="hidden"></option>
                             {drinks.map(drink => <option key={drink.name} value={drink.name}>{drink.name}</option>)}
                         </Form.Select>
                     </Form.Group>
@@ -143,7 +143,7 @@ const CoffeeOrder = () => {
                         <Form.Label htmlFor="size">Size</Form.Label>
                         <Form.Select name="size" id="size" value={order.size}
                             onChange={handleChange} autoComplete="size">
-                            <option key="none" value="none" hidden></option>
+                            <option key="none" value="none" hidden="hidden"></option>
                             {sizes.map(size => <option key={size} value={size}>{size}</option>)}
                         </Form.Select>
                     </Form.Group>
