@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container } from 'reactstrap';
+import { Button, Container } from 'react-bootstrap';
 import { config } from './EnvConfig';
 
 const CoffeeShopLocation = props => {
@@ -61,7 +61,7 @@ const CoffeeShopFinder = () => {
     return (
         <div>
             <Container fluid>
-                <Button color="primary" onClick={findCoffeeShopNearestToMe}>Find my coffee shop</Button>
+                <Button variant="primary" onClick={findCoffeeShopNearestToMe}>Find my coffee shop</Button>
                 {nearestCoffeeShop && <CoffeeShopLocation coffeeShop={nearestCoffeeShop} />}
             </Container>
         </div>

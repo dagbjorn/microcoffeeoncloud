@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import { OrderLine } from './OrderConfirmation';
 import { config } from './EnvConfig';
 import { useCookies} from 'react-cookie';
@@ -131,44 +131,42 @@ const CoffeeOrder = () => {
         <div>
             <Container fluid>
                 <Form onSubmit={handleSubmit}>
-                    <FormGroup>
-                        <Label for="type">Drink</Label>
-                        <Input type="select" name="type" id="type" value={order.type.name}
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="type">Drink</Form.Label>
+                        <Form.Select name="type" id="type" value={order.type.name}
                             onChange={handleChangeInDrink} autoComplete="type">
-                            <option key="none" value="none" hidden="hidden"></option>
+                            <option key="none" value="none" hidden></option>
                             {drinks.map(drink => <option key={drink.name} value={drink.name}>{drink.name}</option>)}
-                        </Input>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="size">Size</Label>
-                        <Input type="select" name="size" id="size" value={order.size}
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="size">Size</Form.Label>
+                        <Form.Select name="size" id="size" value={order.size}
                             onChange={handleChange} autoComplete="size">
-                            <option key="none" value="none" hidden="hidden"></option>
+                            <option key="none" value="none" hidden></option>
                             {sizes.map(size => <option key={size} value={size}>{size}</option>)}
-                        </Input>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="drinker">Your name</Label>
-                        <Input name="drinker" id="drinker" value={order.drinker}
-                            onChange={handleChange} autoComplete="drinker">
-                        </Input>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="options">Options</Label>
-                        <Input type="search" name="options" id="options" value={displayedOption} list="optionlist"
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="drinker">Your name</Form.Label>
+                        <Form.Control name="drinker" id="drinker" value={order.drinker}
+                            onChange={handleChange} autoComplete="drinker" />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label htmlFor="options">Options</Form.Label>
+                        <Form.Control type="search" name="options" id="options" value={displayedOption} list="optionlist"
                             onChange={handleChangeInOptions} onClick={handleClickInOptions}
-                            placeholder="Type milk or syrups or extras here">
-                        </Input>
+                            placeholder="Type milk or syrups or extras here" />
                         <datalist id="optionlist">
                             {availableOptions.map(option => <option key={option} value={option}>{option}</option>)}
                         </datalist>
-                    </FormGroup>
-                    <FormGroup>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
                         {order.selectedOptions.map(option => <span key={option}>{option}; </span>)}
-                    </FormGroup>
-                    <FormGroup>
-                        <Button type="submit" color="primary">Give Me Coffee</Button>
-                    </FormGroup>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Button type="submit" variant="primary">Give Me Coffee</Button>
+                    </Form.Group>
                 </Form>
 
                 {orderList && orderList.map(order => <OrderLine key={order.id} order={order} />)}

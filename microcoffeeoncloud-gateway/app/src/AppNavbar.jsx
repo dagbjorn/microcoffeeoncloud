@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import React from 'react';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const AppNavbar = () => {
-
-    const [isOpen, setIsOpen] = useState(false);
-
     return (
-        <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/">Microcoffee</NavbarBrand>
-            <NavbarToggler onClick={() => { setIsOpen(!isOpen) }} />
-            <Collapse isOpen={isOpen} navbar>
-                <Nav className="justify-content-end" style={{ width: "100%" }} navbar>
-                    <NavItem>
-                        <NavLink href="https://github.com/dagbjorn/microcoffeeoncloud" target="_blank">GitHub</NavLink>
-                    </NavItem>
-                </Nav>
-            </Collapse>
+        <Navbar bg="dark" variant="dark" expand="md">
+            <Container>
+                <Navbar.Brand as={Link} to="/">Microcoffee</Navbar.Brand>
+                <Navbar.Toggle />
+                <Navbar.Collapse className="justify-content-end">
+                    <Nav>
+                        <Nav.Link href="https://github.com/dagbjorn/microcoffeeoncloud" target="_blank">GitHub</Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
         </Navbar>
     );
 };
