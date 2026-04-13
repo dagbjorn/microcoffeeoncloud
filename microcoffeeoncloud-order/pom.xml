@@ -39,7 +39,7 @@
         <spring-cloud.version>2025.1.1</spring-cloud.version>
 
         <modelmapper.version>3.2.6</modelmapper.version>
-        <springdoc-openapi.version>3.0.2</springdoc-openapi.version>
+        <springdoc-openapi.version>3.0.3</springdoc-openapi.version>
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.48.1</docker-maven-plugin.version>
