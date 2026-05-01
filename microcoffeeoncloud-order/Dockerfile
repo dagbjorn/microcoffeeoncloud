@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25.0.2_10-jre-alpine
+FROM eclipse-temurin:25.0.3_9-jre-alpine
 VOLUME /tmp
 WORKDIR /
 ARG JAR_FILE
