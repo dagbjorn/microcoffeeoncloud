@@ -47,7 +47,7 @@ Date | Change
 01.06.2025 | Upgraded to Spring Boot 3.5.0 and Spring Cloud 2025.0.0.
 23.10.2025 | Upgraded to Java 25.
 27.12.2025 | Upgraded to Spring Boot 4.0.1 and Spring Cloud 2025.1.0.
-20.08.2026 | Upgraded to Spring Boot 4.1.0 and Spring Cloud 2025.1.2.
+20.08.2026 | Upgraded to Spring Boot 4.1.1 and Spring Cloud 2025.1.2.
 
 ## Contents
 
