@@ -2,7 +2,7 @@
 
 setlocal
 
-set KEYCLOAK_HOME=D:\bin\keycloak-26.2.0
+set KEYCLOAK_HOME=D:\bin\keycloak-26.7.1
 
 set KC_BOOTSTRAP_ADMIN_USERNAME=admin
 set KC_BOOTSTRAP_ADMIN_PASSWORD=admin
@@ -17,6 +17,7 @@ bin\kc.bat start-dev --import-realm ^
                      --http-enabled=true --http-port=8093 ^
                      --https-port=8456 --https-key-store-file=localhost.p12 --https-key-store-password=12345678 ^
                      --http-management-port=8457 ^
-                     --health-enabled=true --metrics-enabled=true
+                     --health-enabled=true --metrics-enabled=true ^
+                     --features-disabled="twitter-broker,identity-brokering-api"
 
 endlocal

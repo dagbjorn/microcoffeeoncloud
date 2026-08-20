@@ -32,8 +32,8 @@
             Keep 3.4.2 - version 3.5.0 gives error "Cannot access session scope outside of a scoping block" in Eclipse.
             Seems to work though, just annoying.
          -->
-        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
 
         <!-- VM host IP -->
         <vmHostIp>192.168.99.100</vmHostIp>
