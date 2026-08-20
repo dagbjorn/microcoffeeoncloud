@@ -38,7 +38,7 @@ import study.microcoffee.order.test.DiscoveryTestConfig;
 class EmbeddedMongoOrderRepositoryIT {
 
     static final int MONGODB_PORT = 28017;
-    static final Version.Main MONGODB_VERSION = Version.Main.V8_2;
+    static final Version.Main MONGODB_VERSION = Version.Main.V8_3;
 
     private static TransitionWalker.ReachedState<RunningMongodProcess> running;
 
