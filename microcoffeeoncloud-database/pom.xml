@@ -13,7 +13,7 @@
 
         <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
 
-        <groovy.version>5.1.0</groovy.version>
+        <groovy.version>5.1.1</groovy.version>
         <mongodb-driver-sync.version>5.10.0</mongodb-driver-sync.version>
 
         <docker-maven-plugin.version>0.49.0</docker-maven-plugin.version>
