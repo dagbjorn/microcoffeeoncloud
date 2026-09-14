@@ -1,0 +1,21 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - master
+
+# Permissions for the default token.
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-release-draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Draft release
+        uses: release-drafter/release-drafter@v7
+        with:
+          # This default loads .github/release-drafter.yml.
+          config-name: release-drafter.yml
