@@ -1,27 +1,32 @@
 tag-prefix: 'microcoffeeoncloud-'
-tag-template: 'microcoffeeoncloud-$RESOLVED_VERSION'
-name-template: 'microcoffeeoncloud-$RESOLVED_VERSION'
+tag-template: 'microcoffeeoncloud-$NEXT_PATCH_VERSION'
+name-template: 'microcoffeeoncloud-$NEXT_PATCH_VERSION'
 
 categories:
   - title: '🚀 Features'
-    labels:
-      - 'feature'
-      - 'enhancement'
+    when:
+      - labels:
+          - 'feature'
+          - 'enhancement'
   - title: '⚠️ Breaking Changes'
-    labels:
-      - 'breaking'
+    when:
+      - labels:
+          - 'breaking'
   - title: '🐛 Bug Fixes'
-    labels:
-      - 'fix'
-      - 'bugfix'
-      - 'bug'
+    when:
+      - labels:
+          - 'fix'
+          - 'bugfix'
+          - 'bug'
   - title: '🧰 Maintenance'
-    labels:
-      - 'chore'
+    when:
+      - labels:
+          - 'chore'
   - title: '⬆️ Dependency upgrades'
-    labels:
-      - 'bump'
-      - 'dependencies'
+    when:
+      - labels:
+          - 'bump'
+          - 'dependencies'
   - type: 'pre-exclude'
     when:
       label: 'skip-changelog'
