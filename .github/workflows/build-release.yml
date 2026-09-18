@@ -1,14 +1,13 @@
-name: Build release
+name: Build Microcoffee release and push to DockerHub
 
 on:
   workflow_dispatch:  # Allows you to run this workflow manually from the Actions tab
 
 jobs:
-  publish-release:
+  build-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v7
