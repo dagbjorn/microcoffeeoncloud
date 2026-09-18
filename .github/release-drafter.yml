@@ -1,6 +1,6 @@
 tag-prefix: 'microcoffeeoncloud-'
 tag-template: 'microcoffeeoncloud-$NEXT_PATCH_VERSION'
-name-template: 'microcoffeeoncloud-$NEXT_PATCH_VERSION'
+name-template: '$NEXT_PATCH_VERSION'
 
 categories:
   - title: '🚀 Features'
