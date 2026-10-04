@@ -1,6 +1,6 @@
 services:
     creditrating:
-        image: dagbjorn/microcoffeeoncloud-creditrating:0.9.2
+        image: dagbjorn/microcoffeeoncloud-creditrating:0.9.3-SNAPSHOT
         ports:
             - "8083:8083"
             - "8446:8446"

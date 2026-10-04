@@ -1,6 +1,6 @@
 services:
     keycloak:
-        image: dagbjorn/microcoffeeoncloud-authserver:0.9.2
+        image: dagbjorn/microcoffeeoncloud-authserver:0.9.3-SNAPSHOT
         ports:
           - "8093:8093"
           - "8456:8456"

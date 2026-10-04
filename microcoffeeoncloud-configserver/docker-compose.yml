@@ -1,6 +1,6 @@
 services:
     configserver:
-        image: dagbjorn/microcoffeeoncloud-configserver:0.9.2
+        image: dagbjorn/microcoffeeoncloud-configserver:0.9.3-SNAPSHOT
         ports:
             - "8091:8091"
             - "8454:8454"
