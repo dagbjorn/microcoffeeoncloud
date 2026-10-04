@@ -1,5 +1,5 @@
-/.kube
-/.settings
-/target
+.kube/
+.settings/
+target/
 .classpath
 .project

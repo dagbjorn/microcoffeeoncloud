@@ -1,6 +1,6 @@
-/microcoffeeoncloud-notes
-/microcoffeeoncloud-xnotes
-/target
-/.settings
+microcoffeeoncloud-notes/
+microcoffeeoncloud-xnotes/
+target/
+.settings/
 .classpath
 .project
