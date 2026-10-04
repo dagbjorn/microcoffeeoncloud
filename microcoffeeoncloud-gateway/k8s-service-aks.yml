@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: discovery
-        image: dagbjorn/microcoffeeoncloud-gateway:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-gateway:0.9.2-SNAPSHOT
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
@@ -60,4 +60,3 @@ spec:
       name: gateway-https
   selector:
     app: gateway
-    

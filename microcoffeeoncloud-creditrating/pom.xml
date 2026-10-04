@@ -40,6 +40,7 @@
 
         <!-- Plugin versions -->
         <docker-maven-plugin.version>0.49.0</docker-maven-plugin.version>
+        <find-and-replace-maven-plugin.version>1.0.5</find-and-replace-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
     </properties>
@@ -237,6 +238,12 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>software.xdev</groupId>
+                    <artifactId>find-and-replace-maven-plugin</artifactId>
+                    <version>${find-and-replace-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
@@ -416,6 +423,34 @@
                                 <goals>
                                     <goal>report-integration</goal>
                                 </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- To update image version used by Docker Compose and Kubernetes, run: -->
+        <!-- mvn process-sources -Pupdate-image-version -->
+        <profile>
+            <id>update-image-version</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>software.xdev</groupId>
+                        <artifactId>find-and-replace-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>replace-image-version</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>file-contents</goal>
+                                </goals>
+                                <configuration>
+                                    <fileMask>.yml</fileMask>
+                                    <findRegex>${docker.image.prefix}/(microcoffeeoncloud-[a-z]+):\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?$</findRegex>
+                                    <replaceValue>${docker.image.prefix}/$1:${project.version}</replaceValue>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

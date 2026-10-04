@@ -14,6 +14,7 @@
         <microcoffeeoncloud-certificates.version>${project.version}</microcoffeeoncloud-certificates.version>
 
         <docker-maven-plugin.version>0.49.0</docker-maven-plugin.version>
+        <find-and-replace-maven-plugin.version>1.0.5</find-and-replace-maven-plugin.version>
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.11.0</maven-dependency-plugin.version>
         <maven-install-plugin.version>3.2.0</maven-install-plugin.version>
@@ -54,6 +55,12 @@
                         </images>
                         <retries>10</retries>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>software.xdev</groupId>
+                    <artifactId>find-and-replace-maven-plugin</artifactId>
+                    <version>${find-and-replace-maven-plugin.version}</version>
                 </plugin>
 
                 <plugin>
@@ -144,6 +151,33 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- To update image version used by Docker Compose and Kubernetes, run: -->
+        <!-- mvn process-sources -Pupdate-image-version -->
+        <profile>
+            <id>update-image-version</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>software.xdev</groupId>
+                        <artifactId>find-and-replace-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>replace-image-version</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>file-contents</goal>
+                                </goals>
+                                <configuration>
+                                    <fileMask>.yml</fileMask>
+                                    <findRegex>${docker.image.prefix}/(microcoffeeoncloud-[a-z]+):\d+\.\d+\.\d+(?:-[a-zA-Z0-9.]+)?$</findRegex>
+                                    <replaceValue>${docker.image.prefix}/$1:${project.version}</replaceValue>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
-

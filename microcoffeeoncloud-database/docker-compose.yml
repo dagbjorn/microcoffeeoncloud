@@ -1,6 +1,6 @@
 services:
     mongodb:
-        image: dagbjorn/microcoffeeoncloud-database:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-database:0.9.2-SNAPSHOT
         command: mongod --bind_ip_all --tlsMode preferTLS --tlsCertificateKeyFile /microcoffee.study-key.pem --setParameter tlsUseSystemCA=true --tlsAllowConnectionsWithoutCertificates
         ports:
             - "27017:27017"

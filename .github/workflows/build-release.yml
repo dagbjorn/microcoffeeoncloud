@@ -36,15 +36,18 @@ jobs:
 
           cat $GITHUB_ENV
 
-      - name: Generate certificate
+      - name: Set release version in pom and manifests
         run: |
           mvn -f microcoffeeoncloud-certificates/pom.xml versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false -DprocessAllModules=true -B
+          mvn versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false -DprocessAllModules=true -B
+          mvn process-sources -Pupdate-image-version
+
+      - name: Generate certificate
+        run: |
           mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
 
       - name: 'Build and push Docker images to DockerHub'
         run: |
-          mvn versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false -DprocessAllModules=true -B
-
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login https://index.docker.io/v1/ --username ${{ secrets.DOCKERHUB_USER }} --password-stdin
           mvn clean install -Pbuild,push -B
 
@@ -63,6 +66,7 @@ jobs:
 
           mvn -f microcoffeeoncloud-certificates/pom.xml versions:set -DnewVersion=$next_release_version -DgenerateBackupPoms=false -DprocessAllModules=true -B
           mvn versions:set -DnewVersion=$next_release_version -DgenerateBackupPoms=false -DprocessAllModules=true -B
+          mvn process-sources -Pupdate-image-version
 
           git commit -am "Updated to next shapshot version $next_release_version (from GitHub workflow)"
           git push origin ${{ github.ref_name }}

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: order
-        image: dagbjorn/microcoffeeoncloud-order:1.0.0-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-order:0.9.2-SNAPSHOT
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
