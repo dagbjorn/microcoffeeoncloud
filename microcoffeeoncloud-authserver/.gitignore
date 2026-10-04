@@ -1,6 +1,6 @@
-/.kube
-/.settings
-/dump
-/target
+.kube/
+.settings/
+dump/
+target/
 .classpath
 .project

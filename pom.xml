@@ -22,6 +22,7 @@
         <module>microcoffeeoncloud-database</module>
         <module>microcoffeeoncloud-discovery</module>
         <module>microcoffeeoncloud-gateway</module>
+        <module>microcoffeeoncloud-gatlingtest</module>
         <module>microcoffeeoncloud-jwttest</module>
         <module>microcoffeeoncloud-location</module>
         <module>microcoffeeoncloud-order</module>

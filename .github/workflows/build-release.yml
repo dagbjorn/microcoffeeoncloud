@@ -29,9 +29,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Generate certificate
-        run: mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
-
       - name: 'Extract pom info'
         run: |
           echo "APP_PREFIX=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" | sed 's/-aggregator//' >> $GITHUB_ENV
@@ -39,12 +36,17 @@ jobs:
 
           cat $GITHUB_ENV
 
+      - name: Generate certificate
+        run: |
+          mvn -f microcoffeeoncloud-certificates/pom.xml versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false -DprocessAllModules=true -B
+          mvn -f microcoffeeoncloud-certificates/pom.xml clean install -Pgen-certs -B
+
       - name: 'Build and push Docker images to DockerHub'
         run: |
           mvn versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false -DprocessAllModules=true -B
 
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login https://index.docker.io/v1/ --username ${{ secrets.DOCKERHUB_USER }} --password-stdin
-          mvn clean install -Pitest -Pbuild,push -B
+          mvn clean install -Pbuild,push -B
 
       - name: 'Perform release'
         run: |
@@ -59,6 +61,7 @@ jobs:
 
           next_release_version=$(echo "$RELEASE_VERSION" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g' | sed 's/$/-SNAPSHOT/')
 
+          mvn -f microcoffeeoncloud-certificates/pom.xml versions:set -DnewVersion=$next_release_version -DgenerateBackupPoms=false -DprocessAllModules=true -B
           mvn versions:set -DnewVersion=$next_release_version -DgenerateBackupPoms=false -DprocessAllModules=true -B
 
           git commit -am "Updated to next shapshot version $next_release_version (from GitHub workflow)"

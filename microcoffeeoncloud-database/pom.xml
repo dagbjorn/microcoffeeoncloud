@@ -11,7 +11,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <microcoffeeoncloud-certificates.version>1.0.0-SNAPSHOT</microcoffeeoncloud-certificates.version>
+        <microcoffeeoncloud-certificates.version>${project.version}</microcoffeeoncloud-certificates.version>
 
         <groovy.version>6.0.0</groovy.version>
         <mongodb-driver-sync.version>5.13.0</mongodb-driver-sync.version>
