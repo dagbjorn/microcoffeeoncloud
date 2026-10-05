@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: creditrating
-        image: dagbjorn/microcoffeeoncloud-creditrating:0.9.3-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-creditrating:1.0.0-SNAPSHOT
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
