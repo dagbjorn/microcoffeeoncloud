@@ -15,6 +15,7 @@ services:
                      "--https-port=8456", "--https-key-store-file=/opt/microcoffee/keystore/microcoffee.study.p12", "--https-key-store-password=12345678",
                      "--http-management-port=8457",
                      "--health-enabled=true", "--metrics-enabled=true",
+                     "--spi-sticky-session-encoder--infinispan--should-attach-route=false",
                      "--features-disabled=twitter-broker,identity-brokering-api"]
         networks:
             authserver:
