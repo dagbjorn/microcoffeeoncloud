@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: discovery
-        image: dagbjorn/microcoffeeoncloud-discovery:0.9.3-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-discovery:1.0.0-SNAPSHOT
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
