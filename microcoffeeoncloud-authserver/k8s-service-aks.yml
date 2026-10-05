@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: authserver
-        image: dagbjorn/microcoffeeoncloud-authserver:0.9.3-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-authserver:1.0.0-SNAPSHOT
         imagePullPolicy: Always
         command: ["/opt/keycloak/bin/kc.sh"]
         args: ["start-dev",
