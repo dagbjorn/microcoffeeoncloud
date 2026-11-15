@@ -5,7 +5,7 @@
 
     <groupId>study.microcoffeeoncloud</groupId>
     <artifactId>microcoffeeoncloud-configserver</artifactId>
-    <version>0.9.4</version>
+    <version>0.9.5-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
