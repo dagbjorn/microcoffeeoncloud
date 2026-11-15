@@ -1,6 +1,6 @@
 services:
     gateway:
-        image: dagbjorn/microcoffeeoncloud-gateway:0.9.4-SNAPSHOT
+        image: dagbjorn/microcoffeeoncloud-gateway:0.9.4
         ports:
             # Netty (used by Spring Cloud Gateway) doesn't appear to support multiple ports.
             #- "8080:8080"
