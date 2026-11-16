@@ -1,4 +1,4 @@
-FROM mongo:9.0.4
+FROM mongo:9.0.8
 WORKDIR /
 COPY target/keystore/*.p12 ./
 RUN openssl version \
