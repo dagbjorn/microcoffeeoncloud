@@ -17,7 +17,7 @@
         <gatling.version>3.16.0</gatling.version>
         <json4s-jackson.version>4.0.7</json4s-jackson.version>
 
-        <build-helper-maven-plugin.version>3.6.2</build-helper-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.8.0</build-helper-maven-plugin.version>
         <gatling-maven-plugin.version>4.21.12</gatling-maven-plugin.version>
         <scala-maven-plugin.version>4.10.0</scala-maven-plugin.version>
     </properties>
