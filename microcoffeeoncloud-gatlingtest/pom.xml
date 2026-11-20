@@ -14,7 +14,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <gatling.version>3.16.0</gatling.version>
+        <gatling.version>3.16.1</gatling.version>
         <json4s-jackson.version>4.0.7</json4s-jackson.version>
 
         <build-helper-maven-plugin.version>3.8.0</build-helper-maven-plugin.version>
