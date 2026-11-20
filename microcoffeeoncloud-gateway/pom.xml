@@ -52,7 +52,7 @@
         <find-and-replace-maven-plugin.version>1.0.5</find-and-replace-maven-plugin.version>
         <frontend-maven-plugin.version>2.0.2</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>5.8.0.7211</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.9.0.7382</sonar-maven-plugin.version>
         <wro4j-maven-plugin.version>2.1.1</wro4j-maven-plugin.version>
     </properties>
 
