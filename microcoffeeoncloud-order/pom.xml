@@ -36,7 +36,7 @@
 
         <!-- Remember to update the de.flapdoodle.mongodb.embedded.version property in application-test.properties -->
         <flapdoodle-embed-mongo.version>4.33.0</flapdoodle-embed-mongo.version>
-        <spring-cloud.version>2025.1.4</spring-cloud.version>
+        <spring-cloud.version>2026.0.0</spring-cloud.version>
 
         <modelmapper.version>3.2.8</modelmapper.version>
         <springdoc-openapi.version>3.2.0</springdoc-openapi.version>

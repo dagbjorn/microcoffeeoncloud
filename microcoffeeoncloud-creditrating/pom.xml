@@ -34,7 +34,7 @@
         <!-- Library versions -->
         <microcoffeeoncloud-certificates.version>${project.version}</microcoffeeoncloud-certificates.version>
 
-        <spring-cloud.version>2025.1.4</spring-cloud.version>
+        <spring-cloud.version>2026.0.0</spring-cloud.version>
 
         <springdoc-openapi.version>3.2.0</springdoc-openapi.version>
 
